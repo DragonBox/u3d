@@ -29,6 +29,12 @@ module U3d
       [args, extra_args]
     end
 
+    def convert_options(options)
+      o = options.__hash__.dup
+      #o.delete(:verbose)
+      o
+    end
+
     def run
       # some commands have unknown parameters we just want to pass on
       # split after --
@@ -44,9 +50,11 @@ module U3d
 
       command :run do |c|
         c.syntax = "u3d run"
-        c.description = "Run u3d"
+        c.description = "Run unity"
+        U3dCore::CommanderGenerator.new.generate(U3d::Options.available_run_options)
         c.action do |_args, options|
-          UI.success "Running unity3d #{_args} #{options} #{extra_args}"
+          config = convert_options(options)
+          Commands.run(config: config, run_args: extra_args)
         end
       end
 

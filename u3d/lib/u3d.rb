@@ -1,5 +1,5 @@
 require 'u3d/version'
-#require 'u3d/options'
+require 'u3d/options'
 
 require 'u3d_core'
 #require 'terminal-table'
