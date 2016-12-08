@@ -22,7 +22,19 @@ module U3d
     #  o
     #end
 
+    def split_args(args = ARGV)
+      both_args = args.join(" ").split(" -- ")
+      args = both_args[0].split(/\s+/)
+      extra_args = (both_args[1] || "").split(/\s+/)
+      [args, extra_args]
+    end
+
     def run
+      # some commands have unknown parameters we just want to pass on
+      # split after --
+      args, extra_args = split_args()
+      Commander::Runner.instance_variable_set :"@singleton", Commander::Runner.new(args)
+
       program :version, U3d::VERSION
       program :description, U3d::DESCRIPTION
       program :help, "Author", "Jerome Lacoste <jerome@wewanttoknow.com>"
@@ -34,7 +46,7 @@ module U3d
         c.syntax = "u3d run"
         c.description = "Run u3d"
         c.action do |_args, options|
-          UI.success "Running unity3d"
+          UI.success "Running unity3d #{_args} #{options} #{extra_args}"
         end
       end
 
