@@ -7,7 +7,7 @@ module U3dCore
 
       $stdout.sync = true
 
-      if Helper.is_test?
+      if Helper.test?
         @log ||= Logger.new(nil) # don't show any logs when running tests
       else
         @log ||= Logger.new($stdout)
