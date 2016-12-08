@@ -23,10 +23,16 @@ module U3d
     #end
 
     def split_args(args = ARGV)
-      both_args = args.join(" ").split(" -- ")
-      args = both_args[0].split(/\s+/)
-      extra_args = (both_args[1] || "").split(/\s+/)
-      [args, extra_args]
+      both_args = [ [], []]
+      idx=0
+      args.each do |arg|
+        if arg == "--"
+          idx=1
+          next
+        end
+        both_args[idx] << arg
+      end
+      both_args
     end
 
     def convert_options(options)
