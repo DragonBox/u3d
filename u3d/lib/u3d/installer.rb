@@ -31,16 +31,16 @@ module U3d
       if (log_file && File.exist?(log_file))
         File.delete(log_file)
       end
+
       FileUtils.touch(log_file)
 
       tail_pid = Process.spawn("tail -F #{log_file}")
 
       begin
-        args.unshift(installation.exe_path)
+        args.unshift(installation.exe_path.shellescape)
         U3dCore::CommandExecutor::execute(command: args)
       ensure
-        puts "kill #{tail_pid}"
-        `kill #{tail_pid}`
+        Helper.backticks("kill #{tail_pid}")
       end
     end
 
