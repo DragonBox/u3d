@@ -13,6 +13,10 @@ module U3d
       plist['CFBundleVersion']
     end
 
+    def default_log_file
+      "#{ENV['HOME']}/Library/Logs/Unity/Editor.log"
+    end
+
     def exe_path
       "#{path}/Contents/MacOS/Unity"
     end
@@ -28,8 +32,10 @@ module U3d
 
       log_file = find_logFile_in_args(args)
 
-      if (log_file && File.exist?(log_file))
-        File.delete(log_file)
+      if (log_file) # we wouldn't want to do that for the default log file.
+        File.delete(log_file) if File.exist?(log_file)
+      else
+        log_file = installation.default_log_file
       end
 
       FileUtils.touch(log_file)
