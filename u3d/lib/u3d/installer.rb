@@ -110,21 +110,24 @@ module U3d
         puts Installer.new.installed.map {|v| "#{v.version}\t(#{v.path})" }.join("\n")
       end
       
-      def run(config: {}, run_args: "")
+      def run(config: {}, run_args: [])
         version = config[:unity_version]
 
         runner = Runner.new
 
+        pp = runner.find_projectpath_in_args(run_args)
+        pp = "." unless pp
+        up = UnityProject.new(pp)
+
         if (!version) # fall back in project default if we are on a Unity project
-          pp = runner.find_projectpath_in_args(run_args)
-          pp = "." unless pp
-          up = UnityProject.new(pp)
           version = up.editor_version if up.exist?
           if (!version)
-            UI.user_error!("Not sure which version of Unity to run")
+            UI.user_error!("Not sure which version of Unity to run. Are you in a project?")
           end
         end
 
+        # when no argument passed, just start Unity (open the project)
+        run_args = ["-projectpath", up.path] if run_args.empty? and up.exist?
 
         # we could
         # * support matching 5.3.6p3 if passed 5.3.6
