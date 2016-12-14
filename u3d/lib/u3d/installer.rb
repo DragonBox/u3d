@@ -85,7 +85,8 @@ module U3d
       tail_pid = Process.spawn("tail -F #{log_file}")
 
       begin
-        args.unshift(installation.exe_path.shellescape)
+        args.unshift(installation.exe_path)
+        args.map!{|a| a.shellescape }
         U3dCore::CommandExecutor::execute(command: args)
       ensure
         Helper.backticks("kill #{tail_pid}")
