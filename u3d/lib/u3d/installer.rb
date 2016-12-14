@@ -183,7 +183,7 @@ module U3d
         runner = Runner.new
 
         pp = runner.find_projectpath_in_args(run_args)
-        pp = "." unless pp
+        pp = Dir.pwd unless pp
         up = UnityProject.new(pp)
 
         if (!version) # fall back in project default if we are on a Unity project
