@@ -31,7 +31,7 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
     rainbow (2.1.0)
-    rake (12.0.0)
+    rake (10.5.0)
     rspec (3.1.0)
       rspec-core (~> 3.1.0)
       rspec-expectations (~> 3.1.0)
@@ -70,10 +70,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler
+  bundler (~> 1.13)
   coveralls
   pry
-  rake
+  rake (~> 10.0)
   rspec (~> 3.1.0)
   rspec_junit_formatter (~> 0.2.3)
   rubocop (~> 0.44.0)
