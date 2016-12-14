@@ -1,9 +1,21 @@
-require 'plist'
-
 # Mac specific only right now
 module U3d
   class Installation
-    attr_reader :path, :version
+    def self.create(path: nil)
+      if Helper.mac?
+        MacInstallation.new path
+      elsif Helper.linux?
+        LinuxInstallation.new path
+      else
+        raise "Support for Windows platform not yet handled"
+      end
+    end
+  end
+
+  class MacInstallation < Installation
+    attr_reader :path
+
+    require 'plist'
 
     def initialize(path: nil)
       @path=path
@@ -21,8 +33,38 @@ module U3d
       "#{path}/Contents/MacOS/Unity"
     end
 
+    private
     def plist
       @plist ||= Plist::parse_xml("#{@path}/Contents/Info.plist")
+    end
+  end
+
+  class LinuxInstallation < Installation
+    attr_reader :path
+
+    def initialize(path: nil)
+      @path=path
+    end
+
+    def version
+      # I don't find an easy way to extract the version on Linux
+      require 'rexml/document'
+      fpath = "#{path}/Data/PlaybackEngines/LinuxStandaloneSupport/ivy.xml"
+      raise "Couldn't find file #{fpath}" unless File.exist? fpath
+      doc = REXML::Document.new(File.read(fpath))
+      version=REXML::XPath.first(doc, 'ivy-module/info/@e:unityVersion').value
+      if m=version.match(/^(.*)x(.*)Linux$/)
+        version="#{m[1]}#{m[2]}"
+      end
+      version
+    end
+
+    def default_log_file
+      "#{ENV['HOME']}/.config/unity3d/Editor.log"
+    end
+
+    def exe_path
+      "#{path}/Unity"
     end
   end
 
@@ -71,6 +113,18 @@ module U3d
   end
 
   class Installer
+    def self.create()
+      if Helper.mac?
+        MacInstaller.new
+      elsif Helper.linux?
+        LinuxInstaller.new
+      else
+        raise "Support for Windows platform not yet handled"
+      end
+    end
+  end
+
+  class MacInstaller
     def installed
       unless (`mdutil -s /` =~ /disabled/).nil?
         $stderr.puts 'Please enable Spotlight indexing for /Applications.'
@@ -82,13 +136,25 @@ module U3d
       mdfind_args = bundle_identifiers.map{|bi| "kMDItemCFBundleIdentifier == '#{bi}'"}.join(" || ")
 
       command="mdfind \"#{mdfind_args}\" 2>/dev/null" 
-      versions=`#{command}`.split("\n").map {|path| Installation.new(path: path) }
+      versions=`#{command}`.split("\n").map {|path| MacInstallation.new(path: path) }
+
+      versions.sort!{ |x,y| x.version <=> y.version } # sorting should take into account stable/patch etc
+    end
+  end
+
+  class LinuxInstaller
+    def installed
+      # so many assumptions here...
+      command="find /opt/ -maxdepth 3 -name Unity 2> /dev/null | xargs dirname"
+      versions=`#{command}`.split("\n").map {|path| LinuxInstallation.new(path: path) }
 
       versions.sort!{ |x,y| x.version <=> y.version } # sorting should take into account stable/patch etc
     end
   end
 
   class UnityProject
+    attr_reader :path
+
     def initialize(path)
       @path = path
     end
@@ -107,7 +173,7 @@ module U3d
   class Commands
     class << self
       def list_installed
-        puts Installer.new.installed.map {|v| "#{v.version}\t(#{v.path})" }.join("\n")
+        puts Installer.create.installed.map {|v| "#{v.version}\t(#{v.path})" }.join("\n")
       end
       
       def run(config: {}, run_args: [])
@@ -131,7 +197,7 @@ module U3d
 
         # we could
         # * support matching 5.3.6p3 if passed 5.3.6
-        unity = Installer.new.installed.find{|u| u.version == version}
+        unity = Installer.create.installed.find{|u| u.version == version}
         UI.user_error! "Unity version '#{version}' not found" unless unity
         runner.run(unity, run_args)
       end
