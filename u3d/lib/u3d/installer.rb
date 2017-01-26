@@ -110,7 +110,6 @@ module U3d
       }
       nil
     end
-
   end
 
   class Installer
