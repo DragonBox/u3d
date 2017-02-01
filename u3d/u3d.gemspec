@@ -32,6 +32,8 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_dependency 'commander', '>= 4.4.0', '< 5.0.0' # CLI parser
+  spec.add_dependency 'credentials-manager', '>= 1.0.0', '< 2.0.0' # credenials-manager
   spec.add_dependency 'colored', '>= 1.2', '< 2.0.0' # terminal
   spec.add_dependency 'plist', '>= 3.1.0', '< 4.0.0' # Generate the Xcode config plist file
 
