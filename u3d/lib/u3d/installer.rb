@@ -122,6 +122,15 @@ module U3d
         raise "Support for Windows platform not yet handled"
       end
     end
+
+    def self.install_module(file_path, installation_path: nil)
+      extension = File.extname(file_path)
+      if extension == '.pkg'
+        MacInstaller.install_pkg(file_path)
+      else
+        raise "File type #{extension} not supported"
+      end
+    end
   end
 
   class MacInstaller
@@ -139,6 +148,14 @@ module U3d
       versions=`#{command}`.split("\n").map {|path| MacInstallation.new(path: path) }
 
       versions.sort!{ |x,y| x.version <=> y.version } # sorting should take into account stable/patch etc
+    end
+
+    def self.install_pkg(file_path)
+      begin
+        U3dCore::CommandExecutor::execute(command: "sudo installer -pkg #{file_path.shellescape} -target /")
+      rescue => e
+        UI.error "Failed to install pkg at #{file_path}: #{e.to_s}"
+      end
     end
   end
 
