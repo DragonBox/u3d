@@ -135,7 +135,7 @@ module U3d
 
       mdfind_args = bundle_identifiers.map{|bi| "kMDItemCFBundleIdentifier == '#{bi}'"}.join(" || ")
 
-      command="mdfind \"#{mdfind_args}\" 2>/dev/null" 
+      command="mdfind \"#{mdfind_args}\" 2>/dev/null"
       versions=`#{command}`.split("\n").map {|path| MacInstallation.new(path: path) }
 
       versions.sort!{ |x,y| x.version <=> y.version } # sorting should take into account stable/patch etc
@@ -167,40 +167,6 @@ module U3d
       require 'yaml'
       yaml=YAML.load(File.read("#{@path}/ProjectSettings/ProjectVersion.txt"))
       yaml['m_EditorVersion']
-    end
-  end
-
-  class Commands
-    class << self
-      def list_installed
-        puts Installer.create.installed.map {|v| "#{v.version}\t(#{v.path})" }.join("\n")
-      end
-      
-      def run(config: {}, run_args: [])
-        version = config[:unity_version]
-
-        runner = Runner.new
-
-        pp = runner.find_projectpath_in_args(run_args)
-        pp = Dir.pwd unless pp
-        up = UnityProject.new(pp)
-
-        if (!version) # fall back in project default if we are on a Unity project
-          version = up.editor_version if up.exist?
-          if (!version)
-            UI.user_error!("Not sure which version of Unity to run. Are you in a project?")
-          end
-        end
-
-        # when no argument passed, just start Unity (open the project)
-        run_args = ["-projectpath", up.path] if run_args.empty? and up.exist?
-
-        # we could
-        # * support matching 5.3.6p3 if passed 5.3.6
-        unity = Installer.create.installed.find{|u| u.version == version}
-        UI.user_error! "Unity version '#{version}' not found" unless unity
-        runner.run(unity, run_args)
-      end
     end
   end
 end
