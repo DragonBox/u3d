@@ -19,7 +19,7 @@ module U3d
     # @!group REGEX: expressions to interpret data
     #####################################################
     # Captures a version and its base url
-    UNITY_DOWNLOADS_REGEX = %r{"(https?:\/\/[\w\/.-]+\/[0-9a-f]{12}\/)MacEditorInstaller\/[\w\/.-]+(\d+\.\d+\.\d+\w\d+)[\w\/.-]+"}
+    UNITY_DOWNLOADS_REGEX = %r{"(https?:\/\/[\w\/.-]+\/[0-9a-f]{12}\/)MacEditorInstaller\/[a-zA-Z\/.-]+(\d+\.\d+\.\d+\w\d+)[\w\/.-]+"}
     # Captures a beta version in html page
     UNITY_BETAVERSION_REGEX = %r{\/unity\/beta\/unity(\d+\.\d+\.\d+\w\d+)"}
     UNITY_EXTRA_DOWNLOAD_REGEX = %r{"(https?:\/\/[\w\/.-]+\.unity3d\.com\/(\w+))\/[\w\/.-]+\/download.html"}
