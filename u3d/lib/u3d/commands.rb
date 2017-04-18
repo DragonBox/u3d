@@ -3,6 +3,7 @@ require 'u3d/downloader'
 require 'u3d/installer'
 require 'u3d/cache'
 require 'u3d/utils'
+require 'u3d_core/command_executor'
 
 module U3d
   # API for U3d, redirecting calls to class they concern
@@ -45,7 +46,7 @@ module U3d
         version = args[0]
         UI.user_error!('Please specify a Unity version to download') unless version
         UI.important 'Root privileges are required'
-        raise 'Could not get a root password' unless root_password_check
+        raise 'Could not get a root password' unless U3dCore::CommandExecutor.root_password_check
 
         options[:packages] ||= ['Unity']
         cache = Cache.new
