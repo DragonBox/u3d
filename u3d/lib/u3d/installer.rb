@@ -152,7 +152,7 @@ module U3d
 
     def self.install_pkg(file_path)
       begin
-        U3dCore::CommandExecutor::execute(command: "sudo installer -pkg #{file_path.shellescape} -target /")
+        U3dCore::CommandExecutor::execute(command: "installer -pkg #{file_path.shellescape} -target /", admin: true)
       rescue => e
         UI.error "Failed to install pkg at #{file_path}: #{e.to_s}"
       end

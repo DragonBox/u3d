@@ -44,6 +44,9 @@ module U3d
       def download(args: [], options: {})
         version = args[0]
         UI.user_error!('Please specify a Unity version to download') unless version
+        UI.important 'Root privileges are required'
+        raise 'Could not get a root password' unless root_password_check
+
         options[:packages] ||= ['Unity']
         cache = Cache.new
         files = []
