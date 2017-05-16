@@ -14,7 +14,7 @@ module U3dCore
         begin
           require 'pty'
           return U3dCore::SafePty.method(:spawn)
-        rescue
+        rescue LoadError
           UI.important("No pty implementation found. Falling back to popen. Output might be buffered")
           return U3dCore::SafePopen.method(:spawn)
         end
@@ -60,6 +60,7 @@ module U3dCore
       require 'open3'
       Open3.popen2e(command) do |r, w, p|
         yield w, r, p.value.pid # note the inversion
+
         r.close
         w.close
         p.value.exitstatus

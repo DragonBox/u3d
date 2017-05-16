@@ -1,7 +1,8 @@
+require 'u3d_core/credentials'
+
 module U3dCore
   # Executes commands and takes care of error handling and more
   class CommandExecutor
-    SUDO_CRED_PREFIX = 'u3d.sudo'
     class << self
       # Cross-platform way of finding an executable in the $PATH. Respects the $PATHEXT, which lists
       # valid file extensions for executables on Windows.
@@ -37,22 +38,19 @@ module U3dCore
         prefix ||= {}
 
         output = []
-        command = command.join(" ") if command.kind_of?(Array)
+        command = command.join(' ') if command.kind_of?(Array)
         UI.command(command) if print_command
 
-        if print_all and loading # this is only used to show the "Loading text"...
-          UI.command_output(loading)
-        end
+        # this is only used to show the "Loading text"...
+        UI.command_output(loading) if print_all && loading
 
         if admin
-          UI.verbose 'Trying to gain admin privileges to execute the command'
-
-          cm = CredentialsManager::AccountManager.new(
-            user: ENV['USER'],
-            prefix: SUDO_CRED_PREFIX
-          )
-
-          command = "sudo -k && echo #{cm.password} | sudo -S " + command
+          cred = U3dCore::Credentials.new(user: ENV['USER'])
+          if Helper.windows?
+            raise "The command \'#{command}\' must be run in administrative shell" unless has_admin_privileges?
+          else
+            command = "sudo -k && echo #{cred.password} | sudo -S " + command
+          end
           UI.verbose 'Admin privileges granted for command execution'
         end
 
@@ -72,7 +70,7 @@ module U3dCore
               UI.command_output(line)
             end
           end
-          raise "Exit status: #{status}".red if status != 0 && status != nil
+          raise "Exit status: #{status}".red if status != 0 && !status.nil?
         rescue => ex
           # This could happen
           # * if the status is failed
@@ -80,40 +78,30 @@ module U3dCore
           # > invalid byte sequence in US-ASCII (ArgumentError)
           output << ex.to_s
           o = output.join("\n")
-          puts o
-          if error
-            error.call(o, nil)
-          else
-            raise ex
-          end
+          UI.verbose o
+          raise ex unless error
+          error.call(o, nil)
         end
         return output.join("\n")
       end
 
-      def root_password_check
-        cm = CredentialsManager::AccountManager.new(
-          user: ENV['USER'],
-          prefix: SUDO_CRED_PREFIX
-        )
-        tries = 0
-        until tries > 10
+      def has_admin_privileges?
+        if Helper.windows?
           begin
-            status = U3dCore::Runner.run("sudo -k && echo #{cm.password} | sudo -S /usr/bin/whoami") do |stdin, stdout, pid|
-              result = stdin.read
-              UI.command_output(result)
-            end
-          rescue => ex
-            UI.error "Unable to check password validity (#{ex})"
-            UI.error 'Password is assumed to be wrong'
+            result = system('reg query HKU\\S-1-5-19', :out => File::NULL, :err => File::NULL)
+          rescue
+            return false
           end
-          if status != 0
-            return false unless cm.invalid_credentials
-          else
-            return true
+        else
+          credentials = U3dCore::Credentials.new(user: ENV['USER'])
+          begin
+            result = system("sudo -k && echo #{credentials.password} | sudo -S /usr/bin/whoami")
+          rescue
+            return false
           end
-          tries += 1
         end
-        false
+        # returns false if result is nil (command execution fail)
+        return (result ? true : false)
       end
     end
   end

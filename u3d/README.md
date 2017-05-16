@@ -1,21 +1,72 @@
-A set of tools to help run unity on the command line.
+# U3D
 
-# Installation
+U3d is a set of tools to interact with Unity3D from command line. It is available on Linux, Macintosh and Windows.
 
-  The gem isn't yet on a public repo, so do 
+## What can it do?
 
-    ./local_gem_install.sh
+U3d provides help for running and installing unity from CLI. Available commands are:
 
-# Examples
+* `u3d available`: List versions available to download
 
-* list installed versions
+* `u3d download`: Download (and install) Unity
 
-        u3d installed
+* `u3d installed`: List installed versions
 
-* run a CLI on the current project given the configured unity version
+* `u3d local_install`: Install already downloaded packages
 
-        u3d run -- -batchmode -quit -logFile `pwd`/editor.log -executeMethod "WWTK.SimpleBuild.PerformAndroidBuild"
+* `u3d run`: Run Unity
 
-* override with a given Unity version and a specific projectpath
+## Installation
 
-        u3d run -u 5.3.6p3 -- -batchmode -quit -logFile `pwd`/editor.log -projectpath `pwd`/treasure -executeMethod "WWTK.SimpleBuild.PerformAndroidBuild"
+  The gem isn't yet on a public repository, so do
+```shell
+./local_gem_install.sh
+```
+## Security
+
+When you install Unity with this tool, you will have to grant it higher privileges so it can perfrom the installation. It means that under MacOS and Linux, you will be asked for your sudo password.
+
+On Windows, you must launch a administrative command interface to be able to run `local_install` and `download` (only if you install for the latter).
+
+## Examples
+
+* List installed versions on your computer:
+
+```shell
+u3d installed
+```
+
+* List versions you can download and install from Unity, as well as their packages, on Mac:
+
+```shell
+u3d available -p -o mac
+```
+
+* Download and install version 5.6.0f3 of Unity with its documentation and the WebPlayer package:
+
+```shell
+u3d download 5.6.0f3 -p Unity,Documentation,WebPlayer
+```
+* Run a CLI on the current project given the configured unity version:
+
+```shell
+u3d run -- -batchmode -quit -logFile `pwd`/editor.log -executeMethod "WWTK.SimpleBuild.PerformAndroidBuild"
+```
+
+You can get further information on how to use U3d by running `u3d --help` (or `u3d -h`).
+
+## SSL Error
+
+If you face an issue similar to this one
+
+    SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed
+
+your ruby setup to work with OpenSSL may want to be fixed.
+
+ * __On MacOS:__
+
+Your version of OpenSSL may be be outdated, make sure you are using the last one.
+
+ * __On Windows:__
+
+A fix to the issue stated above has been found on [StackOverflow](http://stackoverflow.com/questions/5720484/how-to-solve-certificate-verify-failed-on-windows). If you follow the steps described in this topic, you will most likely get rid of this issue.

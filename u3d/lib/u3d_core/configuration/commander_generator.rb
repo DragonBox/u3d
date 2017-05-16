@@ -7,7 +7,7 @@ module U3dCore
     # Calls the appropriate methods for commander to show the available parameters
     def generate(options)
       # First, enable `always_trace`, to show the stack trace
-      always_trace!
+      # always_trace!
 
       used_switches = []
       options.each do |option|
