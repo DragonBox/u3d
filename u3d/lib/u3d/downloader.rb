@@ -179,6 +179,7 @@ module U3d
           end
 
           return [file_path, ini_file[package]]
+        end
       end
     end
 
