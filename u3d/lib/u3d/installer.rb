@@ -92,7 +92,7 @@ module U3d
       if @logfile.nil?
         begin
           loc_appdata = Utils.windows_local_appdata
-          log_dir = File.expand_path('/Unity/Editor/', loc_appdata)
+          log_dir = File.expand_path('Unity/Editor/', loc_appdata)
           UI.important "Log directory (#{log_dir}) does not exist"  unless Dir.exist? log_dir
           @logfile = File.expand_path('Editor.log', log_dir)
         rescue RuntimeError => ex
@@ -103,7 +103,7 @@ module U3d
     end
 
     def exe_path
-      "#{path}\\Unity.exe"
+      File.expand_path('Unity.exe', @path)
     end
   end
 
@@ -121,14 +121,27 @@ module U3d
 
       FileUtils.touch(log_file)
 
-      tail_pid = Process.spawn("tail -F #{log_file}")
+      if Helper.windows?
+        UI.important "Tailing unavailable for Windows at the moment, logs are at #{log_file}"
+      else
+        tail_pid = Process.spawn("tail -F #{log_file}")
+      end
 
       begin
         args.unshift(installation.exe_path)
-        args.map! { |a| a.shellescape }
+        if Helper.windows?
+          args.map! do |a|
+            if a =~ / / && !a.start_with?("\"")
+              a = "\"#{a}\""
+            end
+            a
+          end
+        else
+          args.map! { |a| a.shellescape }
+        end
         U3dCore::CommandExecutor.execute(command: args)
       ensure
-        Helper.backticks("kill #{tail_pid}")
+        Helper.backticks("kill #{tail_pid}") if tail_pid
       end
     end
 
