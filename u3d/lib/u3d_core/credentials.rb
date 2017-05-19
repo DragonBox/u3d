@@ -80,7 +80,7 @@ module U3dCore
       ENV['U3D_PASSWORD'] = nil
       if Helper.mac?
         UI.verbose 'Deleting credentials from the keychain'
-        Security::InternetPassword.delete(MAC_U3D_SERVER)
+        Security::InternetPassword.delete(server: MAC_U3D_SERVER)
       end
     end
   end

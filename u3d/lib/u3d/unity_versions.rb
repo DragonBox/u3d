@@ -23,12 +23,12 @@ module U3d
     # @!group REGEX: expressions to interpret data
     #####################################################
     # Captures a version and its base url
-    MAC_DOWNLOAD = %r{"(https?:\/\/[\w\/.-]+\/[0-9a-f]{12}\/)MacEditorInstaller\/[\w\/.-]+(\d+\.\d+\.\d+\w\d+)[\w\/.-]+"}
-    WIN_DOWNLOAD = %r{"(https?:\/\/[\w\/.-]+\/[0-9a-f]{12}\/)Windows..EditorInstaller\/[\w\/.-]+(\d+\.\d+\.\d+\w\d+)[\w\/.-]+"}
+    MAC_DOWNLOAD = %r{"(https?:\/\/[\w\/.-]+\/[0-9a-f]{12}\/)MacEditorInstaller\/[a-zA-Z\/.-]+(\d+\.\d+\.\d+\w\d+)[\w\/.-]+"}
+    WIN_DOWNLOAD = %r{"(https?:\/\/[\w\/.-]+\/[0-9a-f]{12}\/)Windows..EditorInstaller\/[a-zA-Z\/.-]+(\d+\.\d+\.\d+\w\d+)[\w\/.-]+"}
     LINUX_DOWNLOAD = %r{"(https?:\/\/[\w\/._-]+\/unity\-editor\-installer\-(\d+\.\d+\.\d+\w\d+).*\.sh)"}
     # Captures a beta version in html page
     UNITY_BETAVERSION_REGEX = %r{\/unity\/beta\/unity(\d+\.\d+\.\d+\w\d+)"}
-    UNITY_EXTRA_DOWNLOAD_REGEX = %r{"(https?:\/\/[\w\/.-]+\.unity3d\.com\/(\w+))\/[\w\/.-]+\/download.html"}
+    UNITY_EXTRA_DOWNLOAD_REGEX = %r{"(https?:\/\/[\w\/.-]+\.unity3d\.com\/(\w+))\/[a-zA-Z\/.-]+\/download.html"}
 
     class << self
       def list_available(os: nil)

@@ -50,7 +50,7 @@ module U3dCore
           if Helper.windows?
             raise "The command \'#{command}\' must be run in administrative shell" unless has_admin_privileges?
           else
-            command = "sudo -k && echo #{cred.password} | sudo -S " + command
+            command = "sudo -k && echo #{cred.password.shellescape} | sudo -S " + command
           end
           UI.verbose 'Admin privileges granted for command execution'
         end
@@ -103,15 +103,16 @@ module U3dCore
           begin
             result = system('reg query HKU\\S-1-5-19', :out => File::NULL, :err => File::NULL)
           rescue
-            return false
+            result = false
           end
         else
           credentials = U3dCore::Credentials.new(user: ENV['USER'])
           begin
-            result = system("sudo -k && echo #{credentials.password} | sudo -S /usr/bin/whoami")
+            result = system("sudo -k && echo #{credentials.password.shellescape} | sudo -S /usr/bin/whoami")
           rescue
-            return false
+            result = false
           end
+          credentials.forget_credentials unless result
         end
         # returns false if result is nil (command execution fail)
         return (result ? true : false)
