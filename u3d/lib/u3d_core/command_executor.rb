@@ -90,15 +90,16 @@ module U3dCore
           begin
             result = system('reg query HKU\\S-1-5-19', :out => File::NULL, :err => File::NULL)
           rescue
-            return false
+            result = false
           end
         else
           credentials = U3dCore::Credentials.new(user: ENV['USER'])
           begin
             result = system("sudo -k && echo #{credentials.password} | sudo -S /usr/bin/whoami")
           rescue
-            return false
+            result = false
           end
+          credentials.forget_credentials unless result
         end
         # returns false if result is nil (command execution fail)
         return (result ? true : false)
