@@ -82,7 +82,7 @@ module U3d
 
       command :download do |c|
         c.syntax = 'u3d download <version> [ [-p | --packages <package> ...] | [-a | --all] ] [ [-n | --no_install] [-i | --installation_path <path>] ]'
-        c.description = 'Download Unity3D packages'
+        c.description = 'Download (and install) Unity3D packages'
         c.option '-p', '--packages PACKAGES', Array, 'Specifies which packages to download. Overriden by --all'
         c.option '-i', '--installation_path PATH', String, 'Specifies where package(s) will be installed. Overriden by --no_install'
         c.option '-a', '--all', 'Download all available packages'
