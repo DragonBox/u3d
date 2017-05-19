@@ -4,39 +4,55 @@ require 'u3d/installer'
 require 'u3d/cache'
 require 'u3d/utils'
 require 'u3d_core/command_executor'
+require 'u3d_core/credentials'
+require 'fileutils'
 
 module U3d
   # API for U3d, redirecting calls to class they concern
   class Commands
     class << self
       def list_installed
-        puts Installer.create.installed.map { |v| "#{v.version}\t(#{v.path})" }.join("\n")
+        if Installer.create.installed.empty?
+          UI.important 'No Unity version installed'
+          return
+        end
+        UI.message Installer.create.installed.map { |v| "Version #{v.version}\t(#{v.path})" }.join("\n")
       end
 
       def list_available(options: {})
-        cache = Cache.new
+        ver = options[:unity_version]
+        os = options[:operating_system]
+        if os
+          if os == 'win' || os == 'mac' || os == 'linux'
+            os = os.to_sym
+          else
+            raise "Specified OS (#{os}) is not recognized"
+          end
+        else
+          os = U3dCore::Helper.operating_system
+        end
+        cache = Cache.new(force_os: os)
         versions = {}
 
-        ver = options[:unity_version]
-
-        return UI.error "Version #{ver} is not in cache" if ver && cache['versions'][ver].nil?
+        return UI.error "Version #{ver} is not in cache" if ver && cache[os.id2name]['versions'][ver].nil?
 
         if ver
-          versions = { ver => cache['versions'][ver] }
+          versions = { ver => cache[os.id2name]['versions'][ver] }
         else
-          versions = cache['versions']
+          versions = cache[os.id2name]['versions']
         end
+
         versions.each do |k, v|
           UI.message "Version #{k}: " + v.to_s.cyan.underline
           if options[:packages]
             inif = nil
             begin
-              inif = U3d::INIparser.load_ini(k, versions)
+              inif = U3d::INIparser.load_ini(k, versions, os: os)
             rescue => e
               UI.error "Could not load packages for this version (#{e})"
             else
               UI.message 'Packages:'
-              inif.keys.each { |pack| UI.message " - #{pack}"}
+              inif.keys.each { |pack| UI.message " - #{pack}" }
             end
           end
         end
@@ -45,31 +61,93 @@ module U3d
       def download(args: [], options: {})
         version = args[0]
         UI.user_error!('Please specify a Unity version to download') unless version
-        UI.important 'Root privileges are required'
-        raise 'Could not get a root password' unless U3dCore::CommandExecutor.root_password_check
 
-        options[:packages] ||= ['Unity']
-        cache = Cache.new
+        unless options[:no_install]
+          UI.important 'Root privileges are required'
+          raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
+        end
+
+        os = U3dCore::Helper.operating_system
+        cache = Cache.new(force_os: os)
         files = []
-        if options[:all]
-          files = Downloader.download_all(version, cache['versions'])
+        if os == :linux
+          UI.important 'Option -a | --all not available for Linux' if options[:all]
+          UI.important 'Option -p | --packages not available for Linux' if options[:packages]
+          files << ["Unity #{version}", Downloader::LinuxDownloader.download(version, cache[os.id2name]['versions']), {}]
         else
-          packages = options[:packages]
-          packages.each do |package|
-            result = Downloader.download_specific(package, version, cache['versions'])
-            files << result unless result.nil?
+          downloader = Downloader::MacDownloader if os == :mac
+          downloader = Downloader::WindowsDownloader if os == :win
+          if options[:all]
+            files = downloader.download_all(version, cache[os.id2name]['versions'])
+          else
+            packages = options[:packages] || ['Unity']
+            packages.insert(0, 'Unity') if packages.delete('Unity')
+            packages.each do |package|
+              result = downloader.download_specific(package, version, cache[os.id2name]['versions'])
+              files << [package, result[0], result[1]] unless result.nil?
+            end
           end
         end
+
         return if options[:no_install]
-        files.each do |f|
-          Installer.install_module(f)
+        files.each do |name, file, info|
+          UI.verbose "Installing #{name}#{info['mandatory'] ? ' (mandatory package)' : ''}, with file #{file}"
+          Installer.install_module(file, version, installation_path: options[:installation_path], info: info)
         end
       end
 
-      def local_install(args: [])
-        UI.user_error!('No file passed') if args.empty?
-        UI.user_error!("#{args[0]} is not a file") unless File.file?(args[0])
-        Installer.install_module(args[0])
+      def local_install(args: [], options: {})
+        UI.user_error!('Please specify a version') if args.empty?
+        version = args[0]
+
+        packages = options[:packages] || ['Unity']
+        packages.insert(0, 'Unity') if packages.delete('Unity')
+
+        installed = Installer.create.installed
+        unity = installed.find { |u| u.version == version }
+        unless packages.include?('Unity')
+          if unity.nil?
+            raise "Version #{version} of Unity is not installed yet. Please install it first before installing any other module"
+          else
+            UI.verbose "Unity #{version} is installed at #{unity.path}"
+          end
+        end
+
+        installed.each do |u|
+          if %r{\/Unity\/} =~ u.path
+            new_path = u.path.sub(%r{\/Unity\/}, "/Unity #{u.version}")
+            UI.verbose "Moving Unity #{u.version} from #{u.path} to #{new_path}"
+            FileUtils.mv(u.path, new_path)
+            u.path = new_path
+          end
+        end
+
+        UI.important 'Root privileges are required'
+        raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
+
+        os = U3dCore::Helper.operating_system
+        files = []
+        if os == :linux
+          UI.important 'Option -a | --all not available for Linux' if options[:all]
+          UI.important 'Option -p | --packages not available for Linux' if options[:packages]
+          files << ["Unity #{version}", Downloader::LinuxDownloader.local_file(version), {}]
+        else
+          downloader = Downloader::MacDownloader if os == :mac
+          downloader = Downloader::WindowsDownloader if os == :win
+          if options[:all]
+            files = downloader.all_local_files(version)
+          else
+            packages.each do |package|
+              result = downloader.local_file(package, version)
+              files << [package, result[0], result[1]] unless result.nil?
+            end
+          end
+        end
+
+        files.each do |name, file, info|
+          UI.verbose "Installing #{name}#{info['mandatory'] ? ' (mandatory package)' : ''}, with file #{file}"
+          Installer.install_module(file, version, installation_path: options[:installation_path], info: info)
+        end
       end
 
       def run(config: {}, run_args: [])
@@ -94,6 +172,11 @@ module U3d
         unity = Installer.create.installed.find { |u| u.version == version }
         UI.user_error! "Unity version '#{version}' not found" unless unity
         runner.run(unity, run_args)
+      end
+
+      def login(options: {})
+        credentials = U3dCore::Credentials.new(user: options['user'])
+        credentials.login
       end
     end
   end

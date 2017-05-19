@@ -68,8 +68,9 @@ module U3d
       end
 
       command :available do |c|
-        c.syntax = 'u3d available'
-        c.option '-u', '--unity_version', String, 'Checks if specified version is available'
+        c.syntax = 'u3d available [-o | --operating_system <OS>] [-u | --unity_version <version>] [-p | --packages]'
+        c.option '-o', '--operating_system STRING', String, 'Checks for availability on specific OS'
+        c.option '-u', '--unity_version STRING', String, 'Checks if specified version is available'
         c.option '-p', '--packages', 'Lists available packages as well'
         c.description = 'List download-ready versions of Unity3d'
         c.action do |_args, options|
@@ -80,9 +81,10 @@ module U3d
       end
 
       command :download do |c|
-        c.syntax = 'u3d download <version> [ [-p | --packages <package> ...] | [-a | --all] ] [-n | --no_install]'
+        c.syntax = 'u3d download <version> [ [-p | --packages <package> ...] | [-a | --all] ] [ [-n | --no_install] [-i | --installation_path <path>] ]'
         c.description = 'Download Unity3D packages'
         c.option '-p', '--packages PACKAGES', Array, 'Specifies which packages to download. Overriden by --all'
+        c.option '-i', '--installation_path PATH', String, 'Specifies where package(s) will be installed. Overriden by --no_install'
         c.option '-a', '--all', 'Download all available packages'
         c.option '-n', '--no_install', 'No installation after download success'
         c.action do |args, options|
@@ -94,10 +96,24 @@ module U3d
       end
 
       command :local_install do |c|
-        c.syntax = 'u3d local_install <pkg>'
+        c.syntax = 'u3d local_install <version> [ [-p | --packages <package> ...] | [-a | --all] ] [-i | --installation_path <path>]'
         c.description = 'Install downloaded version of unity'
-        c.action do |args, _options|
-          Commands.local_install(args: args)
+        c.option '-p', '--packages PACKAGES', Array, 'Specifies which packages to install. Overriden by --all'
+        c.option '-i', '--installation_path PATH', String, 'Specifies where package(s) will be installed.'
+        c.option '-a', '--all', 'Install all downloaded packages'
+        c.action do |args, options|
+          config = convert_options(options)
+          Commands.local_install(args: args, options: config)
+        end
+      end
+
+      command :login do |c|
+        c.syntax = 'u3d login [-u | --user <username>]'
+        c.description = 'Stores credentials for future use'
+        c.option '-u', '--user USER', String, 'Specifies wich user will be logged in'
+        c.action do |_args, options|
+          config = convert_options(options)
+          Commands.login(options: config)
         end
       end
 

@@ -78,6 +78,26 @@ module U3dCore
       (/darwin/ =~ RUBY_PLATFORM) != nil
     end
 
+    def self.operating_system
+      if linux?
+        return :linux
+      elsif mac?
+        return :mac
+      elsif windows?
+        return :win
+      else
+        raise 'Could not assume what OS you\'re running, please specify it as much as possible'
+      end
+    end
+
+    def self.win_64?
+      (/x64/ =~ RUBY_PLATFORM) != nil
+    end
+
+    def self.win_32?
+      (/i386/ =~ RUBY_PLATFORM) != nil
+    end
+
     # Do we want to disable the colored output?
     def self.colors_disabled?
       #ENV["FASTLANE_DISABLE_COLORS"]
