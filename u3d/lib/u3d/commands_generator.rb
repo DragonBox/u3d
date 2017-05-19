@@ -117,6 +117,15 @@ module U3d
         end
       end
 
+      command :analyze_log do |c|
+        c.syntax = 'u3d analyze_log'
+        c.description = 'Lorem Ipsum'
+        c.action do |args, options|
+          config = convert_options(options)
+          Commands.local_analyze(args: args, options: config)
+        end
+      end
+
       default_command :run
 
       run!

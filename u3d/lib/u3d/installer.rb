@@ -121,10 +121,10 @@ module U3d
 
       FileUtils.touch(log_file)
 
-      if Helper.windows?
-        UI.important "Tailing unavailable for Windows at the moment, logs are at #{log_file}"
-      else
-        tail_pid = Process.spawn("tail -F #{log_file}")
+      tail_thread = Thread.new do
+        File.open(log_file, 'r') do |f|
+          LogAnalyzer.pipe(f)
+        end
       end
 
       begin
@@ -141,7 +141,7 @@ module U3d
         end
         U3dCore::CommandExecutor.execute(command: args)
       ensure
-        Helper.backticks("kill #{tail_pid}") if tail_pid
+        Thread.kill(tail_thread) if tail_thread
       end
     end
 

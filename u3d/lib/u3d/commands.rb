@@ -3,6 +3,7 @@ require 'u3d/downloader'
 require 'u3d/installer'
 require 'u3d/cache'
 require 'u3d/utils'
+require 'u3d/log_analyzer'
 require 'u3d_core/command_executor'
 require 'u3d_core/credentials'
 require 'fileutils'
@@ -177,6 +178,15 @@ module U3d
       def login(options: {})
         credentials = U3dCore::Credentials.new(user: options['user'])
         credentials.login
+      end
+
+      def local_analyze(args: [], options: {})
+        raise ArgumentError, 'No files given' if args.empty?
+        raise ArgumentError, "File #{args[0]} does not exist" unless File.exist? args[0]
+
+        File.open(args[0], 'r') do |f|
+          LogAnalyzer.pipe(f)
+        end
       end
     end
   end
