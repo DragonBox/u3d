@@ -208,15 +208,7 @@ module U3d
       target_path ||= '/'
       U3dCore::CommandExecutor.execute(command: "installer -pkg #{file_path.shellescape} -target #{target_path.shellescape}", admin: true)
     rescue => e
-      UI.error "Failed to install pkg at #{file_path}: #{e}"
-    end
-
-    def self.install_pkg(file_path)
-      begin
-        U3dCore::CommandExecutor::execute(command: "installer -pkg #{file_path.shellescape} -target /", admin: true)
-      rescue => e
-        UI.error "Failed to install pkg at #{file_path}: #{e.to_s}"
-      end
+      UI.error "Failed to install pkg at #{file_path}: #{e.to_s}"
     end
   end
 
