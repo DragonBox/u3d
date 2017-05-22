@@ -1,0 +1,30 @@
+{
+  "error": {
+    "active": true,
+    "start_pattern": "error"
+  },
+  "warning": {
+    "active": true,
+    "start_pattern": "warning"
+  },
+  "mono_ini": {
+    "active": true,
+    "start_pattern": "Initialize mono"
+  },
+  "dll_registration": {
+    "active": true,
+    "start_pattern": "Registering custom dll",
+    "end_pattern": "Registered in (?<time>\\d+\\.\\d+) seconds",
+    "store_lines": false,
+    "start_message": "Beginning DLL registration",
+    "end_message": "DLL registration complete"
+  },
+  "asset_registration": {
+    "active": true,
+    "start_pattern": "----- Compute hash",
+    "end_pattern": "----- Total AssetImport time: (?<time>\\d+\\.\\d+)",
+    "store_lines": false,
+    "start_message": "Beginning Asset registration",
+    "end_message": "Asset registration complete"
+  }
+}
