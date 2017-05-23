@@ -1,30 +1,95 @@
 {
-  "error": {
+  "GENERAL": {
     "active": true,
-    "start_pattern": "error"
+    "silent": false,
+    "comment": "A generic set of rules, to be applied regardless of the current phase",
+    "rules": {
+      "steps": {
+        "active": true,
+        "start_pattern": "DisplayProgressbar: (?<step>.+)",
+        "start_message": "Current step: %{step}"
+      }
+    }
   },
-  "warning": {
+  "JENKINS": {
     "active": true,
-    "start_pattern": "warning"
+    "silent": false,
+    "comment": "Jenkins specific, used to catch build launchs via Jenkins",
+    "phase_start_pattern": "Started by",
+    "rules": {
+      "start": {
+        "active": true,
+        "start_pattern": "Started by"
+      }
+    }
   },
-  "mono_ini": {
+  "INIT": {
     "active": true,
-    "start_pattern": "Initialize mono"
+    "silent": false,
+    "comment": "Initialization on editor launch",
+    "phase_start_pattern": "Initialize mono",
+    "rules": {
+      "mono_options": {
+        "active": true,
+        "start_pattern": "Using monoOptions -(?<options>.+)"
+      },
+      "GUID_loading": {
+        "active": true,
+        "start_pattern": "Loading GUID <-> Path mappings"
+      },
+      "asset_DB_loading": {
+        "active": true,
+        "start_pattern": "Loading Asset Database"
+      }
+    }
   },
-  "dll_registration": {
+  "COMPILER": {
     "active": true,
-    "start_pattern": "Registering custom dll",
-    "end_pattern": "Registered in (?<time>\\d+\\.\\d+) seconds",
-    "store_lines": false,
-    "start_message": "Beginning DLL registration",
-    "end_message": "DLL registration complete"
-  },
-  "asset_registration": {
-    "active": true,
-    "start_pattern": "----- Compute hash",
-    "end_pattern": "----- Total AssetImport time: (?<time>\\d+\\.\\d+)",
-    "store_lines": false,
-    "start_message": "Beginning Asset registration",
-    "end_message": "Asset registration complete"
+    "silent": false,
+    "comment": "",
+    "phase_start_pattern": "- starting compile",
+    "phase_end_pattern": "- Finished compile",
+    "rules": {
+      "target": {
+        "active": true,
+        "start_pattern": "- starting compile (?<path>.+), for buildtarget (?<target>.+)",
+        "start_message": "Target: %{path} (buildtarget %{target})"
+      },
+      "finished": {
+        "active": true,
+        "start_pattern": "- Finished compile (?<path>.+)\\n",
+        "start_message": "Finished compilation for %{path}"
+      },
+      "arguments": {
+        "active": false,
+        "start_pattern": "Compiler Commandline Arguments",
+        "end_pattern": "(^\\n|CompilerOutput)",
+        "store_lines": true,
+        "start_message": "Compiler command line arguments:",
+        "end_message": false
+      },
+      "stdout": {
+        "active": true,
+        "start_pattern": "CompilerOutput:-stdout--exitcode: (?<exitcode>\\d)--compilationhadfailure: (?<fail>False|True)--outfile: (?<file>.+)",
+        "start_message": "Exitcode %{exitcode} on the standard output of the compiler (%{file})"
+      },
+      "stderr": {
+        "active": false,
+        "start_pattern": "CompilerOutput:-stderr",
+        "start_message": "Errors and warnings:"
+      },
+      "compiler_error": {
+        "active": true,
+        "start_pattern": "/(?<file>\\w+\\.\\w+\\(\\d+,\\d+\\)): error (?<code>CS....): (?<message>.+)\\n",
+        "start_message": "Error %{code}: %{message} (%{file})",
+        "type": "error"
+      },
+      "compiler_warning": {
+        "active": true,
+        "start_pattern": "/(?<file>\\w+\\.\\w+\\(\\d+,\\d+\\)): warning (?<code>CS....): (?<message>.+)\\n",
+        "start_message": "Warning %{code}: %{message} (%{file})",
+        "type": "warning"
+      }
+    }
   }
 }
