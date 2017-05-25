@@ -198,6 +198,7 @@ module U3d
       mdfind_args = bundle_identifiers.map { |bi| "kMDItemCFBundleIdentifier == '#{bi}'" }.join(' || ')
 
       cmd = "mdfind \"#{mdfind_args}\" 2>/dev/null"
+      UI.verbose cmd
       versions = `#{cmd}`.split("\n").map { |path| MacInstallation.new(path: path) }
 
       # sorting should take into account stable/patch etc

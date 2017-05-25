@@ -1,8 +1,14 @@
+require "shellwords"
+require "u3d"
+require "u3d/commands_generator"
+
 module Fastlane
   module Actions
     class U3dAction < Action
       def self.run(params)
-        UI.message("The u3d plugin is working!")
+        config = params._values
+        run_args = Shellwords.split(config.delete(:run_args))
+        ::U3d::Commands.run(config: config, run_args: run_args)
       end
 
       def self.description
@@ -18,25 +24,25 @@ module Fastlane
       end
 
       def self.details
-        # Optional:
         "Allows to invoke the various u3d functions from within a Fastlane project."
       end
 
       def self.available_options
         [
-          # FastlaneCore::ConfigItem.new(key: :your_option,
-          #                         env_name: "U3D_YOUR_OPTION",
-          #                      description: "A description of your option",
-          #                         optional: false,
-          #                             type: String)
+          FastlaneCore::ConfigItem.new(key: :unity_version,
+                                  env_name: "U3D_VERSION",
+                               description: "Unity version",
+                                  optional: true,
+                                      type: Array),
+          FastlaneCore::ConfigItem.new(key: :run_args,
+          #                       env_name: "U3D_YOUR_OPTION",
+                               description: "U3d run arguments",
+                                  optional: false,
+                                      type: String)
         ]
       end
 
       def self.is_supported?(platform)
-        # Adjust this if your plugin only works for a particular platform (iOS vs. Android, for example)
-        # See: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
-        #
-        # [:ios, :mac, :android].include?(platform)
         true
       end
     end
