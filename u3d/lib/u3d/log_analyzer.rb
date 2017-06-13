@@ -12,8 +12,7 @@ module U3d
           data = JSON.parse(f.read)
         end
         if data['GENERAL'] && data['GENERAL']['active']
-          generic_rules = data['GENERAL']['rules']
-          data['GENERAL']['rules'].each do |_rn, r|
+          data['GENERAL']['rules'].each do |rn, r|
             next unless r['active']
             next if r['start_pattern'].nil?
             r['start_pattern'] = Regexp.new r['start_pattern']
@@ -23,8 +22,11 @@ module U3d
               r['type'] = 'message'
             end
             r['type'] ||= 'message'
+            r['ignore_lines'].map! { |pat| Regexp.new pat } if r['ignore_lines']
+            generic_rules[rn] = r
           end
         end
+        data.delete('GENERAL')
         data.each do |name, phase|
           # Phase parsing
           next unless phase['active']
@@ -34,17 +36,20 @@ module U3d
           phase.delete('comment')
           # Rules parsing
           temp_rules = {}
-          phase['rules'].each do |rn, r|
-            next unless r['active']
-            next if r['start_pattern'].nil?
-            r['start_pattern'] = Regexp.new r['start_pattern']
-            r['end_pattern'] = Regexp.new r['end_pattern'] if r['end_pattern']
-            r['type'] = 'important' if r['type'] == 'warning'
-            if r['type'] && r['type'] != 'error' && r['type'] != 'important'
-              r['type'] = 'message'
+          unless phase['silent'] == true
+            phase['rules'].each do |rn, r|
+              next unless r['active']
+              next if r['start_pattern'].nil?
+              r['start_pattern'] = Regexp.new r['start_pattern']
+              r['end_pattern'] = Regexp.new r['end_pattern'] if r['end_pattern']
+              r['type'] = 'important' if r['type'] == 'warning'
+              if r['type'] && r['type'] != 'error' && r['type'] != 'important'
+                r['type'] = 'message'
+              end
+              r['type'] ||= 'message'
+              r['ignore_lines'].map! { |pat| Regexp.new pat } if r['ignore_lines']
+              temp_rules[rn] = r
             end
-            r['type'] ||= 'message'
-            temp_rules[rn] = r
           end
           phase['rules'] = temp_rules
           phases[name] = phase
@@ -55,6 +60,7 @@ module U3d
       def pipe(i, sleep_time: 0.0)
         active_phase = nil
         active_rule = nil
+        context = {}
         lines_buffer = []
         generic_rules, phases = load_rules
         begin
@@ -73,6 +79,7 @@ module U3d
                   active_rule = nil
                 end
                 active_phase = name
+                context.clear
                 lines_buffer.clear
                 UI.verbose("--- Beginning #{name} phase ---")
                 break
@@ -81,7 +88,7 @@ module U3d
 
             # Try to apply current phase ruleset
             if active_phase
-              rules = phases[active_phase]['rules']
+              rules = phases[active_phase]['rules'].merge(generic_rules)
 
               if active_rule
                 rule = rules[active_rule]
@@ -89,14 +96,14 @@ module U3d
                 if line =~ pattern # Rule ending
                   unless lines_buffer.empty?
                     lines_buffer.each do |l|
-                      UI.send(rule['type'], l)
+                      UI.send(rule['type'], "[#{active_phase}] " + l)
                     end
                   end
                   if rule['end_message'] != false
                     if rule['end_message']
                       match = line.match(pattern)
                       params = match.names.map{ |n| n = n.to_sym }.zip(match.captures).to_h
-                      message = rule['end_message'] % params
+                      message = rule['end_message'] % params.merge(context)
                     else
                       message = line.chomp
                     end
@@ -104,10 +111,21 @@ module U3d
                     UI.send(rule['type'], message)
                   end
                   active_rule = nil
+                  context.clear
                   lines_buffer.clear
-                  UI.verbose("[#{active_phase}] Ending rule '#{active_rule}'.")
                 else
-                  lines_buffer << line.chomp if rule['store_lines']
+                  if rule['store_lines']
+                    match = false
+                    if rule['ignore_lines']
+                      rule['ignore_lines'].each do |pat|
+                        if line =~ pat
+                          match = true
+                          break
+                        end
+                      end
+                    end
+                    lines_buffer << line.chomp unless match
+                  end
                 end
               end
 
@@ -118,15 +136,17 @@ module U3d
                     if rule['end_pattern']
                       active_rule = rn
                     end
-                    if rule['start_message']
-                      match = line.match(pattern)
-                      params = match.names.map{ |n| n = n.to_sym }.zip(match.captures).to_h
-                      message = rule['start_message'] % params
-                    else
-                      message = line.chomp
+                    match = line.match(pattern)
+                    context = match.names.map{ |n| n = n.to_sym }.zip(match.captures).to_h
+                    if rule['start_message'] != false
+                      if rule['start_message']
+                        message = rule['start_message'] % context
+                      else
+                        message = line.chomp
+                      end
+                      message = "[#{active_phase}] " + message
+                      UI.send(rule['type'], message)
                     end
-                    message = "[#{active_phase}] " + message
-                    UI.send(rule['type'], message)
                     break
                   end
                 end
@@ -142,26 +162,6 @@ module U3d
                 lines_buffer.clear
                 UI.verbose("---  Ending #{active_phase} phase   ---")
                 active_phase = nil
-              end
-            end
-
-            # Finally, try to apply the generic rules
-            generic_rules.each do |name, rule|
-              pattern = rule['start_pattern']
-              if line =~ pattern
-                if rule['end_pattern']
-                  UI.important('GENERAL rules only support one line rules at the moment')
-                end
-                if rule['start_message']
-                  match = line.match(pattern)
-                  params = match.names.map{ |n| n = n.to_sym }.zip(match.captures).to_h
-                  message = rule['start_message'] % params
-                else
-                  message = line.chomp
-                end
-                message = "[GENERAL] " + message
-                UI.send(rule['type'], message)
-                break
               end
             end
             sleep(sleep_time)

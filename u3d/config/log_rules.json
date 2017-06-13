@@ -1,13 +1,26 @@
 {
   "GENERAL": {
     "active": true,
-    "silent": false,
     "comment": "A generic set of rules, to be applied regardless of the current phase",
     "rules": {
       "steps": {
-        "active": true,
+        "active": false,
         "start_pattern": "DisplayProgressbar: (?<step>.+)",
         "start_message": "Current step: %{step}"
+      },
+      "fail": {
+        "active": true,
+        "start_pattern": "^(?<fail>Failed to .+)\\n",
+        "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "start_message": false,
+        "end_message": "%{file}(line %{line}): %{fail}",
+        "store_lines": false,
+        "ignore_lines": [
+          "UnityEditor",
+          "UnityEngine",
+          "^\\n"
+        ],
+        "type": "error"
       }
     }
   },
@@ -39,14 +52,19 @@
       },
       "asset_DB_loading": {
         "active": true,
-        "start_pattern": "Loading Asset Database"
+        "start_pattern": "Loading Asset Database ?... {,2}\\d+\\.?\\d*"
+      },
+      "asset_DB_loading_FAIL": {
+        "active": true,
+        "start_pattern": "Loading Asset Database ?... ?\\[ Failed \\]",
+        "type": "warning"
       }
     }
   },
   "COMPILER": {
     "active": true,
     "silent": false,
-    "comment": "",
+    "comment": "Compiling phase",
     "phase_start_pattern": "- starting compile",
     "phase_end_pattern": "- Finished compile",
     "rules": {
@@ -89,6 +107,32 @@
         "start_pattern": "/(?<file>\\w+\\.\\w+\\(\\d+,\\d+\\)): warning (?<code>CS....): (?<message>.+)\\n",
         "start_message": "Warning %{code}: %{message} (%{file})",
         "type": "warning"
+      },
+      "cancel": {
+        "active": true,
+        "start_pattern": "\\*\\*\\* Cancelled '(?<build>.+)' in (?<time>\\d+) seconds",
+        "start_message": "Cancelled '%{build}' after %{time}s",
+        "type": "error"
+      }
+    }
+  },
+  "ASSET": {
+    "active": true,
+    "silent": false,
+    "comment": "Asset managing and packaging",
+    "phase_start_pattern": "Packing sprites",
+    "rules": {
+      "pack_warning": {
+        "active": true,
+        "start_pattern": "WARNING: (?<message>.+)",
+        "start_message": "Warning: %{message}",
+        "type": "warning"
+      },
+      "percentage": {
+        "active": true,
+        "start_pattern": "Textures\\s+\\d+\\.?\\d* .b\\s+\\d{1,3}\\.?\\d*%",
+        "end_pattern": "Complete size\\s+\\d+\\.?\\d* .b\\s+\\d{1,3}\\.?\\d*%",
+        "store_lines": true
       }
     }
   }
