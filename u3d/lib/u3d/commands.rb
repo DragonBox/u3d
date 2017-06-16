@@ -12,12 +12,19 @@ module U3d
   # API for U3d, redirecting calls to class they concern
   class Commands
     class << self
-      def list_installed
-        if Installer.create.installed.empty?
+      def list_installed(options: {})
+        list = Installer.create.installed
+        if list.empty?
           UI.important 'No Unity version installed'
           return
         end
-        UI.message Installer.create.installed.map { |v| "Version #{v.version}\t(#{v.path})" }.join("\n")
+        Installer.create.installed.each do |u|
+          UI.message "Version #{u.version}\t(#{u.path})"
+          if options[:packages] && u.packages
+            UI.message 'Packages:'
+            u.packages.each { |pack| UI.message " - #{pack}" }
+          end
+        end
       end
 
       def list_available(options: {})
@@ -63,10 +70,27 @@ module U3d
         version = args[0]
         UI.user_error!('Please specify a Unity version to download') unless version
 
+        packages = options[:packages] || ['Unity']
+        packages.insert(0, 'Unity') if packages.delete('Unity')
+
+        installed = Installer.create.installed
+        unity = installed.find { |u| u.version == version }
+        unless packages.include?('Unity')
+          if unity.nil?
+            UI.error "Version #{version} of Unity is not installed yet. Please install it first before installing any other module"
+            return
+          else
+            options[:installation_path] ||= unity.path if Helper.windows?
+            UI.verbose "Unity #{version} is installed at #{unity.path}"
+          end
+        end
+
         unless options[:no_install]
           UI.important 'Root privileges are required'
           raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
         end
+
+
 
         os = U3dCore::Helper.operating_system
         cache = Cache.new(force_os: os)
@@ -108,18 +132,11 @@ module U3d
         unity = installed.find { |u| u.version == version }
         unless packages.include?('Unity')
           if unity.nil?
-            raise "Version #{version} of Unity is not installed yet. Please install it first before installing any other module"
+            UI.error "Version #{version} of Unity is not installed yet. Please install it first before installing any other module"
+            return
           else
+            options[:installation_path] ||= unity.path if Helper.windows?
             UI.verbose "Unity #{version} is installed at #{unity.path}"
-          end
-        end
-
-        installed.each do |u|
-          if %r{\/Unity\/} =~ u.path
-            new_path = u.path.sub(%r{\/Unity\/}, "/Unity #{u.version}")
-            UI.verbose "Moving Unity #{u.version} from #{u.path} to #{new_path}"
-            FileUtils.mv(u.path, new_path)
-            u.path = new_path
           end
         end
 

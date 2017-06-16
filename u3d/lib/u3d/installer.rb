@@ -2,6 +2,11 @@ require 'u3d/utils'
 
 # Mac specific only right now
 module U3d
+
+  DEFAULT_LINUX_INSTALL = '/opt/'.freeze
+  DEFAULT_MAC_INSTALL = '/'.freeze
+  DEFAULT_WINDOWS_INSTALL = 'C:/Program Files/'.freeze
+
   class Installation
     def self.create(path: nil)
       if Helper.mac?
@@ -33,6 +38,12 @@ module U3d
 
     def exe_path
       "#{path}/Contents/MacOS/Unity"
+    end
+
+    def packages
+      fpath = File.expand_path('../PlaybackEngines', path)
+      raise "Unity installation does not seem correct. Couldn't locate PlaybackEngines." unless Dir.exist? fpath
+      Dir.entries(fpath).select { |e| File.directory?(File.join(fpath, e)) && !(e == '.' || e == '..') }
     end
 
     private
@@ -69,6 +80,10 @@ module U3d
     def exe_path
       "#{path}/Unity"
     end
+
+    def packages
+      false
+    end
   end
 
   class WindowsInstallation < Installation
@@ -80,7 +95,7 @@ module U3d
 
     def version
       require 'rexml/document'
-      fpath = "#{path}/Data/PlaybackEngines/windowsstandalonesupport/ivy.xml"
+      fpath = "#{path}/Editor/Data/PlaybackEngines/windowsstandalonesupport/ivy.xml"
       raise "Couldn't find file #{fpath}" unless File.exist? fpath
       doc = REXML::Document.new(File.read(fpath))
       version = REXML::XPath.first(doc, 'ivy-module/info/@e:unityVersion').value
@@ -103,7 +118,13 @@ module U3d
     end
 
     def exe_path
-      File.expand_path('Unity.exe', @path)
+      File.join(@path, 'Editor', 'Unity.exe')
+    end
+
+    def packages
+      fpath = "#{path}/Editor/Data/PlaybackEngines/"
+      raise "Unity installation does not seem correct. Couldn't locate PlaybackEngines." unless Dir.exist? fpath
+      Dir.entries(fpath).select { |e| File.directory?(File.join(fpath, e)) && !(e == '.' || e == '..') }
     end
   end
 
@@ -123,7 +144,7 @@ module U3d
 
       tail_thread = Thread.new do
         File.open(log_file, 'r') do |f|
-          LogAnalyzer.pipe(f)
+          LogAnalyzer.pipe(f, sleep_time: 0.5)
         end
       end
 
@@ -163,8 +184,6 @@ module U3d
   end
 
   class Installer
-    DEFAULT_WINDOWS_INSTALL = 'C:/Program Files/Unity/'.freeze
-
     def self.create
       if Helper.mac?
         MacInstaller.new
@@ -178,23 +197,26 @@ module U3d
     def self.install_module(file_path, version, installation_path: nil, info: {})
       extension = File.extname(file_path)
       if extension == '.pkg'
+        path = installation_path || DEFAULT_MAC_INSTALL
         MacInstaller.install_pkg(
           file_path,
-          target_path: installation_path
+          target_path: path
         )
       elsif extension == '.exe'
-        path = installation_path || DEFAULT_WINDOWS_INSTALL
-        path = path.chop + " #{version}/"
-        Dir.mkdir path unless Dir.exist? path
+        path = installation_path || File.expand_path("Unity_#{version}", DEFAULT_WINDOWS_INSTALL)
         WindowsInstaller.install_exe(
           file_path,
           installation_path: path,
           info: info
         )
       elsif extension == '.sh'
-        LinuxInstaller.install_sh(file_path)
+        path = installation_path || File.expand_path("Unity_#{version}", DEFAULT_LINUX_INSTALL)
+        LinuxInstaller.install_sh(
+          file_path,
+          installation_path: path
+        )
       else
-        raise "File type #{extension} not supported"
+        raise "File type #{extension} not yet supported"
       end
     end
   end
@@ -218,62 +240,45 @@ module U3d
     end
 
     def self.install_pkg(file_path, target_path: nil)
-      target_path ||= '/'
+      target_path ||= DEFAULT_MAC_INSTALL
       U3dCore::CommandExecutor.execute(command: "installer -pkg #{file_path.shellescape} -target #{target_path.shellescape}", admin: true)
     rescue => e
       UI.error "Failed to install pkg at #{file_path}: #{e.to_s}"
-    end
-
-    def self.install_pkg(file_path)
-      begin
-        U3dCore::CommandExecutor::execute(command: "installer -pkg #{file_path.shellescape} -target /", admin: true)
-      rescue => e
-        UI.error "Failed to install pkg at #{file_path}: #{e.to_s}"
-      end
+    else
+      UI.success "Successfully installed package from #{file_path}"
     end
   end
 
   class LinuxInstaller
     def installed
-      # so many assumptions here...
-      cmd = 'find /opt/ -maxdepth 3 -name Unity 2> /dev/null | xargs dirname'
-      versions = `#{cmd}`.split("\n").map { |path| LinuxInstallation.new(path: path) }
+      find = File.join(DEFAULT_LINUX_INSTALL, 'Unity*')
+      versions = Dir[find].map { |path| WindowsInstallation.new(path: path) }
 
       # sorting should take into account stable/patch etc
       versions.sort! { |x, y| x.version <=> y.version }
     end
 
-    def self.install_sh(file)
-      U3dCore::CommandExecutor.execute(command: file.shellescape, admin: true)
+    def self.install_sh(file, installation_path: nil)
+      cmd = file.shellescape
+      if installation_path
+        Utils.ensure_dir(installation_path)
+        Dir.chdir(installation_path) do
+          U3dCore::CommandExecutor.execute(command: cmd, admin: true)
+        end
+      else
+        U3dCore::CommandExecutor.execute(command: cmd, admin: true)
+      end
     rescue => e
       UI.error "Failed to install bash file at #{file_path}: #{e}"
+    else
+      UI.success 'Installation successful'
     end
   end
 
   class WindowsInstaller
     def installed
-      unity_paths = []
-
-      require 'win32/registry'
-
-      Win32::Registry::HKEY_LOCAL_MACHINE.open(
-        'Software\Microsoft\Windows\CurrentVersion\Uninstall'
-      ) do |reg|
-        reg.each_key do |key|
-          k = reg.open(key)
-          begin
-            _temp = k['DisplayName']
-          rescue
-            next
-          else
-            next unless /Unity/ =~ key
-          end
-          path = File.expand_path('..', k['UninstallString'])
-          unity_paths << path
-        end
-      end
-
-      versions = unity_paths.map { |path| WindowsInstallation.new(path: path) }
+      find = File.join(DEFAULT_WINDOWS_INSTALL, 'Unity*', 'Editor', 'Uninstall.exe')
+      versions = Dir[find].map { |path| WindowsInstallation.new(path: File.expand_path('../..', path)) }
 
       # sorting should take into account stable/patch etc
       versions.sort! { |x, y| x.version <=> y.version }
@@ -281,15 +286,16 @@ module U3d
 
     def self.install_exe(file_path, installation_path: nil, info: {})
       installation_path ||= DEFAULT_WINDOWS_INSTALL
-      installation_path = installation_path.split('/').join('\\')
+      final_path = installation_path.gsub('/', '\\')
+      Utils.ensure_dir(final_path)
       begin
         command = nil
         if info['cmd']
           command = info['cmd']
           command.sub!(/{FILENAME}/, file_path)
-          command.sub!(/{INSTDIR}/, installation_path)
-          command.sub!(/{DOCDIR}/, installation_path)
-          command.sub!(/{MODULEDIR}/, installation_path)
+          command.sub!(/{INSTDIR}/, final_path)
+          command.sub!(/{DOCDIR}/, final_path)
+          command.sub!(/{MODULEDIR}/, final_path)
           command.sub!(/\/D=/, '/S /D=') unless /\/S/ =~ command
         end
         command ||= file_path.to_s

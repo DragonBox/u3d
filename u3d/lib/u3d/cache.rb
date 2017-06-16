@@ -6,8 +6,10 @@ require 'u3d/utils'
 module U3d
   # Cache stores the informations regarding versions
   class Cache
-    # Path to the directory containing the cache
-    DEFAULT_PATH = "#{ENV['HOME']}/.u3d".freeze
+    # Path to the directory containing the cache for the different OS
+    DEFAULT_LINUX_PATH = File.join(ENV['HOME'], '.u3d').freeze
+    DEFAULT_MAC_PATH = File.join(ENV['HOME'], 'Library', 'Application Support', 'u3d').freeze
+    DEFAULT_WINDOWS_PATH = File.join(ENV['HOME'], 'AppData', 'Local', 'u3d').freeze
     # Name of the file itself
     DEFAULT_NAME = 'cache.json'.freeze
     # Maximum duration after which the cache is considered outdated
@@ -27,8 +29,19 @@ module U3d
       @cache[key]
     end
 
+    def default_path
+      case U3dCore::Helper.operating_system
+      when :linux
+        return DEFAULT_LINUX_PATH
+      when :mac
+        return DEFAULT_MAC_PATH
+      when :win
+        return DEFAULT_WINDOWS_PATH
+      end
+    end
+
     def initialize(path: nil, force_os: nil)
-      @path = path || DEFAULT_PATH
+      @path = path || default_path
       @cache = {}
       os = force_os || U3dCore::Helper.operating_system
       Utils.ensure_dir(@path)

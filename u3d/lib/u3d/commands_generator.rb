@@ -60,10 +60,12 @@ module U3d
       end
 
       command :installed do |c|
-        c.syntax = 'u3d installed'
+        c.syntax = 'u3d installed [-p | --packages]'
+        c.option '-p', '--packages', 'Lists installed packages as well'
         c.description = 'List installed version of Unity3d'
-        c.action do |_args, _options|
-          Commands.list_installed
+        c.action do |_args, options|
+          config = convert_options(options)
+          Commands.list_installed(options: config)
         end
       end
 
