@@ -189,40 +189,15 @@ module U3d
   class Installer
     def self.create
       installer = nil
-      command = ''
       if Helper.mac?
         installer = MacInstaller.new
-        command = "mv %{source} %{target}"
       elsif Helper.linux?
         installer = LinuxInstaller.new
-        command = "mv %{source} %{target}"
       else
         installer = WindowsInstaller.new
-        command = "move %{source} %{target}"
       end
-      installer.installed.each do |unity|
-        unless unity.path =~ UNITY_DIR_CHECK
-          begin
-            source_path = File.expand_path(unity.path)
-            parent = File.expand_path('..', source_path)
-            new_path = File.join(parent, UNITY_DIR % unity.version)
-            UI.important "Moving #{source_path} to #{new_path}..."
-            if Helper.windows?
-              source_path.gsub!('/', '\\')
-              new_path.gsub!('/', '\\')
-            end
-            source_path = "\"" + source_path + "\"" if source_path =~ / /
-            new_path = "\"" + new_path + "\"" if new_path =~ / /
-            cmd = command % { :source => source_path, :target => new_path}
-            U3dCore::CommandExecutor.execute(command: cmd, admin: true)
-          rescue => e
-            UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
-          else
-            UI.success "Successfully moved #{source_path} to #{new_path}"
-          end
-        end
-      end
-      installer
+      installer.check_installed
+      return installer
     end
 
     def self.install_module(file_path, version, installation_path: nil, info: {})
@@ -254,6 +229,26 @@ module U3d
   end
 
   class MacInstaller
+    def check_installed
+      installed.each do |unity|
+        unless unity.path =~ UNITY_DIR_CHECK
+          begin
+            source_path = File.expand_path('..', unity.path)
+            parent = File.expand_path('..', source_path)
+            new_path = File.join(parent, UNITY_DIR % unity.version)
+            UI.important "Moving #{source_path} to #{new_path}..."
+            source_path = "\"" + source_path + "\"" if source_path =~ / /
+            new_path = "\"" + new_path + "\"" if new_path =~ / /
+            U3dCore::CommandExecutor.execute(command: "mv #{source_path} #{new_path}", admin: true)
+          rescue => e
+            UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
+          else
+            UI.success "Successfully moved #{source_path} to #{new_path}"
+          end
+        end
+      end
+    end
+
     def installed
       unless (`mdutil -s /` =~ /disabled/).nil?
         $stderr.puts 'Please enable Spotlight indexing for /Applications.'
@@ -292,6 +287,26 @@ module U3d
   end
 
   class LinuxInstaller
+    def check_installed
+      installed.each do |unity|
+        unless unity.path =~ UNITY_DIR_CHECK
+          begin
+            source_path = File.expand_path(unity.path)
+            parent = File.expand_path('..', source_path)
+            new_path = File.join(parent, UNITY_DIR % unity.version)
+            UI.important "Moving #{source_path} to #{new_path}..."
+            source_path = "\"" + source_path + "\"" if source_path =~ / /
+            new_path = "\"" + new_path + "\"" if new_path =~ / /
+            U3dCore::CommandExecutor.execute(command: "mv #{source_path} #{new_path}", admin: true)
+          rescue => e
+            UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
+          else
+            UI.success "Successfully moved #{source_path} to #{new_path}"
+          end
+        end
+      end
+    end
+
     def installed
       find = File.join(DEFAULT_LINUX_INSTALL, 'Unity*')
       versions = Dir[find].map { |path| WindowsInstallation.new(path: path) }
@@ -320,6 +335,28 @@ module U3d
   end
 
   class WindowsInstaller
+    def check_installed
+      installed.each do |unity|
+        unless unity.path =~ UNITY_DIR_CHECK
+          begin
+            source_path = File.expand_path(unity.path)
+            parent = File.expand_path('..', source_path)
+            new_path = File.join(parent, UNITY_DIR % unity.version)
+            UI.important "Moving #{source_path} to #{new_path}..."
+            source_path.gsub!('/', '\\')
+            new_path.gsub!('/', '\\')
+            source_path = "\"" + source_path + "\"" if source_path =~ / /
+            new_path = "\"" + new_path + "\"" if new_path =~ / /
+            U3dCore::CommandExecutor.execute(command: "move #{source_path} #{new_path}", admin: true)
+          rescue => e
+            UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
+          else
+            UI.success "Successfully moved #{source_path} to #{new_path}"
+          end
+        end
+      end
+    end
+
     def installed
       find = File.join(DEFAULT_WINDOWS_INSTALL, 'Unity*', 'Editor', 'Uninstall.exe')
       versions = Dir[find].map { |path| WindowsInstallation.new(path: File.expand_path('../..', path)) }
