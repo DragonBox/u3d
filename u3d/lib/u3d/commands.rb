@@ -20,7 +20,7 @@ module U3d
         end
         list.each do |u|
           UI.message "Version #{u.version}\t(#{u.path})"
-          if options[:packages] && u.packages
+          if options[:packages] && u.packages && !u.packages.empty?
             UI.message 'Packages:'
             u.packages.each { |pack| UI.message " - #{pack}" }
           end
@@ -73,16 +73,10 @@ module U3d
         packages = options[:packages] || ['Unity']
         packages.insert(0, 'Unity') if packages.delete('Unity')
 
-        installed = Installer.create.installed
-        unity = installed.find { |u| u.version == version }
-        unless packages.include?('Unity')
-          if unity.nil?
-            UI.error "Version #{version} of Unity is not installed yet. Please install it first before installing any other module"
-            return
-          else
-            options[:installation_path] ||= unity.path if Helper.windows?
-            UI.verbose "Unity #{version} is installed at #{unity.path}"
-          end
+        if !packages.include?('Unity')
+          unity = check_unity_presence(version)
+          return unless unity
+          options[:installation_path] ||= unity.path if Helper.windows?
         end
 
         unless options[:no_install]
@@ -126,16 +120,10 @@ module U3d
         packages = options[:packages] || ['Unity']
         packages.insert(0, 'Unity') if packages.delete('Unity')
 
-        installed = Installer.create.installed
-        unity = installed.find { |u| u.version == version }
-        unless packages.include?('Unity')
-          if unity.nil?
-            UI.error "Version #{version} of Unity is not installed yet. Please install it first before installing any other module"
-            return
-          else
-            options[:installation_path] ||= unity.path if Helper.windows?
-            UI.verbose "Unity #{version} is installed at #{unity.path}"
-          end
+        if !packages.include?('Unity')
+          unity = check_unity_presence(version)
+          return unless unity
+          options[:installation_path] ||= unity.path if Helper.windows?
         end
 
         UI.important 'Root privileges are required'
@@ -202,6 +190,20 @@ module U3d
         File.open(args[0], 'r') do |f|
           LogAnalyzer.pipe(f)
         end
+      end
+
+      private
+
+      def check_unity_presence(version: nil)
+        installed = Installer.create.installed
+        unity = installed.find { |u| u.version == version }
+        if unity.nil?
+          UI.error "Version #{version} of Unity is not installed yet. Please install it first before installing any other module"
+        else
+          UI.verbose "Unity #{version} is installed at #{unity.path}"
+          return unity
+        end
+        nil
       end
     end
   end

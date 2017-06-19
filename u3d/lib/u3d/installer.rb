@@ -8,7 +8,7 @@ module U3d
   DEFAULT_MAC_INSTALL = '/'.freeze
   DEFAULT_WINDOWS_INSTALL = 'C:/Program Files/'.freeze
   UNITY_DIR = "Unity_%s"
-  UNITY_DIR_CHECK = %r{Unity_\d\.\d\.\d[a-z]\d}
+  UNITY_DIR_CHECK = %r{Unity_\d+\.\d+\.\d+[a-z]\d+}
 
   class Installation
     def self.create(path: nil)
@@ -44,6 +44,10 @@ module U3d
     end
 
     def packages
+      if Utils.parse_unity_version(version)[0].to_i <= 4
+        UI.important 'Packages in Unity versions older than Unity5 are not supported.'
+        return []
+      end
       fpath = File.expand_path('../PlaybackEngines', path)
       raise "Unity installation does not seem correct. Couldn't locate PlaybackEngines." unless Dir.exist? fpath
       Dir.entries(fpath).select { |e| File.directory?(File.join(fpath, e)) && !(e == '.' || e == '..') }
@@ -125,6 +129,10 @@ module U3d
     end
 
     def packages
+      if Utils.parse_unity_version(version)[0].to_i <= 4
+        UI.important 'Packages in Unity versions older than Unity5 are not supported.'
+        return []
+      end
       fpath = "#{path}/Editor/Data/PlaybackEngines/"
       raise "Unity installation does not seem correct. Couldn't locate PlaybackEngines." unless Dir.exist? fpath
       Dir.entries(fpath).select { |e| File.directory?(File.join(fpath, e)) && !(e == '.' || e == '..') }
@@ -188,7 +196,6 @@ module U3d
 
   class Installer
     def self.create
-      installer = nil
       if Helper.mac?
         installer = MacInstaller.new
       elsif Helper.linux?
@@ -274,12 +281,15 @@ module U3d
         UI.verbose "No Unity install for version #{version} was found"
         U3dCore::CommandExecutor.execute(command: command, admin: true)
       else
-        path = File.expand_path('..', unity.path)
-        temp_path = File.join(target_path, 'Applications', 'Unity')
-        UI.verbose "Temporary switching location of #{path} to #{temp_path} for installation purpose"
-        FileUtils.mv path, temp_path
-        U3dCore::CommandExecutor.execute(command: command, admin: true)
-        FileUtils.mv temp_path, path
+        begin
+          path = File.expand_path('..', unity.path)
+          temp_path = File.join(target_path, 'Applications', 'Unity')
+          UI.verbose "Temporary switching location of #{path} to #{temp_path} for installation purpose"
+          FileUtils.mv path, temp_path
+          U3dCore::CommandExecutor.execute(command: command, admin: true)
+        ensure
+          FileUtils.mv temp_path, path
+        end
       end
     rescue => e
       UI.error "Failed to install pkg at #{file_path}: #{e.to_s}"
@@ -311,7 +321,7 @@ module U3d
 
     def installed
       find = File.join(DEFAULT_LINUX_INSTALL, 'Unity*')
-      versions = Dir[find].map { |path| WindowsInstallation.new(path: path) }
+      versions = Dir[find].map { |path| LinuxInstallation.new(path: path) }
 
       # sorting should take into account stable/patch etc
       versions.sort! { |x, y| x.version <=> y.version }
@@ -322,8 +332,7 @@ module U3d
       current_dir = Dir.pwd
       if installation_path
         Utils.ensure_dir(installation_path)
-        U3dCore::CommandExecutor.execute(command: "cd #{installation_path}", admin: true)
-        U3dCore::CommandExecutor.execute(command: cmd, admin: true)
+        U3dCore::CommandExecutor.execute(command: "cd #{installation_path}; #{cmd}", admin: true)
       else
         U3dCore::CommandExecutor.execute(command: cmd, admin: true)
       end
@@ -331,8 +340,6 @@ module U3d
       UI.error "Failed to install bash file at #{file_path}: #{e}"
     else
       UI.success 'Installation successful'
-    ensure
-      U3dCore::CommandExecutor.execute(command: "cd #{current_dir}", admin: true)
     end
   end
 

@@ -49,8 +49,8 @@ module U3d
         end
         begin
           result = IniFile.load(ini_path).to_h
-        rescue
-          raise 'Could not parse INI data'
+        rescue => e
+          raise "Could not parse INI data (#{e})"
         end
         result
       end
