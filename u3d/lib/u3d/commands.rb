@@ -90,8 +90,6 @@ module U3d
           raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
         end
 
-
-
         os = U3dCore::Helper.operating_system
         cache = Cache.new(force_os: os)
         files = []

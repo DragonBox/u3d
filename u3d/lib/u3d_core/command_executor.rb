@@ -55,18 +55,6 @@ module U3dCore
           UI.verbose 'Admin privileges granted for command execution'
         end
 
-        if admin
-          UI.verbose 'Trying to gain admin privileges to execute the command'
-
-          cm = CredentialsManager::AccountManager.new(
-            user: ENV['USER'],
-            prefix: SUDO_CRED_PREFIX
-          )
-
-          command = "sudo -k && echo #{cm.password} | sudo -S " + command
-          UI.verbose 'Admin privileges granted for command execution'
-        end
-
         begin
           status = U3dCore::Runner.run(command) do |stdin, stdout, pid|
             stdin.each do |l|

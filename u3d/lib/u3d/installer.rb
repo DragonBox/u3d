@@ -189,25 +189,36 @@ module U3d
   class Installer
     def self.create
       installer = nil
+      command = ''
       if Helper.mac?
         installer = MacInstaller.new
+        command = "mv %{source} %{target}"
       elsif Helper.linux?
         installer = LinuxInstaller.new
+        command = "mv %{source} %{target}"
       else
         installer = WindowsInstaller.new
+        command = "move %{source} %{target}"
       end
       installer.installed.each do |unity|
         unless unity.path =~ UNITY_DIR_CHECK
           begin
-            parent = File.expand_path('..', unity.path)
+            source_path = File.expand_path(unity.path)
+            parent = File.expand_path('..', source_path)
             new_path = File.join(parent, UNITY_DIR % unity.version)
-            UI.important "Moving #{unity.path} to #{new_path}..."
-            FileUtils.mv unity.path, new_path
-            unity.path = new_path
+            UI.important "Moving #{source_path} to #{new_path}..."
+            if Helper.windows?
+              source_path.gsub!('/', '\\')
+              new_path.gsub!('/', '\\')
+            end
+            source_path = "\"" + source_path + "\"" if source_path =~ / /
+            new_path = "\"" + new_path + "\"" if new_path =~ / /
+            cmd = command % { :source => source_path, :target => new_path}
+            U3dCore::CommandExecutor.execute(command: cmd, admin: true)
           rescue => e
-            UI.error "Unable to move #{unity.path} to #{new_path}: #{e}"
+            UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
           else
-            UI.message "Successfully moved #{unity.path} to #{new_path}"
+            UI.success "Successfully moved #{source_path} to #{new_path}"
           end
         end
       end
@@ -332,7 +343,7 @@ module U3d
           command.sub!(/\/D=/, '/S /D=') unless /\/S/ =~ command
         end
         command ||= file_path.to_s
-        U3dCore::CommandExecutor.execute(command: command)
+        U3dCore::CommandExecutor.execute(command: command, admin: true)
       rescue => e
         UI.error "Failed to install exe at #{file_path}: #{e}"
       else
