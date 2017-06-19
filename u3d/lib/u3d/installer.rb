@@ -291,11 +291,11 @@ module U3d
 
     def self.install_sh(file, installation_path: nil)
       cmd = file.shellescape
+      current_dir = Dir.pwd
       if installation_path
         Utils.ensure_dir(installation_path)
-        Dir.chdir(installation_path) do
-          U3dCore::CommandExecutor.execute(command: cmd, admin: true)
-        end
+        U3dCore::CommandExecutor.execute(command: "cd #{installation_path}", admin: true)
+        U3dCore::CommandExecutor.execute(command: cmd, admin: true)
       else
         U3dCore::CommandExecutor.execute(command: cmd, admin: true)
       end
@@ -303,6 +303,8 @@ module U3d
       UI.error "Failed to install bash file at #{file_path}: #{e}"
     else
       UI.success 'Installation successful'
+    ensure
+      U3dCore::CommandExecutor.execute(command: "cd #{current_dir}", admin: true)
     end
   end
 
