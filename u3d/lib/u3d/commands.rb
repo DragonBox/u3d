@@ -18,7 +18,7 @@ module U3d
           UI.important 'No Unity version installed'
           return
         end
-        Installer.create.installed.each do |u|
+        list.each do |u|
           UI.message "Version #{u.version}\t(#{u.path})"
           if options[:packages] && u.packages
             UI.message 'Packages:'

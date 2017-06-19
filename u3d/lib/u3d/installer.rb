@@ -1,4 +1,5 @@
 require 'u3d/utils'
+require 'fileutils'
 
 # Mac specific only right now
 module U3d
@@ -6,6 +7,8 @@ module U3d
   DEFAULT_LINUX_INSTALL = '/opt/'.freeze
   DEFAULT_MAC_INSTALL = '/'.freeze
   DEFAULT_WINDOWS_INSTALL = 'C:/Program Files/'.freeze
+  UNITY_DIR = "Unity_%s"
+  UNITY_DIR_CHECK = %r{Unity_\d\.\d\.\d[a-z]\d}
 
   class Installation
     def self.create(path: nil)
@@ -185,13 +188,30 @@ module U3d
 
   class Installer
     def self.create
+      installer = nil
       if Helper.mac?
-        MacInstaller.new
+        installer = MacInstaller.new
       elsif Helper.linux?
-        LinuxInstaller.new
+        installer = LinuxInstaller.new
       else
-        WindowsInstaller.new
+        installer = WindowsInstaller.new
       end
+      installer.installed.each do |unity|
+        unless unity.path =~ UNITY_DIR_CHECK
+          begin
+            parent = File.expand_path('..', unity.path)
+            new_path = File.join(parent, UNITY_DIR % unity.version)
+            UI.important "Moving #{unity.path} to #{new_path}..."
+            FileUtils.mv unity.path, new_path
+            unity.path = new_path
+          rescue => e
+            UI.error "Unable to move #{unity.path} to #{new_path}: #{e}"
+          else
+            UI.message "Successfully moved #{unity.path} to #{new_path}"
+          end
+        end
+      end
+      installer
     end
 
     def self.install_module(file_path, version, installation_path: nil, info: {})
@@ -200,17 +220,18 @@ module U3d
         path = installation_path || DEFAULT_MAC_INSTALL
         MacInstaller.install_pkg(
           file_path,
+          version: version,
           target_path: path
         )
       elsif extension == '.exe'
-        path = installation_path || File.expand_path("Unity_#{version}", DEFAULT_WINDOWS_INSTALL)
+        path = installation_path || File.join(DEFAULT_WINDOWS_INSTALL, UNITY_DIR % version)
         WindowsInstaller.install_exe(
           file_path,
           installation_path: path,
           info: info
         )
       elsif extension == '.sh'
-        path = installation_path || File.expand_path("Unity_#{version}", DEFAULT_LINUX_INSTALL)
+        path = installation_path || File.join(DEFAULT_LINUX_INSTALL, UNITY_DIR % version)
         LinuxInstaller.install_sh(
           file_path,
           installation_path: path
@@ -239,9 +260,19 @@ module U3d
       versions.sort! { |x, y| x.version <=> y.version }
     end
 
-    def self.install_pkg(file_path, target_path: nil)
+    def self.install_pkg(file_path, version: nil, target_path: nil)
       target_path ||= DEFAULT_MAC_INSTALL
-      U3dCore::CommandExecutor.execute(command: "installer -pkg #{file_path.shellescape} -target #{target_path.shellescape}", admin: true)
+      command = "installer -pkg #{file_path.shellescape} -target #{target_path.shellescape}"
+      index = installed.index version
+      if index.nil?
+        U3dCore::CommandExecutor.execute(command: command, admin: true)
+      else
+        path = installed[index].path
+        temp_path = File.join(target_path, 'Applications', 'Unity')
+        FileUtils.mv path, temp_path
+        U3dCore::CommandExecutor.execute(command: command, admin: true)
+        FileUtils.mv temp_path, path
+      end
     rescue => e
       UI.error "Failed to install pkg at #{file_path}: #{e.to_s}"
     else
