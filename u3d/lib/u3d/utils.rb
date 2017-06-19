@@ -24,7 +24,7 @@ module U3d
           UI.error 'SSL has faced an error, you may want to check our README to fix it'
           raise ssl_error
         end
-        
+
         case response
         when Net::HTTPSuccess then
           response.body

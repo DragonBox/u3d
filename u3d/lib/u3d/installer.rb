@@ -162,12 +162,7 @@ module U3d
       begin
         args.unshift(installation.exe_path)
         if Helper.windows?
-          args.map! do |a|
-            if a =~ / / && !a.start_with?("\"")
-              a = "\"#{a}\""
-            end
-            a
-          end
+          args.map! { |a| a =~ / / ? "\"#{a}\"" : a }
         else
           args.map! { |a| a.shellescape }
         end

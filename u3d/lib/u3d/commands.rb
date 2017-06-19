@@ -74,7 +74,7 @@ module U3d
         packages.insert(0, 'Unity') if packages.delete('Unity')
 
         if !packages.include?('Unity')
-          unity = check_unity_presence(version)
+          unity = check_unity_presence(version: version)
           return unless unity
           options[:installation_path] ||= unity.path if Helper.windows?
         end
@@ -121,7 +121,7 @@ module U3d
         packages.insert(0, 'Unity') if packages.delete('Unity')
 
         if !packages.include?('Unity')
-          unity = check_unity_presence(version)
+          unity = check_unity_presence(version: version)
           return unless unity
           options[:installation_path] ||= unity.path if Helper.windows?
         end
