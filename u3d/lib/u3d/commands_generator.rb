@@ -53,7 +53,7 @@ module U3d
         c.syntax = 'u3d run [-u | --unity_version <version>] [ -- <run_args>]'
         c.description = 'Run unity'
         U3dCore::CommanderGenerator.new.generate(U3d::Options.available_run_options)
-        c.action do |args, options|
+        c.action do |_args, options|
           config = convert_options(options)
           Commands.run(config: config, run_args: run_args)
         end
@@ -120,8 +120,8 @@ module U3d
       end
 
       command :analyze_log do |c|
-        c.syntax = 'u3d analyze_log'
-        c.description = 'Lorem Ipsum'
+        c.syntax = 'u3d analyze_log <logfile>'
+        c.description = 'Run a saved logfile through the log filter'
         c.action do |args, options|
           config = convert_options(options)
           Commands.local_analyze(args: args, options: config)

@@ -70,8 +70,7 @@ module U3d
         version = args[0]
         UI.user_error!('Please specify a Unity version to download') unless version
 
-        packages = options[:packages] || ['Unity']
-        packages.insert(0, 'Unity') if packages.delete('Unity')
+        packages = packages_with_unity_first(options)
 
         if !packages.include?('Unity')
           unity = check_unity_presence(version: version)
@@ -97,8 +96,6 @@ module U3d
           if options[:all]
             files = downloader.download_all(version, cache[os.id2name]['versions'])
           else
-            packages = options[:packages] || ['Unity']
-            packages.insert(0, 'Unity') if packages.delete('Unity')
             packages.each do |package|
               result = downloader.download_specific(package, version, cache[os.id2name]['versions'])
               files << [package, result[0], result[1]] unless result.nil?
@@ -117,8 +114,7 @@ module U3d
         UI.user_error!('Please specify a version') if args.empty?
         version = args[0]
 
-        packages = options[:packages] || ['Unity']
-        packages.insert(0, 'Unity') if packages.delete('Unity')
+        packages = packages_with_unity_first(options)
 
         if !packages.include?('Unity')
           unity = check_unity_presence(version: version)
@@ -193,6 +189,12 @@ module U3d
       end
 
       private
+
+      def packages_with_unity_first(options)
+        temp = options[:packages] || ['Unity']
+        temp.insert(0, 'Unity') if temp.delete('Unity')
+        temp
+      end
 
       def check_unity_presence(version: nil)
         installed = Installer.create.installed

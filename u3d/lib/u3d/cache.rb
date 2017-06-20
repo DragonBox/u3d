@@ -29,17 +29,6 @@ module U3d
       @cache[key]
     end
 
-    def default_path
-      case U3dCore::Helper.operating_system
-      when :linux
-        return DEFAULT_LINUX_PATH
-      when :mac
-        return DEFAULT_MAC_PATH
-      when :win
-        return DEFAULT_WINDOWS_PATH
-      end
-    end
-
     def initialize(path: nil, force_os: nil)
       @path = path || default_path
       @cache = {}
@@ -94,6 +83,17 @@ module U3d
       File.delete(file_path) if File.file?(file_path)
       File.open(file_path, 'w') do |f|
         f.write(@cache.to_json)
+      end
+    end
+
+    def default_path
+      case U3dCore::Helper.operating_system
+      when :linux
+        return DEFAULT_LINUX_PATH
+      when :mac
+        return DEFAULT_MAC_PATH
+      when :win
+        return DEFAULT_WINDOWS_PATH
       end
     end
   end

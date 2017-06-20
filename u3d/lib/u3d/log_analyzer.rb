@@ -13,17 +13,7 @@ module U3d
         end
         if data['GENERAL'] && data['GENERAL']['active']
           data['GENERAL']['rules'].each do |rn, r|
-            next unless r['active']
-            next if r['start_pattern'].nil?
-            r['start_pattern'] = Regexp.new r['start_pattern']
-            r['end_pattern'] = Regexp.new r['end_pattern'] if r['end_pattern']
-            r['type'] = 'important' if r['type'] == 'warning'
-            if r['type'] && r['type'] != 'error' && r['type'] != 'important'
-              r['type'] = 'message'
-            end
-            r['type'] ||= 'message'
-            r['ignore_lines'].map! { |pat| Regexp.new pat } if r['ignore_lines']
-            generic_rules[rn] = r
+            generic_rules[rn] = r if parse_rule(r)
           end
         end
         data.delete('GENERAL')
@@ -38,17 +28,7 @@ module U3d
           temp_rules = {}
           unless phase['silent'] == true
             phase['rules'].each do |rn, r|
-              next unless r['active']
-              next if r['start_pattern'].nil?
-              r['start_pattern'] = Regexp.new r['start_pattern']
-              r['end_pattern'] = Regexp.new r['end_pattern'] if r['end_pattern']
-              r['type'] = 'important' if r['type'] == 'warning'
-              if r['type'] && r['type'] != 'error' && r['type'] != 'important'
-                r['type'] = 'message'
-              end
-              r['type'] ||= 'message'
-              r['ignore_lines'].map! { |pat| Regexp.new pat } if r['ignore_lines']
-              temp_rules[rn] = r
+              temp_rules[rn] = r if parse_rule(r)
             end
           end
           phase['rules'] = temp_rules
@@ -171,6 +151,22 @@ module U3d
         rescue Interrupt
           UI.verbose 'Interrupted'
         end
+      end
+
+      private
+
+      def parse_rule(r)
+        return false unless r['active']
+        return false if r['start_pattern'].nil?
+        r['start_pattern'] = Regexp.new r['start_pattern']
+        r['end_pattern'] = Regexp.new r['end_pattern'] if r['end_pattern']
+        r['type'] = 'important' if r['type'] == 'warning'
+        if r['type'] && r['type'] != 'error' && r['type'] != 'important'
+          r['type'] = 'message'
+        end
+        r['type'] ||= 'message'
+        r['ignore_lines'].map! { |pat| Regexp.new pat } if r['ignore_lines']
+        true
       end
     end
   end

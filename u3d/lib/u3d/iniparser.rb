@@ -14,17 +14,6 @@ module U3d
     INI_WIN_PATH = File.join(ENV['HOME'], 'AppData', 'Local', 'u3d', 'ini_files').freeze
 
     class << self
-      def default_ini_path
-        case U3dCore::Helper.operating_system
-        when :linux
-          return INI_LINUX_PATH
-        when :mac
-          return INI_MAC_PATH
-        when :win
-          return INI_WIN_PATH
-        end
-      end
-
       def load_ini(version, cached_versions, os: U3dCore::Helper.operating_system, offline: false)
         unless os == :win || os == :mac
           raise ArgumentError, "OS #{os.id2name} does not use ini files"
@@ -53,6 +42,19 @@ module U3d
           raise "Could not parse INI data (#{e})"
         end
         result
+      end
+
+      private
+
+      def default_ini_path
+        case U3dCore::Helper.operating_system
+        when :linux
+          return INI_LINUX_PATH
+        when :mac
+          return INI_MAC_PATH
+        when :win
+          return INI_WIN_PATH
+        end
       end
     end
   end
