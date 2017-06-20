@@ -20,10 +20,9 @@ module U3d
         end
         list.each do |u|
           UI.message "Version #{u.version}\t(#{u.path})"
-          if options[:packages] && u.packages && !u.packages.empty?
-            UI.message 'Packages:'
-            u.packages.each { |pack| UI.message " - #{pack}" }
-          end
+          next unless options[:packages] && u.packages && !u.packages.empty?
+          UI.message 'Packages:'
+          u.packages.each { |pack| UI.message " - #{pack}" }
         end
       end
 
@@ -72,7 +71,7 @@ module U3d
 
         packages = packages_with_unity_first(options)
 
-        if !packages.include?('Unity')
+        unless packages.include?('Unity')
           unity = check_unity_presence(version: version)
           return unless unity
           options[:installation_path] ||= unity.path if Helper.windows?
@@ -116,7 +115,7 @@ module U3d
 
         packages = packages_with_unity_first(options)
 
-        if !packages.include?('Unity')
+        unless packages.include?('Unity')
           unity = check_unity_presence(version: version)
           return unless unity
           options[:installation_path] ||= unity.path if Helper.windows?
@@ -150,8 +149,8 @@ module U3d
         end
       end
 
-      def run(config: {}, run_args: [])
-        version = config[:unity_version]
+      def run(options: {}, run_args: [])
+        version = options[:unity_version]
 
         runner = Runner.new
         pp = runner.find_projectpath_in_args(run_args)
@@ -179,7 +178,7 @@ module U3d
         credentials.login
       end
 
-      def local_analyze(args: [], options: {})
+      def local_analyze(args: [])
         raise ArgumentError, 'No files given' if args.empty?
         raise ArgumentError, "File #{args[0]} does not exist" unless File.exist? args[0]
 

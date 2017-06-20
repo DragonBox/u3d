@@ -55,7 +55,7 @@ module U3d
         U3dCore::CommanderGenerator.new.generate(U3d::Options.available_run_options)
         c.action do |_args, options|
           config = convert_options(options)
-          Commands.run(config: config, run_args: run_args)
+          Commands.run(options: config, run_args: run_args)
         end
       end
 
@@ -122,9 +122,8 @@ module U3d
       command :analyze_log do |c|
         c.syntax = 'u3d analyze_log <logfile>'
         c.description = 'Run a saved logfile through the log filter'
-        c.action do |args, options|
-          config = convert_options(options)
-          Commands.local_analyze(args: args, options: config)
+        c.action do |args, _options|
+          Commands.local_analyze(args: args)
         end
       end
 

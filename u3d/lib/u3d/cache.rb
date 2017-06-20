@@ -81,19 +81,17 @@ module U3d
       @cache[os.id2name]['lastupdate'] = Time.now.to_i
       @cache[os.id2name]['versions'] = UnityVersions.list_available(os: os)
       File.delete(file_path) if File.file?(file_path)
-      File.open(file_path, 'w') do |f|
-        f.write(@cache.to_json)
-      end
+      File.open(file_path, 'w') { |f| f.write(@cache.to_json) }
     end
 
     def default_path
       case U3dCore::Helper.operating_system
       when :linux
-        return DEFAULT_LINUX_PATH
+        DEFAULT_LINUX_PATH
       when :mac
-        return DEFAULT_MAC_PATH
+        DEFAULT_MAC_PATH
       when :win
-        return DEFAULT_WINDOWS_PATH
+        DEFAULT_WINDOWS_PATH
       end
     end
   end

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
-$LOAD_PATH.push File.expand_path("../../lib", __FILE__)
+$LOAD_PATH.push File.expand_path('../../lib', __FILE__)
 
-require "u3d"
-require "u3d/commands_generator"
+require 'u3d'
+require 'u3d/commands_generator'
 
 U3d::CommandsGenerator.start

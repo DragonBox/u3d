@@ -146,15 +146,15 @@ module U3d
           versions = {}
           UI.message 'Loading Unity releases'
           current = UnityVersions.fetch_version(UNITY_DOWNLOADS, MAC_DOWNLOAD)
-          UI.success "Found #{current.count} releases." if current.count != 0
+          UI.success "Found #{current.count} releases." if current.count.nonzero?
           versions = versions.merge(current)
           UI.message 'Loading Unity patch releases'
           current = UnityVersions.fetch_version(UNITY_PATCHES, MAC_DOWNLOAD)
-          UI.success "Found #{current.count} patch releases." if current.count != 0
+          UI.success "Found #{current.count} patch releases." if current.count.nonzero?
           versions = versions.merge(current)
           UI.message 'Loading Unity beta releases'
           current = UnityVersions.fetch_betas(UNITY_BETAS, MAC_DOWNLOAD)
-          UI.success "Found #{current.count} beta releases." if current.count != 0
+          UI.success "Found #{current.count} beta releases." if current.count.nonzero?
           versions = versions.merge(current)
           versions
         end
@@ -167,15 +167,15 @@ module U3d
           versions = {}
           UI.message 'Loading Unity releases'
           current = UnityVersions.fetch_version(UNITY_DOWNLOADS, WIN_DOWNLOAD)
-          UI.success "Found #{current.count} releases." if current.count != 0
+          UI.success "Found #{current.count} releases." if current.count.nonzero?
           versions = versions.merge(current)
           UI.message 'Loading Unity patch releases'
           current = UnityVersions.fetch_version(UNITY_PATCHES, WIN_DOWNLOAD)
-          UI.success "Found #{current.count} patch releases." if current.count != 0
+          UI.success "Found #{current.count} patch releases." if current.count.nonzero?
           versions = versions.merge(current)
           UI.message 'Loading Unity beta releases'
           current = UnityVersions.fetch_betas(UNITY_BETAS, WIN_DOWNLOAD)
-          UI.success "Found #{current.count} beta releases." if current.count != 0
+          UI.success "Found #{current.count} beta releases." if current.count.nonzero?
           versions = versions.merge(current)
           versions
         end

@@ -3,7 +3,6 @@ require 'u3d_core/credentials'
 module U3dCore
   # Executes commands and takes care of error handling and more
   class CommandExecutor
-    SUDO_CRED_PREFIX = 'u3d.sudo'
     class << self
       # Cross-platform way of finding an executable in the $PATH. Respects the $PATHEXT, which lists
       # valid file extensions for executables on Windows.

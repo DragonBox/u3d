@@ -1,6 +1,7 @@
 require 'json'
 
 module U3d
+  # Analyzes log by filtering output along a set of rules
   class LogAnalyzer
     RULES_PATH = File.expand_path('../../../config/log_rules.json', __FILE__)
     class << self
@@ -44,26 +45,25 @@ module U3d
         lines_buffer = []
         generic_rules, phases = load_rules
         begin
-          while true do
+          loop do
             select([i])
             line = i.readline
 
             # Check if phase is changing
             phases.each do |name, phase|
               next if name == active_phase
-              if line =~ phase['phase_start_pattern']
-                if active_rule
-                  # Active rule should be finished
-                  # If it is still active during phase change, it means that something went wrong
-                  UI.error("[#{active_phase}] Could not finish active rule '#{active_rule}'. Aborting it.")
-                  active_rule = nil
-                end
-                active_phase = name
-                context.clear
-                lines_buffer.clear
-                UI.verbose("--- Beginning #{name} phase ---")
-                break
+              next unless line =~ phase['phase_start_pattern']
+              if active_rule
+                # Active rule should be finished
+                # If it is still active during phase change, it means that something went wrong
+                UI.error("[#{active_phase}] Could not finish active rule '#{active_rule}'. Aborting it.")
+                active_rule = nil
               end
+              active_phase = name
+              context.clear
+              lines_buffer.clear
+              UI.verbose("--- Beginning #{name} phase ---")
+              break
             end
 
             # Try to apply current phase ruleset
@@ -82,7 +82,7 @@ module U3d
                   if rule['end_message'] != false
                     if rule['end_message']
                       match = line.match(pattern)
-                      params = match.names.map{ |n| n = n.to_sym }.zip(match.captures).to_h
+                      params = match.names.map { |n| n.to_sym }.zip(match.captures).to_h
                       message = rule['end_message'] % params.merge(context)
                     else
                       message = line.chomp
@@ -93,42 +93,37 @@ module U3d
                   active_rule = nil
                   context.clear
                   lines_buffer.clear
-                else
-                  if rule['store_lines']
-                    match = false
-                    if rule['ignore_lines']
-                      rule['ignore_lines'].each do |pat|
-                        if line =~ pat
-                          match = true
-                          break
-                        end
+                elsif rule['store_lines']
+                  match = false
+                  if rule['ignore_lines']
+                    rule['ignore_lines'].each do |pat|
+                      if line =~ pat
+                        match = true
+                        break
                       end
                     end
-                    lines_buffer << line.chomp unless match
                   end
+                  lines_buffer << line.chomp unless match
                 end
               end
 
               if active_rule.nil?
-                rules.each do |rn, rule|
-                  pattern = rule['start_pattern']
-                  if line =~ pattern
-                    if rule['end_pattern']
-                      active_rule = rn
+                rules.each do |rn, r|
+                  pattern = r['start_pattern']
+                  next unless line =~ pattern
+                  active_rule = rn if r['end_pattern']
+                  match = line.match(pattern)
+                  context = match.names.map { |n| n.to_sym }.zip(match.captures).to_h
+                  if r['start_message'] != false
+                    if r['start_message']
+                      message = r['start_message'] % context
+                    else
+                      message = line.chomp
                     end
-                    match = line.match(pattern)
-                    context = match.names.map{ |n| n = n.to_sym }.zip(match.captures).to_h
-                    if rule['start_message'] != false
-                      if rule['start_message']
-                        message = rule['start_message'] % context
-                      else
-                        message = line.chomp
-                      end
-                      message = "[#{active_phase}] " + message
-                      UI.send(rule['type'], message)
-                    end
-                    break
+                    message = "[#{active_phase}] " + message
+                    UI.send(r['type'], message)
                   end
+                  break
                 end
               end
 

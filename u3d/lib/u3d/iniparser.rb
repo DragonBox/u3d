@@ -49,11 +49,11 @@ module U3d
       def default_ini_path
         case U3dCore::Helper.operating_system
         when :linux
-          return INI_LINUX_PATH
+          INI_LINUX_PATH
         when :mac
-          return INI_MAC_PATH
+          INI_MAC_PATH
         when :win
-          return INI_WIN_PATH
+          INI_WIN_PATH
         end
       end
     end
