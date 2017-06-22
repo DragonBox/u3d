@@ -21,6 +21,32 @@
           "^\\n"
         ],
         "type": "error"
+      },
+      "log": {
+        "active": true,
+        "start_pattern": "UnityEngine\\.Debug:Log\\(Object\\)",
+        "fetch_line_in_memory": 2,
+        "fetched_line_pattern": "(?<message>.*)\\n",
+        "fetched_line_message": false,
+        "start_message": false,
+        "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_message": "[LOG] %{file}(line %{line}): %{message}"
+      },
+      "log_error": {
+        "active": true,
+        "start_pattern": "UnityEngine\\.Debug:LogError\\(Object\\)",
+        "fetch_line_in_memory": 2,
+        "fetched_line_pattern": "(?<message>.*)\\n",
+        "fetched_line_message": false,
+        "start_message": false,
+        "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_message": "[LOG] %{file}(line %{line}): %{message}",
+        "type": "error"
+      },
+      "batchmode_exit": {
+        "active": true,
+        "start_pattern": "Exiting batchmode successfully now!",
+        "type": "success"
       }
     }
   },
@@ -46,6 +72,14 @@
         "active": true,
         "start_pattern": "Using monoOptions -(?<options>.+)"
       },
+      "batchmode_args": {
+        "active": true,
+        "start_pattern": "BATCHMODE ARGUMENTS:",
+        "start_message": "Batchmode arguments:",
+        "store_lines": true,
+        "end_pattern": "Successfully changed project path",
+        "end_message": "  ---"
+      },
       "GUID_loading": {
         "active": true,
         "start_pattern": "Loading GUID <-> Path mappings"
@@ -58,6 +92,11 @@
         "active": true,
         "start_pattern": "Loading Asset Database ?... ?\\[ Failed \\]",
         "type": "warning"
+      },
+      "engine_version": {
+        "active": true,
+        "start_pattern": "Initialize engine version: (?<version>\\d+\\.\\d+\\.\\d+\\w\\d+) \\((?<hash>\\w*)\\)",
+        "start_message": "Engine Initialization (version %{version})"
       }
     }
   },

@@ -129,8 +129,8 @@ module U3d
     end
 
     def packages
+      # Unity prior to Unity5 did not have package
       if Utils.parse_unity_version(version)[0].to_i <= 4
-        UI.important 'Packages in Unity versions older than Unity5 are not supported.'
         return []
       end
       fpath = "#{path}/Editor/Data/PlaybackEngines/"
@@ -198,8 +198,12 @@ module U3d
       else
         installer = WindowsInstaller.new
       end
-      installer.check_installed
-      return installer
+      unclean = []
+      installer.installed.each { |unity| unclean << unity unless unity.path =~ UNITY_DIR_CHECK }
+      if !unclean.empty? && UI.confirm("#{unclean.count} Unity installation should be moved. Proceed?")
+        unclean.each { |unity| installer.sanitize_install(unity) }
+      end
+      installer
     end
 
     def self.install_module(file_path, version, installation_path: nil, info: {})
@@ -231,23 +235,18 @@ module U3d
   end
 
   class MacInstaller
-    def check_installed
-      installed.each do |unity|
-        next if unity.path =~ UNITY_DIR_CHECK
-        begin
-          source_path = File.expand_path('..', unity.path)
-          parent = File.expand_path('..', source_path)
-          new_path = File.join(parent, UNITY_DIR % unity.version)
-          UI.important "Moving #{source_path} to #{new_path}..."
-          source_path = "\"#{source_path}\"" if source_path =~ / /
-          new_path = "\"#{new_path}\"" if new_path =~ / /
-          U3dCore::CommandExecutor.execute(command: "mv #{source_path} #{new_path}", admin: true)
-        rescue => e
-          UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
-        else
-          UI.success "Successfully moved #{source_path} to #{new_path}"
-        end
-      end
+    def sanitize_install(unity)
+      source_path = File.expand_path('..', unity.path)
+      parent = File.expand_path('..', source_path)
+      new_path = File.join(parent, UNITY_DIR % unity.version)
+      UI.important "Moving #{source_path} to #{new_path}..."
+      source_path = "\"#{source_path}\"" if source_path =~ / /
+      new_path = "\"#{new_path}\"" if new_path =~ / /
+      U3dCore::CommandExecutor.execute(command: "mv #{source_path} #{new_path}", admin: true)
+    rescue => e
+      UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
+    else
+      UI.success "Successfully moved #{source_path} to #{new_path}"
     end
 
     def installed
@@ -293,23 +292,18 @@ module U3d
   end
 
   class LinuxInstaller
-    def check_installed
-      installed.each do |unity|
-        next if unity.path =~ UNITY_DIR_CHECK
-        begin
-          source_path = File.expand_path(unity.path)
-          parent = File.expand_path('..', source_path)
-          new_path = File.join(parent, UNITY_DIR % unity.version)
-          UI.important "Moving #{source_path} to #{new_path}..."
-          source_path = "\"#{source_path}\"" if source_path =~ / /
-          new_path = "\"#{new_path}\"" if new_path =~ / /
-          U3dCore::CommandExecutor.execute(command: "mv #{source_path} #{new_path}", admin: true)
-        rescue => e
-          UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
-        else
-          UI.success "Successfully moved #{source_path} to #{new_path}"
-        end
-      end
+    def sanitize_install(unity)
+      source_path = File.expand_path(unity.path)
+      parent = File.expand_path('..', source_path)
+      new_path = File.join(parent, UNITY_DIR % unity.version)
+      UI.important "Moving #{source_path} to #{new_path}..."
+      source_path = "\"#{source_path}\"" if source_path =~ / /
+      new_path = "\"#{new_path}\"" if new_path =~ / /
+      U3dCore::CommandExecutor.execute(command: "mv #{source_path} #{new_path}", admin: true)
+    rescue => e
+      UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
+    else
+      UI.success "Successfully moved #{source_path} to #{new_path}"
     end
 
     def installed
@@ -336,25 +330,20 @@ module U3d
   end
 
   class WindowsInstaller
-    def check_installed
-      installed.each do |unity|
-        next if unity.path =~ UNITY_DIR_CHECK
-        begin
-          source_path = File.expand_path(unity.path)
-          parent = File.expand_path('..', source_path)
-          new_path = File.join(parent, UNITY_DIR % unity.version)
-          UI.important "Moving #{source_path} to #{new_path}..."
-          source_path.tr!('/', '\\')
-          new_path.tr!('/', '\\')
-          source_path = "\"" + source_path + "\"" if source_path =~ / /
-          new_path = "\"" + new_path + "\"" if new_path =~ / /
-          U3dCore::CommandExecutor.execute(command: "move #{source_path} #{new_path}", admin: true)
-        rescue => e
-          UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
-        else
-          UI.success "Successfully moved #{source_path} to #{new_path}"
-        end
-      end
+    def sanitize_install(unity)
+      source_path = File.expand_path(unity.path)
+      parent = File.expand_path('..', source_path)
+      new_path = File.join(parent, UNITY_DIR % unity.version)
+      UI.important "Moving #{source_path} to #{new_path}..."
+      source_path.tr!('/', '\\')
+      new_path.tr!('/', '\\')
+      source_path = "\"" + source_path + "\"" if source_path =~ / /
+      new_path = "\"" + new_path + "\"" if new_path =~ / /
+      U3dCore::CommandExecutor.execute(command: "move #{source_path} #{new_path}", admin: true)
+    rescue => e
+      UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
+    else
+      UI.success "Successfully moved #{source_path} to #{new_path}"
     end
 
     def installed

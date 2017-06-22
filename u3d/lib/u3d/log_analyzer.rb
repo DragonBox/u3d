@@ -4,6 +4,7 @@ module U3d
   # Analyzes log by filtering output along a set of rules
   class LogAnalyzer
     RULES_PATH = File.expand_path('../../../config/log_rules.json', __FILE__)
+    MEMORY_SIZE = 10
     class << self
       def load_rules
         data = {}
@@ -39,15 +40,18 @@ module U3d
       end
 
       def pipe(i, sleep_time: 0.0)
+        lines_memory = Array.new(MEMORY_SIZE)
         active_phase = nil
         active_rule = nil
         context = {}
-        lines_buffer = []
+        rule_lines_buffer = []
         generic_rules, phases = load_rules
         begin
           loop do
             select([i])
             line = i.readline
+            # Insert new line and remove last stored line
+            lines_memory.push(line).shift
 
             # Check if phase is changing
             phases.each do |name, phase|
@@ -61,22 +65,22 @@ module U3d
               end
               active_phase = name
               context.clear
-              lines_buffer.clear
+              rule_lines_buffer.clear
               UI.verbose("--- Beginning #{name} phase ---")
               break
             end
 
-            # Try to apply current phase ruleset
-            if active_phase
-              rules = phases[active_phase]['rules'].merge(generic_rules)
-
-              if active_rule
-                rule = rules[active_rule]
+            apply_ruleset = lambda do |ruleset, header|
+              # Apply the active rule
+              if active_rule && ruleset[active_rule]
+                rule = ruleset[active_rule]
                 pattern = rule['end_pattern']
-                if line =~ pattern # Rule ending
-                  unless lines_buffer.empty?
-                    lines_buffer.each do |l|
-                      UI.send(rule['type'], "[#{active_phase}] " + l)
+
+                # Is it the end of the rule?
+                if line =~ pattern
+                  unless rule_lines_buffer.empty?
+                    rule_lines_buffer.each do |l|
+                      UI.send(rule['type'], "[#{header}] " + l)
                     end
                   end
                   if rule['end_message'] != false
@@ -87,12 +91,14 @@ module U3d
                     else
                       message = line.chomp
                     end
-                    message = "[#{active_phase}] " + message
+                    message = "[#{header}] " + message
                     UI.send(rule['type'], message)
                   end
                   active_rule = nil
                   context.clear
-                  lines_buffer.clear
+                  rule_lines_buffer.clear
+
+                # It's not the end of the rules, should the line be stored?
                 elsif rule['store_lines']
                   match = false
                   if rule['ignore_lines']
@@ -103,42 +109,51 @@ module U3d
                       end
                     end
                   end
-                  lines_buffer << line.chomp unless match
+                  rule_lines_buffer << line.chomp unless match
                 end
               end
 
+              # If there is no active rule, try to apply a new one
               if active_rule.nil?
-                rules.each do |rn, r|
+                ruleset.each do |rn, r|
                   pattern = r['start_pattern']
                   next unless line =~ pattern
                   active_rule = rn if r['end_pattern']
                   match = line.match(pattern)
                   context = match.names.map { |n| n.to_sym }.zip(match.captures).to_h
+                  if r['fetch_line_in_memory']
+                    fetched_line = lines_memory.reverse[r['fetch_line_in_memory']]
+                    if r['fetched_line_pattern']
+                      match = fetched_line.match(r['fetched_line_pattern'])
+                      context.merge!(match.names.map { |n| n.to_sym }.zip(match.captures).to_h)
+                    end
+                    if r['fetched_line_message'] != false
+                      if r['fetched_line_message']
+                        message = r['fetched_line_message'] % context
+                      else
+                        message = fetched_line.chomp
+                      end
+                      message = "[#{header}] " + message
+                      UI.send(r['type'], message)
+                    end
+                  end
                   if r['start_message'] != false
                     if r['start_message']
                       message = r['start_message'] % context
                     else
                       message = line.chomp
                     end
-                    message = "[#{active_phase}] " + message
+                    message = "[#{header}] " + message
                     UI.send(r['type'], message)
                   end
                   break
                 end
               end
-
-              if phases[active_phase]['phase_end_pattern'] && line =~ phases[active_phase]['phase_end_pattern']
-                if active_rule
-                  # Active rule should be finished
-                  # If it is still active during phase change, it means that something went wrong
-                  UI.error("[#{active_phase}] Could not finish active rule '#{active_rule}'. Aborting it.")
-                  active_rule = nil
-                end
-                lines_buffer.clear
-                UI.verbose("---  Ending #{active_phase} phase   ---")
-                active_phase = nil
-              end
             end
+
+            apply_ruleset.call(phases[active_phase]['rules'], active_phase) if active_phase
+            apply_ruleset.call(generic_rules, 'GENERAL')
+
             sleep(sleep_time)
           end
         rescue EOFError
@@ -155,8 +170,13 @@ module U3d
         return false if r['start_pattern'].nil?
         r['start_pattern'] = Regexp.new r['start_pattern']
         r['end_pattern'] = Regexp.new r['end_pattern'] if r['end_pattern']
+        if r['fetch_line_in_memory']
+          r.delete('fetch_line_in_memory') if r['fetch_line_in_memory'] >= MEMORY_SIZE
+          r.delete('fetch_line_in_memory') if r['fetch_line_in_memory'] <= 0
+          r['fetched_line_pattern'] = Regexp.new r['fetched_line_pattern'] if r['fetched_line_pattern']
+        end
         r['type'] = 'important' if r['type'] == 'warning'
-        if r['type'] && r['type'] != 'error' && r['type'] != 'important'
+        if r['type'] && r['type'] != 'error' && r['type'] != 'important' && r['type'] != 'success'
           r['type'] = 'message'
         end
         r['type'] ||= 'message'
