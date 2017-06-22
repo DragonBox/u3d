@@ -20,10 +20,10 @@ module U3d
         end
         list.each do |u|
           UI.message "Version #{u.version}\t(#{u.path})"
-          pack = u.packages
-          next unless options[:packages] && pack && !pack.empty?
+          packages = u.packages
+          next unless options[:packages] && packages && !packages.empty?
           UI.message 'Packages:'
-          u.packages.each { |pack| UI.message " - #{pack}" }
+          packages.each { |pack| UI.message " - #{pack}" }
         end
       end
 
