@@ -45,7 +45,7 @@ module U3d
 
     def packages
       if Utils.parse_unity_version(version)[0].to_i <= 4
-        UI.important 'Packages in Unity versions older than Unity5 are not supported.'
+        # Unity < 5 doesn't have packages
         return []
       end
       fpath = File.expand_path('../PlaybackEngines', path)
