@@ -25,7 +25,10 @@
       "log": {
         "active": true,
         "start_pattern": "UnityEngine\\.Debug:Log\\(Object\\)",
-        "fetch_line_in_memory": 2,
+        "fetch_first_line_not_matching": [
+          "UnityEngine\\.",
+          "^\\n"
+        ],
         "fetched_line_pattern": "(?<message>.*)\\n",
         "fetched_line_message": false,
         "start_message": false,
@@ -35,7 +38,10 @@
       "log_assertion": {
         "active": true,
         "start_pattern": "UnityEngine\\.Debug:LogAssertion\\(Object\\)",
-        "fetch_line_in_memory": 2,
+        "fetch_first_line_not_matching": [
+          "UnityEngine\\.",
+          "^\\n"
+        ],
         "fetched_line_pattern": "(?<message>.*)\\n",
         "fetched_line_message": false,
         "start_message": false,
@@ -46,7 +52,10 @@
       "log_warning": {
         "active": true,
         "start_pattern": "UnityEngine\\.Debug:LogWarning\\(Object\\)",
-        "fetch_line_in_memory": 2,
+        "fetch_first_line_not_matching": [
+          "UnityEngine\\.",
+          "^\\n"
+        ],
         "fetched_line_pattern": "(?<message>.*)\\n",
         "fetched_line_message": false,
         "start_message": false,
@@ -57,7 +66,12 @@
       "log_error": {
         "active": true,
         "start_pattern": "UnityEngine\\.Debug:LogError\\(Object\\)",
-        "fetch_line_in_memory": 2,
+        "fetch_first_line_not_matching": [
+          "UnityEngine\\.",
+          "^\\n",
+          "^\\t",
+          "^  "
+        ],
         "fetched_line_pattern": "(?<message>.*)\\n",
         "fetched_line_message": false,
         "start_message": false,
@@ -68,7 +82,12 @@
       "log_exception": {
         "active": true,
         "start_pattern": "UnityEngine\\.Debug:LogException\\(Object\\)",
-        "fetch_line_in_memory": 2,
+        "fetch_first_line_not_matching": [
+          "UnityEngine\\.",
+          "^\\n",
+          "^\\t",
+          "^  "
+        ],
         "fetched_line_pattern": "(?<message>.*)\\n",
         "fetched_line_message": false,
         "start_message": false,

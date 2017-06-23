@@ -121,20 +121,37 @@ module U3d
                   active_rule = rn if r['end_pattern']
                   match = line.match(pattern)
                   context = match.names.map { |n| n.to_sym }.zip(match.captures).to_h
-                  if r['fetch_line_in_memory']
-                    fetched_line = lines_memory.reverse[r['fetch_line_in_memory']]
-                    if r['fetched_line_pattern']
-                      match = fetched_line.match(r['fetched_line_pattern'])
-                      context.merge!(match.names.map { |n| n.to_sym }.zip(match.captures).to_h)
-                    end
-                    if r['fetched_line_message'] != false
-                      if r['fetched_line_message']
-                        message = r['fetched_line_message'] % context
-                      else
-                        message = fetched_line.chomp
+                  if r['fetch_line_at_index'] || r['fetch_first_line_not_matching']
+                    if r['fetch_line_at_index']
+                      fetched_line = lines_memory.reverse[r['fetch_line_at_index']]
+                    else
+                      fetched_line = nil
+                      lines_memory.reverse.each do |l|
+                        match = false
+                        r['fetch_first_line_not_matching'].each do |pat|
+                          next unless l =~ pat
+                          match = true
+                          break
+                        end
+                        next if match
+                        fetched_line = l
+                        break
                       end
-                      message = "[#{header}] " + message
-                      UI.send(r['type'], message)
+                    end
+                    if fetched_line
+                      if r['fetched_line_pattern']
+                        match = fetched_line.match(r['fetched_line_pattern'])
+                        context.merge!(match.names.map { |n| n.to_sym }.zip(match.captures).to_h)
+                      end
+                      if r['fetched_line_message'] != false
+                        if r['fetched_line_message']
+                          message = r['fetched_line_message'] % context
+                        else
+                          message = fetched_line.chomp
+                        end
+                        message = "[#{header}] " + message
+                        UI.send(r['type'], message)
+                      end
                     end
                   end
                   if r['start_message'] != false
@@ -170,9 +187,13 @@ module U3d
         return false if r['start_pattern'].nil?
         r['start_pattern'] = Regexp.new r['start_pattern']
         r['end_pattern'] = Regexp.new r['end_pattern'] if r['end_pattern']
-        if r['fetch_line_in_memory']
-          r.delete('fetch_line_in_memory') if r['fetch_line_in_memory'] >= MEMORY_SIZE
-          r.delete('fetch_line_in_memory') if r['fetch_line_in_memory'] <= 0
+        if r['fetch_line_at_index']
+          r.delete('fetch_line_at_index') if r['fetch_line_at_index'] >= MEMORY_SIZE
+          r.delete('fetch_line_at_index') if r['fetch_line_at_index'] <= 0
+        elsif r['fetch_first_line_not_matching']
+          r['fetch_first_line_not_matching'].map! { |pat| Regexp.new pat }
+        end
+        if r['fetch_line_at_index'] || r['fetch_first_line_not_matching']
           r['fetched_line_pattern'] = Regexp.new r['fetched_line_pattern'] if r['fetched_line_pattern']
         end
         r['type'] = 'important' if r['type'] == 'warning'
