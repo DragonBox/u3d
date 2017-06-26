@@ -111,7 +111,9 @@ describe U3d do
         allow(U3d::UnityVersions).to receive(:list_available)
         file = double('file')
         cache_data = '{'\
-        '"win":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}}'\
+        '"win":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}},'\
+        '"mac":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}},'\
+        '"linux":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}}'\
         '}'
         allow(File).to receive(:file?) { true }
         allow(File).to receive(:open).with(anything, 'r').and_yield(file)

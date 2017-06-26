@@ -12,7 +12,7 @@ describe U3d do
       end
 
       it 'raises an error when trying to load INI files for OS different from Mac or Windows' do
-        expect { U3d::INIparser.load_ini('key', @cache, os: 'linux') }.to raise_error
+        expect { U3d::INIparser.load_ini('key', @cache, os: :linux) }.to raise_error(ArgumentError)
       end
     end
   end
