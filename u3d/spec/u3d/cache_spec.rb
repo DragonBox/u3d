@@ -6,12 +6,8 @@ describe U3d do
   describe U3d::Cache do
     describe '#initialize' do
       context 'when there is no cache file' do
-        before(:all) do
-          @cache_file = "#{ENV['HOME']}/.u3d/cache.json"
-        end
-
         before(:each) do
-          File.delete(@cache_file) if File.file?(@cache_file)
+          allow(File).to receive(:file?) { false }
         end
 
         it 'retrieves versions' do
@@ -22,144 +18,115 @@ describe U3d do
 
         it 'creates a cache file' do
           allow(U3d::UnityVersions).to receive(:list_available) { { 'test' => 'url' } }
+          expect(File).to receive(:open).with(anything, 'w')
 
           U3d::Cache.new
-
-          expect(File.file?(@cache_file)).to be true
         end
 
         it 'writes to the cache file' do
           allow(U3d::UnityVersions).to receive(:list_available)
           file = double('file')
 
-          expect(File).to receive(:open).with(@cache_file, 'w').and_yield(file)
+          expect(File).to receive(:open).with(anything, 'w').and_yield(file)
           expect(file).to receive(:write)
 
           U3d::Cache.new
         end
-
-        it 'stores correct information' do
-          allow(U3d::UnityVersions).to receive(:list_available).and_return('test' => 'url')
-          U3d::Cache.new
-
-          data = JSON.parse(File.open(@cache_file, 'r').read)
-          expect(data['versions'].nil?).to be false
-          expect(data['versions']['test']).to eql('url')
-        end
       end
 
-      context 'when cache file is outdated' do
-        before(:all) do
-          @cache_file = "#{ENV['HOME']}/.u3d/cache.json"
-          File.delete(@cache_file) if File.file?(@cache_file)
-        end
-
-        before(:each) do
-          cache = { 'lastupdate' => 0, 'outdatedkey' => 'outdated' }
-          File.open(@cache_file, 'w') do |f|
-            f.write(cache.to_json)
-          end
-        end
-
-        after(:each) do
-          File.delete(@cache_file) if File.file?(@cache_file)
-        end
-
+      context 'when there is a cache file' do
         it 'checks if the file is up-to-date' do
+          allow(U3d::UnityVersions).to receive(:list_available) { { 'test' => 'url' } }
           file = double('file')
-          data = double('data')
-
-          expect(File).to receive(:open).with(@cache_file, 'r') { file }
-          expect(file).to receive(:read) { data }
-          expect(JSON).to receive(:parse).with(data) { { 'lastupdate' => 0 } }
-          expect(Time).to receive(:now) { 60 * 60 * 24 + 1 }
-          allow_any_instance_of(U3d::Cache).to receive(:overwrite_cache)
-
-          U3d::Cache.new
-        end
-
-        it 'retrieves versions' do
-          expect(U3d::UnityVersions).to receive(:list_available)
+          cache = '{'\
+          '"win":{"lastupdate":0,"versions":{"version": "url"}},'\
+          '"mac":{"lastupdate":0,"versions":{"version": "url"}},'\
+          '"linux":{"lastupdate":0,"versions":{"version": "url"}}'\
+          '}'
+          allow(File).to receive(:file?) { true }
+          allow(File).to receive(:open).with(anything, 'r').and_yield(file)
+          allow(file).to receive(:read) { cache }
+          expect(Time).to receive(:now).at_least(:once) { 0 }
+          allow(File).to receive(:open).with(anything, 'w')
 
           U3d::Cache.new
         end
 
-        it 'writes to the cache file' do
-          allow(U3d::UnityVersions).to receive(:list_available)
-          allow_any_instance_of(U3d::Cache).to receive(:check_for_update).and_return(true)
-
-          file = double('file')
-
-          expect(File).to receive(:open).with(@cache_file, 'w').and_yield(file)
-          expect(file).to receive(:write)
-
-          U3d::Cache.new
-        end
-
-        it 'stores correct information' do
-          allow(U3d::UnityVersions).to receive(:list_available).and_return('test' => 'url')
-          U3d::Cache.new
-
-          data = JSON.parse(File.open(@cache_file, 'r').read)
-          expect(data['versions'].nil?).to be false
-          expect(data['versions']['test']).to eql('url')
-        end
-
-        it 'overwrites outdated information' do
-          allow(U3d::UnityVersions).to receive(:list_available).and_return('test' => 'url')
-          U3d::Cache.new
-
-          data = JSON.parse(File.open(@cache_file, 'r').read)
-          expect(data['outdatedkey'].nil?).to be true
-        end
-      end
-
-      context 'when cache file is fresh' do
-        before(:all) do
-          @cache_file = "#{ENV['HOME']}/.u3d/cache.json"
-          File.delete(@cache_file) if File.file?(@cache_file)
-          cache = { 'lastupdate' => Time.now.to_i, 'spec_flag' => true }
-          File.open(@cache_file, 'w') do |f|
-            f.write(cache.to_json)
+        context 'when cache file is outdated' do
+          before(:each) do
+            file = double('file')
+            cache = '{'\
+            '"win":{"lastupdate":0,"versions":{"version": "url"}},'\
+            '"mac":{"lastupdate":0,"versions":{"version": "url"}},'\
+            '"linux":{"lastupdate":0,"versions":{"version": "url"}}'\
+            '}'
+            allow(File).to receive(:file?) { true }
+            allow(File).to receive(:open).with(anything, 'r').and_yield(file)
+            allow(file).to receive(:read) { cache }
+            allow(File).to receive(:open).with(anything, 'w')
+            allow(File).to receive(:delete)
           end
-          U3d::Cache.new
+
+          it 'retrieves versions' do
+            expect(U3d::UnityVersions).to receive(:list_available)
+
+            U3d::Cache.new
+          end
+
+          it 'writes to the cache file' do
+            allow(U3d::UnityVersions).to receive(:list_available)
+            write_file = double('file')
+
+            expect(File).to receive(:open).with(anything, 'w').and_yield(write_file)
+            expect(write_file).to receive(:write)
+
+            U3d::Cache.new
+          end
         end
 
-        after(:each) do
-          File.delete(@cache_file) if File.file?(@cache_file)
-        end
+        context 'when cache file is fresh' do
+          before(:each) do
+            file = double('file')
+            cache = '{'\
+            '"win":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"version": "url"}},'\
+            '"mac":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"version": "url"}},'\
+            '"linux":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"version": "url"}}'\
+            '}'
+            allow(File).to receive(:file?) { true }
+            allow(File).to receive(:open).with(anything, 'r').and_yield(file)
+            allow(file).to receive(:read) { cache }
+          end
 
-        it 'does not overwrite cache' do
-          allow(U3d::UnityVersions).to receive(:list_available).and_return('test' => 'url')
+          it 'does not overwrite cache' do
+            expect(File).not_to receive(:open).with(anything, 'w')
 
-          expect(File.file?(@cache_file)).to be true
-          data = JSON.parse(File.open(@cache_file, 'r').read)
-          expect(data['spec_flag'].nil?).to be false
-          expect(data['spec_flag']).to be true
+            U3d::Cache.new
+          end
         end
       end
     end
 
     describe '#[]' do
-      before(:all) do
-        @cache_file = "#{ENV['HOME']}/.u3d/cache.json"
-        File.delete(@cache_file) if File.file?(@cache_file)
-      end
-
-      after(:each) do
-        File.delete(@cache_file) if File.file?(@cache_file)
+      before(:each) do
+        allow(U3d::UnityVersions).to receive(:list_available)
+        file = double('file')
+        cache_data = '{'\
+        '"win":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}}'\
+        '}'
+        allow(File).to receive(:file?) { true }
+        allow(File).to receive(:open).with(anything, 'r').and_yield(file)
+        allow(file).to receive(:read) { cache_data }
       end
 
       it 'returns correct object with a matching key' do
-        allow(U3d::UnityVersions).to receive(:list_available).and_return('key' => 'url')
         cache = U3d::Cache.new
-        expect(cache['versions']['key']).to eql('url')
+        expect(cache['win']['versions']['key']).to eql('url')
       end
 
       it 'returns nil with wrong key' do
-        allow(U3d::UnityVersions).to receive(:list_available).and_return('key' => 'url')
         cache = U3d::Cache.new
-        expect(cache['versions']['notakey']).not_to eql('url')
+        expect(cache['win']['versions']['notakey']).not_to eql('url')
+        expect(cache['win']['versions']['notakey']).to be_nil
       end
     end
   end

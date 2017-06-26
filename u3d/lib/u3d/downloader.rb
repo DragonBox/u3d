@@ -186,6 +186,10 @@ module U3d
     class LinuxDownloader
       class << self
         def download(version, cached_versions)
+          if cached_versions[version].nil?
+            UI.error "No version #{version} was found in cache. It might need updating."
+            return nil
+          end
           url = cached_versions[version]
           dir = File.join(DOWNLOAD_PATH, DOWNLOAD_DIRECTORY, version)
           Utils.ensure_dir(dir)

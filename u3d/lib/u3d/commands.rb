@@ -89,7 +89,7 @@ module U3d
         if os == :linux
           UI.important 'Option -a | --all not available for Linux' if options[:all]
           UI.important 'Option -p | --packages not available for Linux' if options[:packages]
-          files << ["Unity #{version}", Downloader::LinuxDownloader.download(version, cache[os.id2name]['versions']), {}]
+          files << ["Unity #{version}", Downloader::LinuxDownloader.download(version, cache['linux']['versions']), {}]
         else
           downloader = Downloader::MacDownloader if os == :mac
           downloader = Downloader::WindowsDownloader if os == :win

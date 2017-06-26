@@ -64,7 +64,6 @@ describe U3dCore do
       end
 
       it "allows to test I/O buffering" do
-        # ENV['FASTLANE_NO_TTY'] = 'whatever'
         command = "ruby -e '5.times{sleep 0.1; puts \"HI\"}'"
         output = U3dCore::CommandExecutor.execute(command: command, print_all: true)
         expect(output).to eq("HI\nHI\nHI\nHI\nHI")
