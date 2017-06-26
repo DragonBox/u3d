@@ -9,7 +9,9 @@ module U3d
     # @!group INI parameters to load and save ini files
     #####################################################
     INI_NAME = 'unity-%{version}-%{os}.ini'.freeze
-    INI_PATH = "#{ENV['HOME']}/.u3d/ini_files".freeze
+    INI_LINUX_PATH = File.join(ENV['HOME'], '.u3d', 'ini_files').freeze
+    INI_MAC_PATH = File.join(ENV['HOME'], 'Library', 'Application Support', 'u3d', 'ini_files').freeze
+    INI_WIN_PATH = File.join(ENV['HOME'], 'AppData', 'Local', 'u3d', 'ini_files').freeze
 
     class << self
       def load_ini(version, cached_versions, os: U3dCore::Helper.operating_system, offline: false)
@@ -22,8 +24,8 @@ module U3d
           os = os.id2name
         end
         ini_name = INI_NAME % { :version => version, :os => os }
-        Utils.ensure_dir(INI_PATH)
-        ini_path = File.expand_path(ini_name, INI_PATH)
+        Utils.ensure_dir(default_ini_path)
+        ini_path = File.expand_path(ini_name, default_ini_path)
         unless File.file?(ini_path)
           raise "INI file does not exist at #{ini_path}" if offline
           uri = URI(cached_versions[version] + ini_name)
@@ -34,7 +36,25 @@ module U3d
             f.write(data)
           end
         end
-        IniFile.load(ini_path).to_h
+        begin
+          result = IniFile.load(ini_path).to_h
+        rescue => e
+          raise "Could not parse INI data (#{e})"
+        end
+        result
+      end
+
+      private
+
+      def default_ini_path
+        case U3dCore::Helper.operating_system
+        when :linux
+          INI_LINUX_PATH
+        when :mac
+          INI_MAC_PATH
+        when :win
+          INI_WIN_PATH
+        end
       end
     end
   end

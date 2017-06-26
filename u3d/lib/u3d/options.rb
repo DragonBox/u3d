@@ -1,5 +1,4 @@
 require "u3d_core"
-require "credentials_manager"
 
 module U3d
   class Options

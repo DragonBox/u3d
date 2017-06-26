@@ -37,7 +37,7 @@ module U3d
 
       def hashfile(file_path, blocksize: 65_536)
         require 'digest'
-        raise 'Not a file' unless File.file?(file_path)
+        raise ArgumentError, 'Not a file' unless File.file?(file_path)
         md5 = Digest::MD5.new
         File.open(file_path, 'r') do |f|
           md5 << f.read(blocksize) until f.eof?

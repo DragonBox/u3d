@@ -1,7 +1,15 @@
 require 'u3d/utils'
+require 'fileutils'
 
 # Mac specific only right now
 module U3d
+
+  DEFAULT_LINUX_INSTALL = '/opt/'.freeze
+  DEFAULT_MAC_INSTALL = '/'.freeze
+  DEFAULT_WINDOWS_INSTALL = 'C:/Program Files/'.freeze
+  UNITY_DIR = "Unity_%s"
+  UNITY_DIR_CHECK = %r{Unity_\d+\.\d+\.\d+[a-z]\d+}
+
   class Installation
     def self.create(path: nil)
       if Helper.mac?
@@ -33,6 +41,16 @@ module U3d
 
     def exe_path
       "#{path}/Contents/MacOS/Unity"
+    end
+
+    def packages
+      if Utils.parse_unity_version(version)[0].to_i <= 4
+        # Unity < 5 doesn't have packages
+        return []
+      end
+      fpath = File.expand_path('../PlaybackEngines', path)
+      raise "Unity installation does not seem correct. Couldn't locate PlaybackEngines." unless Dir.exist? fpath
+      Dir.entries(fpath).select { |e| File.directory?(File.join(fpath, e)) && !(e == '.' || e == '..') }
     end
 
     private
@@ -69,6 +87,10 @@ module U3d
     def exe_path
       "#{path}/Unity"
     end
+
+    def packages
+      false
+    end
   end
 
   class WindowsInstallation < Installation
@@ -80,7 +102,7 @@ module U3d
 
     def version
       require 'rexml/document'
-      fpath = "#{path}/Data/PlaybackEngines/windowsstandalonesupport/ivy.xml"
+      fpath = "#{path}/Editor/Data/PlaybackEngines/windowsstandalonesupport/ivy.xml"
       raise "Couldn't find file #{fpath}" unless File.exist? fpath
       doc = REXML::Document.new(File.read(fpath))
       version = REXML::XPath.first(doc, 'ivy-module/info/@e:unityVersion').value
@@ -92,7 +114,7 @@ module U3d
       if @logfile.nil?
         begin
           loc_appdata = Utils.windows_local_appdata
-          log_dir = File.expand_path('/Unity/Editor/', loc_appdata)
+          log_dir = File.expand_path('Unity/Editor/', loc_appdata)
           UI.important "Log directory (#{log_dir}) does not exist"  unless Dir.exist? log_dir
           @logfile = File.expand_path('Editor.log', log_dir)
         rescue RuntimeError => ex
@@ -103,7 +125,17 @@ module U3d
     end
 
     def exe_path
-      "#{path}\\Unity.exe"
+      File.join(@path, 'Editor', 'Unity.exe')
+    end
+
+    def packages
+      # Unity prior to Unity5 did not have package
+      if Utils.parse_unity_version(version)[0].to_i <= 4
+        return []
+      end
+      fpath = "#{path}/Editor/Data/PlaybackEngines/"
+      raise "Unity installation does not seem correct. Couldn't locate PlaybackEngines." unless Dir.exist? fpath
+      Dir.entries(fpath).select { |e| File.directory?(File.join(fpath, e)) && !(e == '.' || e == '..') }
     end
   end
 
@@ -121,14 +153,22 @@ module U3d
 
       FileUtils.touch(log_file)
 
-      tail_pid = Process.spawn("tail -F #{log_file}")
+      tail_thread = Thread.new do
+        File.open(log_file, 'r') do |f|
+          LogAnalyzer.pipe(f, sleep_time: 0.5)
+        end
+      end
 
       begin
         args.unshift(installation.exe_path)
-        args.map! { |a| a.shellescape }
+        if Helper.windows?
+          args.map! { |a| a =~ / / ? "\"#{a}\"" : a }
+        else
+          args.map! { |a| a.shellescape }
+        end
         U3dCore::CommandExecutor.execute(command: args)
       ensure
-        Helper.backticks("kill #{tail_pid}")
+        Thread.kill(tail_thread) if tail_thread
       end
     end
 
@@ -150,43 +190,65 @@ module U3d
   end
 
   class Installer
-    DEFAULT_WINDOWS_INSTALL = 'C:/Program Files/Unity/'.freeze
-
     def self.create
       if Helper.mac?
-        MacInstaller.new
+        installer = MacInstaller.new
       elsif Helper.linux?
-        LinuxInstaller.new
+        installer = LinuxInstaller.new
       else
-        WindowsInstaller.new
+        installer = WindowsInstaller.new
       end
+      unclean = []
+      installer.installed.each { |unity| unclean << unity unless unity.path =~ UNITY_DIR_CHECK }
+      if !unclean.empty? && UI.confirm("#{unclean.count} Unity installation should be moved. Proceed?")
+        unclean.each { |unity| installer.sanitize_install(unity) }
+      end
+      installer
     end
 
     def self.install_module(file_path, version, installation_path: nil, info: {})
       extension = File.extname(file_path)
       if extension == '.pkg'
+        path = installation_path || DEFAULT_MAC_INSTALL
         MacInstaller.install_pkg(
           file_path,
-          target_path: installation_path
+          version: version,
+          target_path: path
         )
       elsif extension == '.exe'
-        path = installation_path || DEFAULT_WINDOWS_INSTALL
-        path = path.chop + " #{version}/"
-        Dir.mkdir path unless Dir.exist? path
+        path = installation_path || File.join(DEFAULT_WINDOWS_INSTALL, UNITY_DIR % version)
         WindowsInstaller.install_exe(
           file_path,
           installation_path: path,
           info: info
         )
       elsif extension == '.sh'
-        LinuxInstaller.install_sh(file_path)
+        path = installation_path || File.join(DEFAULT_LINUX_INSTALL, UNITY_DIR % version)
+        LinuxInstaller.install_sh(
+          file_path,
+          installation_path: path
+        )
       else
-        raise "File type #{extension} not supported"
+        raise "File type #{extension} not yet supported"
       end
     end
   end
 
   class MacInstaller
+    def sanitize_install(unity)
+      source_path = File.expand_path('..', unity.path)
+      parent = File.expand_path('..', source_path)
+      new_path = File.join(parent, UNITY_DIR % unity.version)
+      UI.important "Moving #{source_path} to #{new_path}..."
+      source_path = "\"#{source_path}\"" if source_path =~ / /
+      new_path = "\"#{new_path}\"" if new_path =~ / /
+      U3dCore::CommandExecutor.execute(command: "mv #{source_path} #{new_path}", admin: true)
+    rescue => e
+      UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
+    else
+      UI.success "Successfully moved #{source_path} to #{new_path}"
+    end
+
     def installed
       unless (`mdutil -s /` =~ /disabled/).nil?
         $stderr.puts 'Please enable Spotlight indexing for /Applications.'
@@ -204,55 +266,89 @@ module U3d
       versions.sort! { |x, y| x.version <=> y.version }
     end
 
-    def self.install_pkg(file_path, target_path: nil)
-      target_path ||= '/'
-      U3dCore::CommandExecutor.execute(command: "installer -pkg #{file_path.shellescape} -target #{target_path.shellescape}", admin: true)
+    def self.install_pkg(file_path, version: nil, target_path: nil)
+      target_path ||= DEFAULT_MAC_INSTALL
+      command = "installer -pkg #{file_path.shellescape} -target #{target_path.shellescape}"
+      unity = Installer.create.installed.find { |u| u.version == version }
+      if unity.nil?
+        UI.verbose "No Unity install for version #{version} was found"
+        U3dCore::CommandExecutor.execute(command: command, admin: true)
+      else
+        begin
+          path = File.expand_path('..', unity.path)
+          temp_path = File.join(target_path, 'Applications', 'Unity')
+          UI.verbose "Temporary switching location of #{path} to #{temp_path} for installation purpose"
+          FileUtils.mv path, temp_path
+          U3dCore::CommandExecutor.execute(command: command, admin: true)
+        ensure
+          FileUtils.mv temp_path, path
+        end
+      end
     rescue => e
-      UI.error "Failed to install pkg at #{file_path}: #{e.to_s}"
+      UI.error "Failed to install pkg at #{file_path}: #{e}"
+    else
+      UI.success "Successfully installed package from #{file_path}"
     end
   end
 
   class LinuxInstaller
+    def sanitize_install(unity)
+      source_path = File.expand_path(unity.path)
+      parent = File.expand_path('..', source_path)
+      new_path = File.join(parent, UNITY_DIR % unity.version)
+      UI.important "Moving #{source_path} to #{new_path}..."
+      source_path = "\"#{source_path}\"" if source_path =~ / /
+      new_path = "\"#{new_path}\"" if new_path =~ / /
+      U3dCore::CommandExecutor.execute(command: "mv #{source_path} #{new_path}", admin: true)
+    rescue => e
+      UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
+    else
+      UI.success "Successfully moved #{source_path} to #{new_path}"
+    end
+
     def installed
-      # so many assumptions here...
-      cmd = 'find /opt/ -maxdepth 3 -name Unity 2> /dev/null | xargs dirname'
-      versions = `#{cmd}`.split("\n").map { |path| LinuxInstallation.new(path: path) }
+      find = File.join(DEFAULT_LINUX_INSTALL, 'Unity*')
+      versions = Dir[find].map { |path| LinuxInstallation.new(path: path) }
 
       # sorting should take into account stable/patch etc
       versions.sort! { |x, y| x.version <=> y.version }
     end
 
-    def self.install_sh(file)
-      U3dCore::CommandExecutor.execute(command: file.shellescape, admin: true)
+    def self.install_sh(file, installation_path: nil)
+      cmd = file.shellescape
+      if installation_path
+        Utils.ensure_dir(installation_path)
+        U3dCore::CommandExecutor.execute(command: "cd #{installation_path}; #{cmd}", admin: true)
+      else
+        U3dCore::CommandExecutor.execute(command: cmd, admin: true)
+      end
     rescue => e
       UI.error "Failed to install bash file at #{file_path}: #{e}"
+    else
+      UI.success 'Installation successful'
     end
   end
 
   class WindowsInstaller
+    def sanitize_install(unity)
+      source_path = File.expand_path(unity.path)
+      parent = File.expand_path('..', source_path)
+      new_path = File.join(parent, UNITY_DIR % unity.version)
+      UI.important "Moving #{source_path} to #{new_path}..."
+      source_path.tr!('/', '\\')
+      new_path.tr!('/', '\\')
+      source_path = "\"" + source_path + "\"" if source_path =~ / /
+      new_path = "\"" + new_path + "\"" if new_path =~ / /
+      U3dCore::CommandExecutor.execute(command: "move #{source_path} #{new_path}", admin: true)
+    rescue => e
+      UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
+    else
+      UI.success "Successfully moved #{source_path} to #{new_path}"
+    end
+
     def installed
-      unity_paths = []
-
-      require 'win32/registry'
-
-      Win32::Registry::HKEY_LOCAL_MACHINE.open(
-        'Software\Microsoft\Windows\CurrentVersion\Uninstall'
-      ) do |reg|
-        reg.each_key do |key|
-          k = reg.open(key)
-          begin
-            _temp = k['DisplayName']
-          rescue
-            next
-          else
-            next unless /Unity/ =~ key
-          end
-          path = File.expand_path('..', k['UninstallString'])
-          unity_paths << path
-        end
-      end
-
-      versions = unity_paths.map { |path| WindowsInstallation.new(path: path) }
+      find = File.join(DEFAULT_WINDOWS_INSTALL, 'Unity*', 'Editor', 'Uninstall.exe')
+      versions = Dir[find].map { |path| WindowsInstallation.new(path: File.expand_path('../..', path)) }
 
       # sorting should take into account stable/patch etc
       versions.sort! { |x, y| x.version <=> y.version }
@@ -260,19 +356,20 @@ module U3d
 
     def self.install_exe(file_path, installation_path: nil, info: {})
       installation_path ||= DEFAULT_WINDOWS_INSTALL
-      installation_path = installation_path.split('/').join('\\')
+      final_path = installation_path.tr('/', '\\')
+      Utils.ensure_dir(final_path)
       begin
         command = nil
         if info['cmd']
           command = info['cmd']
           command.sub!(/{FILENAME}/, file_path)
-          command.sub!(/{INSTDIR}/, installation_path)
-          command.sub!(/{DOCDIR}/, installation_path)
-          command.sub!(/{MODULEDIR}/, installation_path)
+          command.sub!(/{INSTDIR}/, final_path)
+          command.sub!(/{DOCDIR}/, final_path)
+          command.sub!(/{MODULEDIR}/, final_path)
           command.sub!(/\/D=/, '/S /D=') unless /\/S/ =~ command
         end
         command ||= file_path.to_s
-        U3dCore::CommandExecutor.execute(command: command)
+        U3dCore::CommandExecutor.execute(command: command, admin: true)
       rescue => e
         UI.error "Failed to install exe at #{file_path}: #{e}"
       else

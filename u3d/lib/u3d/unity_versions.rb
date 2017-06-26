@@ -23,9 +23,9 @@ module U3d
     # @!group REGEX: expressions to interpret data
     #####################################################
     # Captures a version and its base url
-    MAC_DOWNLOAD = %r{"(https?:\/\/[\w\/.-]+\/[0-9a-f]{12}\/)MacEditorInstaller\/[a-zA-Z\/.-]+(\d+\.\d+\.\d+\w\d+)[\w\/.-]+"}
-    WIN_DOWNLOAD = %r{"(https?:\/\/[\w\/.-]+\/[0-9a-f]{12}\/)Windows..EditorInstaller\/[a-zA-Z\/.-]+(\d+\.\d+\.\d+\w\d+)[\w\/.-]+"}
-    LINUX_DOWNLOAD = %r{"(https?:\/\/[\w\/._-]+\/unity\-editor\-installer\-(\d+\.\d+\.\d+\w\d+).*\.sh)"}
+    MAC_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f]{12}/)MacEditorInstaller/[a-zA-Z0-9/\.]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
+    WIN_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f]{12}/)Windows..EditorInstaller/[a-zA-Z0-9/\.]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
+    LINUX_DOWNLOAD = %r{"(https?://[\w/\._-]+/unity\-editor\-installer\-(\d+\.\d+\.\d+\w\d+).*\.sh)"}
     # Captures a beta version in html page
     UNITY_BETAVERSION_REGEX = %r{\/unity\/beta\/unity(\d+\.\d+\.\d+\w\d+)"}
     UNITY_EXTRA_DOWNLOAD_REGEX = %r{"(https?:\/\/[\w\/.-]+\.unity3d\.com\/(\w+))\/[a-zA-Z\/.-]+\/download.html"}
@@ -50,20 +50,15 @@ module U3d
         hash = {}
         data = Utils.get_ssl(url)
         results = data.scan(pattern)
-        results.each do |capt|
-          hash[capt[1]] = capt[0]
-        end
-        hash
+        results.each { |capt| hash[capt[1]] = capt[0] }
+        return hash
       end
 
       def fetch_betas(url, pattern)
         hash = {}
         data = Utils.get_ssl(url)
         results = data.scan(UNITY_BETAVERSION_REGEX).uniq
-        results.each do |beta|
-          v_url = UNITY_BETA_URL % beta[0]
-          hash = hash.merge(fetch_version(v_url, pattern))
-        end
+        results.each { |beta| hash.merge!(fetch_version(UNITY_BETA_URL % beta[0], pattern)) }
         hash
       end
     end
@@ -151,15 +146,15 @@ module U3d
           versions = {}
           UI.message 'Loading Unity releases'
           current = UnityVersions.fetch_version(UNITY_DOWNLOADS, MAC_DOWNLOAD)
-          UI.success "Found #{current.count} releases." if current.count != 0
+          UI.success "Found #{current.count} releases." if current.count.nonzero?
           versions = versions.merge(current)
           UI.message 'Loading Unity patch releases'
           current = UnityVersions.fetch_version(UNITY_PATCHES, MAC_DOWNLOAD)
-          UI.success "Found #{current.count} patch releases." if current.count != 0
+          UI.success "Found #{current.count} patch releases." if current.count.nonzero?
           versions = versions.merge(current)
           UI.message 'Loading Unity beta releases'
           current = UnityVersions.fetch_betas(UNITY_BETAS, MAC_DOWNLOAD)
-          UI.success "Found #{current.count} beta releases." if current.count != 0
+          UI.success "Found #{current.count} beta releases." if current.count.nonzero?
           versions = versions.merge(current)
           versions
         end
@@ -172,15 +167,15 @@ module U3d
           versions = {}
           UI.message 'Loading Unity releases'
           current = UnityVersions.fetch_version(UNITY_DOWNLOADS, WIN_DOWNLOAD)
-          UI.success "Found #{current.count} releases." if current.count != 0
+          UI.success "Found #{current.count} releases." if current.count.nonzero?
           versions = versions.merge(current)
           UI.message 'Loading Unity patch releases'
           current = UnityVersions.fetch_version(UNITY_PATCHES, WIN_DOWNLOAD)
-          UI.success "Found #{current.count} patch releases." if current.count != 0
+          UI.success "Found #{current.count} patch releases." if current.count.nonzero?
           versions = versions.merge(current)
           UI.message 'Loading Unity beta releases'
           current = UnityVersions.fetch_betas(UNITY_BETAS, WIN_DOWNLOAD)
-          UI.success "Found #{current.count} beta releases." if current.count != 0
+          UI.success "Found #{current.count} beta releases." if current.count.nonzero?
           versions = versions.merge(current)
           versions
         end

@@ -1,0 +1,230 @@
+{
+  "GENERAL": {
+    "active": true,
+    "comment": "A generic set of rules, to be applied regardless of the current phase",
+    "rules": {
+      "steps": {
+        "active": false,
+        "start_pattern": "DisplayProgressbar: (?<step>.+)",
+        "start_message": "Current step: %{step}"
+      },
+      "fail": {
+        "active": true,
+        "start_pattern": "^(?<fail>Failed to .+)\\n",
+        "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "start_message": false,
+        "end_message": "%{file}(line %{line}): %{fail}",
+        "store_lines": false,
+        "ignore_lines": [
+          "UnityEditor",
+          "UnityEngine",
+          "^\\n"
+        ],
+        "type": "error"
+      },
+      "log": {
+        "active": true,
+        "start_pattern": "UnityEngine\\.Debug:Log\\(Object\\)",
+        "fetch_first_line_not_matching": [
+          "UnityEngine\\.",
+          "^\\n"
+        ],
+        "fetched_line_pattern": "(?<message>.*)\\n",
+        "fetched_line_message": false,
+        "start_message": false,
+        "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_message": "[LOG] %{file}(line %{line}): %{message}"
+      },
+      "log_assertion": {
+        "active": true,
+        "start_pattern": "UnityEngine\\.Debug:LogAssertion\\(Object\\)",
+        "fetch_first_line_not_matching": [
+          "UnityEngine\\.",
+          "^\\n"
+        ],
+        "fetched_line_pattern": "(?<message>.*)\\n",
+        "fetched_line_message": false,
+        "start_message": false,
+        "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_message": "[LOG] %{file}(line %{line}): %{message}",
+        "type": "warning"
+      },
+      "log_warning": {
+        "active": true,
+        "start_pattern": "UnityEngine\\.Debug:LogWarning\\(Object\\)",
+        "fetch_first_line_not_matching": [
+          "UnityEngine\\.",
+          "^\\n"
+        ],
+        "fetched_line_pattern": "(?<message>.*)\\n",
+        "fetched_line_message": false,
+        "start_message": false,
+        "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_message": "[LOG] %{file}(line %{line}): %{message}",
+        "type": "warning"
+      },
+      "log_error": {
+        "active": true,
+        "start_pattern": "UnityEngine\\.Debug:LogError\\(Object\\)",
+        "fetch_first_line_not_matching": [
+          "UnityEngine\\.",
+          "^\\n",
+          "^\\t",
+          "^  "
+        ],
+        "fetched_line_pattern": "(?<message>.*)\\n",
+        "fetched_line_message": false,
+        "start_message": false,
+        "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_message": "[LOG] %{file}(line %{line}): %{message}",
+        "type": "error"
+      },
+      "log_exception": {
+        "active": true,
+        "start_pattern": "UnityEngine\\.Debug:LogException\\(Object\\)",
+        "fetch_first_line_not_matching": [
+          "UnityEngine\\.",
+          "^\\n",
+          "^\\t",
+          "^  "
+        ],
+        "fetched_line_pattern": "(?<message>.*)\\n",
+        "fetched_line_message": false,
+        "start_message": false,
+        "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_message": "[LOG] %{file}(line %{line}): %{message}",
+        "type": "error"
+      },
+      "batchmode_exit": {
+        "active": true,
+        "start_pattern": "Exiting batchmode successfully now!",
+        "type": "success"
+      }
+    }
+  },
+  "JENKINS": {
+    "active": true,
+    "silent": false,
+    "comment": "Jenkins specific, used to catch build launchs via Jenkins",
+    "phase_start_pattern": "Started by",
+    "rules": {
+      "start": {
+        "active": true,
+        "start_pattern": "Started by"
+      }
+    }
+  },
+  "INIT": {
+    "active": true,
+    "silent": false,
+    "comment": "Initialization on editor launch",
+    "phase_start_pattern": "Initialize mono",
+    "rules": {
+      "mono_options": {
+        "active": true,
+        "start_pattern": "Using monoOptions -(?<options>.+)"
+      },
+      "batchmode_args": {
+        "active": true,
+        "start_pattern": "BATCHMODE ARGUMENTS:",
+        "start_message": "Batchmode arguments:",
+        "store_lines": true,
+        "end_pattern": "Successfully changed project path",
+        "end_message": "  ---"
+      },
+      "GUID_loading": {
+        "active": true,
+        "start_pattern": "Loading GUID <-> Path mappings"
+      },
+      "asset_DB_loading": {
+        "active": true,
+        "start_pattern": "Loading Asset Database ?... {,2}\\d+\\.?\\d*"
+      },
+      "asset_DB_loading_FAIL": {
+        "active": true,
+        "start_pattern": "Loading Asset Database ?... ?\\[ Failed \\]",
+        "type": "warning"
+      },
+      "engine_version": {
+        "active": true,
+        "start_pattern": "Initialize engine version: (?<version>\\d+\\.\\d+\\.\\d+\\w\\d+) \\((?<hash>\\w*)\\)",
+        "start_message": "Engine Initialization (version %{version})"
+      }
+    }
+  },
+  "COMPILER": {
+    "active": true,
+    "silent": false,
+    "comment": "Compiling phase",
+    "phase_start_pattern": "- starting compile",
+    "phase_end_pattern": "- Finished compile",
+    "rules": {
+      "target": {
+        "active": true,
+        "start_pattern": "- starting compile (?<path>.+), for buildtarget (?<target>.+)",
+        "start_message": "Target: %{path} (buildtarget %{target})"
+      },
+      "finished": {
+        "active": true,
+        "start_pattern": "- Finished compile (?<path>.+)\\n",
+        "start_message": "Finished compilation for %{path}"
+      },
+      "arguments": {
+        "active": false,
+        "start_pattern": "Compiler Commandline Arguments",
+        "end_pattern": "(^\\n|CompilerOutput)",
+        "store_lines": true,
+        "start_message": "Compiler command line arguments:",
+        "end_message": false
+      },
+      "stdout": {
+        "active": true,
+        "start_pattern": "CompilerOutput:-stdout--exitcode: (?<exitcode>\\d)--compilationhadfailure: (?<fail>False|True)--outfile: (?<file>.+)",
+        "start_message": "Exitcode %{exitcode} on the standard output of the compiler (%{file})"
+      },
+      "stderr": {
+        "active": false,
+        "start_pattern": "CompilerOutput:-stderr",
+        "start_message": "Errors and warnings:"
+      },
+      "compiler_error": {
+        "active": true,
+        "start_pattern": "/(?<file>\\w+\\.\\w+\\(\\d+,\\d+\\)): error (?<code>CS....): (?<message>.+)\\n",
+        "start_message": "Error %{code}: %{message} (%{file})",
+        "type": "error"
+      },
+      "compiler_warning": {
+        "active": true,
+        "start_pattern": "/(?<file>\\w+\\.\\w+\\(\\d+,\\d+\\)): warning (?<code>CS....): (?<message>.+)\\n",
+        "start_message": "Warning %{code}: %{message} (%{file})",
+        "type": "warning"
+      },
+      "cancel": {
+        "active": true,
+        "start_pattern": "\\*\\*\\* Cancelled '(?<build>.+)' in (?<time>\\d+) seconds",
+        "start_message": "Cancelled '%{build}' after %{time}s",
+        "type": "error"
+      }
+    }
+  },
+  "ASSET": {
+    "active": true,
+    "silent": false,
+    "comment": "Asset managing and packaging",
+    "phase_start_pattern": "Packing sprites",
+    "rules": {
+      "pack_warning": {
+        "active": true,
+        "start_pattern": "WARNING: (?<message>.+)",
+        "start_message": "Warning: %{message}",
+        "type": "warning"
+      },
+      "percentage": {
+        "active": true,
+        "start_pattern": "Textures\\s+\\d+\\.?\\d* .b\\s+\\d{1,3}\\.?\\d*%",
+        "end_pattern": "Complete size\\s+\\d+\\.?\\d* .b\\s+\\d{1,3}\\.?\\d*%",
+        "store_lines": true
+      }
+    }
+  }
+}
