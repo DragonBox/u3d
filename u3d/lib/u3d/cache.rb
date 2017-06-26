@@ -63,7 +63,7 @@ module U3d
           need_update = data[os.id2name].nil?\
           || data[os.id2name]['lastupdate'].nil?\
           || (Time.now.to_i - data[os.id2name]['lastupdate'] > CACHE_LIFE)\
-          || data[os.id2name]['versions'].empty?
+          || (data[os.id2name]['versions'] || []).empty?
           data[os.id2name] = nil if need_update
         end
       end
