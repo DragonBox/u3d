@@ -29,7 +29,7 @@ module U3d
       @cache[key]
     end
 
-    def initialize(path: nil, force_os: nil)
+    def initialize(path: nil, force_os: nil, force_refresh: false)
       @path = path || default_path
       @cache = {}
       os = force_os || U3dCore::Helper.operating_system
@@ -37,7 +37,7 @@ module U3d
       file_path = File.expand_path(DEFAULT_NAME, @path)
       need_update, data = check_for_update(file_path, os)
       @cache = data
-      overwrite_cache(file_path, os) if need_update
+      overwrite_cache(file_path, os) if need_update || force_refresh
     end
 
     private #-------------------------------------------------------------------

@@ -39,7 +39,7 @@ module U3d
         else
           os = U3dCore::Helper.operating_system
         end
-        cache = Cache.new(force_os: os)
+        cache = Cache.new(force_os: os, force_refresh: options[:force])
         versions = {}
 
         return UI.error "Version #{ver} is not in cache" if ver && cache[os.id2name]['versions'][ver].nil?
