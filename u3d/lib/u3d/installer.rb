@@ -198,10 +198,12 @@ module U3d
       else
         installer = WindowsInstaller.new
       end
-      unclean = []
-      installer.installed.each { |unity| unclean << unity unless unity.path =~ UNITY_DIR_CHECK }
-      if !unclean.empty? && UI.confirm("#{unclean.count} Unity installation should be moved. Proceed?")
-        unclean.each { |unity| installer.sanitize_install(unity) }
+      if UI.interactive?
+        unclean = []
+        installer.installed.each { |unity| unclean << unity unless unity.path =~ UNITY_DIR_CHECK }
+        if !unclean.empty? && UI.confirm("#{unclean.count} Unity installation should be moved. Proceed?")
+          unclean.each { |unity| installer.sanitize_install(unity) }
+        end
       end
       installer
     end
