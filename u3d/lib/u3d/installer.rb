@@ -279,11 +279,14 @@ module U3d
         begin
           path = File.expand_path('..', unity.path)
           temp_path = File.join(target_path, 'Applications', 'Unity')
-          UI.verbose "Temporary switching location of #{path} to #{temp_path} for installation purpose"
-          FileUtils.mv path, temp_path
+          move_to_temp = (temp_path != path)
+          if (move_to_temp)
+            UI.verbose "Temporary switching location of #{path} to #{temp_path} for installation purpose"
+            FileUtils.mv path, temp_path
+          end
           U3dCore::CommandExecutor.execute(command: command, admin: true)
         ensure
-          FileUtils.mv temp_path, path
+          FileUtils.mv temp_path, path if move_to_temp
         end
       end
     rescue => e
