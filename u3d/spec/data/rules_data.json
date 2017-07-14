@@ -52,5 +52,16 @@
         }
       }
     }
+  },
+  "phase_start_pattern_parsing": {
+    "message": "parses the start patterns of the phases correctly",
+    "ruleset": {
+      "TEST": {
+        "active": true,
+        "silent": false,
+        "phase_start_pattern": "This is a pattern",
+        "rules": { }
+      }
+    }
   }
 }

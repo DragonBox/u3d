@@ -14,6 +14,9 @@ expectations = {
   end,
   'silent_phase_rules' => Proc.new do |phases|
     expect(phases['TEST']['rules']).to be_empty
+  end,
+  'phase_start_pattern_parsing' => Proc.new do |phases|
+    expect(phases['TEST']['phase_start_pattern']).to eql(/This is a pattern/)
   end
 }
 rules_data_file = File.expand_path('../../data/rules_data.json', __FILE__)
