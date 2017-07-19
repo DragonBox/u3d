@@ -39,7 +39,7 @@ module U3d
         else
           os = U3dCore::Helper.operating_system
         end
-        cache = Cache.new(force_os: os)
+        cache = Cache.new(force_os: os, force_refresh: options[:force])
         versions = {}
 
         return UI.error "Version #{ver} is not in cache" if ver && cache[os.id2name]['versions'][ver].nil?
@@ -50,7 +50,10 @@ module U3d
           versions = cache[os.id2name]['versions']
         end
 
-        versions.each do |k, v|
+        sorted_keys = versions.keys.map {|k| UnityVersionComparator.new(k) }.sort.map{|v| v.version.to_s}
+
+        sorted_keys.each do |k|
+          v = versions[k]
           UI.message "Version #{k}: " + v.to_s.cyan.underline
           if options[:packages]
             inif = nil

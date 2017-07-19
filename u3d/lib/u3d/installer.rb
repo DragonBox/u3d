@@ -198,10 +198,12 @@ module U3d
       else
         installer = WindowsInstaller.new
       end
-      unclean = []
-      installer.installed.each { |unity| unclean << unity unless unity.path =~ UNITY_DIR_CHECK }
-      if !unclean.empty? && UI.confirm("#{unclean.count} Unity installation should be moved. Proceed?")
-        unclean.each { |unity| installer.sanitize_install(unity) }
+      if UI.interactive?
+        unclean = []
+        installer.installed.each { |unity| unclean << unity unless unity.path =~ UNITY_DIR_CHECK }
+        if !unclean.empty? && UI.confirm("#{unclean.count} Unity installation should be moved. Proceed?")
+          unclean.each { |unity| installer.sanitize_install(unity) }
+        end
       end
       installer
     end
@@ -277,11 +279,14 @@ module U3d
         begin
           path = File.expand_path('..', unity.path)
           temp_path = File.join(target_path, 'Applications', 'Unity')
-          UI.verbose "Temporary switching location of #{path} to #{temp_path} for installation purpose"
-          FileUtils.mv path, temp_path
+          move_to_temp = (temp_path != path)
+          if (move_to_temp)
+            UI.verbose "Temporary switching location of #{path} to #{temp_path} for installation purpose"
+            FileUtils.mv path, temp_path
+          end
           U3dCore::CommandExecutor.execute(command: command, admin: true)
         ensure
-          FileUtils.mv temp_path, path
+          FileUtils.mv temp_path, path if move_to_temp
         end
       end
     rescue => e
