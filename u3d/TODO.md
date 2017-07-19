@@ -1,19 +1,20 @@
 = before release
-* core: rename commands (download -> install) (installed -> list)
-* opt-in keychain integration (several commands - same option)
-* message before storing into keychain (inform the user what is going on)
-* add legend (a: alpha, b: beta, f: release candidate/final, p: patch) somewhere in help ?
+* [PN] core: rename commands (download -> install) (installed -> list)
+* [PN] opt-in keychain integration (several commands - same option)
+* [PN] message before storing into keychain (inform the user what is going on)
+* [PN] add legend (a: alpha, b: beta, f: release candidate/final, p: patch) somewhere in help ?
 * u3d install [latest[_stable]|latest_beta|latest_alpha|latest_patch]
 * u3d availale [stable|beta|alpha|patch]
-* progress speed
-* core: moar tests
-* core: clean up Fastlane exceptions
-* core: remote timestamp prefixes
-* core: add u3d action
-* prepare documentation / site
+* [PN] progress speed
+* core: moar tests if needed
+* [PN] core: clean up Fastlane related namings (git grep -i fastlane)
+* [JL] ensure proper LICENSING
+* [PN] core: remove timestamp prefixes for other commands than run
+* [JL] core: add u3d action
+* [JL] prepare documentation / README / site
+* bump version (0.9)
 
-* bug: too much output for downloader on console / CI
-* bug: installer shouldn't ask to rename directory of current Unity install if more packageses are coming
+* [PN] bug: too much output for downloader on console / CI
 
 * bug: password deleted from keychain
 WARN [2017-07-02 23:20:34.44]: Root privileges are required
@@ -28,6 +29,10 @@ keychain: "/Users/Xcloud/Library/Keychains/login.keychain-db"
 
 
 = post
+* core: keep timestamp in run unless surrounding command has it (e.g. fastlane)
+
+* bug: installer shouldn't ask to rename directory of current Unity install if more packageses are coming
+
 * feature to clear credentials
 
 * u3d specific keychain (u3d_credentials_store)
