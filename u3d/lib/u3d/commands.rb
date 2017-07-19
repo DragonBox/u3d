@@ -86,20 +86,22 @@ module U3d
 
         os = U3dCore::Helper.operating_system
         cache = Cache.new(force_os: os)
+        versions = cache[os.id2name]['versions']
+        version = interpret_latest(version, versions)
         files = []
         if os == :linux
           UI.important 'Option -a | --all not available for Linux' if options[:all]
           UI.important 'Option -p | --packages not available for Linux' if options[:packages]
           downloader = Downloader::LinuxDownloader
-          files << ["Unity #{version}", downloader.download(version, cache[os.id2name]['versions']), {}]
+          files << ["Unity #{version}", downloader.download(version, versions), {}]
         else
           downloader = Downloader::MacDownloader if os == :mac
           downloader = Downloader::WindowsDownloader if os == :win
           if options[:all]
-            files = downloader.download_all(version, cache[os.id2name]['versions'])
+            files = downloader.download_all(version, versions)
           else
             packages.each do |package|
-              result = downloader.download_specific(package, version, cache[os.id2name]['versions'])
+              result = downloader.download_specific(package, version, versions)
               files << [package, result[0], result[1]] unless result.nil?
             end
           end
@@ -133,7 +135,7 @@ module U3d
           UI.important 'Option -a | --all not available for Linux' if options[:all]
           UI.important 'Option -p | --packages not available for Linux' if options[:packages]
           downloader = Downloader::LinuxDownloader
-          files << ["Unity #{version}", Downloader::LinuxDownloader.local_file(version), {}]
+          files << ["Unity #{version}", downloader.local_file(version), {}]
         else
           downloader = Downloader::MacDownloader if os == :mac
           downloader = Downloader::WindowsDownloader if os == :win
@@ -191,7 +193,30 @@ module U3d
         end
       end
 
+      def release_letter_mapping
+        {
+          latest: 'f',
+          latest_stable: 'f',
+          latest_beta: 'b',
+          latest_patch: 'p'
+        }
+      end
+
       private
+
+      def interpret_latest(version, versions)
+        return version unless release_letter_mapping.keys.include? version.to_sym
+
+        letter = release_letter_mapping[version.to_sym]
+
+        iversion = versions.keys.map {|k| UnityVersionComparator.new(k) }
+            .sort
+            .reverse
+            .find {|c| c.version.parts[3] == letter }
+            .version.to_s
+        UI.message "Version '#{version}' is #{iversion}."
+        iversion
+      end
 
       def packages_with_unity_first(options)
         temp = options[:packages] || ['Unity']
