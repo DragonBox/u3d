@@ -30,6 +30,7 @@ module U3d
       def list_available(options: {})
         ver = options[:unity_version]
         os = options[:operating_system]
+        rl = options[:release_level]
         if os
           os = os.to_sym
           oses = U3dCore::Helper.operating_systems
@@ -48,7 +49,13 @@ module U3d
           versions = cache[os.id2name]['versions']
         end
 
-        sorted_keys = versions.keys.map {|k| UnityVersionComparator.new(k) }.sort.map{|v| v.version.to_s}
+        vcomparators = versions.keys.map {|k| UnityVersionComparator.new(k) }
+        if rl
+          letter = release_letter_mapping["latest_#{rl.to_s}".to_sym]
+          UI.message "Filtering available versions with release level '#{rl}' [letter '#{letter}']"
+          vcomparators.select! {|vc| vc.version.parts[3] == letter }
+        end
+        sorted_keys = vcomparators.sort.map{|v| v.version.to_s}
 
         sorted_keys.each do |k|
           v = versions[k]
@@ -191,6 +198,10 @@ module U3d
         File.open(args[0], 'r') do |f|
           LogAnalyzer.pipe(f)
         end
+      end
+
+      def release_levels
+        [ :stable, :beta, :patch ]
       end
 
       def release_letter_mapping

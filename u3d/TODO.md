@@ -3,7 +3,6 @@
 * [PN] opt-in keychain integration (several commands - same option)
 * [PN] message before storing into keychain (inform the user what is going on)
 * [PN] add legend (a: alpha, b: beta, f: release candidate/final, p: patch) somewhere in help ?
-* u3d availale [stable|beta|alpha|patch]
 * [PN] progress speed
 * core: moar tests if needed
 * [PN] core: clean up Fastlane related namings (git grep -i fastlane)
