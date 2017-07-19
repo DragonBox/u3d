@@ -68,8 +68,9 @@ module U3d
       end
 
       command :available do |c|
+        oses = U3dCore::Helper.operating_systems
         c.syntax = 'u3d available [-o | --operating_system <OS>] [-u | --unity_version <version>] [-p | --packages] [-f | --force]'
-        c.option '-o', '--operating_system STRING', String, 'Checks for availability on specific OS'
+        c.option '-o', '--operating_system STRING', String, "Checks for availability on specific OS [#{oses.join(', ')}]"
         c.option '-u', '--unity_version STRING', String, 'Checks if specified version is available'
         c.option '-p', '--packages', 'Lists available packages as well'
         c.option '-f', '--force', 'Force refresh list of available versions'

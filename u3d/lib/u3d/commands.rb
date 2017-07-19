@@ -31,11 +31,9 @@ module U3d
         ver = options[:unity_version]
         os = options[:operating_system]
         if os
-          if os == 'win' || os == 'mac' || os == 'linux'
-            os = os.to_sym
-          else
-            raise "Specified OS (#{os}) is not recognized"
-          end
+          os = os.to_sym
+          oses = U3dCore::Helper.operating_systems
+          raise "Specified OS (#{os}) isn't valid [#{oses.join(', ')}]" unless oses.include?(os)
         else
           os = U3dCore::Helper.operating_system
         end
