@@ -9,7 +9,6 @@
 * [JL] ensure proper LICENSING
 * [PN] core: remove timestamp prefixes for other commands than run
 * [JL] prepare documentation / README / site
-* bump version (0.9)
 
 * [PN] bug: too much output for downloader on console / CI
 
