@@ -1,9 +1,15 @@
 = before release
+* core: rename commands (download -> install) (installed -> list)
+* opt-in keychain integration (several commands - same option)
+* message before storing into keychain (inform the user what is going on)
+* add legend (a: alpha, b: beta, f: release candidate/final, p: patch) somewhere in help ?
+* u3d install [latest[_stable]|latest_beta|latest_alpha|latest_patch]
+* u3d availale [stable|beta|alpha|patch]
+* progress speed
 * core: moar tests
 * core: clean up Fastlane exceptions
 * core: remote timestamp prefixes
 * core: add u3d action
-* core: rename commands
 * prepare documentation / site
 
 * bug: too much output for downloader on console / CI
@@ -22,6 +28,10 @@ keychain: "/Users/Xcloud/Library/Keychains/login.keychain-db"
 
 
 = post
+* feature to clear credentials
+
+* u3d specific keychain (u3d_credentials_store)
+
 * if failure to downlad a package, diplay available ones
   #No package "Mac" was found for version 5.6.0f3
 
