@@ -10,7 +10,6 @@
 * [PN] core: clean up Fastlane related namings (git grep -i fastlane)
 * [JL] ensure proper LICENSING
 * [PN] core: remove timestamp prefixes for other commands than run
-* [JL] core: add u3d action
 * [JL] prepare documentation / README / site
 * bump version (0.9)
 
