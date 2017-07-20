@@ -129,7 +129,7 @@ module U3dCore
 
     # Do we want to disable the colored output?
     def self.colors_disabled?
-      #ENV["FASTLANE_DISABLE_COLORS"]
+      ENV["U3D_DISABLE_COLORS"]
     end
 
     # Does the user use the Mac stock terminal
