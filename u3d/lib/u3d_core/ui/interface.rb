@@ -8,7 +8,7 @@ module U3dCore
     # Level Error: Can be used to show additional error
     #   information before actually raising an exception
     #   or can be used to just show an error from which
-    #   fastlane can recover (much magic)
+    #   u3d can recover (much magic)
     #
     #   By default those messages are shown in red
     def error(_message)
@@ -112,11 +112,11 @@ module U3dCore
     #####################################################
 
     # raised from crash!
-    class FastlaneCrash < StandardError
+    class UICrash < StandardError
     end
 
     # raised from user_error!
-    class FastlaneError < StandardError
+    class UIError < StandardError
       attr_reader :show_github_issues
 
       def initialize(show_github_issues: false)
@@ -129,7 +129,7 @@ module U3dCore
     # Use this method instead of user_error! if this error is
     # unexpected, e.g. an invalid server response that shouldn't happen
     def crash!(exception)
-      raise FastlaneCrash.new, exception.to_s
+      raise UICrash.new, exception.to_s
     end
 
     # Use this method to exit the program because of an user error
@@ -142,7 +142,7 @@ module U3dCore
     # and want to show a nice error message to the user
     def user_error!(error_message, options = {})
       options = { show_github_issues: false }.merge(options)
-      raise FastlaneError.new(show_github_issues: options[:show_github_issues]), error_message.to_s
+      raise UIError.new(show_github_issues: options[:show_github_issues]), error_message.to_s
     end
 
     #####################################################

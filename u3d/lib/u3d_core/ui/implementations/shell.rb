@@ -16,7 +16,7 @@ module U3dCore
       @log.formatter = proc do |severity, datetime, progname, msg|
         if $verbose
           string = "#{severity} [#{datetime.strftime('%Y-%m-%d %H:%M:%S.%2N')}]: "
-        elsif ENV["FASTLANE_HIDE_TIMESTAMP"]
+        elsif ENV["U3D_HIDE_TIMESTAMP"]
           string = ""
         else
           string = "[#{datetime.strftime('%H:%M:%S')}]: "
@@ -116,7 +116,7 @@ module U3dCore
     def verify_interactive!(message)
       return if interactive?
       important(message)
-      crash!("Could not retrieve response as fastlane runs in non-interactive mode")
+      crash!("Could not retrieve response as u3d runs in non-interactive mode")
     end
   end
 end
