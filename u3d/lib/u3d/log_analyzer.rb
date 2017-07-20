@@ -107,7 +107,7 @@ module U3d
               if rule['end_message']
                 match = line.match(pattern)
                 params = match.names.map { |n| n.to_sym }.zip(match.captures).to_h
-                message = rule['end_message'] % params.merge(context)
+                message = rule['end_message'] % params.merge(@context)
               else
                 message = line.chomp
               end

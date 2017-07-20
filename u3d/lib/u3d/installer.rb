@@ -195,7 +195,7 @@ module U3d
         end
         U3dCore::CommandExecutor.execute(command: args)
       ensure
-        Thread.kill(tail_thread) if tail_thread
+        Thread.kill(tail_thread)
       end
     end
 
