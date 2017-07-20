@@ -22,6 +22,7 @@
 
 require 'u3d/utils'
 require 'fileutils'
+require 'file-tail'
 
 # Mac specific only right now
 module U3d
@@ -176,8 +177,12 @@ module U3d
       FileUtils.touch(log_file)
 
       tail_thread = Thread.new do
+        analyzer = LogAnalyzer.new
         File.open(log_file, 'r') do |f|
-          LogAnalyzer.pipe(f, sleep_time: 0.5)
+          f.extend File::Tail
+          f.interval # 10
+          f.backward 10
+          f.tail { |l| analyzer.parse_line l }
         end
       end
 

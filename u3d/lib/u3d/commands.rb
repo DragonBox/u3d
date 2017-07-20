@@ -229,8 +229,9 @@ module U3d
         raise ArgumentError, 'No files given' if args.empty?
         raise ArgumentError, "File #{args[0]} does not exist" unless File.exist? args[0]
 
+        analyzer = LogAnalyzer.new
         File.open(args[0], 'r') do |f|
-          LogAnalyzer.pipe(f)
+          f.readlines().each { |l| analyzer.parse_line l }
         end
       end
 
