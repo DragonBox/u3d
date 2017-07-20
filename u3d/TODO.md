@@ -1,6 +1,5 @@
 = before release
 * core: moar tests if needed
-* [PN] core: remove timestamp prefixes for other commands than run
 * [JL] prepare documentation / README / site
 
 = post
