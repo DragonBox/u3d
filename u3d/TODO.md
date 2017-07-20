@@ -1,13 +1,9 @@
 = before release
 * [PN] opt-in keychain integration (several commands - same option)
 * [PN] message before storing into keychain (inform the user what is going on)
-* ~~~ [PN] progress speed
 * core: moar tests if needed
-* [PN] core: clean up Fastlane related namings (git grep -i fastlane)
 * [PN] core: remove timestamp prefixes for other commands than run
 * [JL] prepare documentation / README / site
-
-* XXX [PN] bug: too much output for downloader on console / CI
 
 * bug: password deleted from keychain
 WARN [2017-07-02 23:20:34.44]: Root privileges are required
