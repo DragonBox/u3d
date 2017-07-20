@@ -46,13 +46,21 @@ module U3dCore
     end
 
     def format_string(datetime = Time.now, severity = "")
-      if U3dCore::Globals.verbose?
-        return "#{severity} [#{datetime.strftime('%Y-%m-%d %H:%M:%S.%2N')}]: "
-      elsif ENV["U3D_HIDE_TIMESTAMP"]
-        return ""
-      else
-        return "[#{datetime.strftime('%H:%M:%S')}]: "
+      timestamp = ENV["U3D_UI_TIMESTAMP"]
+      # default timestamp if none specified
+      unless timestamp
+        if U3dCore::Globals.verbose?
+          timestamp = '%Y-%m-%d %H:%M:%S.%2N'
+        else
+          timestamp = '%H:%M:%S'
+        end
       end
+      # hide has last word
+      timestamp = nil if ENV["U3D_HIDE_TIMESTAMP"]
+      s = []
+      s << severity if U3dCore::Globals.verbose? and severity and !severity.empty?
+      s << "[#{datetime.strftime(timestamp)}]" if timestamp
+      s.join(' ')
     end
 
     #####################################################
