@@ -40,6 +40,8 @@ module U3dCore
         "#{format_string(datetime, severity)}#{msg}\n"
       end
 
+      require 'u3d_core/ui/disable_colors' if U3dCore::Helper.colors_disabled?
+
       @log
     end
 
