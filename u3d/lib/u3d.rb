@@ -1,5 +1,4 @@
 require 'u3d/version'
-require 'u3d/options'
 require 'u3d/unity_version_number'
 
 require 'u3d_core'

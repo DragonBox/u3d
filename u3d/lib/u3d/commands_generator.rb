@@ -42,7 +42,6 @@ module U3d
       program :description, U3d::DESCRIPTION
       program :help, 'Authors', 'Jerome Lacoste <jerome@wewanttoknow.com>, Paul Niezborala <p.niezborala@wewanttoknow.com>'
       program :help, 'A word on Unity versions', U3d::UNITY_VERSIONS_NOTE
-      program :help_formatter, :compact
 
       global_option('--verbose') { $verbose = true }
 
@@ -53,10 +52,9 @@ module U3d
 
         c.syntax = 'u3d run [-u | --unity_version <version>] [ -- <run_args>]'
         c.description = 'Run unity'
-        U3dCore::CommanderGenerator.new.generate(U3d::Options.available_run_options)
+        c.option '-u', '--unity_version STRING', String, 'Version of Unity to run with'
         c.action do |_args, options|
-          config = convert_options(options)
-          Commands.run(options: config, run_args: run_args)
+          Commands.run(options: convert_options(options), run_args: run_args)
         end
       end
 
@@ -97,7 +95,6 @@ module U3d
         c.action do |args, options|
           options.default all: false
           options.default no_install: false
-          config = convert_options(options)
           Commands.download(args: args, options: convert_options(options))
         end
       end
@@ -109,7 +106,6 @@ module U3d
         c.option '-i', '--installation_path PATH', String, 'Specifies where package(s) will be installed.'
         c.option '-a', '--all', 'Install all downloaded packages'
         c.action do |args, options|
-          config = convert_options(options)
           Commands.local_install(args: args, options: convert_options(options))
         end
       end
@@ -119,8 +115,7 @@ module U3d
         c.description = 'Stores credentials for future use'
         c.option '-u', '--user USER', String, 'Specifies wich user will be logged in'
         c.action do |_args, options|
-          config = convert_options(options)
-          Commands.login(options: config)
+          Commands.login(options: convert_options(options))
         end
       end
 
