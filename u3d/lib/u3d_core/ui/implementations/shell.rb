@@ -60,9 +60,9 @@ module U3dCore
       # hide has last word
       timestamp = nil if ENV["U3D_HIDE_TIMESTAMP"]
       s = []
-      s << severity if U3dCore::Globals.verbose? and severity and !severity.empty?
-      s << "[#{datetime.strftime(timestamp)}]" if timestamp
-      s.join(' ')
+      s << "#{severity} " if U3dCore::Globals.verbose? and severity and !severity.empty?
+      s << "[#{datetime.strftime(timestamp)}] " if timestamp
+      s.join('')
     end
 
     #####################################################

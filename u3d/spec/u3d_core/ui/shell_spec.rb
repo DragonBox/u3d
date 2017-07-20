@@ -42,7 +42,7 @@ describe U3dCore do
         it "shows severity and a no timestamp in verbose mode" do
           with_log_timestamps(false) do
             with_verbose(true) do
-              expect(shell.format_string(atime, "INFO")).to eq("INFO")
+              expect(shell.format_string(atime, "INFO")).to eq("INFO ")
             end
           end
         end
@@ -51,20 +51,20 @@ describe U3dCore do
       describe "with log timestamp on" do
         it "does add a default timestamp prefix" do
           with_log_timestamps(true) do
-            expect(shell.format_string(atime, "")).to eq("[12:21:35]")
+            expect(shell.format_string(atime, "")).to eq("[12:21:35] ")
           end
         end
 
         it "doesn't show severity by default" do
           with_log_timestamps(true) do
-            expect(shell.format_string(atime, "INFO")).to eq("[12:21:35]")
+            expect(shell.format_string(atime, "INFO")).to eq("[12:21:35] ")
           end
         end
 
         it "shows severity and a longer timestamp in verbose mode" do
           with_log_timestamps(true) do
             with_verbose(true) do
-              expect(shell.format_string(atime, "INFO")).to eq("INFO [2017-07-20 12:21:35.00]")
+              expect(shell.format_string(atime, "INFO")).to eq("INFO [2017-07-20 12:21:35.00] ")
             end
           end
         end
@@ -72,7 +72,7 @@ describe U3dCore do
         it "overrides the timestamp from the ENV" do
           with_log_timestamps(true) do
             with_env_values('U3D_UI_TIMESTAMP' => '%H:%M') do
-              expect(shell.format_string(atime, "")).to eq("[12:21]")
+              expect(shell.format_string(atime, "")).to eq("[12:21] ")
             end
           end
         end
