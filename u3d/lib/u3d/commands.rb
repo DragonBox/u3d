@@ -102,21 +102,24 @@ module U3d
 
         packages = packages_with_unity_first(options)
 
+        os = U3dCore::Helper.operating_system
+        cache = Cache.new(force_os: os)
+        versions = cache[os.id2name]['versions']
+        version = interpret_latest(version, versions)
+        
         unless packages.include?('Unity')
           unity = check_unity_presence(version: version)
           return unless unity
           options[:installation_path] ||= unity.path if Helper.windows?
         end
 
+        U3d::Globals.use_keychain = true if options[:keychain] && Helper.mac?
+
         unless options[:no_install]
           UI.important 'Root privileges are required'
-          raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?(use_keychain: options[:keychain])
+          raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
         end
 
-        os = U3dCore::Helper.operating_system
-        cache = Cache.new(force_os: os)
-        versions = cache[os.id2name]['versions']
-        version = interpret_latest(version, versions)
         files = []
         if os == :linux
           UI.important 'Option -a | --all not available for Linux' if options[:all]
@@ -155,8 +158,10 @@ module U3d
           options[:installation_path] ||= unity.path if Helper.windows?
         end
 
+        U3d::Globals.use_keychain = true if options[:keychain] && Helper.mac?
+
         UI.important 'Root privileges are required'
-        raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?(use_keychain: options[:keychain])
+        raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
 
         os = U3dCore::Helper.operating_system
         files = []
@@ -209,8 +214,9 @@ module U3d
       end
 
       def login(options: {})
-        credentials = U3dCore::Credentials.new(user: options['user'], use_keychain: true)
+        credentials = U3dCore::Credentials.new(user: options['user'])
         credentials.login
+        UI.error 'Invalid credentials' unless U3dCore::CommandExecutor.has_admin_privileges?
       end
 
       def local_analyze(args: [])

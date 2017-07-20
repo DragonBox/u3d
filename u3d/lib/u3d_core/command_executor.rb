@@ -57,7 +57,7 @@ module U3dCore
       # @param admin [Boolean] Do we need admin privilege for this command?
       # @param keychain [Boolean] Should we fetch admin rights from the keychain on OSX
       # @return [String] All the output as string
-      def execute(command: nil, print_all: false, print_command: true, error: nil, prefix: nil, loading: nil, admin: false, keychain: false)
+      def execute(command: nil, print_all: false, print_command: true, error: nil, prefix: nil, loading: nil, admin: false)
         print_all = true if $verbose
         prefix ||= {}
 
@@ -69,9 +69,9 @@ module U3dCore
         UI.command_output(loading) if print_all && loading
 
         if admin
-          cred = U3dCore::Credentials.new(user: ENV['USER'], use_keychain: keychain)
+          cred = U3dCore::Credentials.new(user: ENV['USER'])
           if Helper.windows?
-            raise CredentialsError, "The command \'#{command}\' must be run in administrative shell" unless has_admin_privileges?(use_keychain: keychain)
+            raise CredentialsError, "The command \'#{command}\' must be run in administrative shell" unless has_admin_privileges?
           else
             command = "sudo -k && echo #{cred.password.shellescape} | sudo -S " + command
           end
@@ -109,7 +109,7 @@ module U3dCore
         return output.join("\n")
       end
 
-      def has_admin_privileges?(use_keychain: false)
+      def has_admin_privileges?
         if Helper.windows?
           begin
             result = system('reg query HKU\\S-1-5-19', :out => File::NULL, :err => File::NULL)
@@ -117,7 +117,7 @@ module U3dCore
             result = false
           end
         else
-          credentials = U3dCore::Credentials.new(user: ENV['USER'], use_keychain: use_keychain)
+          credentials = U3dCore::Credentials.new(user: ENV['USER'])
           begin
             result = system("sudo -k && echo #{credentials.password.shellescape} | sudo -S /usr/bin/whoami")
           rescue

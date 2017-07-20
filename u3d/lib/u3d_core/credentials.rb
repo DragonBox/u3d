@@ -27,10 +27,10 @@ require 'security'
 module U3dCore
   class Credentials
     MAC_U3D_SERVER = 'u3d'
-    def initialize(user: nil, password: nil, use_keychain: false)
+    def initialize(user: nil, password: nil)
       @user = user
       @password = password
-      @use_keychain = use_keychain
+      @use_keychain = U3dCore::Globals.use_keychain?
     end
 
     def user
