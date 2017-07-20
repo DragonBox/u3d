@@ -99,11 +99,11 @@ module U3dCore
       return false
     end
 
-    def forget_credentials
+    def forget_credentials(force: false)
       @password = nil
       ENV['U3D_PASSWORD'] = nil
-      if UI.interactive?
-        if Helper.mac? && @use_keychain && UI.confirm('Remove credentials from the keychain?')
+      if force || UI.interactive?
+        if Helper.mac? && @use_keychain && (force || UI.confirm('Remove credentials from the keychain?'))
           UI.message 'Deleting credentials from the keychain'
           Security::InternetPassword.delete(server: MAC_U3D_SERVER)
         end
