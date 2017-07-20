@@ -1,0 +1,14 @@
+Library/
+Temp/
+*.csproj
+*.pidb
+*.pidb.meta
+*.sln
+*.suo
+*.userprefs
+
+editor.log
+
+fastlane/report.xml
+fastlane/README.md
+
