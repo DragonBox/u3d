@@ -133,12 +133,20 @@ module U3d
         end
       end
 
-      command :login do |c|
-        c.syntax = 'u3d login [-u | --user <username>]'
-        c.description = 'Stores credentials for future use'
+      command :credentials_add do |c|
+        c.syntax = 'u3d credentials_add [-u | --user <username>]'
+        c.description = 'Adds credentials for future use'
         c.option '-u', '--user USER', String, 'Specifies wich user will be logged in'
         c.action do |_args, options|
-          Commands.login(options: convert_options(options))
+          Commands.credentials_add(options: convert_options(options))
+        end
+      end
+
+      command :credentials_remove do |c|
+        c.syntax = 'u3d credentials_remove'
+        c.description = 'Forgets credentials from their storage'
+        c.action do |_args, options|
+          Commands.credentials_remove(options: convert_options(options))
         end
       end
 

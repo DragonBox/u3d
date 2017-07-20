@@ -213,11 +213,16 @@ module U3d
         runner.run(unity, run_args)
       end
 
-      def login(options: {})
+      def credentials_add(options: {})
         credentials = U3dCore::Credentials.new(user: options['user'])
         credentials.login
         U3dCore::Globals.use_keychain = true
         UI.error 'Invalid credentials' unless U3dCore::CommandExecutor.has_admin_privileges?
+      end
+
+      def credentials_remove(options: {})
+        U3dCore::Globals.use_keychain = true
+        U3dCore::Credentials.new().forget_credentials(force: true)
       end
 
       def local_analyze(args: [])
