@@ -86,8 +86,8 @@ module U3d
         end
       end
 
-      command :download do |c|
-        c.syntax = 'u3d download <version> [ [-p | --packages <package> ...] | [-a | --all] ] [ [-n | --no_install] [-i | --installation_path <path>] ]'
+      command :install do |c|
+        c.syntax = 'u3d install <version> [ [-p | --packages <package> ...] | [-a | --all] ] [ [-n | --no_install] [-i | --installation_path <path>] ]'
         c.description = "Download (and install) Unity3D packages.\n\n  The 'version' argument can be a specific version number, such as 5.6.1f1, or an alias in [#{Commands::release_letter_mapping.keys.join(',')}]"
         c.option '-p', '--packages PACKAGES', Array, 'Specifies which packages to download. Overriden by --all'
         c.option '-i', '--installation_path PATH', String, 'Specifies where package(s) will be installed. Overriden by --no_install'
