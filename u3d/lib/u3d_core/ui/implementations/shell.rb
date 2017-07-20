@@ -46,7 +46,7 @@ module U3dCore
     end
 
     def format_string(datetime = Time.now, severity = "")
-      if $verbose
+      if U3dCore::Globals.verbose?
         return "#{severity} [#{datetime.strftime('%Y-%m-%d %H:%M:%S.%2N')}]: "
       elsif ENV["U3D_HIDE_TIMESTAMP"]
         return ""
@@ -92,7 +92,7 @@ module U3dCore
     end
 
     def verbose(message)
-      log.debug(message.to_s) if $verbose
+      log.debug(message.to_s) if U3dCore::Globals.verbose?
     end
 
     def header(message)

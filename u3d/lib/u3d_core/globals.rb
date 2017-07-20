@@ -1,5 +1,6 @@
 ## --- BEGIN LICENSE BLOCK ---
-# Copyright (c) 2016-present WeWantToKnow AS
+# Original work Copyright (c) 2015-present the fastlane authors
+# Modified work Copyright 2016-present WeWantToKnow AS
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,11 +21,15 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
-require 'u3d_core/globals'
-require 'u3d_core/helper'
-require 'u3d_core/credentials'
-require 'u3d_core/ui/ui'
-require 'u3d_core/command_executor'
-require 'u3d_core/command_runner'
-require 'colored'
-require 'commander'
+module U3dCore
+  class Globals
+    class << self
+      attr_writer :verbose
+    end
+
+    def self.verbose?
+      return nil unless @verbose
+      return true
+    end
+  end
+end

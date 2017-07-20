@@ -50,3 +50,11 @@ ensure
     ENV[k] = old_vals[k]
   end
 end
+
+def with_verbose(verbose)
+  orig_verbose = U3dCore::Globals.verbose?
+  U3dCore::Globals.verbose = verbose
+  yield if block_given?
+ensure
+  U3dCore::Globals.verbose = orig_verbose
+end
