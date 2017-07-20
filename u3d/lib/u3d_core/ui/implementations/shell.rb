@@ -37,20 +37,20 @@ module U3dCore
       end
 
       @log.formatter = proc do |severity, datetime, progname, msg|
-        if $verbose
-          string = "#{severity} [#{datetime.strftime('%Y-%m-%d %H:%M:%S.%2N')}]: "
-        elsif ENV["U3D_HIDE_TIMESTAMP"]
-          string = ""
-        else
-          string = "[#{datetime.strftime('%H:%M:%S')}]: "
-        end
-
-        string += "#{msg}\n"
-
-        string
+        "#{format_string(datetime, severity)}#{msg}\n"
       end
 
       @log
+    end
+
+    def format_string(datetime = Time.now, severity = "")
+      if $verbose
+        return "#{severity} [#{datetime.strftime('%Y-%m-%d %H:%M:%S.%2N')}]: "
+      elsif ENV["U3D_HIDE_TIMESTAMP"]
+        return ""
+      else
+        return "[#{datetime.strftime('%H:%M:%S')}]: "
+      end
     end
 
     #####################################################
