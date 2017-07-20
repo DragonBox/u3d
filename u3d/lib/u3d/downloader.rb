@@ -51,18 +51,20 @@ module U3d
               rescue ArgumentError
                 UI.verbose 'Unable to get length of file in download'
               end
+              started_at = Time.now.to_i - 1
               response.read_body do |segment|
                 f.write(segment)
                 current += segment.length
+                next unless UI.interactive?
                 if size
-                  Utils.print_progress(current, size)
+                  Utils.print_progress(current, size, started_at)
                 else
-                  Utils.print_progress_nosize(current)
+                  Utils.print_progress_nosize(current, started_at)
                 end
               end
             end
           end
-          print "\n"
+          print "\n" if UI.interactive?
         end
       rescue Interrupt => e
         # Ensure that the file is deleted if download is aborted

@@ -1,11 +1,11 @@
 = before release
-* [PN] core: rename commands (download -> install) (installed -> list)
+* XXX [PN] core: rename commands (download -> install) (installed -> list)
 * [PN] opt-in keychain integration (several commands - same option)
 * [PN] message before storing into keychain (inform the user what is going on)
-* [PN] add legend (a: alpha, b: beta, f: release candidate/final, p: patch) somewhere in help ?
+* XXX [PN] add legend (a: alpha, b: beta, f: release candidate/final, p: patch) somewhere in help ?
 * u3d install [latest[_stable]|latest_beta|latest_alpha|latest_patch]
 * u3d availale [stable|beta|alpha|patch]
-* [PN] progress speed
+* ~~~ [PN] progress speed
 * core: moar tests if needed
 * [PN] core: clean up Fastlane related namings (git grep -i fastlane)
 * [JL] ensure proper LICENSING
@@ -14,7 +14,7 @@
 * [JL] prepare documentation / README / site
 * bump version (0.9)
 
-* [PN] bug: too much output for downloader on console / CI
+* XXX [PN] bug: too much output for downloader on console / CI
 
 * bug: password deleted from keychain
 WARN [2017-07-02 23:20:34.44]: Root privileges are required
@@ -39,4 +39,3 @@ keychain: "/Users/Xcloud/Library/Keychains/login.keychain-db"
 
 * if failure to downlad a package, diplay available ones
   #No package "Mac" was found for version 5.6.0f3
-

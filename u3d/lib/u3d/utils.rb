@@ -49,19 +49,21 @@ module U3d
         FileUtils.mkpath(dir) unless File.directory?(dir)
       end
 
-      def print_progress(current, total)
+      def print_progress(current, total, started_at)
         ratio = [current.to_f / total, 1.0].min
         percent = (ratio * 100.0).round(1)
-        arrow = (ratio * 60.0).floor
+        arrow = (ratio * 20.0).floor
+        time_spent = Time.now.to_i - started_at
         print("\r[")
         print('=' * [arrow - 1, 0].max)
         print('>')
-        print('.' * (60 - arrow))
-        print("] (#{percent}%) ")
+        print('.' * (20 - arrow))
+        print("] #{current}/#{total}b (#{percent}% at #{current.to_f/time_spent}b/s")
       end
 
-      def print_progress_nosize(current)
-        print("\r>#{current} bytes downloaded.  ")
+      def print_progress_nosize(current, started_at)
+        time_spent = Time.now.to_i - started_at
+        print("\r>#{current} bytes downloaded at #{current.to_f/time_spent}b/s.    ")
       end
 
       def parse_unity_version(version)
