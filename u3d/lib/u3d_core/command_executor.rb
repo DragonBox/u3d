@@ -117,7 +117,7 @@ module U3dCore
             result = false
           end
         else
-          credentials = U3dCore::Credentials.new(user: ENV['USER'], use_keychain: keychain)
+          credentials = U3dCore::Credentials.new(user: ENV['USER'], use_keychain: use_keychain)
           begin
             result = system("sudo -k && echo #{credentials.password.shellescape} | sudo -S /usr/bin/whoami")
           rescue
