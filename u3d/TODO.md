@@ -1,12 +1,9 @@
 = before release
-* XXX [PN] core: rename commands (download -> install) (installed -> list)
 * [PN] opt-in keychain integration (several commands - same option)
 * [PN] message before storing into keychain (inform the user what is going on)
-* XXX [PN] add legend (a: alpha, b: beta, f: release candidate/final, p: patch) somewhere in help ?
 * ~~~ [PN] progress speed
 * core: moar tests if needed
 * [PN] core: clean up Fastlane related namings (git grep -i fastlane)
-* [JL] ensure proper LICENSING
 * [PN] core: remove timestamp prefixes for other commands than run
 * [JL] prepare documentation / README / site
 
