@@ -1,0 +1,1 @@
+u3d -- -logFile './editor.log' -executeMethod U3d.EditorRun.LoadSaveScenes -quit -batchmode
