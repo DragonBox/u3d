@@ -106,7 +106,7 @@ module U3d
         cache = Cache.new(force_os: os)
         versions = cache[os.id2name]['versions']
         version = interpret_latest(version, versions)
-        
+
         unless packages.include?('Unity')
           unity = check_unity_presence(version: version)
           return unless unity
@@ -216,6 +216,7 @@ module U3d
       def login(options: {})
         credentials = U3dCore::Credentials.new(user: options['user'])
         credentials.login
+        U3dCore::Globals.use_keychain = true
         UI.error 'Invalid credentials' unless U3dCore::CommandExecutor.has_admin_privileges?
       end
 

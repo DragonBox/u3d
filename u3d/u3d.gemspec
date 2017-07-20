@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name        = 'u3d'
   spec.version     = U3d::VERSION
   spec.date        = '2016-12-08'
-  spec.authors     = ["Jerome Lacoste"]
+  spec.authors     = ["Jerome Lacoste", "Paul Niezborala"]
   spec.email       = 'jerome@wewanttoknow.com'
 
   spec.summary     = "U3d"
@@ -37,7 +37,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'colored', '>= 1.2', '< 2.0.0' # terminal
   spec.add_dependency 'plist', '>= 3.1.0', '< 4.0.0' # Generate the Xcode config plist file
   spec.add_dependency 'inifile', '>= 3.0.0', '< 4.0.0' # Parses INI files
-  spec.add_dependency 'filesize', '>= 0.1.1' # File sizes prettifier 
+  spec.add_dependency 'filesize', '>= 0.1.1' # File sizes prettifier
 
   # Development only
   spec.add_development_dependency "bundler", "~> 1.13"
