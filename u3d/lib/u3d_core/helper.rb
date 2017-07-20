@@ -38,7 +38,7 @@ module U3dCore
     end
 
     # @return true if the currently running program is a unit test
-    def self.test?
+    def self.is_test?
       defined? SpecHelper
     end
 
