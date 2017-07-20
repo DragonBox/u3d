@@ -8,6 +8,8 @@ module Fastlane
       def self.run(params)
         config = params._values
         run_args = Shellwords.split(config.delete(:run_args))
+        # fastlane adds its own timestamping
+        ::U3dCore::Globals.log_timestamps = false
         ::U3d::Commands.run(config: config, run_args: run_args)
       end
 
