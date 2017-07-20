@@ -27,7 +27,7 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
   Coveralls::SimpleCov::Formatter
 ]
 SimpleCov.start
-#Coveralls.wear!
+# Coveralls.wear!
 
 require 'u3d_core'
 require 'u3d'
@@ -39,14 +39,30 @@ end
 # provided keys and values set as defined in hash. After the block
 # completes, restores the ENV to its previous state.
 def with_env_values(hash)
-  old_vals = ENV.select { |k, v| hash.include?(k) }
-  hash.each do |k, v|
+  old_vals = ENV.select { |k, _v| hash.include?(k) }
+  hash.each do |k, _v|
     ENV[k] = hash[k]
   end
   yield
 ensure
-  hash.each do |k, v|
+  hash.each do |k, _v|
     ENV.delete(k) unless old_vals.include?(k)
     ENV[k] = old_vals[k]
   end
+end
+
+def with_verbose(verbose)
+  orig_verbose = U3dCore::Globals.verbose?
+  U3dCore::Globals.verbose = verbose
+  yield if block_given?
+ensure
+  U3dCore::Globals.verbose = orig_verbose
+end
+
+def with_log_timestamps(log_timestamps)
+  orig_log_timestamps = U3dCore::Globals.log_timestamps?
+  U3dCore::Globals.log_timestamps = log_timestamps
+  yield if block_given?
+ensure
+  U3dCore::Globals.log_timestamps = orig_log_timestamps
 end

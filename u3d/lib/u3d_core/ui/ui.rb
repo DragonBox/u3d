@@ -45,5 +45,3 @@ require 'u3d_core/ui/interface'
 Dir[File.expand_path('implementations/*.rb', File.dirname(__FILE__))].each do |file|
   require file
 end
-
-require 'u3d_core/ui/disable_colors' if U3dCore::Helper.colors_disabled?

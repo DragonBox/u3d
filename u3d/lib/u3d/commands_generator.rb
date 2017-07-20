@@ -62,7 +62,7 @@ module U3d
       program :help, 'Authors', 'Jerome Lacoste <jerome@wewanttoknow.com>, Paul Niezborala <p.niezborala@wewanttoknow.com>'
       program :help, 'A word on Unity versions', U3d::UNITY_VERSIONS_NOTE
 
-      global_option('--verbose') { $verbose = true }
+      global_option('--verbose') { U3dCore::Globals.verbose = true }
 
       command :run do |c|
         # Intended for backward compatibilty purposes for run command
@@ -73,6 +73,7 @@ module U3d
         c.description = 'Run unity'
         c.option '-u', '--unity_version STRING', String, 'Version of Unity to run with'
         c.action do |_args, options|
+          U3dCore::Globals.log_timestamps = true
           Commands.run(options: convert_options(options), run_args: run_args)
         end
       end

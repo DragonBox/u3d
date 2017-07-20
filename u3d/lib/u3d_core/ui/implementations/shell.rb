@@ -30,27 +30,39 @@ module U3dCore
 
       $stdout.sync = true
 
-      if Helper.test?
+      if Helper.is_test?
         @log ||= Logger.new(nil) # don't show any logs when running tests
       else
         @log ||= Logger.new($stdout)
       end
 
       @log.formatter = proc do |severity, datetime, progname, msg|
-        if $verbose
-          string = "#{severity} [#{datetime.strftime('%Y-%m-%d %H:%M:%S.%2N')}]: "
-        elsif ENV["U3D_HIDE_TIMESTAMP"]
-          string = ""
-        else
-          string = "[#{datetime.strftime('%H:%M:%S')}]: "
-        end
-
-        string += "#{msg}\n"
-
-        string
+        "#{format_string(datetime, severity)}#{msg}\n"
       end
 
+      require 'u3d_core/ui/disable_colors' if U3dCore::Helper.colors_disabled?
+
       @log
+    end
+
+    def format_string(datetime = Time.now, severity = "")
+      if U3dCore::Globals.log_timestamps?
+        timestamp = ENV["U3D_UI_TIMESTAMP"]
+        # default timestamp if none specified
+        unless timestamp
+          if U3dCore::Globals.verbose?
+            timestamp = '%Y-%m-%d %H:%M:%S.%2N'
+          else
+            timestamp = '%H:%M:%S'
+          end
+        end
+      end
+      # hide has last word
+      timestamp = nil if ENV["U3D_HIDE_TIMESTAMP"]
+      s = []
+      s << "#{severity} " if U3dCore::Globals.verbose? and severity and !severity.empty?
+      s << "[#{datetime.strftime(timestamp)}] " if timestamp
+      s.join('')
     end
 
     #####################################################
@@ -90,7 +102,7 @@ module U3dCore
     end
 
     def verbose(message)
-      log.debug(message.to_s) if $verbose
+      log.debug(message.to_s) if U3dCore::Globals.verbose?
     end
 
     def header(message)
@@ -113,12 +125,12 @@ module U3dCore
 
     def input(message)
       verify_interactive!(message)
-      ask(message.to_s.yellow).to_s.strip
+      ask("#{format_string}#{message.to_s.yellow}").to_s.strip
     end
 
     def confirm(message)
       verify_interactive!(message)
-      agree("#{message} (y/n)".yellow, true)
+      agree("#{format_string}#{message.to_s.yellow} (y/n)", true)
     end
 
     def select(message, options)
@@ -131,7 +143,7 @@ module U3dCore
     def password(message)
       verify_interactive!(message)
 
-      ask(message.yellow) { |q| q.echo = "*" }
+      ask("#{format_string}#{message.to_s.yellow}") { |q| q.echo = "*" }
     end
 
     private
