@@ -56,7 +56,7 @@ describe U3d do
           allow(File).to receive(:open).with(anything, 'r').and_yield(file)
           allow(file).to receive(:read) { test_cases['ruleset'].to_json }
 
-          _gen, parsed_phases = U3d::LogAnalyzer.load_rules
+          _gen, parsed_phases = U3d::LogAnalyzer.new.load_rules
           expectations[key].call(parsed_phases)
         end
       end

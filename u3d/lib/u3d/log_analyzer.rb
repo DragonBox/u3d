@@ -34,19 +34,19 @@ module U3d
       @active_rule = nil
       @context = {}
       @rule_lines_buffer = []
-      load_rules
+      @generic_rules, @phases = load_rules
     end
 
     def load_rules
       data = {}
-      @generic_rules = {}
-      @phases = {}
+      generic_rules = {}
+      phases = {}
       File.open(RULES_PATH, 'r') do |f|
         data = JSON.parse(f.read)
       end
       if data['GENERAL'] && data['GENERAL']['active']
         data['GENERAL']['rules'].each do |rn, r|
-          @generic_rules[rn] = r if parse_rule(r)
+          generic_rules[rn] = r if parse_rule(r)
         end
       end
       data.delete('GENERAL')
@@ -65,8 +65,9 @@ module U3d
           end
         end
         phase['rules'] = temp_rules
-        @phases[name] = phase
+        phases[name] = phase
       end
+      return generic_rules, phases
     end
 
     def parse_line(line)
