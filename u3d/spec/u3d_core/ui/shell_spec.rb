@@ -26,29 +26,63 @@ describe U3dCore do
       let(:shell) { U3dCore::Shell.new }
       let(:atime) { Time.new(2017, 07, 20, 12, 21, 35) }
 
-      it "does add a default timestamp prefix" do
-        expect(shell.format_string(atime, "")).to eq("[12:21:35]")
-      end
+      describe "with log timestamp off" do
+        it "does add a default timestamp prefix" do
+          with_log_timestamps(false) do
+            expect(shell.format_string(atime, "")).to eq("")
+          end
+        end
 
-      it "doesn't show severity by default" do
-        expect(shell.format_string(atime, "INFO")).to eq("[12:21:35]")
-      end
+        it "doesn't show severity by default" do
+          with_log_timestamps(false) do
+            expect(shell.format_string(atime, "INFO")).to eq("")
+          end
+        end
 
-      it "shows severity and a longer timestamp in verbose mode" do
-        with_verbose(true) do
-          expect(shell.format_string(atime, "INFO")).to eq("INFO [2017-07-20 12:21:35.00]")
+        it "shows severity and a no timestamp in verbose mode" do
+          with_log_timestamps(false) do
+            with_verbose(true) do
+              expect(shell.format_string(atime, "INFO")).to eq("INFO")
+            end
+          end
         end
       end
 
-      it "overrides the timestamp from the ENV" do
-        with_env_values('U3D_UI_TIMESTAMP' => '%H:%M') do
-          expect(shell.format_string(atime, "")).to eq("[12:21]")
+      describe "with log timestamp on" do
+        it "does add a default timestamp prefix" do
+          with_log_timestamps(true) do
+            expect(shell.format_string(atime, "")).to eq("[12:21:35]")
+          end
         end
-      end
 
-      it "overries the timestamp from the ENV, with HIDE having the last word" do
-        with_env_values('U3D_UI_TIMESTAMP' => '%H:%M', 'U3D_HIDE_TIMESTAMP' => '') do
-          expect(shell.format_string(atime, "")).to eq("")
+        it "doesn't show severity by default" do
+          with_log_timestamps(true) do
+            expect(shell.format_string(atime, "INFO")).to eq("[12:21:35]")
+          end
+        end
+
+        it "shows severity and a longer timestamp in verbose mode" do
+          with_log_timestamps(true) do
+            with_verbose(true) do
+              expect(shell.format_string(atime, "INFO")).to eq("INFO [2017-07-20 12:21:35.00]")
+            end
+          end
+        end
+
+        it "overrides the timestamp from the ENV" do
+          with_log_timestamps(true) do
+            with_env_values('U3D_UI_TIMESTAMP' => '%H:%M') do
+              expect(shell.format_string(atime, "")).to eq("[12:21]")
+            end
+          end
+        end
+
+        it "overries the timestamp from the ENV, with HIDE having the last word" do
+          with_log_timestamps(true) do
+            with_env_values('U3D_UI_TIMESTAMP' => '%H:%M', 'U3D_HIDE_TIMESTAMP' => '') do
+              expect(shell.format_string(atime, "")).to eq("")
+            end
+          end
         end
       end
     end

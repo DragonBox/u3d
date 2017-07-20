@@ -58,3 +58,11 @@ def with_verbose(verbose)
 ensure
   U3dCore::Globals.verbose = orig_verbose
 end
+
+def with_log_timestamps(log_timestamps)
+  orig_log_timestamps = U3dCore::Globals.log_timestamps?
+  U3dCore::Globals.log_timestamps = log_timestamps
+  yield if block_given?
+ensure
+  U3dCore::Globals.log_timestamps = orig_log_timestamps
+end

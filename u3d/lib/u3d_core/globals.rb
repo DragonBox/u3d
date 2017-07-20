@@ -24,7 +24,12 @@
 module U3dCore
   class Globals
     class << self
-      attr_writer :verbose
+      attr_writer :verbose, :log_timestamps
+    end
+
+    def self.log_timestamps?
+      return nil unless @log_timestamps
+      return true
     end
 
     def self.verbose?

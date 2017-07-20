@@ -76,6 +76,7 @@ module U3d
         c.description = 'Run unity'
         c.option '-u', '--unity_version STRING', String, 'Version of Unity to run with'
         c.action do |_args, options|
+          U3dCore::Globals.log_timestamps = true
           Commands.run(options: convert_options(options), run_args: run_args)
         end
       end
