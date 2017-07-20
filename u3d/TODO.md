@@ -18,6 +18,8 @@ keychain: "/Users/Xcloud/Library/Keychains/login.keychain-db"
 
 
 = post
+* patch commander to support argument descriptions
+
 * core: keep timestamp in run unless surrounding command has it (e.g. fastlane)
 
 * bug: installer shouldn't ask to rename directory of current Unity install if more packageses are coming
