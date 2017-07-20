@@ -1,7 +1,14 @@
+require 'simplecov'
+require 'coveralls'
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
+SimpleCov.start
+#Coveralls.wear!
+
 require 'u3d_core'
 require 'u3d'
-
-#require 'coveralls'
 
 module SpecHelper
 end

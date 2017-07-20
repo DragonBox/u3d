@@ -78,6 +78,12 @@ module U3dCore
       (/darwin/ =~ RUBY_PLATFORM) != nil
     end
 
+    # the valid operating systems
+    def self.operating_systems
+      [:linux, :mac, :win]
+    end
+
+    # the current operating system
     def self.operating_system
       if linux?
         return :linux

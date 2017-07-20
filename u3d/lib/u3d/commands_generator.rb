@@ -71,8 +71,11 @@ module U3d
       end
 
       command :available do |c|
-        c.syntax = 'u3d available [-o | --operating_system <OS>] [-u | --unity_version <version>] [-p | --packages]'
-        c.option '-o', '--operating_system STRING', String, 'Checks for availability on specific OS'
+        oses = U3dCore::Helper.operating_systems
+        c.syntax = 'u3d available [-r | --release_level <level>] [-o | --operating_system <OS>] [-u | --unity_version <version>] [-p | --packages] [-f | --force]'
+        levels = Commands::release_levels
+        c.option '-r', '--release_level STRING', String, "Checks for availability on specific release level [#{levels.join(',')}]"
+        c.option '-o', '--operating_system STRING', String, "Checks for availability on specific OS [#{oses.join(', ')}]"
         c.option '-u', '--unity_version STRING', String, 'Checks if specified version is available'
         c.option '-p', '--packages', 'Lists available packages as well'
         c.example 'List packages available for Unity version 5.6.0f3', 'u3d available -u 5.6.0f3 -p'
@@ -83,9 +86,9 @@ module U3d
         end
       end
 
-      command :install do |c|
-        c.syntax = 'u3d install <version> [ [-p | --packages <package> ...] | [-a | --all] ] [ [-n | --no_install] [-i | --installation_path <path>] ]'
-        c.description = 'Download and install Unity3D packages'
+      command :download do |c|
+        c.syntax = 'u3d download <version> [ [-p | --packages <package> ...] | [-a | --all] ] [ [-n | --no_install] [-i | --installation_path <path>] ]'
+        c.description = "Download (and install) Unity3D packages.\n\n  The 'version' argument can be a specific version number, such as 5.6.1f1, or an alias in [#{Commands::release_letter_mapping.keys.join(',')}]"
         c.option '-p', '--packages PACKAGES', Array, 'Specifies which packages to download. Overriden by --all'
         c.option '-i', '--installation_path PATH', String, 'Specifies where package(s) will be installed. Overriden by --no_install'
         c.option '-a', '--all', 'Download all available packages'

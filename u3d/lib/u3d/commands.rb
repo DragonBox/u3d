@@ -30,12 +30,11 @@ module U3d
       def list_available(options: {})
         ver = options[:unity_version]
         os = options[:operating_system]
+        rl = options[:release_level]
         if os
-          if os == 'win' || os == 'mac' || os == 'linux'
-            os = os.to_sym
-          else
-            raise "Specified OS (#{os}) is not recognized"
-          end
+          os = os.to_sym
+          oses = U3dCore::Helper.operating_systems
+          raise "Specified OS (#{os}) isn't valid [#{oses.join(', ')}]" unless oses.include?(os)
         else
           os = U3dCore::Helper.operating_system
         end
@@ -50,7 +49,13 @@ module U3d
           versions = cache[os.id2name]['versions']
         end
 
-        sorted_keys = versions.keys.map {|k| UnityVersionComparator.new(k) }.sort.map{|v| v.version.to_s}
+        vcomparators = versions.keys.map {|k| UnityVersionComparator.new(k) }
+        if rl
+          letter = release_letter_mapping["latest_#{rl.to_s}".to_sym]
+          UI.message "Filtering available versions with release level '#{rl}' [letter '#{letter}']"
+          vcomparators.select! {|vc| vc.version.parts[3] == letter }
+        end
+        sorted_keys = vcomparators.sort.map{|v| v.version.to_s}
 
         sorted_keys.each do |k|
           v = versions[k]
@@ -88,19 +93,22 @@ module U3d
 
         os = U3dCore::Helper.operating_system
         cache = Cache.new(force_os: os)
+        versions = cache[os.id2name]['versions']
+        version = interpret_latest(version, versions)
         files = []
         if os == :linux
           UI.important 'Option -a | --all not available for Linux' if options[:all]
           UI.important 'Option -p | --packages not available for Linux' if options[:packages]
-          files << ["Unity #{version}", Downloader::LinuxDownloader.download(version, cache['linux']['versions']), {}]
+          downloader = Downloader::LinuxDownloader
+          files << ["Unity #{version}", downloader.download(version, versions), {}]
         else
           downloader = Downloader::MacDownloader if os == :mac
           downloader = Downloader::WindowsDownloader if os == :win
           if options[:all]
-            files = downloader.download_all(version, cache[os.id2name]['versions'])
+            files = downloader.download_all(version, versions)
           else
             packages.each do |package|
-              result = downloader.download_specific(package, version, cache[os.id2name]['versions'])
+              result = downloader.download_specific(package, version, versions)
               files << [package, result[0], result[1]] unless result.nil?
             end
           end
@@ -133,7 +141,8 @@ module U3d
         if os == :linux
           UI.important 'Option -a | --all not available for Linux' if options[:all]
           UI.important 'Option -p | --packages not available for Linux' if options[:packages]
-          files << ["Unity #{version}", Downloader::LinuxDownloader.local_file(version), {}]
+          downloader = Downloader::LinuxDownloader
+          files << ["Unity #{version}", downloader.local_file(version), {}]
         else
           downloader = Downloader::MacDownloader if os == :mac
           downloader = Downloader::WindowsDownloader if os == :win
@@ -191,7 +200,34 @@ module U3d
         end
       end
 
+      def release_levels
+        [ :stable, :beta, :patch ]
+      end
+
+      def release_letter_mapping
+        {
+          latest: 'f',
+          latest_stable: 'f',
+          latest_beta: 'b',
+          latest_patch: 'p'
+        }
+      end
+
       private
+
+      def interpret_latest(version, versions)
+        return version unless release_letter_mapping.keys.include? version.to_sym
+
+        letter = release_letter_mapping[version.to_sym]
+
+        iversion = versions.keys.map {|k| UnityVersionComparator.new(k) }
+            .sort
+            .reverse
+            .find {|c| c.version.parts[3] == letter }
+            .version.to_s
+        UI.message "Version '#{version}' is #{iversion}."
+        iversion
+      end
 
       def packages_with_unity_first(options)
         temp = options[:packages] || ['Unity']

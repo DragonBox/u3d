@@ -1,7 +1,11 @@
 PATH
   remote: .
   specs:
+<<<<<<< HEAD
     u3d (0.9.0)
+=======
+    u3d (0.9)
+>>>>>>> 5b7523188815eab28fd5d0633b2eb3c0427d7553
       colored (>= 1.2, < 2.0.0)
       commander (>= 4.4.0, < 5.0.0)
       inifile (>= 3.0.0, < 4.0.0)
@@ -90,4 +94,8 @@ DEPENDENCIES
   u3d!
 
 BUNDLED WITH
+<<<<<<< HEAD
    1.15.1
+=======
+   1.15.2
+>>>>>>> 5b7523188815eab28fd5d0633b2eb3c0427d7553
