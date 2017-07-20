@@ -108,12 +108,13 @@ module U3d
 
       command :install do |c|
         c.syntax = 'u3d install <version> [ [-p | --packages <package> ...] | [-a | --all] ] [ [-n | --no_install] [-i | --installation_path <path>] ]'
-        c.description = "Download (and install) Unity3D packages.\n\n  The 'version' argument can be a specific version number, such as 5.6.1f1, or an alias in [#{Commands::release_letter_mapping.keys.join(',')}]"
+        c.description = "Download (and install) Unity3D packages."
         c.option '-p', '--packages PACKAGES', Array, 'Specifies which packages to download. Overriden by --all'
         c.option '-i', '--installation_path PATH', String, 'Specifies where package(s) will be installed. Overriden by --no_install'
         c.option '-a', '--all', 'Download all available packages'
         c.option '-n', '--no_install', 'No installation after download success'
         c.example 'Download and install Unity, its Documentation and the Android build support and install them for version 5.1.2f1', 'u3d install 5.1.2f1 -p Unity,Documentation,Android'
+        c.example "The 'version' argument can be a specific version number, such as 5.6.1f1, or an alias in [#{Commands::release_letter_mapping.keys.join(',')}]", 'u3d install latest'
         c.action do |args, options|
           options.default all: false
           options.default no_install: false
