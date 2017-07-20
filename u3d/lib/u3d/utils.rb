@@ -1,5 +1,6 @@
 require 'net/http'
 require 'fileutils'
+require 'filesize'
 require 'u3d_core/helper'
 
 module U3d
@@ -58,12 +59,12 @@ module U3d
         print('=' * [arrow - 1, 0].max)
         print('>')
         print('.' * (20 - arrow))
-        print("] #{current}/#{total}b (#{percent}% at #{current.to_f/time_spent}b/s")
+        print("] #{pretty_filesize(current)}/#{pretty_filesize(total)} (#{percent}% at #{pretty_filesize(current.to_f/time_spent)}/s)     ")
       end
 
       def print_progress_nosize(current, started_at)
         time_spent = Time.now.to_i - started_at
-        print("\r>#{current} bytes downloaded at #{current.to_f/time_spent}b/s.    ")
+        print("\r>#{pretty_filesize(current)} downloaded at #{pretty_filesize(current.to_f/time_spent)}/s)    ")
       end
 
       def parse_unity_version(version)
@@ -88,6 +89,10 @@ module U3d
 
         return windir if Dir.exist? windir
         raise RuntimeError, "Local Appdata retrieved (#{windir}) is not correct"
+      end
+
+      def pretty_filesize(filesize)
+        Filesize.from(filesize.round.to_s + ' B').pretty
       end
     end
   end

@@ -34,10 +34,10 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'commander', '>= 4.4.0', '< 5.0.0' # CLI parser
   spec.add_dependency 'security', '= 0.1.3' # macOS Keychain manager, a dead project, no updates expected
-  #spec.add_dependency 'fastlane', '>= 2.17.0', '< 3.0.0' # credentials-manager
   spec.add_dependency 'colored', '>= 1.2', '< 2.0.0' # terminal
   spec.add_dependency 'plist', '>= 3.1.0', '< 4.0.0' # Generate the Xcode config plist file
   spec.add_dependency 'inifile', '>= 3.0.0', '< 4.0.0' # Parses INI files
+  spec.add_dependency 'filesize', '>= 0.1.1' # File sizes prettifier 
 
   # Development only
   spec.add_development_dependency "bundler", "~> 1.13"
