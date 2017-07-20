@@ -55,8 +55,9 @@ module U3dCore
       # @param prefix [Array] An array containg a prefix + block which might get applied to the output
       # @param loading [String] A loading string that is shown before the first output
       # @param admin [Boolean] Do we need admin privilege for this command?
+      # @param keychain [Boolean] Should we fetch admin rights from the keychain on OSX
       # @return [String] All the output as string
-      def execute(command: nil, print_all: false, print_command: true, error: nil, prefix: nil, loading: nil, admin: false)
+      def execute(command: nil, print_all: false, print_command: true, error: nil, prefix: nil, loading: nil, admin: false, keychain: false)
         print_all = true if $verbose
         prefix ||= {}
 
@@ -68,9 +69,9 @@ module U3dCore
         UI.command_output(loading) if print_all && loading
 
         if admin
-          cred = U3dCore::Credentials.new(user: ENV['USER'])
+          cred = U3dCore::Credentials.new(user: ENV['USER'], use_keychain: keychain)
           if Helper.windows?
-            raise "The command \'#{command}\' must be run in administrative shell" unless has_admin_privileges?
+            raise CredentialsError, "The command \'#{command}\' must be run in administrative shell" unless has_admin_privileges?(use_keychain: keychain)
           else
             command = "sudo -k && echo #{cred.password.shellescape} | sudo -S " + command
           end
@@ -108,7 +109,7 @@ module U3dCore
         return output.join("\n")
       end
 
-      def has_admin_privileges?
+      def has_admin_privileges?(use_keychain: false)
         if Helper.windows?
           begin
             result = system('reg query HKU\\S-1-5-19', :out => File::NULL, :err => File::NULL)
@@ -116,7 +117,7 @@ module U3dCore
             result = false
           end
         else
-          credentials = U3dCore::Credentials.new(user: ENV['USER'])
+          credentials = U3dCore::Credentials.new(user: ENV['USER'], use_keychain: keychain)
           begin
             result = system("sudo -k && echo #{credentials.password.shellescape} | sudo -S /usr/bin/whoami")
           rescue

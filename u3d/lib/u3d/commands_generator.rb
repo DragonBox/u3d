@@ -33,10 +33,7 @@ module U3d
     UI = U3dCore::UI
 
     def self.start
-      # FastlaneCore::UpdateChecker.start_looking_for_update("gym")
       new.run
-    ensure
-      # FastlaneCore::UpdateChecker.show_update_status("gym", Gym::VERSION)
     end
 
     def extract_run_args(args = ARGV)
@@ -113,6 +110,7 @@ module U3d
         c.option '-i', '--installation_path PATH', String, 'Specifies where package(s) will be installed. Overriden by --no_install'
         c.option '-a', '--all', 'Download all available packages'
         c.option '-n', '--no_install', 'No installation after download success'
+        c.option '-k', '--keychain', 'Gain privileges right through the keychain. [OSX only]'
         c.example 'Download and install Unity, its Documentation and the Android build support and install them for version 5.1.2f1', 'u3d install 5.1.2f1 -p Unity,Documentation,Android'
         c.example "The 'version' argument can be a specific version number, such as 5.6.1f1, or an alias in [#{Commands::release_letter_mapping.keys.join(',')}]", 'u3d install latest'
         c.action do |args, options|
@@ -128,6 +126,7 @@ module U3d
         c.option '-p', '--packages PACKAGES', Array, 'Specifies which packages to install. Overriden by --all'
         c.option '-i', '--installation_path PATH', String, 'Specifies where package(s) will be installed.'
         c.option '-a', '--all', 'Install all downloaded packages'
+        c.option '-k', '--keychain', 'Gain privileges right through the keychain. [OSX only]'
         c.action do |args, options|
           Commands.local_install(args: args, options: convert_options(options))
         end

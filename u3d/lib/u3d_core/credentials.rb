@@ -27,9 +27,10 @@ require 'security'
 module U3dCore
   class Credentials
     MAC_U3D_SERVER = 'u3d'
-    def initialize(user: nil, password: nil)
+    def initialize(user: nil, password: nil, use_keychain: false)
       @user = user
       @password = password
+      @use_keychain = use_keychain
     end
 
     def user
@@ -50,9 +51,9 @@ module U3dCore
     def password
       @password ||= ENV['U3D_PASSWORD']
 
-      if Helper.mac?
+      if Helper.mac? && @use_keychain
         unless @password
-          UI.verbose 'Fetching password from keychain'
+          UI.message 'Fetching password from keychain'
           password_holder = Security::InternetPassword.find(server: MAC_U3D_SERVER)
           @password = password_holder.password unless password_holder.nil?
         end
@@ -90,8 +91,8 @@ module U3dCore
     def remember_credentials
       ENV['U3D_USER'] = @user
       ENV['U3D_PASSWORD'] = @password
-      if Helper.mac?
-        UI.verbose 'Storing credentials to the keychain'
+      if Helper.mac? && @use_keychain
+        UI.message 'Storing credentials to the keychain'
         return Security::InternetPassword.add(MAC_U3D_SERVER, user, password)
       end
 
@@ -101,9 +102,13 @@ module U3dCore
     def forget_credentials
       @password = nil
       ENV['U3D_PASSWORD'] = nil
-      if Helper.mac?
-        UI.verbose 'Deleting credentials from the keychain'
-        Security::InternetPassword.delete(server: MAC_U3D_SERVER)
+      if UI.interactive?
+        if Helper.mac? && @use_keychain && UI.confirm('Remove credentials from the keychain?')
+          UI.message 'Deleting credentials from the keychain'
+          Security::InternetPassword.delete(server: MAC_U3D_SERVER)
+        end
+      else
+        UI.verbose 'Keychain may store invalid credentials for u3d' if Helper.mac?
       end
     end
   end

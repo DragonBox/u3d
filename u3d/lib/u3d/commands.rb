@@ -110,7 +110,7 @@ module U3d
 
         unless options[:no_install]
           UI.important 'Root privileges are required'
-          raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
+          raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?(use_keychain: options[:keychain])
         end
 
         os = U3dCore::Helper.operating_system
@@ -156,7 +156,7 @@ module U3d
         end
 
         UI.important 'Root privileges are required'
-        raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
+        raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?(use_keychain: options[:keychain])
 
         os = U3dCore::Helper.operating_system
         files = []
@@ -209,7 +209,7 @@ module U3d
       end
 
       def login(options: {})
-        credentials = U3dCore::Credentials.new(user: options['user'])
+        credentials = U3dCore::Credentials.new(user: options['user'], use_keychain: true)
         credentials.login
       end
 

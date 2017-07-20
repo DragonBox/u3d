@@ -1,6 +1,5 @@
 = before release
 * [PN] opt-in keychain integration (several commands - same option)
-* [PN] message before storing into keychain (inform the user what is going on)
 * core: moar tests if needed
 * [PN] core: remove timestamp prefixes for other commands than run
 * [JL] prepare documentation / README / site
