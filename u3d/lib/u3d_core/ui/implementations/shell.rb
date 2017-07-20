@@ -115,12 +115,12 @@ module U3dCore
 
     def input(message)
       verify_interactive!(message)
-      ask(message.to_s.yellow).to_s.strip
+      ask("#{format_string}#{message.to_s.yellow}").to_s.strip
     end
 
     def confirm(message)
       verify_interactive!(message)
-      agree("#{message} (y/n)".yellow, true)
+      agree("#{format_string}#{message.to_s.yellow} (y/n)", true)
     end
 
     def select(message, options)
@@ -133,7 +133,7 @@ module U3dCore
     def password(message)
       verify_interactive!(message)
 
-      ask(message.yellow) { |q| q.echo = "*" }
+      ask("#{format_string}#{message.to_s.yellow}") { |q| q.echo = "*" }
     end
 
     private
