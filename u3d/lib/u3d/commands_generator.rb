@@ -69,9 +69,10 @@ module U3d
         # Meant to fetch options after '--' unknown by CommandsGenerator
         run_args = extract_run_args
 
-        c.syntax = 'u3d run [-u | --unity_version <version>] [ -- <run_args>]'
+        c.syntax = 'u3d run [-u | --unity_version <version>] [-r | --raw_logs] [ -- <run_args>]'
         c.description = 'Run unity'
         c.option '-u', '--unity_version STRING', String, 'Version of Unity to run with'
+        c.option '-r', '--raw_logs', 'Raw Unity output, not filtered by u3d\'s log analyzer'
         c.action do |_args, options|
           U3dCore::Globals.log_timestamps = true
           Commands.run(options: convert_options(options), run_args: run_args)

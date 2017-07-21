@@ -163,7 +163,7 @@ module U3d
   end
 
   class Runner
-    def run(installation, args)
+    def run(installation, args, raw_logs: false)
       require 'fileutils'
 
       log_file = find_logFile_in_args(args)
@@ -177,12 +177,21 @@ module U3d
       FileUtils.touch(log_file)
 
       tail_thread = Thread.new do
-        analyzer = LogAnalyzer.new
-        File.open(log_file, 'r') do |f|
-          f.extend File::Tail
-          f.interval # 10
-          f.backward 10
-          f.tail { |l| analyzer.parse_line l }
+        if raw_logs
+          File.open(log_file, 'r') do |f|
+            f.extend File::Tail
+            f.interval # 10
+            f.backward 10
+            f.tail { |l| UI.message l }
+          end
+        else
+          analyzer = LogAnalyzer.new
+          File.open(log_file, 'r') do |f|
+            f.extend File::Tail
+            f.interval # 10
+            f.backward 10
+            f.tail { |l| analyzer.parse_line l }
+          end
         end
       end
 

@@ -210,7 +210,7 @@ module U3d
         # * support matching 5.3.6p3 if passed 5.3.6
         unity = Installer.create.installed.find { |u| u.version == version }
         UI.user_error! "Unity version '#{version}' not found" unless unity
-        runner.run(unity, run_args)
+        runner.run(unity, run_args, raw_logs: options[:raw_logs])
       end
 
       def credentials_add(options: {})
