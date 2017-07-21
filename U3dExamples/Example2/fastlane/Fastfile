@@ -1,0 +1,5 @@
+desc "Run the EditorRun.LoadSaveScenes task"
+lane :u3d_build do
+  u3d(run_args: "-logFile './editor.log' -executeMethod U3d.EditorRun.Build -quit -batchmode")
+end
+

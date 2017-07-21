@@ -1,0 +1,1 @@
+This example contains Unity logging in various places to demonstrate the log analyzer.
