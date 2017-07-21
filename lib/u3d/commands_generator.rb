@@ -70,9 +70,9 @@ module U3d
         run_args = extract_run_args
 
         c.syntax = 'u3d run [-u | --unity_version <version>] [-r | --raw_logs] [ -- <run_args>]'
-        c.description = 'Run unity, and parses its output through u3d\'s log analyzer'
+        c.description = 'Run unity, and parses its output through u3d\'s log prettifier'
         c.option '-u', '--unity_version STRING', String, 'Version of Unity to run with'
-        c.option '-r', '--raw_logs', 'Raw Unity output, not filtered by u3d\'s log analyzer'
+        c.option '-r', '--raw_logs', 'Raw Unity output, not filtered by u3d\'s log prettifier'
         c.action do |_args, options|
           U3dCore::Globals.log_timestamps = true
           Commands.run(options: convert_options(options), run_args: run_args)
@@ -143,9 +143,9 @@ module U3d
         end
       end
 
-      command :analyze_log do |c|
-        c.syntax = 'u3d analyze_log <logfile>'
-        c.description = 'Run a saved logfile through the log processing'
+      command :prettify do |c|
+        c.syntax = 'u3d prettify <logfile>'
+        c.description = 'Run a saved logfile through the log prettifying'
         c.action do |args, _options|
           Commands.local_analyze(args: args)
         end

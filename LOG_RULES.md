@@ -1,12 +1,12 @@
 # Log Analyzer rules
 
-The Log Analyzer processes both Unity output and existing log files thanks to a set of JSON rules. These rules are under ./config/log_rules.json. They are meant to be customizable to fit as best as possible your logging specifications.
+The Log Prettifier processes both Unity output and existing log files thanks to a set of JSON rules. These rules are under ./config/log_rules.json. They are meant to be customizable to fit as best as possible your logging specifications.
 
 This document explains how to customize the ruleset.
 
 ## I - Foreword
 
-### A - Log Analysis Philosophy
+### A - Log Prettifying Philosophy
 
 The main thing to understand behind our rule system is that it is based on a whitelist approach: anything coming in the analyzer will be ignored unless it matches a rule, in which case it will be processed accordingly.
 
@@ -20,10 +20,10 @@ For more information on how to use patterns, please refer to [Ruby's Regexp Docu
 
 ## II - Phases
 
-### A - Phased behaviour of the analyzer
+### A - Phased behaviour of the prettifier
 
 As Unity usually goes through different phases during running, compilation or whichever action you want it to perform, the information (and its processing) that it will output will most likely be dependent on the action being performed.
-Therefore, our log analyzer behaves in a phased fashion. It has an inner memory keeping track of the active 'phase' Unity is going through, the ruleset it applies depends on it.
+Therefore, our log prettifier behaves in a phased fashion. It has an inner memory keeping track of the active 'phase' Unity is going through, the ruleset it applies depends on it.
 
 A phase is started when a given pattern is encountered in the logs, and ends in two different ways: either a terminating pattern is met, or another phase starts.
 
