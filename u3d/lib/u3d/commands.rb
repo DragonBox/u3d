@@ -213,16 +213,20 @@ module U3d
         runner.run(unity, run_args, raw_logs: options[:raw_logs])
       end
 
-      def credentials_add(options: {})
-        credentials = U3dCore::Credentials.new(user: options['user'])
-        credentials.login
-        U3dCore::Globals.use_keychain = true
-        UI.error 'Invalid credentials' unless U3dCore::CommandExecutor.has_admin_privileges?
-      end
-
-      def credentials_remove(options: {})
-        U3dCore::Globals.use_keychain = true
-        U3dCore::Credentials.new().forget_credentials(force: true)
+      def credentials(args: [], options: {})
+        action  = args[0]
+        raise 'Please specify an action to perform: add or remove' unless action
+        raise "Action #{action} is not recognized. Please only use add or remove" unless (action == 'add' || action == 'remove')
+        if action == 'add'
+          credentials = U3dCore::Credentials.new(user: options[:user])
+          credentials.login
+          U3dCore::Globals.use_keychain = true
+          UI.error 'Invalid credentials' unless U3dCore::CommandExecutor.has_admin_privileges?
+        else
+          UI.important 'Option [-u | --user] is not used with remove action' if options[:user]
+          U3dCore::Globals.use_keychain = true
+          U3dCore::Credentials.new().forget_credentials(force: true)
+        end
       end
 
       def local_analyze(args: [])

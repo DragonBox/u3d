@@ -179,22 +179,10 @@ module U3d
       tail_thread = Thread.new do
         begin
           if raw_logs
-            File.open(log_file, 'r') do |f|
-              f.extend File::Tail
-              f.interval = 0.1
-              f.max_interval = 0.4
-              f.backward 100
-              f.tail { |l| UI.message l }
-            end
+            pipe(log_file) { |l| UI.message l }
           else
             analyzer = LogAnalyzer.new
-            File.open(log_file, 'r') do |f|
-              f.extend File::Tail
-              f.interval = 0.1
-              f.max_interval = 0.4
-              f.backward 100
-              f.tail { |l| analyzer.parse_line l }
-            end
+            pipe(log_file) { |l| analyzer.parse_line l }
           end
         rescue => e
           UI.error "Failure while trying to pipe #{log_file}: #{e.message}"
@@ -230,6 +218,18 @@ module U3d
         return args[index + 1] if arg == arg_to_find && index < args.count - 1
       end
       nil
+    end
+
+    private
+
+    def pipe(file)
+      File.open(file, 'r') do |f|
+        f.extend File::Tail
+        f.interval = 0.1
+        f.max_interval = 0.4
+        f.backward 100
+        f.tail { |l| yield l }
+      end
     end
   end
 

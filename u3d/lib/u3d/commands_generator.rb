@@ -70,7 +70,7 @@ module U3d
         run_args = extract_run_args
 
         c.syntax = 'u3d run [-u | --unity_version <version>] [-r | --raw_logs] [ -- <run_args>]'
-        c.description = 'Run unity'
+        c.description = 'Run unity, and parses its output through u3d\'s log analyzer'
         c.option '-u', '--unity_version STRING', String, 'Version of Unity to run with'
         c.option '-r', '--raw_logs', 'Raw Unity output, not filtered by u3d\'s log analyzer'
         c.action do |_args, options|
@@ -134,20 +134,12 @@ module U3d
         end
       end
 
-      command :credentials_add do |c|
-        c.syntax = 'u3d credentials_add [-u | --user <username>]'
-        c.description = 'Adds credentials for future use'
-        c.option '-u', '--user USER', String, 'Specifies wich user will be logged in'
-        c.action do |_args, options|
-          Commands.credentials_add(options: convert_options(options))
-        end
-      end
-
-      command :credentials_remove do |c|
-        c.syntax = 'u3d credentials_remove'
-        c.description = 'Forgets credentials from their storage'
-        c.action do |_args, options|
-          Commands.credentials_remove(options: convert_options(options))
+      command :credentials do |c|
+        c.syntax = 'u3d credentials <add | remove> [-u | --user <username>]'
+        c.description = 'Manages credentials so u3d remembers them'
+        c.option '-u', '--user USER', String, 'Specifies wich user will used'
+        c.action do |args, options|
+          Commands.credentials(args: args, options: convert_options(options))
         end
       end
 
