@@ -135,7 +135,7 @@ module U3d
       end
 
       command :credentials do |c|
-        c.syntax = 'u3d credentials <add | remove> [-u | --user <username>]'
+        c.syntax = "u3d credentials <#{Commands.credentials_actions.join(' | ')}> [-u | --user <username>]"
         c.description = 'Manages credentials so u3d remembers them'
         c.option '-u', '--user USER', String, 'Specifies wich user will used'
         c.action do |args, options|

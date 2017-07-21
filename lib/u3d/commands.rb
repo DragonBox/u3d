@@ -213,10 +213,14 @@ module U3d
         runner.run(unity, run_args, raw_logs: options[:raw_logs])
       end
 
+      def credentials_actions
+        ['add', 'remove']
+      end
+
       def credentials(args: [], options: {})
         action  = args[0]
-        raise 'Please specify an action to perform: add or remove' unless action
-        raise "Action #{action} is not recognized. Please only use add or remove" unless (action == 'add' || action == 'remove')
+        raise "Please specify an action to perform, one of #{self.credentials_actions.join(',')}" unless action
+        raise "Unknown action '#{action}'. Use one of #{self.credentials_actions.join(',')}" unless self.credentials_actions.include? action
         if action == 'add'
           U3dCore::Globals.use_keychain = true
           credentials = U3dCore::Credentials.new(user: options[:user])
