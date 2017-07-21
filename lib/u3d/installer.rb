@@ -179,7 +179,7 @@ module U3d
       tail_thread = Thread.new do
         begin
           if raw_logs
-            pipe(log_file) { |l| UI.message l }
+            pipe(log_file) { |l| UI.message l.rstrip }
           else
             analyzer = LogAnalyzer.new
             pipe(log_file) { |l| analyzer.parse_line l }
