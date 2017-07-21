@@ -218,9 +218,9 @@ module U3d
         raise 'Please specify an action to perform: add or remove' unless action
         raise "Action #{action} is not recognized. Please only use add or remove" unless (action == 'add' || action == 'remove')
         if action == 'add'
+          U3dCore::Globals.use_keychain = true
           credentials = U3dCore::Credentials.new(user: options[:user])
           credentials.login
-          U3dCore::Globals.use_keychain = true
           UI.error 'Invalid credentials' unless U3dCore::CommandExecutor.has_admin_privileges?
         else
           UI.important 'Option [-u | --user] is not used with remove action' if options[:user]
