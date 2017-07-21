@@ -61,7 +61,7 @@ The information contained in Unity's log can be formatted differently: it can be
 
 In consequence, the rule syntax is pretty loose to cover as many cases as possible, and below is describe syntax for some of archetypal rules.
 
-They contain nonetheless two mandatory sections:
+They contain nonetheless two mandatory sections and a recurring one:
 
 ```json
 "rule_name": {
@@ -71,7 +71,7 @@ They contain nonetheless two mandatory sections:
 ```
 Similarly to phases, `active` will control whether or not the rule should be applied, and the `start_pattern` will trigger the rule.
 
-### B - One line parsing, unfiltered
+### B - One line parsing
 
 The most basic rule is when you want to extract a single line without having to do any processing on it. Here is an example:
 
@@ -81,3 +81,90 @@ The most basic rule is when you want to extract a single line without having to 
   "start_pattern": "Loading Asset Database ?... {,2}\\d+\\.?\\d*"
 }
 ```
+This example rule extracts the line stating whether the asset database has successfully loaded, and the time and logs it as is.
+
+### C - One line parsing with data extraction
+
+When the line formatting does not suit your needs, you may want to process it rather than simply logging it. Here is an example which occurs at the beginning of the compile phase:
+```json
+"target": {
+  "active": true,
+  "start_pattern": "- starting compile (?<path>.+), for buildtarget (?<target>.+)",
+  "start_message": "Target: %{path} (buildtarget %{target})"
+}
+```
+Simple rewording of the base log, by extracting the meaningful information and putting it back where it was needed.
+
+### D - Multi-line parsing and displaying
+
+The following rule illustrates when you want to log a chunk of lines as they appear in Unity at the same time. This structure is useful when you know exactly where the block begins and end. If not, please check section F.
+```json
+"percentage": {
+  "active": true,
+  "start_pattern": "Textures\\s+\\d+\\.?\\d* .b\\s+\\d{1,3}\\.?\\d*%",
+  "end_pattern": "Complete size\\s+\\d+\\.?\\d* .b\\s+\\d{1,3}\\.?\\d*%",
+  "store_lines": true
+}
+```
+`start_pattern` and `end_pattern` are the limits in between which the lines will be parsed. `store_lines` indicates that we want these lines stored, and displayed later.
+
+###  E - Multi-line parsing and displaying with line filtering and data extraction
+
+This example illustrates several additional functionalities in comparison to the previous sections.
+```json
+"fail": {
+  "active": true,
+  "start_pattern": "^(?<fail>Failed to .+)\\n",
+  "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+  "start_message": false,
+  "end_message": "%{file}(line %{line}): %{fail}",
+  "store_lines": true,
+  "ignore_lines": [
+    "UnityEditor",
+    "UnityEngine",
+    "^\\n"
+  ]
+}
+```
+* `start_message` set to `false` allows for silent rule start. It will start to parse the log, without logging neither the original line nor a reworded version of it. Useful here not to log twice the information. It is not the case here, but this can be applied to the `end_message` in the same fashion to allow for a silent rule ending.
+* `ignore_lines` must be used alongside `store_lines` set to `true`. It will filter the lines so that unwanted lines are not logged. This is really useful here in the case of a fail to log only your applicative stack and not the Unity message logging one, by making the fail message cleaner.
+* This example illustrates also that you can extract data on the first line and use it upon rule termination. The rule has a 'context' which keeps track of extracted data.
+
+_Note_: this is a modified version of the actual rule, for example purposes.
+
+### F - Multi-line with no clear entry point (memory fetching)
+
+This section illustrates how a rule will fetch lines from the previously logged lines. It is used when you want to log several lines, but the fixed point is not at the beginning of the block.
+```json
+"log": {
+  "active": true,
+  "start_pattern": "UnityEngine\\.Debug:Log\\(Object\\)",
+  "fetch_first_line_not_matching": [
+    "UnityEngine\\.",
+    "^\\n"
+  ],
+  "fetched_line_pattern": "(?<message>.*)\\n",
+  "fetched_line_message": false,
+  "start_message": false,
+  "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+  "end_message": "[LOG] %{file}(line %{line}): %{message}"
+}
+```
+The key feature here is the `fetch_first_line_not_matching` pattern. The last lines will be fetched from memory, from the most recent to the oldest, and the first one not matching the specified patterns will be fetched. The `fetched_line_pattern` then extracts data from the fetched line.
+
+This previous rule is used to keep tracks of the Debug.Log messages. Because they log the messages first and you probably don't know it or don't want to create a specific rule for every single message, backtracking is necessary. As the full stack isn't necessary either, the `store_lines` is absent (default is `false`) so the full stack is not displayed.
+
+### G - Logging color code
+
+You can specify the color of the message created by your rules by specifying a type:
+```json
+"target": {
+  "active": true,
+  "type": "warning"
+}
+```
+It will output it differently based on this type. Correct types are:
+* __[DEFAULT]__ `message`: normal logging
+* `warning`: yellow
+* `error`: red
+* `success`: green
