@@ -177,21 +177,28 @@ module U3d
       FileUtils.touch(log_file)
 
       tail_thread = Thread.new do
-        if raw_logs
-          File.open(log_file, 'r') do |f|
-            f.extend File::Tail
-            f.interval # 10
-            f.backward 10
-            f.tail { |l| UI.message l }
+        begin
+          if raw_logs
+            File.open(log_file, 'r') do |f|
+              f.extend File::Tail
+              f.interval = 0.1
+              f.max_interval = 0.4
+              f.backward 100
+              f.tail { |l| UI.message l }
+            end
+          else
+            analyzer = LogAnalyzer.new
+            File.open(log_file, 'r') do |f|
+              f.extend File::Tail
+              f.interval = 0.1
+              f.max_interval = 0.4
+              f.backward 100
+              f.tail { |l| analyzer.parse_line l }
+            end
           end
-        else
-          analyzer = LogAnalyzer.new
-          File.open(log_file, 'r') do |f|
-            f.extend File::Tail
-            f.interval # 10
-            f.backward 10
-            f.tail { |l| analyzer.parse_line l }
-          end
+        rescue => e
+          UI.error "Failure while trying to pipe #{log_file}: #{e.message}"
+          e.backtrace.each { |l| UI.error "  #{l}" }
         end
       end
 
@@ -204,6 +211,7 @@ module U3d
         end
         U3dCore::CommandExecutor.execute(command: args)
       ensure
+        sleep 0.5
         Thread.kill(tail_thread)
       end
     end

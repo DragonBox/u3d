@@ -1,0 +1,9 @@
+[
+  { 
+    "license": "LICENSE",
+    "paths": [
+       "{lib,spec}/**/*.rb"
+    ]
+  }
+]
+  

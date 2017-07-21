@@ -8,9 +8,9 @@ U3d provides help for running and installing unity from CLI. Available commands 
 
 * `u3d available`: List versions available to download
 
-* `u3d download`: Download (and install) Unity
+* `u3d install`: Download (and install) Unity
 
-* `u3d installed`: List installed versions
+* `u3d list`: List installed versions
 
 * `u3d local_install`: Install already downloaded packages
 
@@ -26,14 +26,14 @@ U3d provides help for running and installing unity from CLI. Available commands 
 
 When you install Unity with this tool, you will have to grant it higher privileges so it can perfrom the installation. It means that under MacOS and Linux, you will be asked for your sudo password.
 
-On Windows, you must launch a administrative command interface to be able to run `local_install` and `download` (only if you install for the latter).
+On Windows, you must launch a administrative command interface to be able to run `local_install` and `install` (only if you install for the latter).
 
 ## Examples
 
 * List installed versions on your computer:
 
 ```shell
-u3d installed
+u3d list
 ```
 
 * List versions you can download and install from Unity, as well as their packages, on Mac:
@@ -45,7 +45,7 @@ u3d available -p -o mac
 * Download and install version 5.6.0f3 of Unity with its documentation and the WebPlayer package:
 
 ```shell
-u3d download 5.6.0f3 -p Unity,Documentation,WebPlayer
+u3d install 5.6.0f3 -p Unity,Documentation,WebPlayer
 ```
 * Run a CLI on the current project given the configured unity version:
 

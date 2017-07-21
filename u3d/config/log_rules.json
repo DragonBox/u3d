@@ -126,11 +126,11 @@
       },
       "batchmode_args": {
         "active": true,
-        "start_pattern": "BATCHMODE ARGUMENTS:",
+        "start_pattern": "(?: COMMAND LINE|BATCHMODE) ARGUMENTS:",
         "start_message": "Batchmode arguments:",
         "store_lines": true,
-        "end_pattern": "Successfully changed project path",
-        "end_message": "  ---"
+        "end_pattern": "(Successfully changed project path|Loading GUID)",
+        "end_message": "[...]"
       },
       "GUID_loading": {
         "active": true,
