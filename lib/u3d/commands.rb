@@ -223,13 +223,12 @@ module U3d
         raise "Unknown action '#{action}'. Use one of #{self.credentials_actions.join(',')}" unless self.credentials_actions.include? action
         if action == 'add'
           U3dCore::Globals.use_keychain = true
-          credentials = U3dCore::Credentials.new(user: options[:user])
+          credentials = U3dCore::Credentials.new(user: ENV['USER'])
           credentials.login
           UI.error 'Invalid credentials' unless U3dCore::CommandExecutor.has_admin_privileges?
-        else
-          UI.important 'Option [-u | --user] is not used with remove action' if options[:user]
+        elsif action == 'remove'
           U3dCore::Globals.use_keychain = true
-          U3dCore::Credentials.new().forget_credentials(force: true)
+          U3dCore::Credentials.new(user: ENV['USER']).forget_credentials(force: true)
         end
       end
 
