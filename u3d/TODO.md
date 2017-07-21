@@ -1,6 +1,7 @@
 = before release
 * core: moar tests if needed
 * [JL] prepare documentation / README / site
+* raw_logs: action parameter
 
 = post
 * patch commander to support argument descriptions
