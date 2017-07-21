@@ -5,7 +5,7 @@ PATH
       u3d (~> 0.9)
 
 PATH
-  remote: /Users/lacostej/Code/WWTK/FastGame/u3d
+  remote: /Users/lacostej/Code/WWTK/FastGame
   specs:
     u3d (0.9)
       colored (>= 1.2, < 2.0.0)
