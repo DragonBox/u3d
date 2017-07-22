@@ -214,7 +214,7 @@ module U3d
       end
 
       def credentials_actions
-        ['add', 'remove']
+        ['add', 'remove', 'check']
       end
 
       def credentials(args: [], options: {})
@@ -223,12 +223,27 @@ module U3d
         raise "Unknown action '#{action}'. Use one of #{self.credentials_actions.join(',')}" unless self.credentials_actions.include? action
         if action == 'add'
           U3dCore::Globals.use_keychain = true
-          credentials = U3dCore::Credentials.new(user: ENV['USER'])
-          credentials.login
+          # credentials = U3dCore::Credentials.new(user: ENV['USER'])
+          # credentials.login # ask password
           UI.error 'Invalid credentials' unless U3dCore::CommandExecutor.has_admin_privileges?
         elsif action == 'remove'
           U3dCore::Globals.use_keychain = true
           U3dCore::Credentials.new(user: ENV['USER']).forget_credentials(force: true)
+        else
+          U3dCore::Globals.use_keychain = true
+          credentials = U3dCore::Credentials.new(user: ENV['USER'])
+          U3dCore::Globals.with_do_not_login(true) do
+            if credentials.password.to_s.empty?
+              UI.message "No credentials stored"
+            else
+              if U3dCore::CommandExecutor.has_admin_privileges?
+                UI.success "Stored credentials are valid"
+              else
+                UI.error "Stored credentials are not valid"
+              end
+            end
+          end
+          # FIXME return value
         end
       end
 

@@ -61,7 +61,11 @@ module U3dCore
 
       if @password.to_s.empty?
         UI.verbose 'Could not retrieve password'
-        login
+        if U3dCore::Globals.do_not_login?
+          UI.verbose 'Login disabled'
+        else
+          login
+        end
       end
 
       return @password

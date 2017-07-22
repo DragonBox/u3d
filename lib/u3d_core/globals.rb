@@ -30,7 +30,7 @@ module U3dCore
   # construct
   class Globals
     class << self
-      attr_writer :verbose, :log_timestamps, :use_keychain
+      attr_writer :verbose, :log_timestamps, :use_keychain, :do_not_login
 
       def attributes
         @attributes ||= ((methods - public_instance_methods).grep(/=$/) - [:<=, :>=]).map do |s|
