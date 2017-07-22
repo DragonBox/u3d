@@ -141,7 +141,7 @@ module U3d
 
       command :credentials do |c|
         c.syntax = "u3d credentials <#{Commands.credentials_actions.join(' | ')}>"
-        c.description = 'Manages credentials so u3d remembers them'
+        c.description = 'Manages keychain credentials so u3d remembers them. [OSX only]'
         c.action do |args, options|
           Commands.credentials(args: args, options: convert_options(options))
         end
@@ -149,7 +149,7 @@ module U3d
 
       command :prettify do |c|
         c.syntax = 'u3d prettify <logfile>'
-        c.description = 'Run a saved logfile through the log prettifying'
+        c.description = 'Prettify a saved logfile'
         c.action do |args, _options|
           Commands.local_analyze(args: args)
         end
