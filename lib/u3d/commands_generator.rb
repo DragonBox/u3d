@@ -93,6 +93,7 @@ module U3d
         oses = U3dCore::Helper.operating_systems
         c.syntax = 'u3d available [-r | --release_level <level>] [-o | --operating_system <OS>] [-u | --unity_version <version>] [-p | --packages] [-f | --force]'
         levels = Commands::release_levels
+        c.option '-f', '--force', 'Force refresh list of available versions'
         c.option '-r', '--release_level STRING', String, "Checks for availability on specific release level [#{levels.join(',')}]"
         c.option '-o', '--operating_system STRING', String, "Checks for availability on specific OS [#{oses.join(', ')}]"
         c.option '-u', '--unity_version STRING', String, 'Checks if specified version is available'
