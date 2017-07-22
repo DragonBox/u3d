@@ -22,24 +22,63 @@
 ## --- END LICENSE BLOCK ---
 
 module U3dCore
+  # all these attributes are false by default
+  # and can be set overriden temporarily using a
+  #   with_attr(value) do
+  #     something
+  #   end
+  # construct
   class Globals
     class << self
       attr_writer :verbose, :log_timestamps, :use_keychain
-    end
 
-    def self.log_timestamps?
-      return nil unless @log_timestamps
-      return true
-    end
+      def attributes
+        @attributes ||= ((methods - public_instance_methods).grep(/=$/) - [:<=, :>=]).map do |s|
+            a = s.to_s
+            a[0..(a.length-2)] # remove the '='
+          end
+      end
 
-    def self.verbose?
-      return nil unless @verbose
-      return true
-    end
+      def with(attr, value, &block)
+        orig_attr = send("#{attr}?")
+        send("#{attr}=", value)
+        yield if block_given?
+      ensure
+        send("#{attr}=", orig_attr)
+      end
 
-    def self.use_keychain?
-      return nil unless @use_keychain
-      return true
+      def is?(attr)
+        instance_variable_get("@#{attr}")
+      end
+
+      def method_missing(method_sym, *arguments, &block)
+        if method_sym.to_s =~ /^with_(.*)$/
+          if attributes.include? $1
+            with($1.to_sym, arguments.first, &block)
+          else
+            super
+          end
+        elsif method_sym.to_s =~ /^(.*)\?$/
+          if attributes.include? $1
+            is?($1.to_sym)
+          else
+            super
+          end
+        else
+          super
+        end
+      end
+
+      def respond_to?(method_sym, include_private = false)
+        if method_sym.to_s =~ /^with_(.*)$/
+          return attributes.include? $1
+        elsif method_sym.to_s =~ /^(.*)\?$/
+          return attributes.include? $1
+        else
+          super
+        end
+      end
     end
+    private_class_method :is?, :with, :attributes
   end
 end

@@ -20,41 +20,27 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
-require 'simplecov'
-require 'coveralls'
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
-  SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
-]
-SimpleCov.start
-# Coveralls.wear!
+require 'u3d_core/globals'
 
-require 'u3d_core'
-require 'u3d'
+describe U3dCore do
+  describe U3dCore::Globals do
+    #[:verbose, :log_timestamps, :use_keychain].each do |global|
+    describe '#verbose?' do
+      it 'defaults to nil' do
+        expect(U3dCore::Globals.verbose?).to eq(nil)
+      end
 
-module SpecHelper
-end
+      it 'can be set to false' do
+        U3dCore::Globals.with_verbose(false) do
+          expect(U3dCore::Globals.verbose?).to eq(false)
+        end
+      end
 
-# Executes the provided block after adjusting the ENV to have the
-# provided keys and values set as defined in hash. After the block
-# completes, restores the ENV to its previous state.
-def with_env_values(hash)
-  old_vals = ENV.select { |k, _v| hash.include?(k) }
-  hash.each do |k, _v|
-    ENV[k] = hash[k]
+      it 'can be set to true' do
+        U3dCore::Globals.with_verbose(true) do
+          expect(U3dCore::Globals.verbose?).to eq(true)
+        end
+      end
+    end
   end
-  yield
-ensure
-  hash.each do |k, _v|
-    ENV.delete(k) unless old_vals.include?(k)
-    ENV[k] = old_vals[k]
-  end
-end
-
-def with_verbose(verbose)
-  U3dCore::Globals.with_verbose(verbose)
-end
-
-def with_log_timestamps(log_timestamps)
-  U3dCore::Globals.with_log_timestamps(log_timestamps)
 end
