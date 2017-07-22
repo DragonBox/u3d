@@ -25,19 +25,19 @@ require 'json'
 
 include RSpec::Matchers
 expectations = {
-  'phase_active' => Proc.new do |phases|
+  'phase_active' => proc do |phases|
     expect(phases).to have_key('TEST_ACTIVE')
   end,
-  'phase_not_active' => Proc.new do |phases|
+  'phase_not_active' => proc do |phases|
     expect(phases).not_to have_key('TEST_NOT_ACTIVE')
   end,
-  'silent_phase_use' => Proc.new do |phases|
+  'silent_phase_use' => proc do |phases|
     expect(phases).to have_key('TEST')
   end,
-  'silent_phase_rules' => Proc.new do |phases|
+  'silent_phase_rules' => proc do |phases|
     expect(phases['TEST']['rules']).to be_empty
   end,
-  'phase_start_pattern_parsing' => Proc.new do |phases|
+  'phase_start_pattern_parsing' => proc do |phases|
     expect(phases['TEST']['phase_start_pattern']).to eql(/This is a pattern/)
   end
 }
@@ -51,7 +51,7 @@ describe U3d do
         data = JSON.parse(f.read)
       end
       data.each do |key, test_cases|
-        it "#{test_cases['message']}" do
+        it (test_cases['message']).to_s do
           file = double('file')
           allow(File).to receive(:open).with(anything, 'r').and_yield(file)
           allow(file).to receive(:read) { test_cases['ruleset'].to_json }

@@ -27,7 +27,7 @@ describe U3d do
     describe U3d::Downloader::MacDownloader do
       describe '.download_all' do
         before(:each) do
-          @cache = { 'mac'=> {'version' => 'url'} }
+          @cache = { 'mac' => { 'version' => 'url' } }
         end
 
         it 'logs an error when trying to download unknown version' do
@@ -38,7 +38,7 @@ describe U3d do
 
       describe '.download_specific' do
         before(:each) do
-          @cache = { 'mac'=> {'version' => 'url'} }
+          @cache = { 'mac' => { 'version' => 'url' } }
         end
 
         it 'logs an error when trying to download unknown version' do

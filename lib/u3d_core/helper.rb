@@ -25,9 +25,7 @@ require 'logger'
 require 'colored'
 
 module U3dCore
-  # rubocop:disable Metrics/ModuleLength
   module Helper
-
     # Runs a given command using backticks (`)
     # and prints them out using the UI.command method
     def self.backticks(command, print: true)
@@ -50,7 +48,7 @@ module U3dCore
     # @return [boolean] true if executing with bundler (like 'bundle exec fastlane [action]')
     def self.bundler?
       # Bundler environment variable
-      ['BUNDLE_BIN_PATH', 'BUNDLE_GEMFILE'].each do |current|
+      %w(BUNDLE_BIN_PATH BUNDLE_GEMFILE).each do |current|
         return true if ENV.key?(current)
       end
       return false
@@ -60,7 +58,7 @@ module U3dCore
     # Usually this means the fastlane directory is ~/.fastlane/bin/
     # We set this value via the environment variable `FASTLANE_SELF_CONTAINED`
     def self.contained_fastlane?
-      ENV["FASTLANE_SELF_CONTAINED"].to_s == "true" && !self.homebrew?
+      ENV["FASTLANE_SELF_CONTAINED"].to_s == "true" && !homebrew?
     end
 
     # returns true if fastlane was installed from the Fabric Mac app
@@ -75,13 +73,13 @@ module U3dCore
 
     # returns true if fastlane was installed via RubyGems
     def self.rubygems?
-      !self.bundler? && !self.contained_fastlane? && !self.homebrew? && !self.mac_app?
+      !bundler? && !contained_fastlane? && !homebrew? && !mac_app?
     end
 
     # @return [boolean] true if building in a known CI environment
     def self.ci?
       # Check for Jenkins, Travis CI, ... environment variables
-      ['JENKINS_HOME', 'JENKINS_URL', 'TRAVIS', 'CIRCLECI', 'CI', 'TEAMCITY_VERSION', 'GO_PIPELINE_NAME', 'bamboo_buildKey', 'GITLAB_CI', 'XCS'].each do |current|
+      %w(JENKINS_HOME JENKINS_URL TRAVIS CIRCLECI CI TEAMCITY_VERSION GO_PIPELINE_NAME bamboo_buildKey GITLAB_CI XCS).each do |current|
         return true if ENV.key?(current)
       end
       return false
@@ -143,9 +141,9 @@ module U3dCore
     end
 
     # Logs base directory
-    #def self.buildlog_path
+    # def self.buildlog_path
     #  return ENV["FL_BUILDLOG_PATH"] || "~/Library/Logs"
-    #end
+    # end
   end
   # rubocop:enable Metrics/ModuleLength
 end

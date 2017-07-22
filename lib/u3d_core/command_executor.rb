@@ -62,7 +62,7 @@ module U3dCore
         prefix ||= {}
 
         output = []
-        command = command.join(' ') if command.kind_of?(Array)
+        command = command.join(' ') if command.is_a?(Array)
         UI.command(command) if print_command
 
         # this is only used to show the "Loading text"...
@@ -79,7 +79,7 @@ module U3dCore
         end
 
         begin
-          status = U3dCore::Runner.run(command) do |stdin, stdout, pid|
+          status = U3dCore::Runner.run(command) do |stdin, _stdout, _pid|
             stdin.each do |l|
               line = l.strip # strip so that \n gets removed
               output << line
@@ -112,19 +112,19 @@ module U3dCore
       def has_admin_privileges?
         if Helper.windows?
           begin
-            result = system('reg query HKU\\S-1-5-19', :out => File::NULL, :err => File::NULL)
+            result = system('reg query HKU\\S-1-5-19', out: File::NULL, err: File::NULL)
           rescue
             result = false
           end
         else
           credentials = U3dCore::Credentials.new(user: ENV['USER'])
           begin
-            # FIXME hide / show output
+            # FIXME: hide / show output
             result = system("sudo -k && echo #{credentials.password.shellescape} | sudo -S /usr/bin/whoami")
           rescue
             result = false
           end
-          credentials.forget_credentials unless result # FIXME why?
+          credentials.forget_credentials unless result # FIXME: why?
         end
         # returns false if result is nil (command execution fail)
         return (result ? true : false)

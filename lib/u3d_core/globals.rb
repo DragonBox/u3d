@@ -34,12 +34,12 @@ module U3dCore
 
       def attributes
         @attributes ||= ((methods - public_instance_methods).grep(/=$/) - [:<=, :>=]).map do |s|
-            a = s.to_s
-            a[0..(a.length-2)] # remove the '='
-          end
+          a = s.to_s
+          a[0..(a.length - 2)] # remove the '='
+        end
       end
 
-      def with(attr, value, &block)
+      def with(attr, value)
         orig_attr = send("#{attr}?")
         send("#{attr}=", value)
         yield if block_given?
@@ -53,14 +53,14 @@ module U3dCore
 
       def method_missing(method_sym, *arguments, &block)
         if method_sym.to_s =~ /^with_(.*)$/
-          if attributes.include? $1
-            with($1.to_sym, arguments.first, &block)
+          if attributes.include? Regexp.last_match(1)
+            with(Regexp.last_match(1).to_sym, arguments.first, &block)
           else
             super
           end
         elsif method_sym.to_s =~ /^(.*)\?$/
-          if attributes.include? $1
-            is?($1.to_sym)
+          if attributes.include? Regexp.last_match(1)
+            is?(Regexp.last_match(1).to_sym)
           else
             super
           end
@@ -71,9 +71,9 @@ module U3dCore
 
       def respond_to?(method_sym, include_private = false)
         if method_sym.to_s =~ /^with_(.*)$/
-          return attributes.include? $1
+          return attributes.include? Regexp.last_match(1)
         elsif method_sym.to_s =~ /^(.*)\?$/
-          return attributes.include? $1
+          return attributes.include? Regexp.last_match(1)
         else
           super
         end

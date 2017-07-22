@@ -27,5 +27,5 @@ module U3d
   "\t. 'f' are the main release candidates for Unity3d\n"\
   "\t. 'p' are patches fixing those releases\n"\
   "\t. 'b' are the beta releases\n"\
-  "\t. 'a' are the alpha releases (not currently discovered)\n"
+  "\t. 'a' are the alpha releases (not currently discovered)\n".freeze
 end

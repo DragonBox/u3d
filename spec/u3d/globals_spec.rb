@@ -24,7 +24,7 @@ require 'u3d_core/globals'
 
 describe U3dCore do
   describe U3dCore::Globals do
-    #[:verbose, :log_timestamps, :use_keychain, :do_not_login].each do |global|
+    # [:verbose, :log_timestamps, :use_keychain, :do_not_login].each do |global|
     describe '#verbose?' do
       it 'defaults to nil' do
         expect(U3dCore::Globals.verbose?).to eq(nil)

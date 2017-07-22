@@ -74,7 +74,7 @@ module U3d
         c.option '-u', '--unity_version STRING', String, 'Version of Unity to run with'
         c.option '-r', '--raw_logs', 'Raw Unity output, not filtered by u3d\'s log prettifier'
         c.action do |_args, options|
-          UI.user_error! ("Run doesn't take arguments. Did you forget '--' or did you mistake your command? (#{_args})") if _args.count > 0
+          UI.user_error! "Run doesn't take arguments. Did you forget '--' or did you mistake your command? (#{_args})" if _args.count > 0
           U3dCore::Globals.log_timestamps = true
           Commands.run(options: convert_options(options), run_args: run_args)
         end
@@ -93,7 +93,7 @@ module U3d
       command :available do |c|
         oses = U3dCore::Helper.operating_systems
         c.syntax = 'u3d available [-r | --release_level <level>] [-o | --operating_system <OS>] [-u | --unity_version <version>] [-p | --packages] [-f | --force]'
-        levels = Commands::release_levels
+        levels = Commands.release_levels
         c.option '-f', '--force', 'Force refresh list of available versions'
         c.option '-r', '--release_level STRING', String, "Checks for availability on specific release level [#{levels.join(',')}]"
         c.option '-o', '--operating_system STRING', String, "Checks for availability on specific OS [#{oses.join(', ')}]"
@@ -119,7 +119,7 @@ module U3d
         c.option '-n', '--no_install', 'No installation after download success'
         c.option '-k', '--keychain', 'Gain privileges right through the keychain. [OSX only]'
         c.example 'Download and install Unity, its Documentation and the Android build support and install them for version 5.1.2f1', 'u3d install 5.1.2f1 -p Unity,Documentation,Android'
-        c.example "The 'version' argument can be a specific version number, such as 5.6.1f1, or an alias in [#{Commands::release_letter_mapping.keys.join(',')}]", 'u3d install latest'
+        c.example "The 'version' argument can be a specific version number, such as 5.6.1f1, or an alias in [#{Commands.release_letter_mapping.keys.join(',')}]", 'u3d install latest'
         c.action do |args, options|
           options.default all: false
           options.default no_install: false

@@ -65,33 +65,32 @@ module U3d
 
         return UI.error "Version #{ver} is not in cache" if ver && cache[os.id2name]['versions'][ver].nil?
 
-        if ver
-          versions = { ver => cache[os.id2name]['versions'][ver] }
-        else
-          versions = cache[os.id2name]['versions']
-        end
+        versions = if ver
+                     { ver => cache[os.id2name]['versions'][ver] }
+                   else
+                     cache[os.id2name]['versions']
+                   end
 
-        vcomparators = versions.keys.map {|k| UnityVersionComparator.new(k) }
+        vcomparators = versions.keys.map { |k| UnityVersionComparator.new(k) }
         if rl
-          letter = release_letter_mapping["latest_#{rl.to_s}".to_sym]
+          letter = release_letter_mapping["latest_#{rl}".to_sym]
           UI.message "Filtering available versions with release level '#{rl}' [letter '#{letter}']"
-          vcomparators.select! {|vc| vc.version.parts[3] == letter }
+          vcomparators.select! { |vc| vc.version.parts[3] == letter }
         end
-        sorted_keys = vcomparators.sort.map{|v| v.version.to_s}
+        sorted_keys = vcomparators.sort.map { |v| v.version.to_s }
 
         sorted_keys.each do |k|
           v = versions[k]
           UI.message "Version #{k}: " + v.to_s.cyan.underline
-          if options[:packages]
-            inif = nil
-            begin
-              inif = U3d::INIparser.load_ini(k, versions, os: os)
-            rescue => e
-              UI.error "Could not load packages for this version (#{e})"
-            else
-              UI.message 'Packages:'
-              inif.keys.each { |pack| UI.message " - #{pack}" }
-            end
+          next unless options[:packages]
+          inif = nil
+          begin
+            inif = U3d::INIparser.load_ini(k, versions, os: os)
+          rescue => e
+            UI.error "Could not load packages for this version (#{e})"
+          else
+            UI.message 'Packages:'
+            inif.keys.each { |pack| UI.message " - #{pack}" }
           end
         end
       end
@@ -197,9 +196,9 @@ module U3d
         pp = Dir.pwd unless pp
         up = UnityProject.new(pp)
 
-        if !version # fall back in project default if we are on a Unity project
+        unless version # fall back in project default if we are on a Unity project
           version = up.editor_version if up.exist?
-          if !version
+          unless version
             UI.user_error!('Not sure which version of Unity to run. Are you in a project?')
           end
         end
@@ -214,13 +213,13 @@ module U3d
       end
 
       def credentials_actions
-        ['add', 'remove', 'check']
+        %w(add remove check)
       end
 
       def credentials(args: [], options: {})
-        action  = args[0]
-        raise "Please specify an action to perform, one of #{self.credentials_actions.join(',')}" unless action
-        raise "Unknown action '#{action}'. Use one of #{self.credentials_actions.join(',')}" unless self.credentials_actions.include? action
+        action = args[0]
+        raise "Please specify an action to perform, one of #{credentials_actions.join(',')}" unless action
+        raise "Unknown action '#{action}'. Use one of #{credentials_actions.join(',')}" unless credentials_actions.include? action
         if action == 'add'
           U3dCore::Globals.use_keychain = true
           # credentials = U3dCore::Credentials.new(user: ENV['USER'])
@@ -243,7 +242,7 @@ module U3d
               end
             end
           end
-          # FIXME return value
+          # FIXME: return value
         end
       end
 
@@ -253,12 +252,12 @@ module U3d
 
         analyzer = LogAnalyzer.new
         File.open(args[0], 'r') do |f|
-          f.readlines().each { |l| analyzer.parse_line l }
+          f.readlines.each { |l| analyzer.parse_line l }
         end
       end
 
       def release_levels
-        [ :stable, :beta, :patch ]
+        [:stable, :beta, :patch]
       end
 
       def release_letter_mapping
@@ -277,11 +276,11 @@ module U3d
 
         letter = release_letter_mapping[version.to_sym]
 
-        iversion = versions.keys.map {|k| UnityVersionComparator.new(k) }
-            .sort
-            .reverse
-            .find {|c| c.version.parts[3] == letter }
-            .version.to_s
+        iversion = versions.keys.map { |k| UnityVersionComparator.new(k) }
+                           .sort
+                           .reverse
+                           .find { |c| c.version.parts[3] == letter }
+                           .version.to_s
         UI.message "Version '#{version}' is #{iversion}."
         iversion
       end

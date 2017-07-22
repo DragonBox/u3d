@@ -34,7 +34,7 @@ module U3dCore
       interface_methods = Interface.instance_methods - Object.instance_methods
       UI.user_error!("Unknown method '#{method_sym}', supported #{interface_methods}") unless interface_methods.include?(method_sym)
 
-      self.current.send(method_sym, *args)
+      current.send(method_sym, *args)
     end
   end
 end

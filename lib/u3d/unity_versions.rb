@@ -30,7 +30,7 @@ module U3d
     #####################################################
     # @!group URLS: Locations to fetch information from
     #####################################################
-    #URL for the forum thread listing all the Linux releases
+    # URL for the forum thread listing all the Linux releases
     UNITY_LINUX_DOWNLOADS = 'https://forum.unity3d.com/threads/unity-on-linux-release-notes-and-known-issues.350256/'.freeze
     # URL for the main releases for Windows and Macintosh
     UNITY_DOWNLOADS = 'https://unity3d.com/get-unity/download/archive'.freeze

@@ -30,13 +30,13 @@ module U3dCore
 
       $stdout.sync = true
 
-      if Helper.is_test?
-        @log ||= Logger.new(nil) # don't show any logs when running tests
-      else
-        @log ||= Logger.new($stdout)
-      end
+      @log ||= if Helper.is_test?
+                 Logger.new(nil) # don't show any logs when running tests
+               else
+                 Logger.new($stdout)
+               end
 
-      @log.formatter = proc do |severity, datetime, progname, msg|
+      @log.formatter = proc do |severity, datetime, _progname, msg|
         "#{format_string(datetime, severity)}#{msg}\n"
       end
 
@@ -50,17 +50,17 @@ module U3dCore
         timestamp = ENV["U3D_UI_TIMESTAMP"]
         # default timestamp if none specified
         unless timestamp
-          if U3dCore::Globals.verbose?
-            timestamp = '%Y-%m-%d %H:%M:%S.%2N'
-          else
-            timestamp = '%H:%M:%S'
-          end
+          timestamp = if U3dCore::Globals.verbose?
+                        '%Y-%m-%d %H:%M:%S.%2N'
+                      else
+                        '%H:%M:%S'
+                      end
         end
       end
       # hide has last word
       timestamp = nil if ENV["U3D_HIDE_TIMESTAMP"]
       s = []
-      s << "#{severity} " if U3dCore::Globals.verbose? and severity and !severity.empty?
+      s << "#{severity} " if U3dCore::Globals.verbose? && severity && !severity.empty?
       s << "[#{datetime.strftime(timestamp)}] " if timestamp
       s.join('')
     end

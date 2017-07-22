@@ -26,12 +26,11 @@ require 'file-tail'
 
 # Mac specific only right now
 module U3d
-
   DEFAULT_LINUX_INSTALL = '/opt/'.freeze
   DEFAULT_MAC_INSTALL = '/'.freeze
   DEFAULT_WINDOWS_INSTALL = 'C:/Program Files/'.freeze
-  UNITY_DIR = "Unity_%s"
-  UNITY_DIR_CHECK = %r{Unity_\d+\.\d+\.\d+[a-z]\d+}
+  UNITY_DIR = "Unity_%s".freeze
+  UNITY_DIR_CHECK = /Unity_\d+\.\d+\.\d+[a-z]\d+/
 
   class Installation
     def self.create(path: nil)
@@ -138,7 +137,7 @@ module U3d
         begin
           loc_appdata = Utils.windows_local_appdata
           log_dir = File.expand_path('Unity/Editor/', loc_appdata)
-          UI.important "Log directory (#{log_dir}) does not exist"  unless Dir.exist? log_dir
+          UI.important "Log directory (#{log_dir}) does not exist" unless Dir.exist? log_dir
           @logfile = File.expand_path('Editor.log', log_dir)
         rescue RuntimeError => ex
           UI.error "Unable to retrieve the editor logfile: #{ex}"
@@ -153,9 +152,7 @@ module U3d
 
     def packages
       # Unity prior to Unity5 did not have package
-      if Utils.parse_unity_version(version)[0].to_i <= 4
-        return []
-      end
+      return [] if Utils.parse_unity_version(version)[0].to_i <= 4
       fpath = "#{path}/Editor/Data/PlaybackEngines/"
       raise "Unity installation does not seem correct. Couldn't locate PlaybackEngines." unless Dir.exist? fpath
       Dir.entries(fpath).select { |e| File.directory?(File.join(fpath, e)) && !(e == '.' || e == '..') }
@@ -195,7 +192,7 @@ module U3d
         if Helper.windows?
           args.map! { |a| a =~ / / ? "\"#{a}\"" : a }
         else
-          args.map! { |a| a.shellescape }
+          args.map!(&:shellescape)
         end
         U3dCore::CommandExecutor.execute(command: args)
       ensure
@@ -213,7 +210,7 @@ module U3d
     end
 
     def find_arg_in_args(arg_to_find, args)
-      raise 'Only arguments of type array supported right now' unless args.kind_of?(Array)
+      raise 'Only arguments of type array supported right now' unless args.is_a?(Array)
       args.each_with_index do |arg, index|
         return args[index + 1] if arg == arg_to_find && index < args.count - 1
       end
@@ -235,13 +232,13 @@ module U3d
 
   class Installer
     def self.create
-      if Helper.mac?
-        installer = MacInstaller.new
-      elsif Helper.linux?
-        installer = LinuxInstaller.new
-      else
-        installer = WindowsInstaller.new
-      end
+      installer = if Helper.mac?
+                    MacInstaller.new
+                  elsif Helper.linux?
+                    LinuxInstaller.new
+                  else
+                    WindowsInstaller.new
+                  end
       if UI.interactive?
         unclean = []
         installer.installed.each { |unity| unclean << unity unless unity.path =~ UNITY_DIR_CHECK }
@@ -325,7 +322,7 @@ module U3d
           path = File.expand_path('..', unity.path)
           temp_path = File.join(target_path, 'Applications', 'Unity')
           move_to_temp = (temp_path != path)
-          if (move_to_temp)
+          if move_to_temp
             UI.verbose "Temporary switching location of #{path} to #{temp_path} for installation purpose"
             FileUtils.mv path, temp_path
           end

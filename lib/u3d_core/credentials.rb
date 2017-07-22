@@ -26,7 +26,7 @@ require 'security'
 
 module U3dCore
   class Credentials
-    MAC_U3D_SERVER = 'u3d'
+    MAC_U3D_SERVER = 'u3d'.freeze
     def initialize(user: nil, password: nil)
       @user = user
       @password = password

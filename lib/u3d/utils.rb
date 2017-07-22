@@ -81,12 +81,12 @@ module U3d
         print('=' * [arrow - 1, 0].max)
         print('>')
         print('.' * (20 - arrow))
-        print("] #{pretty_filesize(current)}/#{pretty_filesize(total)} (#{percent}% at #{pretty_filesize(current.to_f/time_spent)}/s)     ")
+        print("] #{pretty_filesize(current)}/#{pretty_filesize(total)} (#{percent}% at #{pretty_filesize(current.to_f / time_spent)}/s)     ")
       end
 
       def print_progress_nosize(current, started_at)
         time_spent = Time.now.to_i - started_at
-        print("\r>#{pretty_filesize(current)} downloaded at #{pretty_filesize(current.to_f/time_spent)}/s)    ")
+        print("\r>#{pretty_filesize(current)} downloaded at #{pretty_filesize(current.to_f / time_spent)}/s)    ")
       end
 
       def parse_unity_version(version)
@@ -101,16 +101,16 @@ module U3d
       def windows_local_appdata
         require 'win32api'
 
-        windir = ' '*261
+        windir = ' ' * 261
 
         getdir = Win32API.new('shell32', 'SHGetFolderPath', 'LLLLP', 'L')
         result = getdir.call(0, CSIDL_LOCAL_APPDATA, 0, 0, windir)
-        raise RuntimeError, "Unable to get Local Appdata directory, returned with value #{result}" unless result == 0
+        raise "Unable to get Local Appdata directory, returned with value #{result}" unless result == 0
         windir.rstrip!
         windir = File.expand_path(windir.rstrip)
 
         return windir if Dir.exist? windir
-        raise RuntimeError, "Local Appdata retrieved (#{windir}) is not correct"
+        raise "Local Appdata retrieved (#{windir}) is not correct"
       end
 
       def pretty_filesize(filesize)

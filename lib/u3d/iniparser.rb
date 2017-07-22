@@ -40,12 +40,12 @@ module U3d
         unless os == :win || os == :mac
           raise ArgumentError, "OS #{os.id2name} does not use ini files"
         end
-        if os == :mac
-          os = 'osx'
-        else
-          os = os.id2name
-        end
-        ini_name = INI_NAME % { :version => version, :os => os }
+        os = if os == :mac
+               'osx'
+             else
+               os.id2name
+             end
+        ini_name = INI_NAME % { version: version, os: os }
         Utils.ensure_dir(default_ini_path)
         ini_path = File.expand_path(ini_name, default_ini_path)
         unless File.file?(ini_path)

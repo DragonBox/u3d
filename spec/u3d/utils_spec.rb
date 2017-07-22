@@ -26,7 +26,7 @@ describe U3d do
   describe U3d::Utils do
     describe '.hashfile' do
       it 'raises an error if the path to the file is not valid' do
-        expect{ U3d::Utils.hashfile('not_a_dir/not_a_file') }.to raise_error(ArgumentError)
+        expect { U3d::Utils.hashfile('not_a_dir/not_a_file') }.to raise_error(ArgumentError)
       end
 
       it 'returns the md5 hash of the file' do
@@ -47,11 +47,11 @@ describe U3d do
 
     describe '.parse_unity_version' do
       it 'raises an error if the version is not valid' do
-        expect{ U3d::Utils.parse_unity_version('not_a_version') }.to raise_error(ArgumentError)
+        expect { U3d::Utils.parse_unity_version('not_a_version') }.to raise_error(ArgumentError)
       end
 
       it 'returns the version as an array' do
-        expect(U3d::Utils.parse_unity_version('1.2.3f4')).to eql(['1', '2', '3', 'f', '4'])
+        expect(U3d::Utils.parse_unity_version('1.2.3f4')).to eql(%w(1 2 3 f 4))
       end
     end
   end

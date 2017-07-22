@@ -72,7 +72,7 @@ describe U3dCore do
     describe "execute" do
       it "raise error upon exit status failure" do
         expect do
-          output = U3dCore::CommandExecutor.execute(command: "ruby -e 'exit 1'")
+          U3dCore::CommandExecutor.execute(command: "ruby -e 'exit 1'")
         end.to raise_error(RuntimeError, /Exit status: 1/)
       end
 

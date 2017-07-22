@@ -54,9 +54,9 @@ module U3dCore
       require 'pty'
       PTY.spawn(command) do |r, w, p|
         begin
-          trap('INT') {
+          trap('INT') do
             Process.kill("INT", p)
-          }
+          end
           yield r, w, p
         # if the process has closed, ruby might raise an exception if we try
         # to do I/O on a closed stream. This behavior is platform specific

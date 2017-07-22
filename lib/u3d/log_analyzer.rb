@@ -28,7 +28,7 @@ module U3d
     RULES_PATH = File.expand_path('../../../config/log_rules.json', __FILE__)
     MEMORY_SIZE = 10
 
-    def initialize()
+    def initialize
       @lines_memory = Array.new(MEMORY_SIZE)
       @active_phase = nil
       @active_rule = nil
@@ -107,7 +107,7 @@ module U3d
             if rule['end_message'] != false
               if rule['end_message']
                 match = line.match(pattern)
-                params = match.names.map { |n| n.to_sym }.zip(match.captures).to_h
+                params = match.names.map(&:to_sym).zip(match.captures).to_h
                 message = rule['end_message'] % params.merge(@context)
               else
                 message = line.chomp
@@ -141,7 +141,7 @@ module U3d
             next unless line =~ pattern
             @active_rule = rn if r['end_pattern']
             match = line.match(pattern)
-            @context = match.names.map { |n| n.to_sym }.zip(match.captures).to_h
+            @context = match.names.map(&:to_sym).zip(match.captures).to_h
             if r['fetch_line_at_index'] || r['fetch_first_line_not_matching']
               if r['fetch_line_at_index']
                 fetched_line = @lines_memory.reverse[r['fetch_line_at_index']]
@@ -162,25 +162,25 @@ module U3d
               if fetched_line
                 if r['fetched_line_pattern']
                   match = fetched_line.match(r['fetched_line_pattern'])
-                  @context.merge!(match.names.map { |n| n.to_sym }.zip(match.captures).to_h)
+                  @context.merge!(match.names.map(&:to_sym).zip(match.captures).to_h)
                 end
                 if r['fetched_line_message'] != false
-                  if r['fetched_line_message']
-                    message = r['fetched_line_message'] % @context
-                  else
-                    message = fetched_line.chomp
-                  end
+                  message = if r['fetched_line_message']
+                              r['fetched_line_message'] % @context
+                            else
+                              fetched_line.chomp
+                            end
                   message = "[#{header}] " + message
                   UI.send(r['type'], message)
                 end
               end
             end
             if r['start_message'] != false
-              if r['start_message']
-                message = r['start_message'] % @context
-              else
-                message = line.chomp
-              end
+              message = if r['start_message']
+                          r['start_message'] % @context
+                        else
+                          line.chomp
+                        end
               message = "[#{header}] " + message
               UI.send(r['type'], message)
             end

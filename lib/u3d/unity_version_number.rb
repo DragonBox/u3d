@@ -29,7 +29,7 @@ module U3d
     def initialize(version)
       parsed = Utils.parse_unity_version(version)
       parsed.each_with_index do |val, index|
-        next if val.nil? or index == 3
+        next if val.nil? || (index == 3)
         parsed[index] = val.to_i
       end
       @parts = parsed
@@ -43,9 +43,9 @@ module U3d
   class UnityVersionComparator
     include Comparable
 
-    RELEASE_LETTER_STRENGTH = { a: 1, b: 2, f: 3, p: 4 }
+    RELEASE_LETTER_STRENGTH = { a: 1, b: 2, f: 3, p: 4 }.freeze
 
-    attr :version
+    attr_reader :version
 
     def <=>(anOther)
       comp = @version.parts[0] <=> anOther.version.parts[0]
@@ -63,6 +63,7 @@ module U3d
       version = UnityVersionNumber.new(version.to_s)
       @version = version
     end
+
     def inspect
       @version
     end
