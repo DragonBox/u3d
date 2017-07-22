@@ -1,0 +1,1 @@
+gem 'fastlane-plugin-u3d', :path => File.join(REPO_ROOT, 'fastlane-plugin-u3d')

@@ -1,0 +1,43 @@
+#
+#   File.chmod(0777, f)
+#
+# is easier to read than
+#
+#   File.chmod(0o777, f)
+#
+AllCops:
+  #Include:
+  #  - '**/fastlane/Fastfile'
+  Exclude:
+    - './fastlane-plugin-u3d/**/*'
+
+
+Style/NumericLiteralPrefix:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false # we're not there yet
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+# Configuration parameters: AllowURI, URISchemes.
+Metrics/LineLength:
+  Max: 370
+
+# We're not there yet
+Style/Documentation:
+  Enabled: false
+
+# Better too much 'return' than one missing
+Style/RedundantReturn:
+  Enabled: false

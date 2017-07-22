@@ -1,0 +1,5 @@
+# Example integration of u3d
+
+task :u3d_load_save_scenes do
+  system("u3d -- -logFile './editor.log' -executeMethod U3d.EditorRun.LoadSaveScenes -quit -batchmode")
+end

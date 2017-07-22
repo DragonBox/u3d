@@ -1,0 +1,19 @@
+# Unity specific
+Library/
+Temp/
+*.csproj
+*.pidb
+*.pidb.meta
+*.sln
+*.suo
+*.userprefs
+
+# bundler specific
+.bundle/
+
+# fastlane specific
+fastlane/report.xml
+fastlane/README.md
+
+# project specific
+editor.log

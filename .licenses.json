@@ -1,0 +1,19 @@
+[
+  {
+    "license": "LICENSE.fastlane",
+    "paths": [
+      "lib/u3d_core/ui/{disable_colors,interface,ui}.rb",
+      "lib/u3d_core/ui/implementations/shell.rb",
+      "lib/u3d_core/{command_executor,command_runner,credentials,globals,helper}.rb",
+      "spec/u3d_core/command_executor_spec.rb"
+    ]
+  },
+  { 
+    "license": "LICENSE",
+    "paths": [
+       "{lib,spec}/**/*.rb",
+       "Rakefile"
+    ]
+  }
+]
+  

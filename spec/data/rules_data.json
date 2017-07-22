@@ -1,0 +1,67 @@
+{
+  "phase_active": {
+    "message": "uses active phases",
+    "ruleset": {
+      "TEST_ACTIVE": {
+        "active": true,
+        "silent": false,
+        "phase_start_pattern": "Not important",
+        "rules": { }
+      }
+    }
+  },
+  "phase_not_active": {
+    "message": "ignores inactive phases",
+    "ruleset": {
+      "TEST_NOT_ACTIVE": {
+        "active": false,
+        "silent": false,
+        "phase_start_pattern": "Not important",
+        "rules": { }
+      }
+    }
+  },
+  "silent_phase_use": {
+    "message": "uses active silent phases",
+    "ruleset": {
+      "TEST": {
+        "active": true,
+        "silent": true,
+        "phase_start_pattern": "Not important",
+        "rules": {
+          "rule_1": {
+            "active": true,
+            "start_pattern": "Not important either"
+          }
+        }
+      }
+    }
+  },
+  "silent_phase_rules": {
+    "message": "ignores the rules of silent phases",
+    "ruleset": {
+      "TEST": {
+        "active": true,
+        "silent": true,
+        "phase_start_pattern": "Not important",
+        "rules": {
+          "rule_1": {
+            "active": true,
+            "start_pattern": "Not important either"
+          }
+        }
+      }
+    }
+  },
+  "phase_start_pattern_parsing": {
+    "message": "parses the start patterns of the phases correctly",
+    "ruleset": {
+      "TEST": {
+        "active": true,
+        "silent": false,
+        "phase_start_pattern": "This is a pattern",
+        "rules": { }
+      }
+    }
+  }
+}
