@@ -18,10 +18,10 @@ U3d provides help for running and installing unity from CLI. Available commands 
 
 ## Installation
 
-  The gem isn't yet on a public repository, so do
 ```shell
-./local_gem_install.sh
+gem install u3d
 ```
+
 ## Security
 
 When you install Unity with this tool, you will have to grant it higher privileges so it can perfrom the installation. It means that under MacOS and Linux, you will be asked for your sudo password.
