@@ -5,6 +5,13 @@
 #
 #   File.chmod(0o777, f)
 #
+AllCops:
+  #Include:
+  #  - '**/fastlane/Fastfile'
+  Exclude:
+    - './fastlane-plugin-u3d/**/*'
+
+
 Style/NumericLiteralPrefix:
   Enabled: false
 
