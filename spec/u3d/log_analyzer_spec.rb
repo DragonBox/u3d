@@ -51,7 +51,7 @@ describe U3d do
         data = JSON.parse(f.read)
       end
       data.each do |key, test_cases|
-        it (test_cases['message']).to_s do
+        it test_cases['message'] do
           file = double('file')
           allow(File).to receive(:open).with(anything, 'r').and_yield(file)
           allow(file).to receive(:read) { test_cases['ruleset'].to_json }

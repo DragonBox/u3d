@@ -38,11 +38,8 @@ module U3dCore
 
       while @user.to_s.empty?
         UI.verbose 'Username does not exist or is empty'
-        if UI.interactive?
-          @user = UI.input 'Username for u3d:'
-        else
-          raise CredentialsError, 'Username missing and context is not interactive. Please check that the environment variable is correct'
-        end
+        raise CredentialsError, 'Username missing and context is not interactive. Please check that the environment variable is correct' unless UI.interactive?
+        @user = UI.input 'Username for u3d:'
       end
 
       return @user
@@ -78,11 +75,8 @@ module U3dCore
 
       while @password.to_s.empty?
         UI.verbose 'Password does not exist or is empty'
-        if UI.interactive?
-          @password = UI.password "Password for #{user}:"
-        else
-          raise CredentialsError, 'Password missing and context is not interactive. Please make sure it is correct'
-        end
+        raise CredentialsError, 'Password missing and context is not interactive. Please make sure it is correct' unless UI.interactive?
+        @password = UI.password "Password for #{user}:"
       end
 
       if remember_credentials

@@ -59,7 +59,6 @@ describe U3d do
 
       context 'when online' do
         it 'gets the INI file from the web if it is absent' do
-          file = double('file')
           allow(File).to receive(:file?) { false }
           allow(IniFile).to receive(:load)
           expect(Net::HTTP).to receive(:get) { '' }

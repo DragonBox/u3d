@@ -47,16 +47,16 @@ module U3d
 
     attr_reader :version
 
-    def <=>(anOther)
-      comp = @version.parts[0] <=> anOther.version.parts[0]
-      return comp if comp != 0
-      comp = @version.parts[1] <=> anOther.version.parts[1]
-      return comp if comp != 0
-      comp = @version.parts[2] <=> anOther.version.parts[2]
-      return comp if comp != 0
-      comp = RELEASE_LETTER_STRENGTH[@version.parts[3].to_sym] <=> RELEASE_LETTER_STRENGTH[anOther.version.parts[3].to_sym]
-      return comp if comp != 0
-      return @version.parts[4] <=> anOther.version.parts[4]
+    def <=>(other)
+      comp = @version.parts[0] <=> other.version.parts[0]
+      return comp if comp.nonzero?
+      comp = @version.parts[1] <=> other.version.parts[1]
+      return comp if comp.nonzero?
+      comp = @version.parts[2] <=> other.version.parts[2]
+      return comp if comp.nonzero?
+      comp = RELEASE_LETTER_STRENGTH[@version.parts[3].to_sym] <=> RELEASE_LETTER_STRENGTH[other.version.parts[3].to_sym]
+      return comp if comp.nonzero?
+      return @version.parts[4] <=> other.version.parts[4]
     end
 
     def initialize(version)

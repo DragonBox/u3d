@@ -73,8 +73,8 @@ module U3d
         c.description = 'Run unity, and parses its output through u3d\'s log prettifier'
         c.option '-u', '--unity_version STRING', String, 'Version of Unity to run with'
         c.option '-r', '--raw_logs', 'Raw Unity output, not filtered by u3d\'s log prettifier'
-        c.action do |_args, options|
-          UI.user_error! "Run doesn't take arguments. Did you forget '--' or did you mistake your command? (#{_args})" if _args.count > 0
+        c.action do |args, options|
+          UI.user_error! "Run doesn't take arguments. Did you forget '--' or did you mistake your command? (#{args})" if args.count > 0
           U3dCore::Globals.log_timestamps = true
           Commands.run(options: convert_options(options), run_args: run_args)
         end

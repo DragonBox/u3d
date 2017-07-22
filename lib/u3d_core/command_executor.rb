@@ -58,7 +58,7 @@ module U3dCore
       # @param keychain [Boolean] Should we fetch admin rights from the keychain on OSX
       # @return [String] All the output as string
       def execute(command: nil, print_all: false, print_command: true, error: nil, prefix: nil, loading: nil, admin: false)
-        print_all = true if $verbose
+        print_all = true if U3dCore::Globals.verbose?
         prefix ||= {}
 
         output = []
@@ -94,7 +94,7 @@ module U3dCore
               UI.command_output(line)
             end
           end
-          raise "Exit status: #{status}".red if status != 0 && !status.nil?
+          raise "Exit status: #{status}".red if status.nonzero? && !status.nil?
         rescue => ex
           # This could happen
           # * if the status is failed

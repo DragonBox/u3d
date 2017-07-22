@@ -105,7 +105,7 @@ module U3d
 
         getdir = Win32API.new('shell32', 'SHGetFolderPath', 'LLLLP', 'L')
         result = getdir.call(0, CSIDL_LOCAL_APPDATA, 0, 0, windir)
-        raise "Unable to get Local Appdata directory, returned with value #{result}" unless result == 0
+        raise "Unable to get Local Appdata directory, returned with value #{result}" unless result.zero?
         windir.rstrip!
         windir = File.expand_path(windir.rstrip)
 

@@ -29,13 +29,15 @@ module U3dCore
       end
     end
 
+    # rubocop:disable Style/MethodMissing
     def self.method_missing(method_sym, *args, &_block)
-      # not using `responds` beacuse we don't care about methods like .to_s and so on
+      # not using `responds` because we don't care about methods like .to_s and so on
       interface_methods = Interface.instance_methods - Object.instance_methods
       UI.user_error!("Unknown method '#{method_sym}', supported #{interface_methods}") unless interface_methods.include?(method_sym)
 
       current.send(method_sym, *args)
     end
+    # rubocop:enable Style/MethodMissing
   end
 end
 
