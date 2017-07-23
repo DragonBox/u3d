@@ -59,5 +59,12 @@ describe U3d do
         end
       end
     end
+    describe '.load_rules default' do
+      it "loads defaults rules without problem" do
+        gen, phases = U3d::LogAnalyzer.new.load_rules
+        expect(gen.keys.count).to be > 5
+        expect(phases.keys).to eq ['JENKINS','INIT','COMPILER','ASSET']
+      end
+    end
   end
 end
