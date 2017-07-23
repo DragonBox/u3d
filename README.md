@@ -6,15 +6,17 @@ U3d is a set of tools to interact with Unity3D from command line. It is availabl
 
 U3d provides help for running and installing unity from CLI. Available commands are:
 
-* `u3d available`: List versions available to download
+* `u3d available`: List download-ready versions of Unity3d
 
-* `u3d install`: Download (and install) Unity
+* `u3d install`: Download (and install) Unity3D packages
 
-* `u3d list`: List installed versions
+* `u3d list`: List installed versions of Unity3d
 
-* `u3d local_install`: Install already downloaded packages
+* `u3d local_install`: Install downloaded version of Unity3d
 
-* `u3d run`: Run Unity
+* `u3d run`: Run Unity, and parses its output through u3d's log prettifier
+
+* `u3d prettify`: Prettify a saved logfile
 
 ## Installation
 
@@ -24,7 +26,7 @@ gem install u3d
 
 ## Security
 
-When you install Unity with this tool, you will have to grant it higher privileges so it can perfrom the installation. It means that under MacOS and Linux, you will be asked for your sudo password.
+When you install Unity with this tool, you will have to grant it higher privileges so it can perform the installation. It means that under MacOS and Linux, you will be asked for your `sudo` password.
 
 On Windows, you must launch a administrative command interface to be able to run `local_install` and `install` (only if you install for the latter).
 
@@ -47,10 +49,16 @@ u3d available -p -o mac
 ```shell
 u3d install 5.6.0f3 -p Unity,Documentation,WebPlayer
 ```
-* Run a CLI on the current project given the configured unity version:
+* Run a CLI on the current project given the project's configured unity version, displaying prettified logs, while keeping the original logs under `editor.log`:
 
 ```shell
 u3d run -- -batchmode -quit -logFile `pwd`/editor.log -executeMethod "WWTK.SimpleBuild.PerformAndroidBuild"
+```
+
+* Open the proper Unity3d for the current project, displaying the raw editor logs in the command line:
+
+```shell
+u3d run -r
 ```
 
 You can get further information on how to use U3d by running `u3d --help` (or `u3d -h`).

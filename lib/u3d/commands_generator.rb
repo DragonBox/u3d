@@ -84,7 +84,7 @@ module U3d
         c.syntax = 'u3d list [-p | --packages]'
         c.option '-p', '--packages', 'Lists installed packages as well'
         c.example 'List currently installed Unity3d versions, as well as installed packages', 'u3d list -p'
-        c.description = 'List installed version of Unity3d'
+        c.description = 'List installed versions of Unity3d'
         c.action do |_args, options|
           Commands.list_installed(options: convert_options(options))
         end
@@ -129,7 +129,7 @@ module U3d
 
       command :local_install do |c|
         c.syntax = 'u3d local_install <version> [ [-p | --packages <package> ...] | [-a | --all] ] [-i | --installation_path <path>]'
-        c.description = 'Install downloaded version of unity'
+        c.description = 'Install downloaded version of Unity3d'
         c.option '-p', '--packages PACKAGES', Array, 'Specifies which packages to install. Overriden by --all'
         c.option '-i', '--installation_path PATH', String, 'Specifies where package(s) will be installed.'
         c.option '-a', '--all', 'Install all downloaded packages'
