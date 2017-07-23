@@ -38,12 +38,11 @@ module U3d
     end
 
     def load_rules
-      data = {}
       generic_rules = {}
       phases = {}
-      File.open(RULES_PATH, 'r') do |f|
-        data = JSON.parse(f.read)
-      end
+
+      data = JSON.parse(File.read(RULES_PATH))
+
       if data['GENERAL'] && data['GENERAL']['active']
         data['GENERAL']['rules'].each do |rn, r|
           generic_rules[rn] = r if parse_rule(r)

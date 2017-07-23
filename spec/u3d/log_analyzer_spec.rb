@@ -46,15 +46,11 @@ rules_data_file = File.expand_path('../../data/rules_data.json', __FILE__)
 describe U3d do
   describe U3d::LogAnalyzer do
     describe '.load_rules' do
-      data = {}
-      File.open(rules_data_file, 'r') do |f|
-        data = JSON.parse(f.read)
-      end
+      data =  JSON.parse(File.read(rules_data_file))
       data.each do |key, test_cases|
         it test_cases['message'] do
           file = double('file')
-          allow(File).to receive(:open).with(anything, 'r').and_yield(file)
-          allow(file).to receive(:read) { test_cases['ruleset'].to_json }
+          allow(File).to receive(:read) { test_cases['ruleset'].to_json }
 
           _gen, parsed_phases = U3d::LogAnalyzer.new.load_rules
           expectations[key].call(parsed_phases)
