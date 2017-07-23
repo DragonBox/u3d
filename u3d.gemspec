@@ -6,7 +6,6 @@ require 'u3d/version'
 Gem::Specification.new do |spec|
   spec.name        = 'u3d'
   spec.version     = U3d::VERSION
-  spec.date        = '2016-12-08'
   spec.authors     = ["Jerome Lacoste", "Paul Niezborala"]
   spec.email       = 'jerome@wewanttoknow.com'
 
