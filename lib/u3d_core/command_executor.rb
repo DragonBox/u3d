@@ -119,8 +119,8 @@ module U3dCore
         else
           credentials = U3dCore::Credentials.new(user: ENV['USER'])
           begin
-            # FIXME: hide / show output
-            result = system("sudo -k && echo #{credentials.password.shellescape} | sudo -S /usr/bin/whoami")
+            result = system("sudo -k && echo #{credentials.password.shellescape} | sudo -S /usr/bin/whoami",
+              out: File::NULL, err: File::NULL)
           rescue
             result = false
           end
