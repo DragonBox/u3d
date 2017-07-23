@@ -50,11 +50,3 @@ ensure
     ENV[k] = old_vals[k]
   end
 end
-
-def with_verbose(verbose)
-  U3dCore::Globals.with_verbose(verbose)
-end
-
-def with_log_timestamps(log_timestamps)
-  U3dCore::Globals.with_log_timestamps(log_timestamps)
-end
