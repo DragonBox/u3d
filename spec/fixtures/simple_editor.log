@@ -1,0 +1,796 @@
+2017-07-22 14:49:53.653 Unity[5079:1495272] NSDocumentController Info.plist warning: The values of CFBundleTypeRole entries must be 'Editor', 'Viewer', 'None', or 'Shell'.
+...300157 bytes written to /Users/lacostej/Library/Unity/Certificates/CACerts.pem
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools64/JobProcess
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
+  0
+ GL_ARB_blend_func_extended GL_ARB_draw_buffers_blend GL_ARB_draw_indirect GL_ARB_ES2_compatibility GL_ARB_explicit_attrib_location GL_ARB_gpu_shader5 GL_ARB_instanced_arrays GL_ARB_internalformat_query GL_ARB_occlusion_query2 GL_ARB_sample_shading GL_ARB_sampler_objects GL_ARB_separate_shader_objects GL_ARB_shader_bit_encoding GL_ARB_shader_subroutine GL_ARB_shading_language_include GL_ARB_tessellation_shader GL_ARB_texture_buffer_object_rgb32 GL_ARB_texture_cube_map_array GL_ARB_texture_gather GL_ARB_texture_query_lod GL_ARB_texture_rgb10_a2ui GL_ARB_texture_storage GL_ARB_texture_swizzle GL_ARB_timer_query GL_ARB_transform_feedback2 GL_ARB_transform_feedback3 GL_ARB_vertex_type_2_10_10_10_rev GL_ARB_viewport_array GL_EXT_debug_label GL_EXT_debug_marker GL_EXT_texture_compression_s3tc GL_EXT_texture_filter_anisotropic GL_EXT_texture_mirror_clamp GL_EXT_texture_sRGB_decode GL_APPLE_client_storage GL_APPLE_container_object_shareable GL_APPLE_flush_render GL_APPLE_object_purgeable GL_APPLE_rgb_422 GL_APPLE_ro
+w_bytes GL_APPLE_texture_range GL_ATI_texture_mirror_once GL_NV_texture_barrier
+OPENGL LOG: Creating OpenGL 4.1 graphics device ; Context level  <OpenGL 4.1> ; Context handle 268709888
+Begin MonoManager ReloadAssembly
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEngine.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEditor.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.Locator.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.DataContract.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Core.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.IvyParser.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Xml.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Configuration.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/PackageManager/Unity/PackageManager/5.6.1/Unity.PackageManager.dll (this message is harmless)
+Initializing Unity.PackageManager (PackageManager) v5.6.1 for Unity v5.6.1f1
+Setting Standalone:StandaloneOSXIntel v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport
+Setting Advertisements v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements
+  UnityEngine.Advertisements.dll (Extension) GUID: 739bbd9f364b4268874f9fd86ab3beef
+  Editor/UnityEditor.Advertisements.dll (Extension) GUID: 97decbdab0634cdd991f8d23ddf0dead
+Setting GUISystem v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem
+  UnityEngine.UI.dll (Extension) GUID: f5f67c52d1564df4a8936ccd202a3bd8
+  Standalone/UnityEngine.UI.dll (Extension) GUID: f70555f144d8491a825f0804e09c671c
+  Editor/UnityEditor.UI.dll (Extension) GUID: 80a3616ca19596e4da0f10f14d241e9f
+Setting UNetHLAPI v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking
+  UnityEngine.Networking.dll (Extension) GUID: 870353891bb340e2b2a9c8707e7419ba
+  Standalone/UnityEngine.Networking.dll (Extension) GUID: dc443db3e92b4983b9738c1131f555cb
+  Editor/UnityEditor.Networking.dll (Extension) GUID: 5f32cd94baa94578a686d4b9d6b660f7
+Setting TestRunner v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner
+  Editor/UnityEditor.TestRunner.dll (Extension) GUID: 4113173d5e95493ab8765d7b08371de4
+  UnityEngine.TestRunner.dll (Extension) GUID: 53ebcfaa2e1e4e2dbc85882cd5a73fa1
+  nunit.framework.dll (Extension) GUID: 6abf4b4cbfd0454e850ffc1ec9140b58
+  standalone/nunit.framework.dll (Extension) GUID: 4277762b3c154fab9f2e968e868bbbd7
+  portable/nunit.framework.dll (Extension) GUID: 405b9b51bb344a128608d968297df79c
+Setting TreeEditor v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TreeEditor
+  Editor/UnityEditor.TreeEditor.dll (Extension) GUID: adebbd281f1a4ef3a30be7f21937e02f
+Setting UnityAnalytics v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics
+  UnityEngine.Analytics.dll (Extension) GUID: 852E56802EB941638ACBB491814497B0
+  Editor/UnityEditor.Analytics.dll (Extension) GUID: 86f4de9468454445ac2f39e207fafa3a
+Setting UnityHoloLens v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens
+  Editor/UnityEditor.HoloLens.dll (Extension) GUID: 12fd8a0055b84bb59e84c9835a37e333
+  Runtime/UnityEngine.HoloLens.dll (Extension) GUID: f7b54ff4a43d4fcf81b4538b678e0bcc
+  RuntimeEditor/UnityEngine.HoloLens.dll (Extension) GUID: 1c6d1fbb51834b64847b1b73a75bfc77
+Setting UnityPurchasing v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing
+  UnityEngine.Purchasing.dll (Extension) GUID: 8E0CD8ED44D4412CBE0642067ABC9E44
+  Editor/UnityEditor.Purchasing.dll (Extension) GUID: 8382B2BB260241859771B69B7F377A8D
+Setting UnityVR v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR
+  Editor/UnityEditor.VR.dll (Extension) GUID: 4ba2329b63d54f0187bcaa12486b1b0f
+  Runtime/UnityEngine.VR.dll (Extension) GUID: 6cdf1e5c78d14720aaadccd4C792df96
+  RuntimeEditor/UnityEngine.VR.dll (Extension) GUID: 307433eba81a469ab1e2084d52d1a5a2
+Registering custom unity dll's ...
+Register platform support module: /Applications/Unity_5.6.1f1/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
+Register platform support module: /Applications/Unity_5.6.1f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: /Applications/Unity_5.6.1f1/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll
+Register platform support module: /Applications/Unity_5.6.1f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Register platform support module: /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll
+Registered in 0.001417 seconds.
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/PackageManager/Unity/PackageManager/5.6.1/Unity.PackageManager.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/PackageManager/Unity/PackageManager/5.6.1/Unity.PackageManager.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/Editor/UnityEditor.TestRunner.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/Editor/UnityEditor.TestRunner.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/nunit.framework.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/nunit.framework.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/Editor/UnityEditor.Analytics.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/Editor/UnityEditor.Analytics.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Editor/UnityEditor.HoloLens.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Editor/UnityEditor.HoloLens.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/Editor/UnityEditor.Purchasing.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/Editor/UnityEditor.Purchasing.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll into Unity Child Domain
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEditor.Graphs.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEditor.Graphs.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll into Unity Child Domain
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll into Unity Child Domain
+Refreshing native plugins compatible for Editor in 3.71 ms, found 2 plugins.
+Preloading 1 native plugins for Editor in 2.50 ms.
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Mono.Cecil.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.SerializationLogic.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/UnityScript.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/ICSharpCode.NRefactory.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Xml.Linq.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Web.dll (this message is harmless)
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.iOS.Extensions.Xcode.dll (this message is harmless)
+Mono: successfully reloaded assembly
+- Completed reload, in  0.799 seconds
+Registering platform support modules:
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Drawing.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Data.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/Boo.Lang.Compiler.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/Boo.Lang.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/Boo.Lang.Parser.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/UnityScript.Lang.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/Mono.Security.dll (this message is harmless)
+Registered platform support modules in: 0.156293s.
+Native extension for OSXStandalone target not found
+Native extension for WindowsStandalone target not found
+Native extension for LinuxStandalone target not found
+Native extension for WebGL target not found
+Native extension for Android target not found
+Begin MonoManager ReloadAssembly
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEngine.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEditor.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.Locator.dll (this message is harmless)
+Registering custom user dll's ...
+Registered in 0.000151 seconds.
+Non platform assembly: /Users/lacostej/Code/WWTK/FastGame/examples/Example2/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll (this message is harmless)
+Loading /Users/lacostej/Code/WWTK/FastGame/examples/Example2/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll into Unity Child Domain
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/PackageManager/Unity/PackageManager/5.6.1/Unity.PackageManager.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/PackageManager/Unity/PackageManager/5.6.1/Unity.PackageManager.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/Editor/UnityEditor.TestRunner.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/Editor/UnityEditor.TestRunner.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/nunit.framework.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/nunit.framework.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/Editor/UnityEditor.Analytics.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/Editor/UnityEditor.Analytics.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Editor/UnityEditor.HoloLens.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Editor/UnityEditor.HoloLens.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/Editor/UnityEditor.Purchasing.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/Editor/UnityEditor.Purchasing.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll into Unity Child Domain
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEditor.Graphs.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEditor.Graphs.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll into Unity Child Domain
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll into Unity Child Domain
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Core.dll (this message is harmless)
+Refreshing native plugins compatible for Editor in 0.37 ms, found 2 plugins.
+Preloading 1 native plugins for Editor in 0.34 ms.
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Mono.Cecil.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.SerializationLogic.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.DataContract.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/UnityScript.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/ICSharpCode.NRefactory.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Xml.Linq.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.IvyParser.dll (this message is harmless)
+Forcing SerializationMode.ForceText and Visible Meta Files
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+WWTK.SimpleBuildSetup:Run() (at Assets/Editor/SimpleBuildSetup.cs:15)
+WWTK.SimpleBuildSetup:.cctor() (at Assets/Editor/SimpleBuildSetup.cs:11)
+System.Runtime.CompilerServices.RuntimeHelpers:RunClassConstructor(IntPtr)
+System.Runtime.CompilerServices.RuntimeHelpers:RunClassConstructor(RuntimeTypeHandle) (at /Users/builduser/buildslave/mono/build/mcs/class/corlib/System.Runtime.CompilerServices/RuntimeHelpers.cs:101)
+UnityEditor.EditorAssemblies:ProcessEditorInitializeOnLoad(Type) (at /Users/builduser/buildslave/unity/build/Editor/Mono/EditorAssemblies.cs:136)
+UnityEditor.EditorAssemblies:ProcessInitializeOnLoadAttributes() (at /Users/builduser/buildslave/unity/build/Editor/Mono/EditorAssemblies.cs:162)
+ 
+(Filename: Assets/Editor/SimpleBuildSetup.cs Line: 15)
+
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Web.dll (this message is harmless)
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.iOS.Extensions.Xcode.dll (this message is harmless)
+Mono: successfully reloaded assembly
+- Completed reload, in  0.557 seconds
+Initializing Unity.PackageManager (PackageManager) v5.6.1 for Unity v5.6.1f1
+Setting Standalone:StandaloneOSXIntel v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport
+Setting Advertisements v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements
+  UnityEngine.Advertisements.dll (Extension) GUID: 739bbd9f364b4268874f9fd86ab3beef
+  Editor/UnityEditor.Advertisements.dll (Extension) GUID: 97decbdab0634cdd991f8d23ddf0dead
+Setting GUISystem v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem
+  UnityEngine.UI.dll (Extension) GUID: f5f67c52d1564df4a8936ccd202a3bd8
+  Standalone/UnityEngine.UI.dll (Extension) GUID: f70555f144d8491a825f0804e09c671c
+  Editor/UnityEditor.UI.dll (Extension) GUID: 80a3616ca19596e4da0f10f14d241e9f
+Setting UNetHLAPI v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking
+  UnityEngine.Networking.dll (Extension) GUID: 870353891bb340e2b2a9c8707e7419ba
+  Standalone/UnityEngine.Networking.dll (Extension) GUID: dc443db3e92b4983b9738c1131f555cb
+  Editor/UnityEditor.Networking.dll (Extension) GUID: 5f32cd94baa94578a686d4b9d6b660f7
+Setting TestRunner v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner
+  Editor/UnityEditor.TestRunner.dll (Extension) GUID: 4113173d5e95493ab8765d7b08371de4
+  UnityEngine.TestRunner.dll (Extension) GUID: 53ebcfaa2e1e4e2dbc85882cd5a73fa1
+  nunit.framework.dll (Extension) GUID: 6abf4b4cbfd0454e850ffc1ec9140b58
+  standalone/nunit.framework.dll (Extension) GUID: 4277762b3c154fab9f2e968e868bbbd7
+  portable/nunit.framework.dll (Extension) GUID: 405b9b51bb344a128608d968297df79c
+Setting TreeEditor v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TreeEditor
+  Editor/UnityEditor.TreeEditor.dll (Extension) GUID: adebbd281f1a4ef3a30be7f21937e02f
+Setting UnityAnalytics v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics
+  UnityEngine.Analytics.dll (Extension) GUID: 852E56802EB941638ACBB491814497B0
+  Editor/UnityEditor.Analytics.dll (Extension) GUID: 86f4de9468454445ac2f39e207fafa3a
+Setting UnityHoloLens v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens
+  Editor/UnityEditor.HoloLens.dll (Extension) GUID: 12fd8a0055b84bb59e84c9835a37e333
+  Runtime/UnityEngine.HoloLens.dll (Extension) GUID: f7b54ff4a43d4fcf81b4538b678e0bcc
+  RuntimeEditor/UnityEngine.HoloLens.dll (Extension) GUID: 1c6d1fbb51834b64847b1b73a75bfc77
+Setting UnityPurchasing v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing
+  UnityEngine.Purchasing.dll (Extension) GUID: 8E0CD8ED44D4412CBE0642067ABC9E44
+  Editor/UnityEditor.Purchasing.dll (Extension) GUID: 8382B2BB260241859771B69B7F377A8D
+Setting UnityVR v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR
+  Editor/UnityEditor.VR.dll (Extension) GUID: 4ba2329b63d54f0187bcaa12486b1b0f
+  Runtime/UnityEngine.VR.dll (Extension) GUID: 6cdf1e5c78d14720aaadccd4C792df96
+  RuntimeEditor/UnityEngine.VR.dll (Extension) GUID: 307433eba81a469ab1e2084d52d1a5a2
+Reloading assemblies after script compilation.
+Begin MonoManager ReloadAssembly
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEngine.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEditor.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.Locator.dll (this message is harmless)
+Non platform assembly: /Users/lacostej/Code/WWTK/FastGame/examples/Example2/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll (this message is harmless)
+Loading /Users/lacostej/Code/WWTK/FastGame/examples/Example2/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll into Unity Child Domain
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/PackageManager/Unity/PackageManager/5.6.1/Unity.PackageManager.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/PackageManager/Unity/PackageManager/5.6.1/Unity.PackageManager.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/Editor/UnityEditor.TestRunner.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/Editor/UnityEditor.TestRunner.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/nunit.framework.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/nunit.framework.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/Editor/UnityEditor.Analytics.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/Editor/UnityEditor.Analytics.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Editor/UnityEditor.HoloLens.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Editor/UnityEditor.HoloLens.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/Editor/UnityEditor.Purchasing.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/Editor/UnityEditor.Purchasing.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll into Unity Child Domain
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEditor.Graphs.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEditor.Graphs.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll into Unity Child Domain
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll into Unity Child Domain
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Core.dll (this message is harmless)
+Refreshing native plugins compatible for Editor in 0.64 ms, found 2 plugins.
+Preloading 1 native plugins for Editor in 0.61 ms.
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Mono.Cecil.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.SerializationLogic.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.DataContract.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/UnityScript.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/ICSharpCode.NRefactory.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Xml.Linq.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.IvyParser.dll (this message is harmless)
+Forcing SerializationMode.ForceText and Visible Meta Files
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+WWTK.SimpleBuildSetup:Run() (at Assets/Editor/SimpleBuildSetup.cs:15)
+WWTK.SimpleBuildSetup:.cctor() (at Assets/Editor/SimpleBuildSetup.cs:11)
+System.Runtime.CompilerServices.RuntimeHelpers:RunClassConstructor(IntPtr)
+System.Runtime.CompilerServices.RuntimeHelpers:RunClassConstructor(RuntimeTypeHandle) (at /Users/builduser/buildslave/mono/build/mcs/class/corlib/System.Runtime.CompilerServices/RuntimeHelpers.cs:101)
+UnityEditor.EditorAssemblies:ProcessEditorInitializeOnLoad(Type) (at /Users/builduser/buildslave/unity/build/Editor/Mono/EditorAssemblies.cs:136)
+UnityEditor.EditorAssemblies:ProcessInitializeOnLoadAttributes() (at /Users/builduser/buildslave/unity/build/Editor/Mono/EditorAssemblies.cs:162)
+ 
+(Filename: Assets/Editor/SimpleBuildSetup.cs Line: 15)
+
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Web.dll (this message is harmless)
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.iOS.Extensions.Xcode.dll (this message is harmless)
+Mono: successfully reloaded assembly
+- Completed reload, in  0.494 seconds
+Initializing Unity.PackageManager (PackageManager) v5.6.1 for Unity v5.6.1f1
+Setting Standalone:StandaloneOSXIntel v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport
+Setting Advertisements v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements
+  UnityEngine.Advertisements.dll (Extension) GUID: 739bbd9f364b4268874f9fd86ab3beef
+  Editor/UnityEditor.Advertisements.dll (Extension) GUID: 97decbdab0634cdd991f8d23ddf0dead
+Setting GUISystem v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem
+  UnityEngine.UI.dll (Extension) GUID: f5f67c52d1564df4a8936ccd202a3bd8
+  Standalone/UnityEngine.UI.dll (Extension) GUID: f70555f144d8491a825f0804e09c671c
+  Editor/UnityEditor.UI.dll (Extension) GUID: 80a3616ca19596e4da0f10f14d241e9f
+Setting UNetHLAPI v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking
+  UnityEngine.Networking.dll (Extension) GUID: 870353891bb340e2b2a9c8707e7419ba
+  Standalone/UnityEngine.Networking.dll (Extension) GUID: dc443db3e92b4983b9738c1131f555cb
+  Editor/UnityEditor.Networking.dll (Extension) GUID: 5f32cd94baa94578a686d4b9d6b660f7
+Setting TestRunner v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner
+  Editor/UnityEditor.TestRunner.dll (Extension) GUID: 4113173d5e95493ab8765d7b08371de4
+  UnityEngine.TestRunner.dll (Extension) GUID: 53ebcfaa2e1e4e2dbc85882cd5a73fa1
+  nunit.framework.dll (Extension) GUID: 6abf4b4cbfd0454e850ffc1ec9140b58
+  standalone/nunit.framework.dll (Extension) GUID: 4277762b3c154fab9f2e968e868bbbd7
+  portable/nunit.framework.dll (Extension) GUID: 405b9b51bb344a128608d968297df79c
+Setting TreeEditor v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TreeEditor
+  Editor/UnityEditor.TreeEditor.dll (Extension) GUID: adebbd281f1a4ef3a30be7f21937e02f
+Setting UnityAnalytics v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics
+  UnityEngine.Analytics.dll (Extension) GUID: 852E56802EB941638ACBB491814497B0
+  Editor/UnityEditor.Analytics.dll (Extension) GUID: 86f4de9468454445ac2f39e207fafa3a
+Setting UnityHoloLens v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens
+  Editor/UnityEditor.HoloLens.dll (Extension) GUID: 12fd8a0055b84bb59e84c9835a37e333
+  Runtime/UnityEngine.HoloLens.dll (Extension) GUID: f7b54ff4a43d4fcf81b4538b678e0bcc
+  RuntimeEditor/UnityEngine.HoloLens.dll (Extension) GUID: 1c6d1fbb51834b64847b1b73a75bfc77
+Setting UnityPurchasing v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing
+  UnityEngine.Purchasing.dll (Extension) GUID: 8E0CD8ED44D4412CBE0642067ABC9E44
+  Editor/UnityEditor.Purchasing.dll (Extension) GUID: 8382B2BB260241859771B69B7F377A8D
+Setting UnityVR v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR
+  Editor/UnityEditor.VR.dll (Extension) GUID: 4ba2329b63d54f0187bcaa12486b1b0f
+  Runtime/UnityEngine.VR.dll (Extension) GUID: 6cdf1e5c78d14720aaadccd4C792df96
+  RuntimeEditor/UnityEngine.VR.dll (Extension) GUID: 307433eba81a469ab1e2084d52d1a5a2
+Registering platform support modules:
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Drawing.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Data.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/Boo.Lang.Compiler.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/Boo.Lang.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/Boo.Lang.Parser.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/UnityScript.Lang.dll (this message is harmless)
+Registered platform support modules in: 0.095071s.
+Native extension for OSXStandalone target not found
+Native extension for WindowsStandalone target not found
+Native extension for LinuxStandalone target not found
+Native extension for WebGL target not found
+Native extension for Android target not found
+Validating Project structure ... 0.000137 seconds.
+Refresh: detecting if any assets need to be imported or removed ... Refresh: elapses 0.000550 seconds (Nothing changed)
+Warming cache for 61 main assets: 0.000265 seconds elapsed
+Initializing Unity extensions:
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Editor/UnityEditor.HoloLens.dll'  GUID: 12fd8a0055b84bb59e84c9835a37e333
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll'  GUID: 852e56802eb941638acbb491814497b0
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/portable/nunit.framework.dll'  GUID: 405b9b51bb344a128608d968297df79c
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Standalone/UnityEngine.UI.dll'  GUID: f70555f144d8491a825f0804e09c671c
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll'  GUID: f5f67c52d1564df4a8936ccd202a3bd8
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/Standalone/UnityEngine.Networking.dll'  GUID: dc443db3e92b4983b9738c1131f555cb
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll'  GUID: 5f32cd94baa94578a686d4b9d6b660f7
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/Editor/UnityEditor.Analytics.dll'  GUID: 86f4de9468454445ac2f39e207fafa3a
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Runtime/UnityEngine.HoloLens.dll'  GUID: f7b54ff4a43d4fcf81b4538b678e0bcc
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll'  GUID: adebbd281f1a4ef3a30be7f21937e02f
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll'  GUID: 870353891bb340e2b2a9c8707e7419ba
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll'  GUID: 53ebcfaa2e1e4e2dbc85882cd5a73fa1
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll'  GUID: 97decbdab0634cdd991f8d23ddf0dead
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/standalone/nunit.framework.dll'  GUID: 4277762b3c154fab9f2e968e868bbbd7
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll'  GUID: 4ba2329b63d54f0187bcaa12486b1b0f
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/Editor/UnityEditor.Purchasing.dll'  GUID: 8382b2bb260241859771b69b7f377a8d
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll'  GUID: 1c6d1fbb51834b64847b1b73a75bfc77
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll'  GUID: 307433eba81a469ab1e2084d52d1a5a2
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/nunit.framework.dll'  GUID: 6abf4b4cbfd0454e850ffc1ec9140b58
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Runtime/UnityEngine.VR.dll'  GUID: 6cdf1e5c78d14720aaadccd4c792df96
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll'  GUID: 80a3616ca19596e4da0f10f14d241e9f
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/Editor/UnityEditor.TestRunner.dll'  GUID: 4113173d5e95493ab8765d7b08371de4
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll'  GUID: 8e0cd8ed44d4412cbe0642067abc9e44
+ '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll'  GUID: 739bbd9f364b4268874f9fd86ab3beef
+Unloading 85 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 218.0 MB.
+System memory in use after: 218.1 MB.
+
+Unloading 56 unused Assets to reduce memory usage. Loaded Objects now: 564.
+Total: 0.931541 ms (FindLiveObjects: 0.082952 ms CreateObjectMapping: 0.017814 ms MarkObjects: 0.807836 ms  DeleteObjects: 0.021520 ms)
+
+Building Example2
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+U3d.EditorRun:Build() (at Assets/Editor/EditorRun.cs:11)
+ 
+(Filename: Assets/Editor/EditorRun.cs Line: 11)
+
+Updating ProjectSettings/EditorSettings.asset - GUID: 0000000000000000c000000000000000...
+ done. [Time: 40.715050 ms] 
+Refreshing native plugins compatible for Editor in 0.35 ms, found 2 plugins.
+Preloading 1 native plugins for Editor in 0.33 ms.
+
+----- Total AssetImport time: 0.119298s, AssetImport time: 0.065810s, Asset hashing: 0.000000s [0 B, 0.000000 mb/s]
+
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.CecilTools.dll (this message is harmless)
+BuildPlayer: start building target 27
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/Editor/UnityEditor.TestRunner.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/nunit.framework.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/portable/nunit.framework.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/standalone/nunit.framework.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/Editor/UnityEditor.Analytics.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Editor/UnityEditor.HoloLens.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Runtime/UnityEngine.HoloLens.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/Editor/UnityEditor.Purchasing.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Runtime/UnityEngine.VR.dll' because we're compiling for Standalone:MacStandaloneSupport
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll' because we're compiling for Standalone:MacStandaloneSupport
+DisplayProgressbar: Building Player
+Packing sprites:
+[     28 MB ]- Skipping packing - Sprite Packer is off.
+[     28 MB ]Opening scene 'Assets/Scene.unity'
+Load scene 'Assets/Scene.unity' time: 0.019386 ms 
+Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 240.9 MB.
+System memory in use after: 241.0 MB.
+
+Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 2513.
+Total: 4.682285 ms (FindLiveObjects: 0.223597 ms CreateObjectMapping: 0.025926 ms MarkObjects: 3.751506 ms  DeleteObjects: 0.679845 ms)
+
+[00:00:00] Enlighten: Precompute started.
+[PathTracer][LP] Issuing deduplication and tetrahedralization job. Combined: 80257199cfa681a16be5e09b3c2208f4, tetrahedralized probes: 00000000000000000000000000000000, non-tetrahedralized probes: 00000000000000000000000000000000, dependencies: 00000000000000000000000000000000
+[00:00:00] Enlighten: Finished 1 Layout Systems job (0.00s execute, 0.00s integrate, 0.01s wallclock)
+[PathTracer][LP] Integrating deduplicated and tetrahedralized probes for hash 80257199cfa681a16be5e09b3c2208f4.
+[00:00:00] Enlighten: Finished 1 Tetrahedralize Probes job (0.00s execute, 0.00s integrate, 0.01s wallclock)
+[00:00:00] Enlighten: Precompute took 0.022454 seconds.
+Enlighten scene contents:   0 geometries.   0 instances.   0 systems.   0 probe groups.   0 cube maps. Scene is up-to-date.
+[00:00:00] Enlighten: Bake started.
+Launched and connected shader compiler UnityShaderCompiler after 0.06 seconds
+Setting up 4 worker threads for Enlighten.
+  Thread -> id: 7000024ea000 -> priority: 1 
+  Thread -> id: 70000256d000 -> priority: 1 
+  Thread -> id: 7000025f0000 -> priority: 1 
+  Thread -> id: 700002673000 -> priority: 1 
+[00:00:00] Enlighten: Finished 1 Bake Runtime job (0.03s execute, 0.00s integrate, 0.12s wallclock)
+[00:00:00] Enlighten: Bake took 0.119501 seconds.
+[PathTracer] Lightmap reset.
+[PathTracer][LP] Light probes reset.
+[PathTracer] building lightmap data asset.
+[00:00:00] Enlighten: Reflection Probes started.
+[00:00:00] Enlighten: Finished 1 Ambient Probes job (0.00s execute, 0.00s integrate, 0.01s wallclock)
+WARNING: BC6H/BC7 texture format is not supported, decompressing texture
+[00:00:00] Enlighten: Finished 1 Reflection Probes job (0.00s execute, 0.01s integrate, 0.02s wallclock)
+
+
+Mono dependencies included in the build
+Dependency assembly - Mono.Security.dll
+Dependency assembly - System.Core.dll
+Dependency assembly - System.dll
+Dependency assembly - mscorlib.dll
+Dependency assembly - UnityEngine.UI.dll
+Dependency assembly - UnityEngine.Networking.dll
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 243.6 MB.
+System memory in use after: 243.6 MB.
+
+Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2502.
+Total: 4.852812 ms (FindLiveObjects: 0.333685 ms CreateObjectMapping: 0.040919 ms MarkObjects: 3.829577 ms  DeleteObjects: 0.646777 ms)
+
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 243.5 MB.
+System memory in use after: 243.6 MB.
+
+Unloading 0 unused Assets to reduce memory usage. Loaded Objects now: 2515.
+Total: 5.303880 ms (FindLiveObjects: 0.248492 ms CreateObjectMapping: 0.033369 ms MarkObjects: 5.011693 ms  DeleteObjects: 0.009053 ms)
+
+Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 267.1 MB.
+System memory in use after: 243.8 MB.
+
+Unloading 128 unused Assets to reduce memory usage. Loaded Objects now: 2501.
+Total: 23.340166 ms (FindLiveObjects: 0.189848 ms CreateObjectMapping: 0.029768 ms MarkObjects: 3.575009 ms  DeleteObjects: 19.544535 ms)
+
+Launched and connected shader compiler UnityShaderCompiler after 0.06 seconds
+Launched and connected shader compiler UnityShaderCompiler after 0.06 seconds
+Launched and connected shader compiler UnityShaderCompiler after 0.05 seconds
+Launched and connected shader compiler UnityShaderCompiler after 0.05 seconds
+Launched and connected shader compiler UnityShaderCompiler after 0.06 seconds
+Launched and connected shader compiler UnityShaderCompiler after 0.06 seconds
+Launched and connected shader compiler UnityShaderCompiler after 0.05 seconds
+
+Textures      0.0 kb	 nan% 
+Meshes        0.0 kb	 nan% 
+Animations    0.0 kb	 nan% 
+Sounds        0.0 kb	 nan% 
+Shaders       10.6 kb	 inf% 
+Other Assets  0.9 kb	 inf% 
+Levels        5.2 kb	 inf% 
+Scripts       501.0 kb	 inf% 
+Included DLLs 3.9 mb	 inf% 
+File headers  8.9 kb	 inf% 
+Complete size 0.0 kb	 nan% 
+
+Used Assets and files from the Resources folder, sorted by uncompressed size:
+ 11.1 kb	 inf% Resources/unity_builtin_extra
+ 4.1 kb	 inf% /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll
+ 4.1 kb	 inf% /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Standalone/UnityEngine.UI.dll
+ 1.8 kb	 inf% /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll
+ 1.8 kb	 inf% /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/Standalone/UnityEngine.Networking.dll
+ 0.7 kb	 inf% /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll
+ 0.7 kb	 inf% /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Runtime/UnityEngine.HoloLens.dll
+ 0.3 kb	 inf% /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll
+ 0.3 kb	 inf% /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll
+ 0.1 kb	 inf% /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll
+ 0.1 kb	 inf% /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll
+executing: /Users/lacostej/Code/WWTK/FastGame/examples/Example2/Assets/Editor/PostprocessBuildPlayer_log.sh /Users/lacostej/Code/WWTK/FastGame/examples/Example2/target/Example2.app StandaloneOSXIntel64
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+PostprocessBuildPlayer:OnPostprocessBuildPlayer(BuildTarget, String) (at Assets/Editor/PostprocessBuildPlayer.cs:50)
+System.Reflection.MonoMethod:InternalInvoke(Object, Object[], Exception&)
+System.Reflection.MonoMethod:Invoke(Object, BindingFlags, Binder, Object[], CultureInfo) (at /Users/builduser/buildslave/mono/build/mcs/class/corlib/System.Reflection/MonoMethod.cs:222)
+System.Reflection.MethodBase:Invoke(Object, Object[]) (at /Users/builduser/buildslave/mono/build/mcs/class/corlib/System.Reflection/MethodBase.cs:115)
+UnityEditor.Build.AttributeCallbackWrapper:OnPostprocessBuild(BuildTarget, String) (at /Users/builduser/buildslave/unity/build/Editor/Mono/BuildPipeline/BuildPipelineInterfaces.cs:65)
+UnityEditor.Build.BuildPipelineInterfaces:OnBuildPostProcess(BuildTarget, String, Boolean) (at /Users/builduser/buildslave/unity/build/Editor/Mono/BuildPipeline/BuildPipelineInterfaces.cs:274)
+UnityEditor.BuildPipeline:BuildPlayerInternalNoCheck(String[], String, String, BuildTargetGroup, BuildTarget, BuildOptions, Boolean)
+UnityEditor.BuildPipeline:BuildPlayerInternal(String[], String, String, BuildTargetGroup, BuildTarget, BuildOptions) (at /Users/builduser/buildslave/unity/build/artifacts/generated/common/editor/BuildPipelineBindings.gen.cs:308)
+UnityEditor.BuildPipeline:BuildPlayer(String[], String, String, BuildTargetGroup, BuildTarget, BuildOptions) (at /Users/builduser/buildslave/unity/build/artifacts/generated/common/editor/BuildPipelineBindings.gen.cs:242)
+UnityEditor.BuildPipeline:BuildPlayer(BuildPlayerOptions) (at /Users/builduser/buildslave/unity/build/artifacts/generated/common/editor/BuildPipelineBindings.gen.cs:205)
+UnityEditor.BuildPipeline:BuildPlayer(EditorBuildSettingsScene[], String, BuildTarget, BuildOptions) (at /Users/builduser/buildslave/unity/build/artifacts/generated/common/editor/BuildPipelineBindings.gen.cs:186)
+U3d.EditorRun:BuildPlayer(EditorBuildSettingsScene[], String, BuildTarget, BuildOptions) (at Assets/Editor/EditorRun.cs:18)
+U3d.EditorRun:Build() (at Assets/Editor/EditorRun.cs:13)
+ 
+(Filename: Assets/Editor/PostprocessBuildPlayer.cs Line: 50)
+
+** output: 
+/Users/lacostej/Code/WWTK/FastGame/examples/Example2/Assets/Editor/PostprocessBuildPlayer_log.sh
+
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+PostprocessBuildPlayer:OnPostprocessBuildPlayer(BuildTarget, String) (at Assets/Editor/PostprocessBuildPlayer.cs:81)
+System.Reflection.MonoMethod:InternalInvoke(Object, Object[], Exception&)
+System.Reflection.MonoMethod:Invoke(Object, BindingFlags, Binder, Object[], CultureInfo) (at /Users/builduser/buildslave/mono/build/mcs/class/corlib/System.Reflection/MonoMethod.cs:222)
+System.Reflection.MethodBase:Invoke(Object, Object[]) (at /Users/builduser/buildslave/mono/build/mcs/class/corlib/System.Reflection/MethodBase.cs:115)
+UnityEditor.Build.AttributeCallbackWrapper:OnPostprocessBuild(BuildTarget, String) (at /Users/builduser/buildslave/unity/build/Editor/Mono/BuildPipeline/BuildPipelineInterfaces.cs:65)
+UnityEditor.Build.BuildPipelineInterfaces:OnBuildPostProcess(BuildTarget, String, Boolean) (at /Users/builduser/buildslave/unity/build/Editor/Mono/BuildPipeline/BuildPipelineInterfaces.cs:274)
+UnityEditor.BuildPipeline:BuildPlayerInternalNoCheck(String[], String, String, BuildTargetGroup, BuildTarget, BuildOptions, Boolean)
+UnityEditor.BuildPipeline:BuildPlayerInternal(String[], String, String, BuildTargetGroup, BuildTarget, BuildOptions) (at /Users/builduser/buildslave/unity/build/artifacts/generated/common/editor/BuildPipelineBindings.gen.cs:308)
+UnityEditor.BuildPipeline:BuildPlayer(String[], String, String, BuildTargetGroup, BuildTarget, BuildOptions) (at /Users/builduser/buildslave/unity/build/artifacts/generated/common/editor/BuildPipelineBindings.gen.cs:242)
+UnityEditor.BuildPipeline:BuildPlayer(BuildPlayerOptions) (at /Users/builduser/buildslave/unity/build/artifacts/generated/common/editor/BuildPipelineBindings.gen.cs:205)
+UnityEditor.BuildPipeline:BuildPlayer(EditorBuildSettingsScene[], String, BuildTarget, BuildOptions) (at /Users/builduser/buildslave/unity/build/artifacts/generated/common/editor/BuildPipelineBindings.gen.cs:186)
+U3d.EditorRun:BuildPlayer(EditorBuildSettingsScene[], String, BuildTarget, BuildOptions) (at Assets/Editor/EditorRun.cs:18)
+U3d.EditorRun:Build() (at Assets/Editor/EditorRun.cs:13)
+ 
+(Filename: Assets/Editor/PostprocessBuildPlayer.cs Line: 81)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 244.4 MB.
+System memory in use after: 244.5 MB.
+
+Unloading 11 unused Assets to reduce memory usage. Loaded Objects now: 2516.
+Total: 5.814057 ms (FindLiveObjects: 0.241823 ms CreateObjectMapping: 0.057115 ms MarkObjects: 4.597988 ms  DeleteObjects: 0.915559 ms)
+
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Standalone/UnityEngine.UI.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/Standalone/UnityEngine.Networking.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/standalone/nunit.framework.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Runtime/UnityEngine.HoloLens.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Runtime/UnityEngine.VR.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Standalone/UnityEngine.UI.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/Standalone/UnityEngine.Networking.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/standalone/nunit.framework.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Runtime/UnityEngine.HoloLens.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Runtime/UnityEngine.VR.dll' because we're compiling for Editor:Editor
+- starting compile Library/ScriptAssemblies/Assembly-CSharp-Editor.dll, for buildtarget 27
+Load scene 'Temp/__Backupscenes/0.backup' time: 0.061842 ms 
+Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
+[00:00:00] Enlighten: Reflection Probes took 1.844441 seconds. Cancelled, so not done yet.
+System memory in use before: 244.4 MB.
+System memory in use after: 244.6 MB.
+
+Unloading 0 unused Assets to reduce memory usage. Loaded Objects now: 2505.
+Total: 6.292026 ms (FindLiveObjects: 0.298123 ms CreateObjectMapping: 0.060877 ms MarkObjects: 5.916989 ms  DeleteObjects: 0.013944 ms)
+
+
+*** Completed 'Build.Player.MacStandaloneSupport' in 3 seconds (2850 ms)
+
+- Finished compile Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+WeaveUnetFromEditor Temp/Assembly-CSharp-Editor.dll
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.UNetWeaver.dll (this message is harmless)
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Standalone/UnityEngine.UI.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/Standalone/UnityEngine.Networking.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/standalone/nunit.framework.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Runtime/UnityEngine.HoloLens.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll' because we're compiling for Editor:Editor
+    Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Runtime/UnityEngine.VR.dll' because we're compiling for Editor:Editor
+WeaveAssemblies unityPath= /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEngine.dll
+WeaveAssemblies unetPath= /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Mono.Cecil.Pdb.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Mono.Cecil.Mdb.dll (this message is harmless)
+Begin MonoManager ReloadAssembly
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEngine.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEditor.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.Locator.dll (this message is harmless)
+Non platform assembly: /Users/lacostej/Code/WWTK/FastGame/examples/Example2/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll (this message is harmless)
+Loading /Users/lacostej/Code/WWTK/FastGame/examples/Example2/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll into Unity Child Domain
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/PackageManager/Unity/PackageManager/5.6.1/Unity.PackageManager.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/PackageManager/Unity/PackageManager/5.6.1/Unity.PackageManager.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/Editor/UnityEditor.TestRunner.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/Editor/UnityEditor.TestRunner.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/nunit.framework.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/nunit.framework.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/Editor/UnityEditor.Analytics.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/Editor/UnityEditor.Analytics.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Editor/UnityEditor.HoloLens.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Editor/UnityEditor.HoloLens.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/Editor/UnityEditor.Purchasing.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/Editor/UnityEditor.Purchasing.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.VR.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll into Unity Child Domain
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEditor.Graphs.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEditor.Graphs.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll into Unity Child Domain
+Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll into Unity Child Domain
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll (this message is harmless)
+Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll into Unity Child Domain
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Core.dll (this message is harmless)
+Refreshing native plugins compatible for Editor in 0.51 ms, found 2 plugins.
+Preloading 1 native plugins for Editor in 0.39 ms.
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Mono.Cecil.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.SerializationLogic.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.DataContract.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/UnityScript.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/ICSharpCode.NRefactory.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Xml.Linq.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.IvyParser.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Web.dll (this message is harmless)
+Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.iOS.Extensions.Xcode.dll (this message is harmless)
+Forcing SerializationMode.ForceText and Visible Meta Files
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+WWTK.SimpleBuildSetup:Run() (at Assets/Editor/SimpleBuildSetup.cs:15)
+WWTK.SimpleBuildSetup:.cctor() (at Assets/Editor/SimpleBuildSetup.cs:11)
+System.Runtime.CompilerServices.RuntimeHelpers:RunClassConstructor(IntPtr)
+System.Runtime.CompilerServices.RuntimeHelpers:RunClassConstructor(RuntimeTypeHandle) (at /Users/builduser/buildslave/mono/build/mcs/class/corlib/System.Runtime.CompilerServices/RuntimeHelpers.cs:101)
+UnityEditor.EditorAssemblies:ProcessEditorInitializeOnLoad(Type) (at /Users/builduser/buildslave/unity/build/Editor/Mono/EditorAssemblies.cs:136)
+UnityEditor.EditorAssemblies:ProcessInitializeOnLoadAttributes() (at /Users/builduser/buildslave/unity/build/Editor/Mono/EditorAssemblies.cs:162)
+ 
+(Filename: Assets/Editor/SimpleBuildSetup.cs Line: 15)
+
+Mono: successfully reloaded assembly
+Refreshing native plugins compatible for Editor in 0.60 ms, found 2 plugins.
+Preloading 1 native plugins for Editor in 0.49 ms.
+
+----- Total AssetImport time: 0.088096s, AssetImport time: 0.000000s, Asset hashing: 0.000000s [0 B, 0.000000 mb/s]
+
+- Completed reload, in  0.928 seconds
+Initializing Unity.PackageManager (PackageManager) v5.6.1 for Unity v5.6.1f1
+Setting Standalone:StandaloneOSXIntel v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport
+Setting Advertisements v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements
+  UnityEngine.Advertisements.dll (Extension) GUID: 739bbd9f364b4268874f9fd86ab3beef
+  Editor/UnityEditor.Advertisements.dll (Extension) GUID: 97decbdab0634cdd991f8d23ddf0dead
+Setting GUISystem v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem
+  UnityEngine.UI.dll (Extension) GUID: f5f67c52d1564df4a8936ccd202a3bd8
+  Standalone/UnityEngine.UI.dll (Extension) GUID: f70555f144d8491a825f0804e09c671c
+  Editor/UnityEditor.UI.dll (Extension) GUID: 80a3616ca19596e4da0f10f14d241e9f
+Setting UNetHLAPI v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Networking
+  UnityEngine.Networking.dll (Extension) GUID: 870353891bb340e2b2a9c8707e7419ba
+  Standalone/UnityEngine.Networking.dll (Extension) GUID: dc443db3e92b4983b9738c1131f555cb
+  Editor/UnityEditor.Networking.dll (Extension) GUID: 5f32cd94baa94578a686d4b9d6b660f7
+Setting TestRunner v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner
+  Editor/UnityEditor.TestRunner.dll (Extension) GUID: 4113173d5e95493ab8765d7b08371de4
+  UnityEngine.TestRunner.dll (Extension) GUID: 53ebcfaa2e1e4e2dbc85882cd5a73fa1
+  nunit.framework.dll (Extension) GUID: 6abf4b4cbfd0454e850ffc1ec9140b58
+  standalone/nunit.framework.dll (Extension) GUID: 4277762b3c154fab9f2e968e868bbbd7
+  portable/nunit.framework.dll (Extension) GUID: 405b9b51bb344a128608d968297df79c
+Setting TreeEditor v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TreeEditor
+  Editor/UnityEditor.TreeEditor.dll (Extension) GUID: adebbd281f1a4ef3a30be7f21937e02f
+Setting UnityAnalytics v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics
+  UnityEngine.Analytics.dll (Extension) GUID: 852E56802EB941638ACBB491814497B0
+  Editor/UnityEditor.Analytics.dll (Extension) GUID: 86f4de9468454445ac2f39e207fafa3a
+Setting UnityHoloLens v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens
+  Editor/UnityEditor.HoloLens.dll (Extension) GUID: 12fd8a0055b84bb59e84c9835a37e333
+  Runtime/UnityEngine.HoloLens.dll (Extension) GUID: f7b54ff4a43d4fcf81b4538b678e0bcc
+  RuntimeEditor/UnityEngine.HoloLens.dll (Extension) GUID: 1c6d1fbb51834b64847b1b73a75bfc77
+Setting UnityPurchasing v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing
+  UnityEngine.Purchasing.dll (Extension) GUID: 8E0CD8ED44D4412CBE0642067ABC9E44
+  Editor/UnityEditor.Purchasing.dll (Extension) GUID: 8382B2BB260241859771B69B7F377A8D
+Setting UnityVR v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR
+  Editor/UnityEditor.VR.dll (Extension) GUID: 4ba2329b63d54f0187bcaa12486b1b0f
+  Runtime/UnityEngine.VR.dll (Extension) GUID: 6cdf1e5c78d14720aaadccd4C792df96
+  RuntimeEditor/UnityEngine.VR.dll (Extension) GUID: 307433eba81a469ab1e2084d52d1a5a2
+Registering platform support modules:
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Drawing.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Data.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/Boo.Lang.Compiler.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/Boo.Lang.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/Boo.Lang.Parser.dll (this message is harmless)
+Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/UnityScript.Lang.dll (this message is harmless)
+Registered platform support modules in: 0.102543s.
+Native extension for OSXStandalone target not found
+Native extension for WindowsStandalone target not found
+Native extension for LinuxStandalone target not found
+Native extension for WebGL target not found
+Native extension for Android target not found
+Batchmode quit successfully invoked - shutting down!
+Refresh: detecting if any assets need to be imported or removed ... Refresh: elapses 0.000581 seconds (Nothing changed)
+Updating ProjectSettings/ProjectSettings.asset - GUID: 00000000000000004000000000000000...
+ done. [Time: 36.657764 ms] 
+Updating ProjectSettings/EditorSettings.asset - GUID: 0000000000000000c000000000000000...
+ done. [Time: 2.038806 ms] 
+Refreshing native plugins compatible for Editor in 0.63 ms, found 2 plugins.
+Preloading 1 native plugins for Editor in 0.42 ms.
+
+----- Total AssetImport time: 0.131493s, AssetImport time: 0.069220s, Asset hashing: 0.000000s [0 B, 0.000000 mb/s]
+
+Refresh: detecting if any assets need to be imported or removed ... Refresh: elapses 0.000678 seconds (Nothing changed)
+Cleanup mono

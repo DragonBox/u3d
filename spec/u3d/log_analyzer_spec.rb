@@ -65,6 +65,15 @@ describe U3d do
         expect(gen.keys.count).to be > 5
         expect(phases.keys).to eq ['JENKINS','INIT','COMPILER','ASSET']
       end
+
+      it "parses a simple file" do
+        log = File.expand_path('../../fixtures/simple_editor.log', __FILE__)
+        analyzer = U3d::LogAnalyzer.new
+        File.open(log, 'r') do |f|
+          f.readlines.each { |l| analyzer.parse_line l }
+        end
+        # FIXME we're not really testing anything here
+      end
     end
   end
 end
