@@ -8,15 +8,25 @@ U3d provides help for running and installing unity from CLI. Available commands 
 
 * `u3d available`: List download-ready versions of Unity3d
 
+![u3d available](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_available.png)
+
 * `u3d install`: Download (and install) Unity3D packages
 
+![u3d install](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_install.png)
+
 * `u3d list`: List installed versions of Unity3d
+
+![u3d list](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_list.png)
 
 * `u3d local_install`: Install downloaded version of Unity3d
 
 * `u3d run`: Run Unity, and parses its output through u3d's log prettifier
 
+![u3d run](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_run.png)
+
 * `u3d prettify`: Prettify a saved logfile
+
+  (see above :))
 
 ## Installation
 
