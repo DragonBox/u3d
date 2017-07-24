@@ -94,7 +94,7 @@ module U3dCore
               UI.command_output(line)
             end
           end
-          raise "Exit status: #{status}".red if status.nonzero? && !status.nil?
+          raise "Exit status: #{status}".red if !status.nil? && status.nonzero?
         rescue => ex
           # This could happen
           # * if the status is failed

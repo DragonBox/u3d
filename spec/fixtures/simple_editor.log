@@ -1,18 +1,37 @@
-2017-07-22 14:49:53.653 Unity[5079:1495272] NSDocumentController Info.plist warning: The values of CFBundleTypeRole entries must be 'Editor', 'Viewer', 'None', or 'Shell'.
+setrlimit() failed with errno=1
+Initialize mono
+Mono path[0] = '/Applications/Unity_5.6.1f1/Unity.app/Contents/Managed'
+Mono path[1] = '/Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0'
+Mono config path = '/Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,defer=y,address=0.0.0.0:56915
+2017-07-24 10:32:33.207 Unity[11915:518874] NSDocumentController Info.plist warning: The values of CFBundleTypeRole entries must be 'Editor', 'Viewer', 'None', or 'Shell'.
 ...300157 bytes written to /Users/lacostej/Library/Unity/Certificates/CACerts.pem
-Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools64/JobProcess
-Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
-Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
-Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
-Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
-Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
-Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
-Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
-Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
-  0
+
+LICENSE SYSTEM [2017724 10:32:33] Next license update check is after 2016-06-01T17:18:41
+
+DisplayProgressbar: Unity license
+
+ COMMAND LINE ARGUMENTS:
+/Applications/Unity_5.6.1f1/Unity.app/Contents/MacOS/Unity
+-executeMethod
+U3d.EditorRun.Build
+-quit
+-batchmode
+/Users/lacostej/Code/WWTK/FastGame/examples/Example2
+Loading GUID <-> Path mappings...0.000079 seconds
+Loading Asset Database...0.032529 seconds
+Audio: FMOD Profiler initialized on port 54900
+AssetDatabase consistency checks...0.068744 seconds
+Initialize engine version: 5.6.1f1 (2860b30f0b54)
+GfxDevice: creating device client; threaded=0
+GfxDevice: creating device client; threaded=0
+Renderer: AMD Radeon HD 6750M OpenGL Engine
+Vendor:   ATI Technologies Inc.
+Version:  4.1 ATI-1.42.15
+GLES:     0
  GL_ARB_blend_func_extended GL_ARB_draw_buffers_blend GL_ARB_draw_indirect GL_ARB_ES2_compatibility GL_ARB_explicit_attrib_location GL_ARB_gpu_shader5 GL_ARB_instanced_arrays GL_ARB_internalformat_query GL_ARB_occlusion_query2 GL_ARB_sample_shading GL_ARB_sampler_objects GL_ARB_separate_shader_objects GL_ARB_shader_bit_encoding GL_ARB_shader_subroutine GL_ARB_shading_language_include GL_ARB_tessellation_shader GL_ARB_texture_buffer_object_rgb32 GL_ARB_texture_cube_map_array GL_ARB_texture_gather GL_ARB_texture_query_lod GL_ARB_texture_rgb10_a2ui GL_ARB_texture_storage GL_ARB_texture_swizzle GL_ARB_timer_query GL_ARB_transform_feedback2 GL_ARB_transform_feedback3 GL_ARB_vertex_type_2_10_10_10_rev GL_ARB_viewport_array GL_EXT_debug_label GL_EXT_debug_marker GL_EXT_texture_compression_s3tc GL_EXT_texture_filter_anisotropic GL_EXT_texture_mirror_clamp GL_EXT_texture_sRGB_decode GL_APPLE_client_storage GL_APPLE_container_object_shareable GL_APPLE_flush_render GL_APPLE_object_purgeable GL_APPLE_rgb_422 GL_APPLE_ro
 w_bytes GL_APPLE_texture_range GL_ATI_texture_mirror_once GL_NV_texture_barrier
-OPENGL LOG: Creating OpenGL 4.1 graphics device ; Context level  <OpenGL 4.1> ; Context handle 268709888
+OPENGL LOG: Creating OpenGL 4.1 graphics device ; Context level  <OpenGL 4.1> ; Context handle 243694592
 Begin MonoManager ReloadAssembly
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEngine.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEditor.dll (this message is harmless)
@@ -65,7 +84,7 @@ Register platform support module: /Applications/Unity_5.6.1f1/PlaybackEngines/We
 Register platform support module: /Applications/Unity_5.6.1f1/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll
 Register platform support module: /Applications/Unity_5.6.1f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
 Register platform support module: /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll
-Registered in 0.001417 seconds.
+Registered in 0.007241 seconds.
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/PackageManager/Unity/PackageManager/5.6.1/Unity.PackageManager.dll (this message is harmless)
 Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/PackageManager/Unity/PackageManager/5.6.1/Unity.PackageManager.dll into Unity Child Domain
 Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll (this message is harmless)
@@ -112,8 +131,8 @@ Non platform assembly: /Applications/Unity_5.6.1f1/PlaybackEngines/WindowsStanda
 Loading /Applications/Unity_5.6.1f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll into Unity Child Domain
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll (this message is harmless)
 Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll into Unity Child Domain
-Refreshing native plugins compatible for Editor in 3.71 ms, found 2 plugins.
-Preloading 1 native plugins for Editor in 2.50 ms.
+Refreshing native plugins compatible for Editor in 6.28 ms, found 2 plugins.
+Preloading 1 native plugins for Editor in 4.93 ms.
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Mono.Cecil.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.SerializationLogic.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/UnityScript.dll (this message is harmless)
@@ -122,7 +141,7 @@ Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Web.dll (this message is harmless)
 Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.iOS.Extensions.Xcode.dll (this message is harmless)
 Mono: successfully reloaded assembly
-- Completed reload, in  0.799 seconds
+- Completed reload, in  1.741 seconds
 Registering platform support modules:
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Drawing.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Data.dll (this message is harmless)
@@ -131,7 +150,7 @@ Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/Boo.Lang.Parser.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/UnityScript.Lang.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/Mono.Security.dll (this message is harmless)
-Registered platform support modules in: 0.156293s.
+Registered platform support modules in: 0.275808s.
 Native extension for OSXStandalone target not found
 Native extension for WindowsStandalone target not found
 Native extension for LinuxStandalone target not found
@@ -142,7 +161,7 @@ Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityE
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/UnityEditor.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.Locator.dll (this message is harmless)
 Registering custom user dll's ...
-Registered in 0.000151 seconds.
+Registered in 0.000213 seconds.
 Non platform assembly: /Users/lacostej/Code/WWTK/FastGame/examples/Example2/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll (this message is harmless)
 Loading /Users/lacostej/Code/WWTK/FastGame/examples/Example2/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll into Unity Child Domain
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/PackageManager/Unity/PackageManager/5.6.1/Unity.PackageManager.dll (this message is harmless)
@@ -192,8 +211,8 @@ Loading /Applications/Unity_5.6.1f1/PlaybackEngines/WindowsStandaloneSupport/Uni
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll (this message is harmless)
 Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll into Unity Child Domain
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Core.dll (this message is harmless)
-Refreshing native plugins compatible for Editor in 0.37 ms, found 2 plugins.
-Preloading 1 native plugins for Editor in 0.34 ms.
+Refreshing native plugins compatible for Editor in 0.54 ms, found 2 plugins.
+Preloading 1 native plugins for Editor in 0.54 ms.
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Mono.Cecil.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.SerializationLogic.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.DataContract.dll (this message is harmless)
@@ -218,7 +237,7 @@ UnityEditor.EditorAssemblies:ProcessInitializeOnLoadAttributes() (at /Users/buil
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Web.dll (this message is harmless)
 Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.iOS.Extensions.Xcode.dll (this message is harmless)
 Mono: successfully reloaded assembly
-- Completed reload, in  0.557 seconds
+- Completed reload, in  0.875 seconds
 Initializing Unity.PackageManager (PackageManager) v5.6.1 for Unity v5.6.1f1
 Setting Standalone:StandaloneOSXIntel v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport
 Setting Advertisements v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements
@@ -308,8 +327,8 @@ Loading /Applications/Unity_5.6.1f1/PlaybackEngines/WindowsStandaloneSupport/Uni
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll (this message is harmless)
 Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll into Unity Child Domain
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Core.dll (this message is harmless)
-Refreshing native plugins compatible for Editor in 0.64 ms, found 2 plugins.
-Preloading 1 native plugins for Editor in 0.61 ms.
+Refreshing native plugins compatible for Editor in 0.68 ms, found 2 plugins.
+Preloading 1 native plugins for Editor in 0.54 ms.
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Mono.Cecil.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.SerializationLogic.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.DataContract.dll (this message is harmless)
@@ -334,7 +353,7 @@ UnityEditor.EditorAssemblies:ProcessInitializeOnLoadAttributes() (at /Users/buil
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Web.dll (this message is harmless)
 Non platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Editor/UnityEditor.iOS.Extensions.Xcode.dll (this message is harmless)
 Mono: successfully reloaded assembly
-- Completed reload, in  0.494 seconds
+- Completed reload, in  0.743 seconds
 Initializing Unity.PackageManager (PackageManager) v5.6.1 for Unity v5.6.1f1
 Setting Standalone:StandaloneOSXIntel v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport
 Setting Advertisements v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements
@@ -377,15 +396,79 @@ Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/Boo.Lang.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/Boo.Lang.Parser.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/UnityScript.Lang.dll (this message is harmless)
-Registered platform support modules in: 0.095071s.
+Registered platform support modules in: 0.160648s.
 Native extension for OSXStandalone target not found
 Native extension for WindowsStandalone target not found
 Native extension for LinuxStandalone target not found
 Native extension for WebGL target not found
 Native extension for Android target not found
-Validating Project structure ... 0.000137 seconds.
-Refresh: detecting if any assets need to be imported or removed ... Refresh: elapses 0.000550 seconds (Nothing changed)
-Warming cache for 61 main assets: 0.000265 seconds elapsed
+Validating Project structure ... 0.000164 seconds.
+Refresh: detecting if any assets need to be imported or removed ... 
+Hashing assets ... 0.004 seconds
+  file open: 0.000 seconds (10 files)
+  file read: 0.003 seconds (0.012 MB)
+  hash: 0.000 seconds
+----- Compute hash(es) for 5 asset(s).
+----- Asset named Assets/Editor/EditorRun.cs is skipped as no actual change.
+----- Asset named Assets/Editor/PostprocessBuildPlayer.cs is skipped as no actual change.
+----- Asset named Assets/Editor/PostprocessBuildPlayer_log.sh is skipped as no actual change.
+----- Asset named Assets/Editor/SimpleBuildSetup.cs is skipped as no actual change.
+----- Asset named Assets/Scene.unity is skipped as no actual change.
+
+Refresh: elapses 0.107673 seconds
+Updating ProjectSettings/InputManager.asset - GUID: 00000000000000002000000000000000...
+ done. [Time: 75.376694 ms] 
+Unloading 81 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 217.0 MB.
+System memory in use after: 217.1 MB.
+
+Unloading 92 unused Assets to reduce memory usage. Loaded Objects now: 531.
+Total: 2.306178 ms (FindLiveObjects: 0.103386 ms CreateObjectMapping: 0.033081 ms MarkObjects: 2.139152 ms  DeleteObjects: 0.028803 ms)
+
+Updating ProjectSettings/TagManager.asset - GUID: 00000000000000003000000000000000...
+ done. [Time: 8.257698 ms] 
+Updating ProjectSettings/ProjectSettings.asset - GUID: 00000000000000004000000000000000...
+ done. [Time: 5.491417 ms] 
+Updating ProjectSettings/NavMeshAreas.asset - GUID: 00000000000000004100000000000000...
+ done. [Time: 4.016569 ms] 
+Updating ProjectSettings/Physics2DSettings.asset - GUID: 00000000000000005100000000000000...
+ done. [Time: 4.110785 ms] 
+Updating ProjectSettings/AudioManager.asset - GUID: 00000000000000006000000000000000...
+Audio: FMOD Profiler initialized on port 54900
+ done. [Time: 55.803295 ms] 
+Updating ProjectSettings/GraphicsSettings.asset - GUID: 00000000000000006100000000000000...
+ done. [Time: 4.139010 ms] 
+Updating ProjectSettings/TimeManager.asset - GUID: 00000000000000007000000000000000...
+ done. [Time: 5.515575 ms] 
+Updating ProjectSettings/ClusterInputManager.asset - GUID: 00000000000000007100000000000000...
+ done. [Time: 4.555195 ms] 
+Updating ProjectSettings/DynamicsManager.asset - GUID: 00000000000000008000000000000000...
+ done. [Time: 7.398559 ms] 
+Updating ProjectSettings/QualitySettings.asset - GUID: 00000000000000009000000000000000...
+ done. [Time: 4.560171 ms] 
+Updating ProjectSettings/NetworkManager.asset - GUID: 0000000000000000a000000000000000...
+ done. [Time: 12.496020 ms] 
+Updating ProjectSettings/UnityConnectSettings.asset - GUID: 0000000000000000a100000000000000...
+ done. [Time: 6.132507 ms] 
+Updating ProjectSettings/EditorBuildSettings.asset - GUID: 0000000000000000b000000000000000...
+ done. [Time: 7.986321 ms] 
+Updating ProjectSettings/EditorSettings.asset - GUID: 0000000000000000c000000000000000...
+ done. [Time: 10.145298 ms] 
+Updating Assets/Editor - GUID: c132847aef6384146a622760c1c1a559...
+ done. [Time: 7.499577 ms] 
+Unloading 14 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 215.2 MB.
+System memory in use after: 215.2 MB.
+
+Unloading 0 unused Assets to reduce memory usage. Loaded Objects now: 531.
+Total: 1.021432 ms (FindLiveObjects: 0.048598 ms CreateObjectMapping: 0.014922 ms MarkObjects: 0.951785 ms  DeleteObjects: 0.004517 ms)
+
+Refreshing native plugins compatible for Editor in 10.92 ms, found 2 plugins.
+Preloading 1 native plugins for Editor in 0.34 ms.
+
+----- Total AssetImport time: 0.548069s, AssetImport time: 0.427493s, Asset hashing: 0.004469s [12.7 KB, 2.783316 mb/s]
+
+Warming cache for 61 main assets: 0.000233 seconds elapsed
 Initializing Unity extensions:
  '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityHoloLens/Editor/UnityEditor.HoloLens.dll'  GUID: 12fd8a0055b84bb59e84c9835a37e333
  '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll'  GUID: 852e56802eb941638acbb491814497b0
@@ -411,12 +494,12 @@ Initializing Unity extensions:
  '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/TestRunner/Editor/UnityEditor.TestRunner.dll'  GUID: 4113173d5e95493ab8765d7b08371de4
  '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll'  GUID: 8e0cd8ed44d4412cbe0642067abc9e44
  '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll'  GUID: 739bbd9f364b4268874f9fd86ab3beef
-Unloading 85 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 218.0 MB.
-System memory in use after: 218.1 MB.
+Unloading 38 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 216.8 MB.
+System memory in use after: 216.9 MB.
 
-Unloading 56 unused Assets to reduce memory usage. Loaded Objects now: 564.
-Total: 0.931541 ms (FindLiveObjects: 0.082952 ms CreateObjectMapping: 0.017814 ms MarkObjects: 0.807836 ms  DeleteObjects: 0.021520 ms)
+Unloading 1 unused Assets to reduce memory usage. Loaded Objects now: 564.
+Total: 1.028774 ms (FindLiveObjects: 0.101425 ms CreateObjectMapping: 0.015979 ms MarkObjects: 0.889958 ms  DeleteObjects: 0.019973 ms)
 
 Building Example2
 UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
@@ -426,13 +509,6 @@ UnityEngine.Debug:Log(Object)
 U3d.EditorRun:Build() (at Assets/Editor/EditorRun.cs:11)
  
 (Filename: Assets/Editor/EditorRun.cs Line: 11)
-
-Updating ProjectSettings/EditorSettings.asset - GUID: 0000000000000000c000000000000000...
- done. [Time: 40.715050 ms] 
-Refreshing native plugins compatible for Editor in 0.35 ms, found 2 plugins.
-Preloading 1 native plugins for Editor in 0.33 ms.
-
------ Total AssetImport time: 0.119298s, AssetImport time: 0.065810s, Asset hashing: 0.000000s [0 B, 0.000000 mb/s]
 
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.CecilTools.dll (this message is harmless)
 BuildPlayer: start building target 27
@@ -462,37 +538,40 @@ DisplayProgressbar: Building Player
 Packing sprites:
 [     28 MB ]- Skipping packing - Sprite Packer is off.
 [     28 MB ]Opening scene 'Assets/Scene.unity'
-Load scene 'Assets/Scene.unity' time: 0.019386 ms 
-Unloading 4 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 240.9 MB.
-System memory in use after: 241.0 MB.
+Load scene 'Assets/Scene.unity' time: 0.686887 ms 
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 240.8 MB.
+System memory in use after: 240.9 MB.
 
 Unloading 9 unused Assets to reduce memory usage. Loaded Objects now: 2513.
-Total: 4.682285 ms (FindLiveObjects: 0.223597 ms CreateObjectMapping: 0.025926 ms MarkObjects: 3.751506 ms  DeleteObjects: 0.679845 ms)
+Total: 7.229253 ms (FindLiveObjects: 0.426836 ms CreateObjectMapping: 0.037614 ms MarkObjects: 6.062677 ms  DeleteObjects: 0.700287 ms)
 
 [00:00:00] Enlighten: Precompute started.
+[00:00:00] Enlighten: Finished 1 Layout Systems job (0.00s execute, 0.00s integrate, 0.00s wallclock)
 [PathTracer][LP] Issuing deduplication and tetrahedralization job. Combined: 80257199cfa681a16be5e09b3c2208f4, tetrahedralized probes: 00000000000000000000000000000000, non-tetrahedralized probes: 00000000000000000000000000000000, dependencies: 00000000000000000000000000000000
-[00:00:00] Enlighten: Finished 1 Layout Systems job (0.00s execute, 0.00s integrate, 0.01s wallclock)
-[PathTracer][LP] Integrating deduplicated and tetrahedralized probes for hash 80257199cfa681a16be5e09b3c2208f4.
 [00:00:00] Enlighten: Finished 1 Tetrahedralize Probes job (0.00s execute, 0.00s integrate, 0.01s wallclock)
-[00:00:00] Enlighten: Precompute took 0.022454 seconds.
+[00:00:00] Enlighten: Precompute took 0.015473 seconds.
 Enlighten scene contents:   0 geometries.   0 instances.   0 systems.   0 probe groups.   0 cube maps. Scene is up-to-date.
 [00:00:00] Enlighten: Bake started.
-Launched and connected shader compiler UnityShaderCompiler after 0.06 seconds
+[PathTracer][LP] Integrating deduplicated and tetrahedralized probes for hash 80257199cfa681a16be5e09b3c2208f4.
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools64/JobProcess
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.15 seconds
 Setting up 4 worker threads for Enlighten.
-  Thread -> id: 7000024ea000 -> priority: 1 
-  Thread -> id: 70000256d000 -> priority: 1 
-  Thread -> id: 7000025f0000 -> priority: 1 
-  Thread -> id: 700002673000 -> priority: 1 
-[00:00:00] Enlighten: Finished 1 Bake Runtime job (0.03s execute, 0.00s integrate, 0.12s wallclock)
-[00:00:00] Enlighten: Bake took 0.119501 seconds.
+  Thread -> id: 7000006a6000 -> priority: 1 
+  Thread -> id: 7000007ac000 -> priority: 1 
+  Thread -> id: 70000082f000 -> priority: 1 
+  Thread -> id: 7000008b2000 -> priority: 1 
+[00:00:00] Enlighten: Finished 1 Bake Runtime job (0.09s execute, 0.00s integrate, 0.30s wallclock)
+[00:00:00] Enlighten: Bake took 0.302449 seconds.
 [PathTracer] Lightmap reset.
 [PathTracer][LP] Light probes reset.
 [PathTracer] building lightmap data asset.
 [00:00:00] Enlighten: Reflection Probes started.
 [00:00:00] Enlighten: Finished 1 Ambient Probes job (0.00s execute, 0.00s integrate, 0.01s wallclock)
 WARNING: BC6H/BC7 texture format is not supported, decompressing texture
-[00:00:00] Enlighten: Finished 1 Reflection Probes job (0.00s execute, 0.01s integrate, 0.02s wallclock)
+[00:00:00] Enlighten: Finished 1 Reflection Probes job (0.00s execute, 0.02s integrate, 0.03s wallclock)
+Refreshing native plugins compatible for Editor in 0.62 ms, found 2 plugins.
 
 
 Mono dependencies included in the build
@@ -504,33 +583,40 @@ Dependency assembly - UnityEngine.UI.dll
 Dependency assembly - UnityEngine.Networking.dll
 
 Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 243.6 MB.
-System memory in use after: 243.6 MB.
+System memory in use before: 243.4 MB.
+System memory in use after: 243.5 MB.
 
 Unloading 10 unused Assets to reduce memory usage. Loaded Objects now: 2502.
-Total: 4.852812 ms (FindLiveObjects: 0.333685 ms CreateObjectMapping: 0.040919 ms MarkObjects: 3.829577 ms  DeleteObjects: 0.646777 ms)
+Total: 7.823365 ms (FindLiveObjects: 0.276726 ms CreateObjectMapping: 0.030404 ms MarkObjects: 5.296729 ms  DeleteObjects: 2.217545 ms)
 
 Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 243.5 MB.
-System memory in use after: 243.6 MB.
+System memory in use before: 243.3 MB.
+System memory in use after: 243.5 MB.
 
 Unloading 0 unused Assets to reduce memory usage. Loaded Objects now: 2515.
-Total: 5.303880 ms (FindLiveObjects: 0.248492 ms CreateObjectMapping: 0.033369 ms MarkObjects: 5.011693 ms  DeleteObjects: 0.009053 ms)
+Total: 6.614436 ms (FindLiveObjects: 0.225344 ms CreateObjectMapping: 0.026285 ms MarkObjects: 6.331768 ms  DeleteObjects: 0.028985 ms)
 
 Unloading 1 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 267.1 MB.
-System memory in use after: 243.8 MB.
+System memory in use before: 267.0 MB.
+System memory in use after: 243.7 MB.
 
 Unloading 128 unused Assets to reduce memory usage. Loaded Objects now: 2501.
-Total: 23.340166 ms (FindLiveObjects: 0.189848 ms CreateObjectMapping: 0.029768 ms MarkObjects: 3.575009 ms  DeleteObjects: 19.544535 ms)
+Total: 40.944485 ms (FindLiveObjects: 0.470398 ms CreateObjectMapping: 0.064183 ms MarkObjects: 5.226262 ms  DeleteObjects: 35.181755 ms)
 
-Launched and connected shader compiler UnityShaderCompiler after 0.06 seconds
-Launched and connected shader compiler UnityShaderCompiler after 0.06 seconds
-Launched and connected shader compiler UnityShaderCompiler after 0.05 seconds
-Launched and connected shader compiler UnityShaderCompiler after 0.05 seconds
-Launched and connected shader compiler UnityShaderCompiler after 0.06 seconds
-Launched and connected shader compiler UnityShaderCompiler after 0.06 seconds
-Launched and connected shader compiler UnityShaderCompiler after 0.05 seconds
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.08 seconds
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.09 seconds
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.09 seconds
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.09 seconds
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.07 seconds
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.10 seconds
+Launching external process: /Applications/Unity_5.6.1f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.10 seconds
 
 Textures      0.0 kb	 nan% 
 Meshes        0.0 kb	 nan% 
@@ -601,11 +687,11 @@ U3d.EditorRun:Build() (at Assets/Editor/EditorRun.cs:13)
 (Filename: Assets/Editor/PostprocessBuildPlayer.cs Line: 81)
 
 Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 244.4 MB.
-System memory in use after: 244.5 MB.
+System memory in use before: 244.2 MB.
+System memory in use after: 244.2 MB.
 
 Unloading 11 unused Assets to reduce memory usage. Loaded Objects now: 2516.
-Total: 5.814057 ms (FindLiveObjects: 0.241823 ms CreateObjectMapping: 0.057115 ms MarkObjects: 4.597988 ms  DeleteObjects: 0.915559 ms)
+Total: 9.420173 ms (FindLiveObjects: 0.556790 ms CreateObjectMapping: 0.082449 ms MarkObjects: 7.521880 ms  DeleteObjects: 1.256562 ms)
 
     Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll' because we're compiling for Editor:Editor
     Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Standalone/UnityEngine.UI.dll' because we're compiling for Editor:Editor
@@ -622,17 +708,17 @@ Total: 5.814057 ms (FindLiveObjects: 0.241823 ms CreateObjectMapping: 0.057115 m
     Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll' because we're compiling for Editor:Editor
     Ignoring '/Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/UnityVR/Runtime/UnityEngine.VR.dll' because we're compiling for Editor:Editor
 - starting compile Library/ScriptAssemblies/Assembly-CSharp-Editor.dll, for buildtarget 27
-Load scene 'Temp/__Backupscenes/0.backup' time: 0.061842 ms 
+Load scene 'Temp/__Backupscenes/0.backup' time: 0.041312 ms 
 Unloading 0 Unused Serialized files (Serialized files now loaded: 0)
-[00:00:00] Enlighten: Reflection Probes took 1.844441 seconds. Cancelled, so not done yet.
-System memory in use before: 244.4 MB.
-System memory in use after: 244.6 MB.
+[00:00:00] Enlighten: Reflection Probes took 3.251119 seconds. Cancelled, so not done yet.
+System memory in use before: 244.2 MB.
+System memory in use after: 244.4 MB.
 
 Unloading 0 unused Assets to reduce memory usage. Loaded Objects now: 2505.
-Total: 6.292026 ms (FindLiveObjects: 0.298123 ms CreateObjectMapping: 0.060877 ms MarkObjects: 5.916989 ms  DeleteObjects: 0.013944 ms)
+Total: 16.574448 ms (FindLiveObjects: 0.370385 ms CreateObjectMapping: 0.119448 ms MarkObjects: 15.851408 ms  DeleteObjects: 0.231356 ms)
 
 
-*** Completed 'Build.Player.MacStandaloneSupport' in 3 seconds (2850 ms)
+*** Completed 'Build.Player.MacStandaloneSupport' in 4 seconds (4490 ms)
 
 - Finished compile Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
 WeaveUnetFromEditor Temp/Assembly-CSharp-Editor.dll
@@ -702,7 +788,7 @@ Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngine
 Loading /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll into Unity Child Domain
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/System.Core.dll (this message is harmless)
 Refreshing native plugins compatible for Editor in 0.51 ms, found 2 plugins.
-Preloading 1 native plugins for Editor in 0.39 ms.
+Preloading 1 native plugins for Editor in 0.61 ms.
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Mono.Cecil.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.SerializationLogic.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Managed/Unity.DataContract.dll (this message is harmless)
@@ -727,12 +813,12 @@ UnityEditor.EditorAssemblies:ProcessInitializeOnLoadAttributes() (at /Users/buil
 (Filename: Assets/Editor/SimpleBuildSetup.cs Line: 15)
 
 Mono: successfully reloaded assembly
-Refreshing native plugins compatible for Editor in 0.60 ms, found 2 plugins.
-Preloading 1 native plugins for Editor in 0.49 ms.
+Refreshing native plugins compatible for Editor in 0.44 ms, found 2 plugins.
+Preloading 1 native plugins for Editor in 0.39 ms.
 
------ Total AssetImport time: 0.088096s, AssetImport time: 0.000000s, Asset hashing: 0.000000s [0 B, 0.000000 mb/s]
+----- Total AssetImport time: 0.118101s, AssetImport time: 0.000000s, Asset hashing: 0.000000s [0 B, 0.000000 mb/s]
 
-- Completed reload, in  0.928 seconds
+- Completed reload, in  1.505 seconds
 Initializing Unity.PackageManager (PackageManager) v5.6.1 for Unity v5.6.1f1
 Setting Standalone:StandaloneOSXIntel v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport
 Setting Advertisements v5.6.1 for Unity v5.6.1f1 to /Applications/Unity_5.6.1f1/Unity.app/Contents/UnityExtensions/Unity/Advertisements
@@ -775,22 +861,24 @@ Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/Boo.Lang.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/Boo.Lang.Parser.dll (this message is harmless)
 Platform assembly: /Applications/Unity_5.6.1f1/Unity.app/Contents/Mono/lib/mono/2.0/UnityScript.Lang.dll (this message is harmless)
-Registered platform support modules in: 0.102543s.
+Registered platform support modules in: 0.123197s.
 Native extension for OSXStandalone target not found
 Native extension for WindowsStandalone target not found
 Native extension for LinuxStandalone target not found
 Native extension for WebGL target not found
 Native extension for Android target not found
 Batchmode quit successfully invoked - shutting down!
-Refresh: detecting if any assets need to be imported or removed ... Refresh: elapses 0.000581 seconds (Nothing changed)
+Refresh: detecting if any assets need to be imported or removed ... Refresh: elapses 0.000630 seconds (Nothing changed)
 Updating ProjectSettings/ProjectSettings.asset - GUID: 00000000000000004000000000000000...
- done. [Time: 36.657764 ms] 
+ done. [Time: 49.391296 ms] 
 Updating ProjectSettings/EditorSettings.asset - GUID: 0000000000000000c000000000000000...
- done. [Time: 2.038806 ms] 
-Refreshing native plugins compatible for Editor in 0.63 ms, found 2 plugins.
-Preloading 1 native plugins for Editor in 0.42 ms.
+ done. [Time: 3.894142 ms] 
+Refreshing native plugins compatible for Editor in 0.92 ms, found 2 plugins.
+Preloading 1 native plugins for Editor in 0.50 ms.
 
------ Total AssetImport time: 0.131493s, AssetImport time: 0.069220s, Asset hashing: 0.000000s [0 B, 0.000000 mb/s]
+----- Total AssetImport time: 0.194373s, AssetImport time: 0.097963s, Asset hashing: 0.000000s [0 B, 0.000000 mb/s]
 
-Refresh: detecting if any assets need to be imported or removed ... Refresh: elapses 0.000678 seconds (Nothing changed)
+Refresh: detecting if any assets need to be imported or removed ... Refresh: elapses 0.000753 seconds (Nothing changed)
 Cleanup mono
+debugger-agent: Unable to listen on 6
+Exiting batchmode successfully now!
