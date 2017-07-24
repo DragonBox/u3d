@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.summary     = "U3d"
   spec.description = U3d::DESCRIPTION
 
-  spec.homepage    = 'https://github.com/WeWantToKnow/u3d'
+  spec.homepage    = 'https://github.com/DragonBox/u3d'
   spec.license     = 'MIT'
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
