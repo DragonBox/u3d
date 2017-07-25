@@ -24,9 +24,11 @@ U3d provides help for running and installing unity from CLI. Available commands 
 
 ![u3d run](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_run.png)
 
-* `u3d prettify`: Prettify a saved logfile
+The prettifyer is on by default but can be turned off to get Unity3d's raw output.
 
-  (see above :))
+* `u3d prettify`: Prettify a saved editor logfile
+
+  [Information on how `prettify` works](https://github.com/DragonBox/u3d/blob/master/LOG_RULES.md)
 
 ## Installation
 
