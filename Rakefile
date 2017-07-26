@@ -25,4 +25,18 @@ require "rspec/core/rake_task"
 
 RSpec::Core::RakeTask.new(:spec)
 
-task default: :spec
+task :test_all do
+  formatter = "--format progress"
+  if ENV["CIRCLECI"]
+    Dir.mkdir("/tmp/rspec/")
+    formatter += " -r rspec_junit_formatter --format RspecJunitFormatter -o /tmp/rspec/rspec.xml"
+    TEST_FILES = `(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)`.tr!("\n", ' ')
+    rspec_args = "#{formatter} #{TEST_FILES}"
+  else
+    formatter += " --pattern ./spec/**/*_spec.rb"
+    rspec_args = formatter
+  end
+  sh "rspec #{rspec_args}"
+end
+
+task default: :test_all
