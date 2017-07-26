@@ -25,4 +25,10 @@ require "rspec/core/rake_task"
 
 RSpec::Core::RakeTask.new(:spec)
 
-task default: :spec
+task :test_all do
+  formatter = "--format progress"
+  formatter += " -r rspec_junit_formatter --format RspecJunitFormatter -o $CIRCLE_TEST_REPORTS/rspec/fastlane-junit-results.xml" if ENV["CIRCLE_TEST_REPORTS"]
+  sh "rspec --pattern ./**/*_spec.rb #{formatter}"
+end
+
+task default: :test_all
