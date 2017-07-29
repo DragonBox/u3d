@@ -27,7 +27,7 @@ Therefore, our log prettifier behaves in a phased fashion. It has an inner memor
 
 A phase is started when a given pattern is encountered in the logs, and ends in two different ways: either a terminating pattern is met, or another phase starts.
 
-Because there are rules that you may want to apply throughout the whole analysis, there is a peculiar phase: the 'GENERAL' one. It contains a generic set of rules which will be applied in parallel to the active phase's ruleset, and allows for not having to repeat rules in different phases. The main use which this phase was designed for is to catch exceptions, warnings and errors no matter the active phase, but it is obviously not limited to that.
+Because there are rules that you may want to apply throughout the whole analysis, there is a peculiar phase: the 'GENERAL' one. It contains a generic set of rules which will be applied in parallel to the active phase's ruleset, and allows for not having to repeat rules in different phases. The main use which this phase was designed for is exceptions catching, warnings and errors no matter the active phase, but it is obviously not limited to that.
 
 ### B - Phase syntax
 
@@ -53,15 +53,15 @@ The syntax of phases is as follows:
 * __[OPTIONAL]__ `phase_end_pattern`: this patterns specifies when the phase should end. It is optional because a phase will also end when another one begins, as stated in II A. This is used when you know exactly when the phase has finished.
 * `rules`: contains a set of rules. See III for further information on rule declaration.
 
-## Rules
+## III - Rules
 
 ### A - Rule declaration
 
 The information contained in Unity's log can be formatted differently: it can be contained in a single line, spread on several, the lines can contain exactly what you want or be way too verbose for your liking.
 
-In consequence, the rule syntax is pretty loose to cover as many cases as possible, and below is describe syntax for some of archetypal rules.
+In consequence, the rule syntax is pretty loose to cover as many cases as possible, and below is describe syntax for some archetypal rules.
 
-They contain nonetheless two mandatory sections and a recurring one:
+They contain nonetheless two mandatory sections:
 
 ```json
 "rule_name": {
@@ -86,6 +86,7 @@ This example rule extracts the line stating whether the asset database has succe
 ### C - One line parsing with data extraction
 
 When the line formatting does not suit your needs, you may want to process it rather than simply logging it. Here is an example which occurs at the beginning of the compile phase:
+
 ```json
 "target": {
   "active": true,
@@ -97,7 +98,8 @@ Simple rewording of the base log, by extracting the meaningful information and p
 
 ### D - Multi-line parsing and displaying
 
-The following rule illustrates when you want to log a chunk of lines as they appear in Unity at the same time. This structure is useful when you know exactly where the block begins and end. If not, please check section F.
+The following rule illustrates when you want to log a chunk of lines as they appear in Unity at the same time. This structure is useful when you know exactly where the block begins and ends. If not, please check section F.
+
 ```json
 "percentage": {
   "active": true,
@@ -106,11 +108,12 @@ The following rule illustrates when you want to log a chunk of lines as they app
   "store_lines": true
 }
 ```
-`start_pattern` and `end_pattern` are the limits in between which the lines will be parsed. `store_lines` indicates that we want these lines stored, and displayed later.
+`start_pattern` and `end_pattern` are the limits in between which the lines will be parsed. `store_lines` indicates that we want these lines stored, and displayed later on.
 
 ###  E - Multi-line parsing and displaying with line filtering and data extraction
 
 This example illustrates several additional functionalities in comparison to the previous sections.
+
 ```json
 "fail": {
   "active": true,
@@ -134,7 +137,8 @@ _Note_: this is a modified version of the actual rule, for example purposes.
 
 ### F - Multi-line with no clear entry point (memory fetching)
 
-This section illustrates how a rule will fetch lines from the previously logged lines. It is used when you want to log several lines, but the fixed point is not at the beginning of the block.
+This section illustrates how a rule will fetch lines from the previously logged lines. It is used when you want to log several lines, but the fixed 'entry point' is not at the beginning of the block.
+
 ```json
 "log": {
   "active": true,
@@ -157,6 +161,7 @@ This previous rule is used to keep tracks of the Debug.Log messages. Because the
 ### G - Logging color code
 
 You can specify the color of the message created by your rules by specifying a type:
+
 ```json
 "target": {
   "active": true,
@@ -164,7 +169,7 @@ You can specify the color of the message created by your rules by specifying a t
 }
 ```
 It will output it differently based on this type. Correct types are:
-* __[DEFAULT]__ `message`: normal logging
+* `message`: normal logging __[DEFAULT]__ 
 * `warning`: yellow
-* `error`: red
+* `error`  : red
 * `success`: green
