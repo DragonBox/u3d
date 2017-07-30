@@ -178,30 +178,11 @@ module U3d
       installer
     end
 
-    def self.install_module(file_path, version, installation_path: nil, info: {})
-      extension = File.extname(file_path)
-      if extension == '.pkg'
-        path = installation_path || DEFAULT_MAC_INSTALL
-        MacInstaller.install_pkg(
-          file_path,
-          version: version,
-          target_path: path
-        )
-      elsif extension == '.exe'
-        path = installation_path || File.join(DEFAULT_WINDOWS_INSTALL, UNITY_DIR % version)
-        WindowsInstaller.install_exe(
-          file_path,
-          installation_path: path,
-          info: info
-        )
-      elsif extension == '.sh'
-        path = installation_path || File.join(DEFAULT_LINUX_INSTALL, UNITY_DIR % version)
-        LinuxInstaller.install_sh(
-          file_path,
-          installation_path: path
-        )
-      else
-        raise "File type #{extension} not yet supported"
+    def self.install_modules(files, version, installation_path: nil)
+      installer = Installer.create
+      files.each do |name, file, info|
+        UI.verbose "Installing #{name}#{info['mandatory'] ? ' (mandatory package)' : ''}, with file #{file}"
+        installer.install(file, version, installation_path: installation_path, info: info)
       end
     end
   end
@@ -239,10 +220,21 @@ module U3d
       versions.sort! { |x, y| x.version <=> y.version }
     end
 
-    def self.install_pkg(file_path, version: nil, target_path: nil)
+    def install(file_path, version, installation_path: nil, info: {})
+      extension = File.extname(file_path)
+      raise "Installation of #{extension} files is not supported on Mac" if extension != '.pkg'
+      path = installation_path || DEFAULT_MAC_INSTALL
+      install_pkg(
+        file_path,
+        version: version,
+        target_path: path
+      )
+    end
+
+    def install_pkg(file_path, version: nil, target_path: nil)
       target_path ||= DEFAULT_MAC_INSTALL
       command = "installer -pkg #{file_path.shellescape} -target #{target_path.shellescape}"
-      unity = Installer.create.installed.find { |u| u.version == version }
+      unity = installed.find { |u| u.version == version }
       if unity.nil?
         UI.verbose "No Unity install for version #{version} was found"
         U3dCore::CommandExecutor.execute(command: command, admin: true)
@@ -290,7 +282,17 @@ module U3d
       versions.sort! { |x, y| x.version <=> y.version }
     end
 
-    def self.install_sh(file, installation_path: nil)
+    def install(file_path, version, installation_path: nil, info: {})
+      extension = File.extname(file_path)
+      raise "Installation of #{extension} files is not supported on Linux" if extension != '.sh'
+      path = installation_path || File.join(DEFAULT_LINUX_INSTALL, UNITY_DIR % version)
+      install_sh(
+        file_path,
+        installation_path: path
+      )
+    end
+
+    def install_sh(file, installation_path: nil)
       cmd = file.shellescape
       if installation_path
         Utils.ensure_dir(installation_path)
@@ -330,7 +332,18 @@ module U3d
       versions.sort! { |x, y| x.version <=> y.version }
     end
 
-    def self.install_exe(file_path, installation_path: nil, info: {})
+    def install(file_path, version, installation_path: nil, info: {})
+      extension = File.extname(file_path)
+      raise "Installation of #{extension} files is not supported on Windows" if extension != '.exe'
+      path = installation_path || File.join(DEFAULT_WINDOWS_INSTALL, UNITY_DIR % version)
+      install_exe(
+        file_path,
+        installation_path: path,
+        info: info
+      )
+    end
+
+    def install_exe(file_path, installation_path: nil, info: {})
       installation_path ||= DEFAULT_WINDOWS_INSTALL
       final_path = installation_path.tr('/', '\\')
       Utils.ensure_dir(final_path)

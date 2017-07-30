@@ -140,10 +140,7 @@ module U3d
         end
 
         return if options[:no_install]
-        files.each do |name, file, info|
-          UI.verbose "Installing #{name}#{info['mandatory'] ? ' (mandatory package)' : ''}, with file #{file}"
-          Installer.install_module(file, version, installation_path: options[:installation_path], info: info)
-        end
+        Installer.install_modules(files, version, installation_path: options[:installation_path])
       end
 
       def local_install(args: [], options: {})
@@ -183,10 +180,7 @@ module U3d
           end
         end
 
-        files.each do |name, file, info|
-          UI.verbose "Installing #{name}#{info['mandatory'] ? ' (mandatory package)' : ''}, with file #{file}"
-          Installer.install_module(file, version, installation_path: options[:installation_path], info: info)
-        end
+        Installer.install_modules(files, version, installation_path: options[:installation_path])
       end
 
       def run(options: {}, run_args: [])
