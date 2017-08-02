@@ -49,7 +49,7 @@ module U3d
     WIN_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f]{12}/)Windows..EditorInstaller/[a-zA-Z0-9/\.]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
     LINUX_DOWNLOAD_DATED = %r{"(https?://[\w/\._-]+/unity\-editor\-installer\-(\d+\.\d+\.\d+\w\d+).*\.sh)"}
     LINUX_DOWNLOAD_RECENT_PAGE = %r{"(http://beta\.unity3d\.com/download/[a-zA-Z0-9/\.]+/public_download\.html)"}
-    LINUX_DOWNLOAD_RECENT_FILE = %r{'(https?://beta\.unity3d\.com/download/[a-zA-Z0-9/\.]+/unity\-editor\-installer\-(\d+\.\d+\.\d+\w+\d+).*\.sh)'}
+    LINUX_DOWNLOAD_RECENT_FILE = %r{'(https?://beta\.unity3d\.com/download/[a-zA-Z0-9/\.]+/unity\-editor\-installer\-(\d+\.\d+\.\d+(?:x)?\w\d+).*\.sh)'}
     # Captures a beta version in html page
     UNITY_BETAVERSION_REGEX = %r{\/unity\/beta\/unity(\d+\.\d+\.\d+\w\d+)"}
     UNITY_EXTRA_DOWNLOAD_REGEX = %r{"(https?:\/\/[\w\/.-]+\.unity3d\.com\/(\w+))\/[a-zA-Z\/.-]+\/download.html"}
@@ -166,7 +166,7 @@ module U3d
             if response.kind_of? Net::HTTPSuccess
               capt = response.body.match(LINUX_DOWNLOAD_RECENT_FILE)
               if capt && capt[1] && capt[2]
-                versions[capt[2]] = capt[1]
+                versions[capt[2].gsub(/x/, '')] = capt[1]
               else
                 UI.error("Could not retrieve a fitting file from #{url}")
               end

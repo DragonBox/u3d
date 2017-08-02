@@ -43,7 +43,7 @@ module U3d
   class UnityVersionComparator
     include Comparable
 
-    RELEASE_LETTER_STRENGTH = { a: 1, b: 2, f: 3, p: 4, xa: 1, xb: 2, xf: 3, xp: 4 }.freeze
+    RELEASE_LETTER_STRENGTH = { a: 1, b: 2, f: 3, p: 4 }.freeze
 
     attr_reader :version
 
