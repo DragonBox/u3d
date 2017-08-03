@@ -31,7 +31,7 @@ module U3d
       log_file = find_logFile_in_args(args)
 
       if log_file # we wouldn't want to do that for the default log file.
-        File.delete(log_file) if File.exist?(log_file)
+        File.delete(log_file) if File.file?(log_file) # We only delete real files
       else
         log_file = installation.default_log_file
       end
