@@ -38,16 +38,12 @@ describe U3d do
       end
 
       context 'when offline' do
-        before (:all) do
-          RSpec::Mocks.with_temporary_scope do
-            # this to ensure tests are not failing on Linux platform
-            allow(U3dCore::Helper).to receive(:operating_system) { :mac }
-          end
-        end
+        # this to ensure tests are not failing on Linux platform
+        let(:platform_os) { :mac }
 
         it 'raises an error when trying to load INI files absent from filesystem' do
           allow(File).to receive(:file?) { false }
-          expect { U3d::INIparser.load_ini('key', @cache, offline: true) }.to raise_error(RuntimeError)
+          expect { U3d::INIparser.load_ini('key', @cache, os: platform_os, offline: true) }.to raise_error(RuntimeError)
         end
 
         it 'parses and loads the INI data already existing' do
@@ -57,7 +53,7 @@ describe U3d do
             f.rewind
             allow(File).to receive(:file?) { true }
             allow(IniFile).to receive(:load).and_wrap_original { |m, _args| m.call(f.path) }
-            data = U3d::INIparser.load_ini('key', @cache, offline: true)
+            data = U3d::INIparser.load_ini('key', @cache, os: platform_os, offline: true)
             expect(data['A']).not_to be_nil
             expect(data['A']['test']).to eql('initesting')
           end
@@ -65,18 +61,14 @@ describe U3d do
       end
 
       context 'when online' do
-        before (:all) do
-          RSpec::Mocks.with_temporary_scope do
-            # this to ensure tests are not failing on Linux platform
-            allow(U3dCore::Helper).to receive(:operating_system) { :mac }
-          end
-        end
+        # this to ensure tests are not failing on Linux platform
+        let(:platform_os) { :mac }
 
         it 'gets the INI file from the web if it is absent' do
           allow(File).to receive(:file?) { false }
           allow(IniFile).to receive(:load)
           expect(Net::HTTP).to receive(:get) { '' }
-          U3d::INIparser.load_ini('key', @cache, offline: false)
+          U3d::INIparser.load_ini('key', @cache, os: platform_os, offline: false)
         end
 
         it 'parses and loads the INI data already existing without download' do
@@ -87,7 +79,7 @@ describe U3d do
             allow(File).to receive(:file?) { true }
             allow(IniFile).to receive(:load).and_wrap_original { |m, _args| m.call(f.path) }
             expect(Net::HTTP).not_to receive(:get)
-            data = U3d::INIparser.load_ini('key', @cache, offline: false)
+            data = U3d::INIparser.load_ini('key', @cache, os: platform_os, offline: false)
             expect(data['A']).not_to be_nil
             expect(data['A']['test']).to eql('initesting')
           end
