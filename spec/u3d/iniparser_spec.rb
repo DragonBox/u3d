@@ -38,6 +38,13 @@ describe U3d do
       end
 
       context 'when offline' do
+        before (:all) do
+          RSpec::Mocks.with_temporary_scope do
+            # this to ensure tests are not failing on Linux platform
+            allow(U3dCore::Helper).to receive(:operating_system) { :mac }
+          end
+        end
+
         it 'raises an error when trying to load INI files absent from filesystem' do
           allow(File).to receive(:file?) { false }
           expect { U3d::INIparser.load_ini('key', @cache, offline: true) }.to raise_error(RuntimeError)
@@ -58,6 +65,13 @@ describe U3d do
       end
 
       context 'when online' do
+        before (:all) do
+          RSpec::Mocks.with_temporary_scope do
+            # this to ensure tests are not failing on Linux platform
+            allow(U3dCore::Helper).to receive(:operating_system) { :mac }
+          end
+        end
+
         it 'gets the INI file from the web if it is absent' do
           allow(File).to receive(:file?) { false }
           allow(IniFile).to receive(:load)
