@@ -34,7 +34,7 @@ describe U3d do
         expect(U3d::UnityVersions.list_available(os: :mac).count).to be > 49
       end
       it 'retrieves linux versions' do
-        expect(U3d::UnityVersions.list_available(os: :linux).count).to be > 25
+        expect(U3d::UnityVersions.list_available(os: :linux).count).to be > 42
       end
     end
   end
