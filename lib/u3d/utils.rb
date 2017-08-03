@@ -30,7 +30,7 @@ module U3d
   module Utils
     # Regex to capture each part of a version string (0.0.0x0)
     CSIDL_LOCAL_APPDATA = 0x001c
-    UNITY_VERSION_REGEX = /(\d+)(?:\.(\d+)(?:\.(\d+))?)?(?:(\w+)(?:(\d+))?)?/
+    UNITY_VERSION_REGEX = /(\d+)(?:\.(\d+)(?:\.(\d+))?)?(?:(\w)(?:(\d+))?)?/
 
     class << self
       def get_ssl(url, redirect_limit: 10)
