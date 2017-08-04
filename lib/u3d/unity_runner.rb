@@ -36,7 +36,7 @@ module U3d
         log_file = installation.default_log_file
       end
 
-      FileUtils.touch(log_file)
+      FileUtils.touch(log_file) unless File.exist? log_file
 
       tail_thread = Thread.new do
         begin
@@ -52,6 +52,10 @@ module U3d
         end
       end
 
+      # Wait for tail_thread setup to be complete
+      sleep 0.5 while tail_thread.status!='sleep'
+      tail_thread.run
+
       begin
         args.unshift(installation.exe_path)
         if Helper.windows?
@@ -61,7 +65,7 @@ module U3d
         end
         U3dCore::CommandExecutor.execute(command: args)
       ensure
-        sleep 0.5
+        sleep 1
         Thread.kill(tail_thread)
       end
     end
@@ -89,7 +93,8 @@ module U3d
         f.extend File::Tail
         f.interval = 0.1
         f.max_interval = 0.4
-        f.backward 100
+        f.backward 0
+        Thread.stop
         f.tail { |l| yield l }
       end
     end
