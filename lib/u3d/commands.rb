@@ -41,7 +41,14 @@ module U3d
           UI.important 'No Unity version installed'
           return
         end
-        list.each do |u|
+        # version -> installations
+        arraym = list.map{|a| [a.version, a]}
+        map = Hash[*arraym.flatten]
+        # sorted versions
+        vcomparators = map.keys.map { |k| UnityVersionComparator.new(k) }
+        sorted_keys = vcomparators.sort.map { |v| v.version.to_s }
+        sorted_keys.each do |k|
+          u = map[k]
           UI.message "Version #{u.version}\t(#{u.path})"
           packages = u.packages
           next unless options[:packages] && packages && !packages.empty?
