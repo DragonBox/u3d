@@ -107,7 +107,7 @@ module U3d
               if rule['end_message']
                 match = line.match(pattern)
                 params = match.names.map(&:to_sym).zip(match.captures).to_h
-                message = rule['end_message'] % params.merge(@context)
+                message = inject(rule['end_message'], params: params)
               else
                 message = line.chomp
               end
@@ -165,7 +165,7 @@ module U3d
                 end
                 if r['fetched_line_message'] != false
                   message = if r['fetched_line_message']
-                              r['fetched_line_message'] % @context
+                              inject(r['fetched_line_message'])
                             else
                               fetched_line.chomp
                             end
@@ -176,7 +176,7 @@ module U3d
             end
             if r['start_message'] != false
               message = if r['start_message']
-                          r['start_message'] % @context
+                          inject(r['start_message'])
                         else
                           line.chomp
                         end
@@ -193,6 +193,16 @@ module U3d
     end
 
     private
+
+    def inject(string, params: {})
+      message = "This is a default message."
+      begin
+        message = string % params.merge(@context)
+      rescue KeyError => e
+        UI.error("[U3D] Rule #{@active_rule} captures were incomplete: #{e.message}")
+      end
+      message
+    end
 
     def parse_rule(r)
       return false unless r['active']
