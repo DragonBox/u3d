@@ -30,7 +30,9 @@ module U3d
   DEFAULT_MAC_INSTALL = '/'.freeze
   DEFAULT_WINDOWS_INSTALL = 'C:/Program Files/'.freeze
   UNITY_DIR = "Unity_%s".freeze
+  UNITY_DIR_LINUX = "unity-editor-%s".freeze
   UNITY_DIR_CHECK = /Unity_\d+\.\d+\.\d+[a-z]\d+/
+  UNITY_DIR_CHECK_LINUX = /unity-editor-\d+\.\d+\.\d+[a-z]\d+\z/
 
   class Installation
     def self.create(path: nil)
@@ -75,6 +77,10 @@ module U3d
       Dir.entries(fpath).select { |e| File.directory?(File.join(fpath, e)) && !(e == '.' || e == '..') }
     end
 
+    def clean_install?
+      path =~ UNITY_DIR_CHECK
+    end
+
     private
 
     def plist
@@ -112,6 +118,10 @@ module U3d
 
     def packages
       false
+    end
+
+    def clean_install?
+      path =~ UNITY_DIR_CHECK_LINUX
     end
   end
 
@@ -157,6 +167,10 @@ module U3d
       raise "Unity installation does not seem correct. Couldn't locate PlaybackEngines." unless Dir.exist? fpath
       Dir.entries(fpath).select { |e| File.directory?(File.join(fpath, e)) && !(e == '.' || e == '..') }
     end
+
+    def clean_install?
+      path =~ UNITY_DIR_CHECK
+    end
   end
 
   class Installer
@@ -170,7 +184,7 @@ module U3d
                   end
       if UI.interactive?
         unclean = []
-        installer.installed.each { |unity| unclean << unity unless unity.path =~ UNITY_DIR_CHECK }
+        installer.installed.each { |unity| unclean << unity unless unity.clean_install? }
         if !unclean.empty? && UI.confirm("#{unclean.count} Unity installation should be moved. Proceed?")
           unclean.each { |unity| installer.sanitize_install(unity) }
         end
@@ -263,7 +277,7 @@ module U3d
     def sanitize_install(unity)
       source_path = File.expand_path(unity.path)
       parent = File.expand_path('..', source_path)
-      new_path = File.join(parent, UNITY_DIR % unity.version)
+      new_path = File.join(parent, UNITY_DIR_LINUX % unity.version)
       UI.important "Moving #{source_path} to #{new_path}..."
       source_path = "\"#{source_path}\"" if source_path =~ / /
       new_path = "\"#{new_path}\"" if new_path =~ / /
