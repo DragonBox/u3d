@@ -268,11 +268,28 @@ module U3d
           file_name = UNITY_MODULE_FILE_REGEX.match(url)[1]
           file_path = File.expand_path(file_name, dir)
 
+          # Assume size from online ressource
+          uri = URI(url)
+          size = nil
+          Net::HTTP.start(uri.host, uri.port) do |http|
+            response = http.request_head url
+            size = Integer(response['Content-Length'])
+          end
           # Check if file already exists
           # Note: without size or hash validation, the file is assumed to be correct
           if File.file?(file_path)
-            UI.important "File already downloaded at #{file_path}"
-            return file_path
+            if size
+              if File.size(file_path) != size
+                UI.important "File at #{file_path} is corrupted, deleting it"
+                File.delete file_path
+              else
+                UI.important "Unity #{version} installer already downloaded at #{file_path}"
+                return file_path
+              end
+            else
+              UI.important "No file validation available, #{file_path} is assumed to be correct"
+              return file_path
+            end
           end
 
           # Download file
