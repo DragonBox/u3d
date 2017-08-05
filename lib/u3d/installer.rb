@@ -301,7 +301,7 @@ module U3d
         U3dCore::CommandExecutor.execute(command: cmd, admin: true)
       end
     rescue => e
-      UI.error "Failed to install bash file at #{file_path}: #{e}"
+      UI.error "Failed to install bash file at #{file}: #{e}"
     else
       UI.success 'Installation successful'
     end
