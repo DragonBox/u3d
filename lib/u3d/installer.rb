@@ -92,7 +92,7 @@ module U3d
     def version
       # I don't find an easy way to extract the version on Linux
       require 'rexml/document'
-      fpath = "#{path}/Data/PlaybackEngines/LinuxStandaloneSupport/ivy.xml"
+      fpath = "#{path}/Editor/Data/PlaybackEngines/LinuxStandaloneSupport/ivy.xml"
       raise "Couldn't find file #{fpath}" unless File.exist? fpath
       doc = REXML::Document.new(File.read(fpath))
       version = REXML::XPath.first(doc, 'ivy-module/info/@e:unityVersion').value
@@ -275,7 +275,7 @@ module U3d
     end
 
     def installed
-      find = File.join(DEFAULT_LINUX_INSTALL, 'Unity*')
+      find = File.join(DEFAULT_LINUX_INSTALL, 'unity-editor-*')
       versions = Dir[find].map { |path| LinuxInstallation.new(path: path) }
 
       # sorting should take into account stable/patch etc
@@ -285,7 +285,7 @@ module U3d
     def install(file_path, version, installation_path: nil, info: {})
       extension = File.extname(file_path)
       raise "Installation of #{extension} files is not supported on Linux" if extension != '.sh'
-      path = installation_path || File.join(DEFAULT_LINUX_INSTALL, UNITY_DIR % version)
+      path = installation_path || DEFAULT_LINUX_INSTALL
       install_sh(
         file_path,
         installation_path: path
@@ -295,13 +295,16 @@ module U3d
     def install_sh(file, installation_path: nil)
       cmd = file.shellescape
       if installation_path
-        Utils.ensure_dir(installation_path)
-        U3dCore::CommandExecutor.execute(command: "cd #{installation_path}; #{cmd}", admin: true)
+        command = "cd \"#{installation_path}\"; #{cmd}"
+        unless File.directory? installation_path
+          command = "mkdir -p \"#{installation_path}\"; #{command}"
+        end
+        U3dCore::CommandExecutor.execute(command: command, admin: true)
       else
         U3dCore::CommandExecutor.execute(command: cmd, admin: true)
       end
     rescue => e
-      UI.error "Failed to install bash file at #{file_path}: #{e}"
+      UI.error "Failed to install bash file at #{file}: #{e}"
     else
       UI.success 'Installation successful'
     end
