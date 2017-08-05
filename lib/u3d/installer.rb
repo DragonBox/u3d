@@ -275,7 +275,7 @@ module U3d
     end
 
     def installed
-      find = File.join(DEFAULT_LINUX_INSTALL, 'Unity_*', 'unity-*')
+      find = File.join(DEFAULT_LINUX_INSTALL, 'unity-editor-*')
       versions = Dir[find].map { |path| LinuxInstallation.new(path: path) }
 
       # sorting should take into account stable/patch etc
@@ -285,7 +285,7 @@ module U3d
     def install(file_path, version, installation_path: nil, info: {})
       extension = File.extname(file_path)
       raise "Installation of #{extension} files is not supported on Linux" if extension != '.sh'
-      path = installation_path || File.join(DEFAULT_LINUX_INSTALL, UNITY_DIR % version)
+      path = installation_path || DEFAULT_LINUX_INSTALL
       install_sh(
         file_path,
         installation_path: path
