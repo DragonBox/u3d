@@ -295,8 +295,11 @@ module U3d
     def install_sh(file, installation_path: nil)
       cmd = file.shellescape
       if installation_path
-        Utils.ensure_dir(installation_path)
-        U3dCore::CommandExecutor.execute(command: "cd #{installation_path}; #{cmd}", admin: true)
+        command = "cd \"#{installation_path}\"; #{cmd}"
+        unless File.directory? installation_path
+          command = "mkdir -p \"#{installation_path}\"; #{command}"
+        end
+        U3dCore::CommandExecutor.execute(command: command, admin: true)
       else
         U3dCore::CommandExecutor.execute(command: cmd, admin: true)
       end
