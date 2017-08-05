@@ -275,7 +275,7 @@ module U3d
     end
 
     def installed
-      find = File.join(DEFAULT_LINUX_INSTALL, 'Unity*')
+      find = File.join(DEFAULT_LINUX_INSTALL, 'Unity_*', 'unity-*')
       versions = Dir[find].map { |path| LinuxInstallation.new(path: path) }
 
       # sorting should take into account stable/patch etc
