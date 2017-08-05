@@ -92,7 +92,7 @@ module U3d
     def version
       # I don't find an easy way to extract the version on Linux
       require 'rexml/document'
-      fpath = "#{path}/Data/PlaybackEngines/LinuxStandaloneSupport/ivy.xml"
+      fpath = "#{path}/Editor/Data/PlaybackEngines/LinuxStandaloneSupport/ivy.xml"
       raise "Couldn't find file #{fpath}" unless File.exist? fpath
       doc = REXML::Document.new(File.read(fpath))
       version = REXML::XPath.first(doc, 'ivy-module/info/@e:unityVersion').value
