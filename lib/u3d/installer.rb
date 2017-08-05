@@ -30,7 +30,9 @@ module U3d
   DEFAULT_MAC_INSTALL = '/'.freeze
   DEFAULT_WINDOWS_INSTALL = 'C:/Program Files/'.freeze
   UNITY_DIR = "Unity_%s".freeze
+  UNITY_DIR_LINUX = "unity-editor-%sLinux".freeze
   UNITY_DIR_CHECK = /Unity_\d+\.\d+\.\d+[a-z]\d+/
+  UNITY_DIR_CHECK_LINUX = /unity-editor-\d+\.\d+\.\d+(?:x)?[a-z]\d+Linux/
 
   class Installation
     def self.create(path: nil)
@@ -107,7 +109,7 @@ module U3d
     end
 
     def exe_path
-      "#{path}/Unity"
+      "#{path}/Editor/Unity"
     end
 
     def packages
@@ -170,7 +172,7 @@ module U3d
                   end
       if UI.interactive?
         unclean = []
-        installer.installed.each { |unity| unclean << unity unless unity.path =~ UNITY_DIR_CHECK }
+        installer.installed.each { |unity| unclean << unity unless clean_install?(unity.path) }
         if !unclean.empty? && UI.confirm("#{unclean.count} Unity installation should be moved. Proceed?")
           unclean.each { |unity| installer.sanitize_install(unity) }
         end
@@ -183,6 +185,16 @@ module U3d
       files.each do |name, file, info|
         UI.verbose "Installing #{name}#{info['mandatory'] ? ' (mandatory package)' : ''}, with file #{file}"
         installer.install(file, version, installation_path: installation_path, info: info)
+      end
+    end
+
+    private
+
+    def self.clean_install?(path)
+      if Helper.linux?
+        return path =~ UNITY_DIR_CHECK_LINUX
+      else
+        return path =~ UNITY_DIR_CHECK
       end
     end
   end
@@ -263,7 +275,7 @@ module U3d
     def sanitize_install(unity)
       source_path = File.expand_path(unity.path)
       parent = File.expand_path('..', source_path)
-      new_path = File.join(parent, UNITY_DIR % unity.version)
+      new_path = File.join(parent, UNITY_DIR_LINUX % unity.version)
       UI.important "Moving #{source_path} to #{new_path}..."
       source_path = "\"#{source_path}\"" if source_path =~ / /
       new_path = "\"#{new_path}\"" if new_path =~ / /
@@ -293,6 +305,7 @@ module U3d
     end
 
     def install_sh(file, installation_path: nil)
+      LinuxDependencies.install_dependencies
       cmd = file.shellescape
       if installation_path
         command = "cd \"#{installation_path}\"; #{cmd}"
@@ -384,7 +397,70 @@ module U3d
     def editor_version
       require 'yaml'
       yaml = YAML.load(File.read("#{@path}/ProjectSettings/ProjectVersion.txt"))
-      yaml['m_EditorVersion']
+      version = yaml['m_EditorVersion']
+      if Helper.linux?
+        version.gsub!(/Linux/, '')
+        version.gsub!(/x/, '')
+      end
+      version
+    end
+  end
+
+  class LinuxDependencies
+    DEPENDENCIES = [
+      'gconf-service',
+      'lib32gcc1',
+      'lib32stdc++6',
+      'libasound2',
+      'libc6',
+      'libc6-i386',
+      'libcairo2',
+      'libcap2',
+      'libcups2',
+      'libdbus-1-3',
+      'libexpat1',
+      'libfontconfig1',
+      'libfreetype6',
+      'libgcc1',
+      'libgconf-2-4',
+      'libgdk-pixbuf2.0-0',
+      'libgl1-mesa-glx',
+      'libglib2.0-0',
+      'libglu1-mesa',
+      'libgtk2.0-0',
+      'libnspr4',
+      'libnss3',
+      'libpango1.0-0',
+      'libstdc++6',
+      'libx11-6',
+      'libxcomposite1',
+      'libxcursor1',
+      'libxdamage1',
+      'libxext6',
+      'libxfixes3',
+      'libxi6',
+      'libxrandr2',
+      'libxrender1',
+      'libxtst6',
+      'zlib1g',
+      'debconf',
+      'npm'
+    ]
+
+    def self.install_dependencies
+      if `which dpkg` != ''
+        prefix = 'apt-get -y install'
+      elsif `which rpm` != ''
+        prefix = 'yum -y install'
+      else
+        raise 'Cannot install dependencies on your Linux distribution'
+      end
+      DEPENDENCIES.each do |dep|
+        if UI.interactive?
+          next unless UI.confirm "Install #{dep}?"
+        end
+        U3dCore::CommandExecutor.execute(command: "#{prefix} #{dep}", admin: true)
+      end
     end
   end
 end
