@@ -64,7 +64,7 @@ module U3d
         else
           args.map!(&:shellescape)
         end
-        # FIXME return value not handled
+        
         U3dCore::CommandExecutor.execute(command: args, print_all: true)
       ensure
         sleep 1
