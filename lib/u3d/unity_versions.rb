@@ -166,7 +166,7 @@ module U3d
             if response.kind_of? Net::HTTPSuccess
               capt = response.body.match(LINUX_DOWNLOAD_RECENT_FILE)
               if capt && capt[1] && capt[2]
-                versions[capt[2].gsub(/x/, '')] = capt[1]
+                versions[capt[2].delete('x')] = capt[1]
               else
                 UI.error("Could not retrieve a fitting file from #{url}")
               end

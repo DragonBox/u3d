@@ -29,15 +29,19 @@ class CustomExpectations
   def phase_active(phases)
     expect(phases).to have_key('TEST_ACTIVE')
   end
+
   def phase_not_active(phases)
     expect(phases).not_to have_key('TEST_NOT_ACTIVE')
   end
+
   def silent_phase_use(phases)
     expect(phases).to have_key('TEST')
   end
+
   def silent_phase_rules(phases)
     expect(phases['TEST']['rules']).to be_empty
   end
+
   def phase_start_pattern_parsing(phases)
     expect(phases['TEST']['phase_start_pattern']).to eql(/This is a pattern/)
   end
@@ -48,10 +52,9 @@ rules_data_file = File.expand_path('../../data/rules_data.json', __FILE__)
 describe U3d do
   describe U3d::LogAnalyzer do
     describe '.load_rules custom' do
-      data =  JSON.parse(File.read(rules_data_file))
+      data = JSON.parse(File.read(rules_data_file))
       data.each do |key, test_cases|
         it test_cases['message'] do
-          file = double('file')
           allow(File).to receive(:read) { test_cases['ruleset'].to_json }
 
           _gen, parsed_phases = U3d::LogAnalyzer.new.load_rules
@@ -63,7 +66,7 @@ describe U3d do
       it "loads defaults rules without problem" do
         gen, phases = U3d::LogAnalyzer.new.load_rules
         expect(gen.keys.count).to be > 5
-        expect(phases.keys).to eq ['JENKINS','INIT','COMPILER','ASSET']
+        expect(phases.keys).to eq %w(JENKINS INIT COMPILER ASSET)
       end
 
       it "parses a simple file" do
