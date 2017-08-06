@@ -36,6 +36,7 @@ module U3d
         log_file = installation.default_log_file
       end
 
+      Utils.ensure_dir File.dirname(log_file)
       FileUtils.touch(log_file) unless File.exist? log_file
 
       tail_thread = Thread.new do
