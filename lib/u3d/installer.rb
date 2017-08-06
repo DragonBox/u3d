@@ -113,7 +113,7 @@ module U3d
     end
 
     def exe_path
-      "#{path}/Editor/Unity"
+      "#{path}/Unity"
     end
 
     def packages
