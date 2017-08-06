@@ -42,7 +42,7 @@ module U3d
           return
         end
         # version -> installations
-        arraym = list.map{|a| [a.version, a]}
+        arraym = list.map { |a| [a.version, a] }
         map = Hash[*arraym.flatten]
         # sorted versions
         vcomparators = map.keys.map { |k| UnityVersionComparator.new(k) }
@@ -218,7 +218,7 @@ module U3d
         %w(add remove check)
       end
 
-      def credentials(args: [], options: {})
+      def credentials(args: [], _options: {})
         action = args[0]
         raise "Please specify an action to perform, one of #{credentials_actions.join(',')}" unless action
         raise "Unknown action '#{action}'. Use one of #{credentials_actions.join(',')}" unless credentials_actions.include? action
