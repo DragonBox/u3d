@@ -1,5 +1,33 @@
 # Change Log
 
+## [v0.9.3](https://github.com/DragonBox/u3d/tree/v0.9.3) (2017-08-07)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v0.9.2...v0.9.3)
+
+**Implemented enhancements:**
+
+- Auto-sanitize Linux install names after install [\#35](https://github.com/DragonBox/u3d/issues/35)
+- u3d list: properly align versions and paths in output [\#42](https://github.com/DragonBox/u3d/pull/42) ([niezbop](https://github.com/niezbop))
+
+**Fixed bugs:**
+
+- Don't duplicate Unity install for specific versions [\#40](https://github.com/DragonBox/u3d/issues/40)
+- u3d install: too high CPU usage during download [\#36](https://github.com/DragonBox/u3d/issues/36)
+- Linux Unity\_2017.2.0b2 installer failure [\#19](https://github.com/DragonBox/u3d/issues/19)
+
+**Merged pull requests:**
+
+- Do not reinstall Unity or its packages if already present. Also prevent duplication because of sanitization. [\#41](https://github.com/DragonBox/u3d/pull/41) ([niezbop](https://github.com/niezbop))
+- Linux auto sanitize after install [\#39](https://github.com/DragonBox/u3d/pull/39) ([niezbop](https://github.com/niezbop))
+- u3d/install: reduce cpu caused by lack of buffering and high console output \#36 [\#37](https://github.com/DragonBox/u3d/pull/37) ([lacostej](https://github.com/lacostej))
+- Rubocop / Improve code style [\#34](https://github.com/DragonBox/u3d/pull/34) ([niezbop](https://github.com/niezbop))
+- \[linux\] Adjust to weird editor versions stored under ProjectSettings/ProjectVersion.txt [\#33](https://github.com/DragonBox/u3d/pull/33) ([niezbop](https://github.com/niezbop))
+- Make Linux runner functional again [\#29](https://github.com/DragonBox/u3d/pull/29) ([lacostej](https://github.com/lacostej))
+- u3d/run: ensure parent dir to logfile exists before creating the file [\#28](https://github.com/DragonBox/u3d/pull/28) ([lacostej](https://github.com/lacostej))
+- Rubocop / Improve code style [\#27](https://github.com/DragonBox/u3d/pull/27) ([lacostej](https://github.com/lacostej))
+- Fix Linux runner and installation [\#26](https://github.com/DragonBox/u3d/pull/26) ([niezbop](https://github.com/niezbop))
+- Change sanitizer to be platform specific [\#24](https://github.com/DragonBox/u3d/pull/24) ([niezbop](https://github.com/niezbop))
+- Make Linux installer functional again [\#20](https://github.com/DragonBox/u3d/pull/20) ([lacostej](https://github.com/lacostej))
+
 ## [v0.9.2](https://github.com/DragonBox/u3d/tree/v0.9.2) (2017-08-04)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v0.9.1...v0.9.2)
 
