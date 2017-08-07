@@ -304,6 +304,7 @@ module U3d
         file_path,
         installation_path: path
       )
+      # Forces sanitation for installation of 'weird' versions eg 5.6.1xf1Linux
       sanitize_install(installed.select { |u| u.version == version }.first)
     end
 
