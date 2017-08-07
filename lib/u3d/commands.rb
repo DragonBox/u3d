@@ -114,10 +114,20 @@ module U3d
         versions = cache[os.id2name]['versions']
         version = interpret_latest(version, versions)
 
-        unless packages.include?('Unity')
-          unity = check_unity_presence(version: version)
-          return unless unity
-          options[:installation_path] ||= unity.path if Helper.windows?
+        unity = check_unity_presence(version: version)
+        if unity
+          UI.important "Unity #{version} is already installed"
+          return if Helper.linux?
+          if packages.include?('Unity')
+            UI.important 'Ignoring Unity module, it is already installed'
+            packages.delete('Unity')
+            options[:installation_path] ||= unity.path if Helper.windows?
+          end
+        else
+          unless packages.include?('Unity')
+            UI.error "Please install Unity #{version} before any of its packages"
+            return
+          end
         end
 
         U3d::Globals.use_keychain = true if options[:keychain] && Helper.mac?
@@ -156,10 +166,22 @@ module U3d
 
         packages = packages_with_unity_first(options)
 
-        unless packages.include?('Unity')
-          unity = check_unity_presence(version: version)
-          return unless unity
-          options[:installation_path] ||= unity.path if Helper.windows?
+        os = U3dCore::Helper.operating_system
+
+        unity = check_unity_presence(version: version)
+        if unity
+          UI.important "Unity #{version} is already installed"
+          return if Helper.linux?
+          if packages.include?('Unity')
+            UI.important 'Ignoring Unity module, it is already installed'
+            packages.delete('Unity')
+            options[:installation_path] ||= unity.path if Helper.windows?
+          end
+        else
+          unless packages.include?('Unity')
+            UI.error "Please install Unity #{version} before any of its packages"
+            return
+          end
         end
 
         U3d::Globals.use_keychain = true if options[:keychain] && Helper.mac?
@@ -167,7 +189,6 @@ module U3d
         UI.important 'Root privileges are required'
         raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
 
-        os = U3dCore::Helper.operating_system
         files = []
         if os == :linux
           UI.important 'Option -a | --all not available for Linux' if options[:all]
@@ -297,7 +318,7 @@ module U3d
         installed = Installer.create.installed
         unity = installed.find { |u| u.version == version }
         if unity.nil?
-          UI.error "Version #{version} of Unity is not installed yet. Please install it first before installing any other module"
+          UI.verbose "Version #{version} of Unity is not installed yet"
         else
           UI.verbose "Unity #{version} is installed at #{unity.path}"
           return unity
