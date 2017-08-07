@@ -65,6 +65,7 @@ module U3d
         File.open(path, 'wb') do |f|
           uri = URI(url)
           current = 0
+          last_print_update = 0
           Net::HTTP.start(uri.host, uri.port) do |http|
             request = Net::HTTP::Get.new uri
             http.request request do |response|
@@ -77,7 +78,11 @@ module U3d
               response.read_body do |segment|
                 f.write(segment)
                 current += segment.length
+                # wait for Net::HTTP buffer on slow networks
+                sleep 0.08 # adjust to reduce CPU
                 next unless UI.interactive?
+                next unless Time.now.to_f - last_print_update > 0.5
+                last_print_update = Time.now.to_f
                 if size
                   Utils.print_progress(current, size, started_at)
                 else
