@@ -115,20 +115,7 @@ module U3d
         version = interpret_latest(version, versions)
 
         unity = check_unity_presence(version: version)
-        if unity
-          UI.important "Unity #{version} is already installed"
-          return if Helper.linux?
-          if packages.include?('Unity')
-            UI.important 'Ignoring Unity module, it is already installed'
-            packages.delete('Unity')
-            options[:installation_path] ||= unity.path if Helper.windows?
-          end
-        else
-          unless packages.include?('Unity')
-            UI.error "Please install Unity #{version} before any of its packages"
-            return
-          end
-        end
+        return unless enforce_setup_coherence(packages, options, unity)
 
         U3d::Globals.use_keychain = true if options[:keychain] && Helper.mac?
 
@@ -169,20 +156,7 @@ module U3d
         os = U3dCore::Helper.operating_system
 
         unity = check_unity_presence(version: version)
-        if unity
-          UI.important "Unity #{version} is already installed"
-          return if Helper.linux?
-          if packages.include?('Unity')
-            UI.important 'Ignoring Unity module, it is already installed'
-            packages.delete('Unity')
-            options[:installation_path] ||= unity.path if Helper.windows?
-          end
-        else
-          unless packages.include?('Unity')
-            UI.error "Please install Unity #{version} before any of its packages"
-            return
-          end
-        end
+        return unless enforce_setup_coherence(packages, options, unity)
 
         U3d::Globals.use_keychain = true if options[:keychain] && Helper.mac?
 
@@ -324,6 +298,24 @@ module U3d
           return unity
         end
         nil
+      end
+
+      def enforce_setup_coherence(packages, options, unity)
+        if unity
+          UI.important "Unity #{unity.version} is already installed"
+          return false if Helper.linux?
+          if packages.include?('Unity')
+            UI.important 'Ignoring Unity module, it is already installed'
+            packages.delete('Unity')
+            options[:installation_path] ||= unity.path if Helper.windows?
+          end
+        else
+          unless packages.include?('Unity')
+            UI.error "Please install Unity #{unity.version} before any of its packages"
+            return false
+          end
+        end
+        true
       end
     end
   end
