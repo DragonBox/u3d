@@ -304,6 +304,7 @@ module U3d
         file_path,
         installation_path: path
       )
+      sanitize_install(installed.select { |u| u.version == version }.first)
     end
 
     def install_sh(file, installation_path: nil)
