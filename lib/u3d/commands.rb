@@ -49,7 +49,7 @@ module U3d
         sorted_keys = vcomparators.sort.map { |v| v.version.to_s }
         sorted_keys.each do |k|
           u = map[k]
-          UI.message "Version #{u.version}\t(#{u.path})"
+          UI.message "%-*s%s" % [30, "Version #{u.version}", " (#{u.path})"]
           packages = u.packages
           next unless options[:packages] && packages && !packages.empty?
           UI.message 'Packages:'
