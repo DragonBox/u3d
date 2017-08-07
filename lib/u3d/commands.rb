@@ -309,6 +309,11 @@ module U3d
             packages.delete('Unity')
             options[:installation_path] ||= unity.path if Helper.windows?
           end
+          if unity.packages
+            unity.packages.each do |pack|
+              UI.important "Ignoring #{pack} module, it is already installed" if packages.delete(pack)
+            end
+          end
         else
           unless packages.include?('Unity')
             UI.error "Please install Unity #{unity.version} before any of its packages"
