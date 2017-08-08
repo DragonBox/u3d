@@ -21,6 +21,8 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
+require 'English'
+
 module U3dCore
   # this module is meant to be private to this lib
   module Runner
@@ -60,17 +62,21 @@ module U3dCore
           yield r, w, p
         # if the process has closed, ruby might raise an exception if we try
         # to do I/O on a closed stream. This behavior is platform specific
+        # rubocop:disable HandleExceptions
         rescue Errno::EIO
+        # rubocop:enable HandleExceptions
         ensure
           begin
             Process.wait p
           # The process might have exited.
           # This behavior is also ruby version dependent.
+          # rubocop:disable HandleExceptions
           rescue Errno::ECHILD, PTY::ChildExited
           end
+          # rubocop:enable HandleExceptions
         end
       end
-      $?.exitstatus
+      $CHILD_STATUS.exitstatus
     end
   end
 
