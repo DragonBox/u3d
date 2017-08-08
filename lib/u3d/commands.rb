@@ -218,20 +218,7 @@ module U3d
           U3dCore::Globals.use_keychain = true
           U3dCore::Credentials.new(user: ENV['USER']).forget_credentials(force: true)
         else
-          U3dCore::Globals.use_keychain = true
-          credentials = U3dCore::Credentials.new(user: ENV['USER'])
-          U3dCore::Globals.with_do_not_login(true) do
-            if credentials.password.to_s.empty?
-              UI.message "No credentials stored"
-            else
-              if U3dCore::CommandExecutor.has_admin_privileges?
-                UI.success "Stored credentials are valid"
-              else
-                UI.error "Stored credentials are not valid"
-              end
-            end
-          end
-          # FIXME: return value
+          credentials_check
         end
       end
 
@@ -259,6 +246,23 @@ module U3d
       end
 
       private
+
+      def credentials_check
+        U3dCore::Globals.use_keychain = true
+        credentials = U3dCore::Credentials.new(user: ENV['USER'])
+        U3dCore::Globals.with_do_not_login(true) do
+          if credentials.password.to_s.empty?
+            UI.message "No credentials stored"
+          else
+            if U3dCore::CommandExecutor.has_admin_privileges?
+              UI.success "Stored credentials are valid"
+            else
+              UI.error "Stored credentials are not valid"
+            end
+          end
+        end
+        # FIXME: return value
+      end        
 
       # if the specified string representatio of `os` is non nil
       # convert the it to a symbol and checks it against the valid ones
