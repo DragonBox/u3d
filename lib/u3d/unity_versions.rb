@@ -98,6 +98,7 @@ module U3d
           versions = {}
           results = data.scan(LINUX_DOWNLOAD_DATED)
           results.each do |capt|
+            save_package_size(capt[1], capt[0])
             versions[capt[1]] = capt[0]
           end
 
@@ -113,7 +114,9 @@ module U3d
             if response.is_a? Net::HTTPSuccess
               capt = response.body.match(LINUX_DOWNLOAD_RECENT_FILE)
               if capt && capt[1] && capt[2]
-                versions[capt[2].delete('x')] = capt[1]
+                ver = capt[2].delete('x')
+                save_package_size(ver, capt[1])
+                versions[ver] = capt[1]
               else
                 UI.error("Could not retrieve a fitting file from #{url}")
               end
@@ -127,6 +130,16 @@ module U3d
             UI.success "Found #{versions.count} releases."
           end
           versions
+        end
+
+        def save_package_size(version, url)
+          uri = URI(url)
+          size = nil
+          Net::HTTP.start(uri.host, uri.port) do |http|
+            response = http.request_head url
+            size = Integer(response['Content-Length'])
+          end
+          INIparser.create_linux_ini(version, size) if size
         end
 
         def linux_forum_page_content
