@@ -84,6 +84,7 @@ module U3dCore
 
     # the current operating system
     def self.operating_system
+      # rubocop:disable GuardClause
       if linux?
         return :linux
       elsif mac?
@@ -93,6 +94,7 @@ module U3dCore
       else
         raise 'Could not assume what OS you\'re running, please specify it as much as possible'
       end
+      # rubocop:enable GuardClause
     end
 
     def self.win_64?
