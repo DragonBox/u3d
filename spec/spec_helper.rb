@@ -26,7 +26,9 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(
   [SimpleCov::Formatter::HTMLFormatter,
    Coveralls::SimpleCov::Formatter]
 )
-SimpleCov.start
+SimpleCov.start do
+  add_filter '.bundle'
+end
 # Coveralls.wear!
 
 require 'u3d_core'
