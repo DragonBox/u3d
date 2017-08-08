@@ -110,6 +110,7 @@ module U3d
 
         unity = check_unity_presence(version: version)
         return unless enforce_setup_coherence(packages, options, unity)
+        return if packages.empty?
 
         U3d::Globals.use_keychain = true if options[:keychain] && Helper.mac?
 
@@ -134,6 +135,7 @@ module U3d
 
         unity = check_unity_presence(version: version)
         return unless enforce_setup_coherence(packages, options, unity)
+        return if packages.empty?
 
         U3d::Globals.use_keychain = true if options[:keychain] && Helper.mac?
 
