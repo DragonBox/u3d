@@ -118,7 +118,7 @@ module U3d
           raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
         end
 
-        files = Downloader.download_modules(version, versions, os, packages)
+        files = Downloader.download_modules(version, versions, os, packages: packages)
 
         return if options[:no_install]
         Installer.install_modules(files, version, installation_path: options[:installation_path])
@@ -140,7 +140,7 @@ module U3d
         UI.important 'Root privileges are required'
         raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
 
-        files = Downloader.local_files(version, os, packages)
+        files = Downloader.local_files(version, os, packages: packages)
 
         Installer.install_modules(files, version, installation_path: options[:installation_path])
       end
