@@ -102,7 +102,7 @@ module U3d
       raise "Couldn't find file #{fpath}" unless File.exist? fpath
       doc = REXML::Document.new(File.read(fpath))
       version = REXML::XPath.first(doc, 'ivy-module/info/@e:unityVersion').value
-      if m = version.match(/^(.*)x(.*)Linux$/)
+      if (m = version.match(/^(.*)x(.*)Linux$/))
         version = "#{m[1]}#{m[2]}"
       end
       version
