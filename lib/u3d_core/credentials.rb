@@ -105,8 +105,8 @@ module U3dCore
           UI.message 'Deleting credentials from the keychain'
           Security::InternetPassword.delete(server: MAC_U3D_SERVER)
         end
-      else
-        UI.verbose 'Keychain may store invalid credentials for u3d' if Helper.mac?
+      elsif Helper.mac?
+        UI.verbose 'Keychain may store invalid credentials for u3d'
       end
     end
   end
