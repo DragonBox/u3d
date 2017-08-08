@@ -112,12 +112,12 @@ module U3dCore
 
     # Does the user use the Mac stock terminal
     def self.mac_stock_terminal?
-      !!ENV["TERM_PROGRAM_VERSION"]
+      !ENV["TERM_PROGRAM_VERSION"].nil?
     end
 
     # Does the user use iTerm?
     def self.iterm?
-      !!ENV["ITERM_SESSION_ID"]
+      !ENV["ITERM_SESSION_ID"].nil?
     end
 
     # Logs base directory
