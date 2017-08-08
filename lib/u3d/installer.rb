@@ -374,7 +374,7 @@ module U3d
           command.sub!(/{INSTDIR}/, final_path)
           command.sub!(/{DOCDIR}/, final_path)
           command.sub!(/{MODULEDIR}/, final_path)
-          command.sub!(/\/D=/, '/S /D=') unless /\/S/ =~ command
+          command.sub!(%r{\/D=}, '/S /D=') unless %r{\/S} =~ command
         end
         command ||= file_path.to_s
         U3dCore::CommandExecutor.execute(command: command, admin: true)
