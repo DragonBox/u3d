@@ -29,7 +29,7 @@ describe U3d do
       before(:each) do
         @version = 'key'
         @cache = { @version => 'url' }
-        name = 'unity-%s-osx.ini' % @version
+        name = "unity-#{@version}-osx.ini"
         @path = File.expand_path(name, "#{ENV['HOME']}/.u3d/ini_files")
       end
 

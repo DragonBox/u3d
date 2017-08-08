@@ -55,7 +55,6 @@ describe U3d do
       data = JSON.parse(File.read(rules_data_file))
       data.each do |key, test_cases|
         it test_cases['message'] do
-          file = double('file')
           allow(File).to receive(:read) { test_cases['ruleset'].to_json }
 
           _gen, parsed_phases = U3d::LogAnalyzer.new.load_rules
@@ -76,7 +75,7 @@ describe U3d do
         File.open(log, 'r') do |f|
           f.readlines.each { |l| analyzer.parse_line l }
         end
-        # FIXME we're not really testing anything here
+        # FIXME: we're not really testing anything here
       end
     end
   end
