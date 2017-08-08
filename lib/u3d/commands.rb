@@ -59,17 +59,9 @@ module U3d
 
       def list_available(options: {})
         ver = options[:unity_version]
-        os = options[:operating_system]
+        os = valid_os_or_current(options[:operating_system])
         rl = options[:release_level]
-        if os
-          os = os.to_sym
-          oses = U3dCore::Helper.operating_systems
-          raise "Specified OS (#{os}) isn't valid [#{oses.join(', ')}]" unless oses.include?(os)
-        else
-          os = U3dCore::Helper.operating_system
-        end
         cache = Cache.new(force_os: os, force_refresh: options[:force])
-        versions = {}
 
         return UI.error "Version #{ver} is not in cache" if ver && cache[os.id2name]['versions'][ver].nil?
 
@@ -267,6 +259,20 @@ module U3d
       end
 
       private
+
+      # if the specified string representatio of `os` is non nil
+      # convert the it to a symbol and checks it against the valid ones
+      # or return the current OS
+      def valid_os_or_current(os)
+        if os
+          os = os.to_sym
+          oses = U3dCore::Helper.operating_systems
+          raise "Specified OS (#{os}) isn't valid [#{oses.join(', ')}]" unless oses.include?(os)
+        else
+          os = U3dCore::Helper.operating_system
+        end
+        os
+      end
 
       def interpret_latest(version, versions)
         return version unless release_letter_mapping.keys.include? version.to_sym
