@@ -33,6 +33,7 @@ require 'fileutils'
 
 module U3d
   # API for U3d, redirecting calls to class they concern
+  # rubocop:disable ClassLength
   class Commands
     class << self
       def list_installed(options: {})
@@ -49,7 +50,7 @@ module U3d
         sorted_keys = vcomparators.sort.map { |v| v.version.to_s }
         sorted_keys.each do |k|
           u = map[k]
-          UI.message "%-*s%s" % [30, "Version #{u.version}", " (#{u.path})"]
+          UI.message "Version #{u.version.ljust(30)}(#{u.path})"
           packages = u.packages
           next unless options[:packages] && packages && !packages.empty?
           UI.message 'Packages:'
@@ -262,7 +263,7 @@ module U3d
           end
         end
         # FIXME: return value
-      end        
+      end
 
       # if the specified string representatio of `os` is non nil
       # convert the it to a symbol and checks it against the valid ones
@@ -334,4 +335,5 @@ module U3d
       end
     end
   end
+  # rubocop:enable ClassLength
 end
