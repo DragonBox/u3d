@@ -28,6 +28,7 @@ HighLine.track_eof = false
 
 module U3d
   # CLI using commander gem for u3d
+  # rubocop:disable ClassLength
   class CommandsGenerator
     include Commander::Methods
     UI = U3dCore::UI
@@ -160,4 +161,5 @@ module U3d
       run!
     end
   end
+  # rubocop:enable ClassLength
 end
