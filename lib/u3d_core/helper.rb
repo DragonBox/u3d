@@ -36,7 +36,7 @@ module U3dCore
     end
 
     # @return true if the currently running program is a unit test
-    def self.is_test?
+    def self.test?
       defined? SpecHelper
     end
 
@@ -84,6 +84,7 @@ module U3dCore
 
     # the current operating system
     def self.operating_system
+      # rubocop:disable GuardClause
       if linux?
         return :linux
       elsif mac?
@@ -93,6 +94,7 @@ module U3dCore
       else
         raise 'Could not assume what OS you\'re running, please specify it as much as possible'
       end
+      # rubocop:enable GuardClause
     end
 
     def self.win_64?
@@ -110,12 +112,12 @@ module U3dCore
 
     # Does the user use the Mac stock terminal
     def self.mac_stock_terminal?
-      !!ENV["TERM_PROGRAM_VERSION"]
+      !ENV["TERM_PROGRAM_VERSION"].nil?
     end
 
     # Does the user use iTerm?
     def self.iterm?
-      !!ENV["ITERM_SESSION_ID"]
+      !ENV["ITERM_SESSION_ID"].nil?
     end
 
     # Logs base directory

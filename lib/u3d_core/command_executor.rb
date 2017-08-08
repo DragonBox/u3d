@@ -61,23 +61,19 @@ module U3dCore
         print_all = true if U3dCore::Globals.verbose?
         prefix ||= {}
 
-        output = []
         command = command.join(' ') if command.is_a?(Array)
         UI.command(command) if print_command
 
         # this is only used to show the "Loading text"...
         UI.command_output(loading) if print_all && loading
 
-        if admin
-          cred = U3dCore::Credentials.new(user: ENV['USER'])
-          if Helper.windows?
-            raise CredentialsError, "The command \'#{command}\' must be run in administrative shell" unless has_admin_privileges?
-          else
-            command = "sudo -k && echo #{cred.password.shellescape} | sudo -S bash -c \"#{command}\""
-          end
-          UI.verbose 'Admin privileges granted for command execution'
-        end
+        command = grant_admin_privileges(command) if admin
 
+        execute_command(command: command, print_all: print_all, error: error, prefix: prefix)
+      end
+
+      def execute_command(command: nil, print_all: nil, error: nil, prefix: nil)
+        output = []
         begin
           status = U3dCore::Runner.run(command) do |stdin, _stdout, _pid|
             stdin.each do |l|
@@ -109,7 +105,9 @@ module U3dCore
         return output.join("\n")
       end
 
+      # rubocop:disable PredicateName
       def has_admin_privileges?
+        # rubocop:enable PredicateName
         if Helper.windows?
           begin
             result = system('reg query HKU\\S-1-5-19', out: File::NULL, err: File::NULL)
@@ -120,8 +118,8 @@ module U3dCore
           credentials = U3dCore::Credentials.new(user: ENV['USER'])
           begin
             result = system("sudo -k && echo #{credentials.password.shellescape} | sudo -S /usr/bin/whoami",
-              out: File::NULL,
-              err: File::NULL)
+                            out: File::NULL,
+                            err: File::NULL)
           rescue
             result = false
           end
@@ -130,6 +128,19 @@ module U3dCore
         # returns false if result is nil (command execution fail)
         return (result ? true : false)
       end
+
+      def grant_admin_privileges(command)
+        cred = U3dCore::Credentials.new(user: ENV['USER'])
+        if Helper.windows?
+          raise CredentialsError, "The command \'#{command}\' must be run in administrative shell" unless has_admin_privileges?
+        else
+          command = "sudo -k && echo #{cred.password.shellescape} | sudo -S bash -c \"#{command}\""
+        end
+        UI.verbose 'Admin privileges granted for command execution'
+        command
+      end
     end
+
+    private_class_method :execute_command
   end
 end

@@ -26,6 +26,7 @@ require 'u3d/utils'
 
 module U3d
   # Take care of downloading files and packages
+  # rubocop:disable ModuleLength
   module Downloader
     # Name of the directory for the package downloading
     DOWNLOAD_DIRECTORY = 'Unity_Packages'.freeze
@@ -59,6 +60,48 @@ module U3d
           UI.verbose 'No size validation available. File is assumed correct but may not be.'
         end
         true
+      end
+
+      # download packages or all if none specified
+      def download_modules(version, versions, os, packages: [])
+        files = []
+        if os == :linux
+          downloader = Downloader::LinuxDownloader
+          files << ["Unity #{version}", downloader.download(version, versions), {}]
+        else
+          downloader = Downloader::MacDownloader if os == :mac
+          downloader = Downloader::WindowsDownloader if os == :win
+          if packages.count.zero?
+            files = downloader.download_all(version, versions)
+          else
+            packages.each do |package|
+              result = downloader.download_specific(package, version, versions)
+              files << [package, result[0], result[1]] unless result.nil?
+            end
+          end
+        end
+        files
+      end
+
+      # find already downloaded packages or all if none specified
+      def local_files(version, os, packages: [])
+        files = []
+        if os == :linux
+          downloader = Downloader::LinuxDownloader
+          files << ["Unity #{version}", downloader.local_file(version), {}]
+        else
+          downloader = Downloader::MacDownloader if os == :mac
+          downloader = Downloader::WindowsDownloader if os == :win
+          if packages.count.zero?
+            files = downloader.all_local_files(version)
+          else
+            packages.each do |package|
+              result = downloader.local_file(package, version)
+              files << [package, result[0], result[1]] unless result.nil?
+            end
+          end
+        end
+        files
       end
 
       def download_package(path, url, size: nil)
@@ -365,4 +408,5 @@ module U3d
       end
     end
   end
+  # rubocop:enable ModuleLength
 end

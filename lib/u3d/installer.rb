@@ -102,7 +102,7 @@ module U3d
       raise "Couldn't find file #{fpath}" unless File.exist? fpath
       doc = REXML::Document.new(File.read(fpath))
       version = REXML::XPath.first(doc, 'ivy-module/info/@e:unityVersion').value
-      if m = version.match(/^(.*)x(.*)Linux$/)
+      if (m = version.match(/^(.*)x(.*)Linux$/))
         version = "#{m[1]}#{m[2]}"
       end
       version
@@ -234,7 +234,7 @@ module U3d
       versions.sort! { |x, y| x.version <=> y.version }
     end
 
-    def install(file_path, version, installation_path: nil, info: {})
+    def install(file_path, version, installation_path: nil, _info: {})
       extension = File.extname(file_path)
       raise "Installation of #{extension} files is not supported on Mac" if extension != '.pkg'
       path = installation_path || DEFAULT_MAC_INSTALL
@@ -296,7 +296,7 @@ module U3d
       versions.sort! { |x, y| x.version <=> y.version }
     end
 
-    def install(file_path, version, installation_path: nil, info: {})
+    def install(file_path, version, installation_path: nil, _info: {})
       extension = File.extname(file_path)
       raise "Installation of #{extension} files is not supported on Linux" if extension != '.sh'
       path = installation_path || DEFAULT_LINUX_INSTALL
@@ -374,7 +374,7 @@ module U3d
           command.sub!(/{INSTDIR}/, final_path)
           command.sub!(/{DOCDIR}/, final_path)
           command.sub!(/{MODULEDIR}/, final_path)
-          command.sub!(/\/D=/, '/S /D=') unless /\/S/ =~ command
+          command.sub!(%r{\/D=}, '/S /D=') unless %r{\/S} =~ command
         end
         command ||= file_path.to_s
         U3dCore::CommandExecutor.execute(command: command, admin: true)

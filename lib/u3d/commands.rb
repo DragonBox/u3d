@@ -33,6 +33,7 @@ require 'fileutils'
 
 module U3d
   # API for U3d, redirecting calls to class they concern
+  # rubocop:disable ClassLength
   class Commands
     class << self
       def list_installed(options: {})
@@ -49,7 +50,7 @@ module U3d
         sorted_keys = vcomparators.sort.map { |v| v.version.to_s }
         sorted_keys.each do |k|
           u = map[k]
-          UI.message "%-*s%s" % [30, "Version #{u.version}", " (#{u.path})"]
+          UI.message "Version #{u.version.ljust(30)}(#{u.path})"
           packages = u.packages
           next unless options[:packages] && packages && !packages.empty?
           UI.message 'Packages:'
@@ -59,17 +60,9 @@ module U3d
 
       def list_available(options: {})
         ver = options[:unity_version]
-        os = options[:operating_system]
+        os = valid_os_or_current(options[:operating_system])
         rl = options[:release_level]
-        if os
-          os = os.to_sym
-          oses = U3dCore::Helper.operating_systems
-          raise "Specified OS (#{os}) isn't valid [#{oses.join(', ')}]" unless oses.include?(os)
-        else
-          os = U3dCore::Helper.operating_system
-        end
         cache = Cache.new(force_os: os, force_refresh: options[:force])
-        versions = {}
 
         return UI.error "Version #{ver} is not in cache" if ver && cache[os.id2name]['versions'][ver].nil?
 
@@ -107,9 +100,10 @@ module U3d
         version = args[0]
         UI.user_error!('Please specify a Unity version to download') unless version
 
-        packages = packages_with_unity_first(options)
-
         os = U3dCore::Helper.operating_system
+
+        packages = packages_with_unity_first(os, options)
+
         cache = Cache.new(force_os: os)
         versions = cache[os.id2name]['versions']
         version = interpret_latest(version, versions)
@@ -124,36 +118,19 @@ module U3d
           raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
         end
 
-        files = []
-        if os == :linux
-          UI.important 'Option -a | --all not available for Linux' if options[:all]
-          UI.important 'Option -p | --packages not available for Linux' if options[:packages]
-          downloader = Downloader::LinuxDownloader
-          files << ["Unity #{version}", downloader.download(version, versions), {}]
-        else
-          downloader = Downloader::MacDownloader if os == :mac
-          downloader = Downloader::WindowsDownloader if os == :win
-          if options[:all]
-            files = downloader.download_all(version, versions)
-          else
-            packages.each do |package|
-              result = downloader.download_specific(package, version, versions)
-              files << [package, result[0], result[1]] unless result.nil?
-            end
-          end
-        end
+        files = Downloader.download_modules(version, versions, os, packages)
 
         return if options[:no_install]
         Installer.install_modules(files, version, installation_path: options[:installation_path])
       end
 
       def local_install(args: [], options: {})
-        UI.user_error!('Please specify a version') if args.empty?
         version = args[0]
-
-        packages = packages_with_unity_first(options)
+        UI.user_error!('Please specify a Unity version to download') unless version
 
         os = U3dCore::Helper.operating_system
+
+        packages = packages_with_unity_first(os, options)
 
         unity = check_unity_presence(version: version)
         return unless enforce_setup_coherence(packages, options, unity)
@@ -163,24 +140,7 @@ module U3d
         UI.important 'Root privileges are required'
         raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
 
-        files = []
-        if os == :linux
-          UI.important 'Option -a | --all not available for Linux' if options[:all]
-          UI.important 'Option -p | --packages not available for Linux' if options[:packages]
-          downloader = Downloader::LinuxDownloader
-          files << ["Unity #{version}", downloader.local_file(version), {}]
-        else
-          downloader = Downloader::MacDownloader if os == :mac
-          downloader = Downloader::WindowsDownloader if os == :win
-          if options[:all]
-            files = downloader.all_local_files(version)
-          else
-            packages.each do |package|
-              result = downloader.local_file(package, version)
-              files << [package, result[0], result[1]] unless result.nil?
-            end
-          end
-        end
+        files = Downloader.local_files(version, os, packages)
 
         Installer.install_modules(files, version, installation_path: options[:installation_path])
       end
@@ -226,20 +186,7 @@ module U3d
           U3dCore::Globals.use_keychain = true
           U3dCore::Credentials.new(user: ENV['USER']).forget_credentials(force: true)
         else
-          U3dCore::Globals.use_keychain = true
-          credentials = U3dCore::Credentials.new(user: ENV['USER'])
-          U3dCore::Globals.with_do_not_login(true) do
-            if credentials.password.to_s.empty?
-              UI.message "No credentials stored"
-            else
-              if U3dCore::CommandExecutor.has_admin_privileges?
-                UI.success "Stored credentials are valid"
-              else
-                UI.error "Stored credentials are not valid"
-              end
-            end
-          end
-          # FIXME: return value
+          credentials_check
         end
       end
 
@@ -268,6 +215,35 @@ module U3d
 
       private
 
+      def credentials_check
+        U3dCore::Globals.use_keychain = true
+        credentials = U3dCore::Credentials.new(user: ENV['USER'])
+        U3dCore::Globals.with_do_not_login(true) do
+          if credentials.password.to_s.empty?
+            UI.message "No credentials stored"
+          elsif U3dCore::CommandExecutor.has_admin_privileges?
+            UI.success "Stored credentials are valid"
+          else
+            UI.error "Stored credentials are not valid"
+          end
+        end
+        # FIXME: return value
+      end
+
+      # if the specified string representatio of `os` is non nil
+      # convert the it to a symbol and checks it against the valid ones
+      # or return the current OS
+      def valid_os_or_current(os)
+        if os
+          os = os.to_sym
+          oses = U3dCore::Helper.operating_systems
+          raise "Specified OS (#{os}) isn't valid [#{oses.join(', ')}]" unless oses.include?(os)
+        else
+          os = U3dCore::Helper.operating_system
+        end
+        os
+      end
+
       def interpret_latest(version, versions)
         return version unless release_letter_mapping.keys.include? version.to_sym
 
@@ -282,7 +258,12 @@ module U3d
         iversion
       end
 
-      def packages_with_unity_first(options)
+      def packages_with_unity_first(os, options)
+        if os == :linux
+          UI.important 'Option -a | --all not available for Linux' if options[:all]
+          UI.important 'Option -p | --packages not available for Linux' if options[:packages]
+        end
+        return [] if options[:all]
         temp = options[:packages] || ['Unity']
         temp.insert(0, 'Unity') if temp.delete('Unity')
         temp
@@ -324,4 +305,5 @@ module U3d
       end
     end
   end
+  # rubocop:enable ClassLength
 end

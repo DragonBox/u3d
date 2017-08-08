@@ -91,7 +91,45 @@ module U3d
       class << self
         def list_available
           UI.message 'Loading Unity releases'
-          request = nil
+
+          data = linux_forum_page_content
+
+          data.gsub(/[ \t]+/, '').each_line { |l| puts l if /<a href=/ =~ l }
+          versions = {}
+          results = data.scan(LINUX_DOWNLOAD_DATED)
+          results.each do |capt|
+            versions[capt[1]] = capt[0]
+          end
+
+          response = nil
+          results = data.scan(LINUX_DOWNLOAD_RECENT_PAGE)
+          results.each do |page|
+            url = page[0]
+            uri = URI(url)
+            Net::HTTP.start(uri.host, uri.port) do |http|
+              request = Net::HTTP::Get.new uri
+              response = http.request request
+            end
+            if response.is_a? Net::HTTPSuccess
+              capt = response.body.match(LINUX_DOWNLOAD_RECENT_FILE)
+              if capt && capt[1] && capt[2]
+                versions[capt[2].delete('x')] = capt[1]
+              else
+                UI.error("Could not retrieve a fitting file from #{url}")
+              end
+            else
+              UI.error("Could not access #{url}")
+            end
+          end
+          if versions.count.zero?
+            UI.important 'Found no releases'
+          else
+            UI.success "Found #{versions.count} releases."
+          end
+          versions
+        end
+
+        def linux_forum_page_content
           response = nil
           data = ''
           uri = URI(UNITY_LINUX_DOWNLOADS)
@@ -148,38 +186,7 @@ module U3d
             else raise "Request failed with status #{response.code}"
             end
           end
-          data.gsub(/[ \t]+/, '').each_line { |l| puts l if /<a href=/ =~ l }
-          versions = {}
-          results = data.scan(LINUX_DOWNLOAD_DATED)
-          results.each do |capt|
-            versions[capt[1]] = capt[0]
-          end
-
-          results = data.scan(LINUX_DOWNLOAD_RECENT_PAGE)
-          results.each do |page|
-            url = page[0]
-            uri = URI(url)
-            Net::HTTP.start(uri.host, uri.port) do |http|
-              request = Net::HTTP::Get.new uri
-              response = http.request request
-            end
-            if response.kind_of? Net::HTTPSuccess
-              capt = response.body.match(LINUX_DOWNLOAD_RECENT_FILE)
-              if capt && capt[1] && capt[2]
-                versions[capt[2].delete('x')] = capt[1]
-              else
-                UI.error("Could not retrieve a fitting file from #{url}")
-              end
-            else
-              UI.error("Could not access #{url}")
-            end
-          end
-          if versions.count.zero?
-            UI.important 'Found no releases'
-          else
-            UI.success "Found #{versions.count} releases."
-          end
-          versions
+          data
         end
       end
     end

@@ -69,7 +69,8 @@ module U3dCore
         end
       end
 
-      def respond_to?(method_sym, include_private = false)
+      def respond_to_missing?(method_sym, include_private = false)
+        # rubocop:disable GuardClause
         if method_sym.to_s =~ /^with_(.*)$/
           return attributes.include? Regexp.last_match(1)
         elsif method_sym.to_s =~ /^(.*)\?$/
@@ -77,6 +78,7 @@ module U3dCore
         else
           super
         end
+        # rubocop:enable GuardClause
       end
     end
     private_class_method :is?, :with, :attributes
