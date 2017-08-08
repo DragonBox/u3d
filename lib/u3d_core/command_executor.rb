@@ -61,23 +61,15 @@ module U3dCore
         print_all = true if U3dCore::Globals.verbose?
         prefix ||= {}
 
-        output = []
         command = command.join(' ') if command.is_a?(Array)
         UI.command(command) if print_command
 
         # this is only used to show the "Loading text"...
         UI.command_output(loading) if print_all && loading
 
-        if admin
-          cred = U3dCore::Credentials.new(user: ENV['USER'])
-          if Helper.windows?
-            raise CredentialsError, "The command \'#{command}\' must be run in administrative shell" unless has_admin_privileges?
-          else
-            command = "sudo -k && echo #{cred.password.shellescape} | sudo -S bash -c \"#{command}\""
-          end
-          UI.verbose 'Admin privileges granted for command execution'
-        end
+        command = grant_admin_privileges(command) if admin
 
+        output = []
         begin
           status = U3dCore::Runner.run(command) do |stdin, _stdout, _pid|
             stdin.each do |l|
@@ -131,6 +123,17 @@ module U3dCore
         end
         # returns false if result is nil (command execution fail)
         return (result ? true : false)
+      end
+
+      def grant_admin_privileges(command)
+        cred = U3dCore::Credentials.new(user: ENV['USER'])
+        if Helper.windows?
+          raise CredentialsError, "The command \'#{command}\' must be run in administrative shell" unless has_admin_privileges?
+        else
+          command = "sudo -k && echo #{cred.password.shellescape} | sudo -S bash -c \"#{command}\""
+        end
+        UI.verbose 'Admin privileges granted for command execution'
+        command
       end
     end
   end
