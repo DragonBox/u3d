@@ -37,9 +37,6 @@ module U3d
 
     class << self
       def load_ini(version, cached_versions, os: U3dCore::Helper.operating_system, offline: false)
-        unless %i[win mac].include? os
-          raise ArgumentError, "OS #{os.id2name} does not use ini files"
-        end
         os = if os == :mac
                'osx'
              else
@@ -49,6 +46,10 @@ module U3d
         Utils.ensure_dir(default_ini_path)
         ini_path = File.expand_path(ini_name, default_ini_path)
         unless File.file?(ini_path)
+          if os == 'linux'
+            UI.error "No INI file for version #{version}"
+            return nil
+          end
           raise "INI file does not exist at #{ini_path}" if offline
           uri = URI(cached_versions[version] + ini_name)
           File.open(ini_path, 'wb') do |f|

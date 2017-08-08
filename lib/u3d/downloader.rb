@@ -268,13 +268,8 @@ module U3d
           file_name = UNITY_MODULE_FILE_REGEX.match(url)[1]
           file_path = File.expand_path(file_name, dir)
 
-          # Assume size from online ressource
-          uri = URI(url)
-          size = nil
-          Net::HTTP.start(uri.host, uri.port) do |http|
-            response = http.request_head url
-            size = Integer(response['Content-Length'])
-          end
+          ini_file = INIparser.load_ini(version, [], os: :linux)
+          size = ini_file['size'] if ini_file
           # Check if file already exists
           # Note: without size or hash validation, the file is assumed to be correct
           if File.file?(file_path)
