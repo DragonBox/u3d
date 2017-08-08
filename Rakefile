@@ -35,7 +35,7 @@ task :test_all do
     TEST_FILES = `(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)`.tr!("\n", ' ')
     rspec_args = "#{formatter} #{TEST_FILES}"
   else
-    formatter += " --pattern ./spec/**/*_spec.rb"
+    formatter += ' --pattern "./spec/**/*_spec.rb"'
     rspec_args = formatter
   end
   sh "rspec #{rspec_args}"
