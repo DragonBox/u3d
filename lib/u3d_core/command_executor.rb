@@ -69,6 +69,10 @@ module U3dCore
 
         command = grant_admin_privileges(command) if admin
 
+        execute_command(command: command, print_all: print_all, error: error, prefix: prefix)
+      end
+
+      def execute_command(command: nil, print_all: nil, error: nil, prefix: nil)
         output = []
         begin
           status = U3dCore::Runner.run(command) do |stdin, _stdout, _pid|
@@ -136,5 +140,7 @@ module U3dCore
         command
       end
     end
+
+    private_class_method :execute_command
   end
 end
