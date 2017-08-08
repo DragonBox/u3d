@@ -96,7 +96,7 @@ module U3d
         c.syntax = 'u3d available [-r | --release_level <level>] [-o | --operating_system <OS>] [-u | --unity_version <version>] [-p | --packages] [-f | --force]'
         levels = Commands.release_levels
         c.option '-f', '--force', 'Force refresh list of available versions'
-        c.option '-r', '--release_level STRING', String, "Checks for availability on specific release level [#{levels.join(',')}]"
+        c.option '-r', '--release_level STRING', String, "Checks for availability on specific release level [#{levels.join(', ')}]"
         c.option '-o', '--operating_system STRING', String, "Checks for availability on specific OS [#{oses.join(', ')}]"
         c.option '-u', '--unity_version STRING', String, 'Checks if specified version is available'
         c.option '-p', '--packages', 'Lists available packages as well'
@@ -120,7 +120,7 @@ module U3d
         c.option '-n', '--no_install', 'No installation after download success'
         c.option '-k', '--keychain', 'Gain privileges right through the keychain. [OSX only]'
         c.example 'Download and install Unity, its Documentation and the Android build support and install them for version 5.1.2f1', 'u3d install 5.1.2f1 -p Unity,Documentation,Android'
-        c.example "The 'version' argument can be a specific version number, such as 5.6.1f1, or an alias in [#{Commands.release_letter_mapping.keys.join(',')}]. If not specified, u3d will download the unity version for the current project", 'u3d install latest'
+        c.example "The 'version' argument can be a specific version number, such as 5.6.1f1, or an alias in [#{Commands.release_letter_mapping.keys.join(', ')}]. If not specified, u3d will download the unity version for the current project", 'u3d install latest'
         c.action do |args, options|
           options.default all: false
           options.default no_install: false
