@@ -120,8 +120,8 @@ module U3dCore
           credentials = U3dCore::Credentials.new(user: ENV['USER'])
           begin
             result = system("sudo -k && echo #{credentials.password.shellescape} | sudo -S /usr/bin/whoami",
-              out: File::NULL,
-              err: File::NULL)
+                            out: File::NULL,
+                            err: File::NULL)
           rescue
             result = false
           end
