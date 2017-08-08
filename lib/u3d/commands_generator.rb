@@ -72,7 +72,7 @@ module U3d
 
         c.syntax = 'u3d run [-u | --unity_version <version>] [-r | --raw_logs] [ -- <run_args>]'
         c.description = 'Run unity, and parses its output through u3d\'s log prettifier'
-        c.option '-u', '--unity_version STRING', String, 'Version of Unity to run with'
+        c.option '-u', '--unity_version STRING', String, 'Version of Unity to run with. If not specified, it runs with the version of the project (either specified as -projectpath or current)'
         c.option '-r', '--raw_logs', 'Raw Unity output, not filtered by u3d\'s log prettifier'
         c.action do |args, options|
           UI.user_error! "Run doesn't take arguments. Did you forget '--' or did you mistake your command? (#{args})" if args.count > 0
