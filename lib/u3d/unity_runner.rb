@@ -28,16 +28,7 @@ module U3d
   # Launches Unity with given arguments
   class Runner
     def run(installation, args, raw_logs: false)
-      log_file = find_logFile_in_args(args)
-
-      if log_file # we wouldn't want to do that for the default log file.
-        File.delete(log_file) if File.file?(log_file) # We only delete real files
-      else
-        log_file = installation.default_log_file
-      end
-
-      Utils.ensure_dir File.dirname(log_file)
-      FileUtils.touch(log_file) unless File.exist? log_file
+      log_file = find_and_prepare_logfile(installation, args)
 
       tail_thread = Thread.new do
         begin
@@ -64,7 +55,7 @@ module U3d
         else
           args.map!(&:shellescape)
         end
-        
+
         U3dCore::CommandExecutor.execute(command: args, print_all: true)
       ensure
         sleep 1
@@ -72,7 +63,23 @@ module U3d
       end
     end
 
+    def find_and_prepare_logfile(installation, args)
+      log_file = find_logFile_in_args(args)
+
+      if log_file # we wouldn't want to do that for the default log file.
+        File.delete(log_file) if File.file?(log_file) # We only delete real files
+      else
+        log_file = installation.default_log_file
+      end
+
+      Utils.ensure_dir File.dirname(log_file)
+      FileUtils.touch(log_file) unless File.exist? log_file
+      log_file
+    end
+
+    # rubocop:disable MethodName
     def find_logFile_in_args(args)
+      # rubocop:enable MethodName
       find_arg_in_args('-logFile', args)
     end
 
