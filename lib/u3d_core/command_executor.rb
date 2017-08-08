@@ -109,7 +109,9 @@ module U3dCore
         return output.join("\n")
       end
 
+      # rubocop:disable PredicateName
       def has_admin_privileges?
+        # rubocop:enable PredicateName
         if Helper.windows?
           begin
             result = system('reg query HKU\\S-1-5-19', out: File::NULL, err: File::NULL)
