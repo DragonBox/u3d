@@ -105,6 +105,10 @@ module U3d
 
         cache = Cache.new(force_os: os)
         versions = cache[os.id2name]['versions']
+        unless versions[version]
+          UI.error "No version #{version} was found in cache"
+          return
+        end
         version = interpret_latest(version, versions)
 
         unity = check_unity_presence(version: version)
