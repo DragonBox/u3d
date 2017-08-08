@@ -97,8 +97,7 @@ module U3d
       end
 
       def download(args: [], options: {})
-        version = args[0]
-        UI.user_error!('Please specify a Unity version to download') unless version
+        version = specified_or_current_project_version(args[0])
 
         os = U3dCore::Helper.operating_system
 
@@ -125,8 +124,7 @@ module U3d
       end
 
       def local_install(args: [], options: {})
-        version = args[0]
-        UI.user_error!('Please specify a Unity version to download') unless version
+        version = specified_or_current_project_version(args[0])
 
         os = U3dCore::Helper.operating_system
 
@@ -214,6 +212,16 @@ module U3d
       end
 
       private
+
+      def specified_or_current_project_version(version)
+        unless version # no version specified, use the one from the current unity project if any
+          UI.message "No unity version specified. If the current directory is a Unity project, we try to install the one it requires"
+          up = UnityProject.new(Dir.pwd)
+          version = up.editor_version if up.exist?
+        end
+        UI.user_error!('Please specify a Unity version to download') unless version
+        version
+      end
 
       def credentials_check
         U3dCore::Globals.use_keychain = true
