@@ -100,9 +100,10 @@ module U3d
         version = args[0]
         UI.user_error!('Please specify a Unity version to download') unless version
 
-        packages = packages_with_unity_first(options)
-
         os = U3dCore::Helper.operating_system
+
+        packages = packages_with_unity_first(os, options)
+
         cache = Cache.new(force_os: os)
         versions = cache[os.id2name]['versions']
         version = interpret_latest(version, versions)
@@ -117,36 +118,19 @@ module U3d
           raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
         end
 
-        files = []
-        if os == :linux
-          UI.important 'Option -a | --all not available for Linux' if options[:all]
-          UI.important 'Option -p | --packages not available for Linux' if options[:packages]
-          downloader = Downloader::LinuxDownloader
-          files << ["Unity #{version}", downloader.download(version, versions), {}]
-        else
-          downloader = Downloader::MacDownloader if os == :mac
-          downloader = Downloader::WindowsDownloader if os == :win
-          if options[:all]
-            files = downloader.download_all(version, versions)
-          else
-            packages.each do |package|
-              result = downloader.download_specific(package, version, versions)
-              files << [package, result[0], result[1]] unless result.nil?
-            end
-          end
-        end
+        files = Downloader.download_modules(version, versions, os, packages)
 
         return if options[:no_install]
         Installer.install_modules(files, version, installation_path: options[:installation_path])
       end
 
       def local_install(args: [], options: {})
-        UI.user_error!('Please specify a version') if args.empty?
         version = args[0]
-
-        packages = packages_with_unity_first(options)
+        UI.user_error!('Please specify a Unity version to download') unless version
 
         os = U3dCore::Helper.operating_system
+
+        packages = packages_with_unity_first(os, options)
 
         unity = check_unity_presence(version: version)
         return unless enforce_setup_coherence(packages, options, unity)
@@ -156,24 +140,7 @@ module U3d
         UI.important 'Root privileges are required'
         raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
 
-        files = []
-        if os == :linux
-          UI.important 'Option -a | --all not available for Linux' if options[:all]
-          UI.important 'Option -p | --packages not available for Linux' if options[:packages]
-          downloader = Downloader::LinuxDownloader
-          files << ["Unity #{version}", downloader.local_file(version), {}]
-        else
-          downloader = Downloader::MacDownloader if os == :mac
-          downloader = Downloader::WindowsDownloader if os == :win
-          if options[:all]
-            files = downloader.all_local_files(version)
-          else
-            packages.each do |package|
-              result = downloader.local_file(package, version)
-              files << [package, result[0], result[1]] unless result.nil?
-            end
-          end
-        end
+        files = Downloader.local_files(version, os, packages)
 
         Installer.install_modules(files, version, installation_path: options[:installation_path])
       end
@@ -293,7 +260,12 @@ module U3d
         iversion
       end
 
-      def packages_with_unity_first(options)
+      def packages_with_unity_first(os, options)
+        if os == :linux
+          UI.important 'Option -a | --all not available for Linux' if options[:all]
+          UI.important 'Option -p | --packages not available for Linux' if options[:packages]
+        end
+        return [] if options[:all]
         temp = options[:packages] || ['Unity']
         temp.insert(0, 'Unity') if temp.delete('Unity')
         temp
