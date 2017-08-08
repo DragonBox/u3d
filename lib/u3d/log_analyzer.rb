@@ -24,6 +24,7 @@ require 'json'
 
 module U3d
   # Analyzes log by filtering output along a set of rules
+  # rubocop:disable ClassLength, PerceivedComplexity, BlockNesting
   class LogAnalyzer
     RULES_PATH = File.expand_path('../../../config/log_rules.json', __FILE__)
     MEMORY_SIZE = 10
@@ -227,4 +228,5 @@ module U3d
       true
     end
   end
+  # rubocop:enable ClassLength, PerceivedComplexity, BlockNesting
 end
