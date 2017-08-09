@@ -106,6 +106,10 @@ module U3d
         cache = Cache.new(force_os: os)
         versions = cache[os.id2name]['versions']
         version = interpret_latest(version, versions)
+        unless versions[version]
+          UI.error "No version #{version} was found in cache. Either it doesn't exist or u3d doesn't know about it yet. Try refreshing with 'u3d available -f'"
+          return
+        end
 
         unity = check_unity_presence(version: version)
         return unless enforce_setup_coherence(packages, options, unity)
