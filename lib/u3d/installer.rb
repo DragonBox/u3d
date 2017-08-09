@@ -205,6 +205,20 @@ module U3d
     end
   end
 
+  class CommonInstaller
+    def self.sanitize_install(source_path, new_path, command, dry_run: false)
+      if dry_run
+        UI.message "'#{source_path}' would move to '#{new_path}'"
+      else
+        UI.important "Moving '#{source_path}' to '#{new_path}'..."
+        U3dCore::CommandExecutor.execute(command: command, admin: true)
+        UI.success "Successfully moved '#{source_path}' to '#{new_path}'"
+      end
+    rescue => e
+      UI.error "Unable to move '#{source_path}' to '#{new_path}': #{e}"
+    end
+  end
+
   class MacInstaller
     def sanitize_install(unity, dry_run: false)
       source_path = File.expand_path('..', unity.path)
@@ -212,15 +226,10 @@ module U3d
       new_path = File.join(parent, UNITY_DIR % unity.version)
       source_path = source_path.shellescape
       new_path = new_path.shellescape
-      if dry_run
-        UI.message "#{source_path} would move to #{new_path}"
-      else
-        UI.important "Moving #{source_path} to #{new_path}..."
-        U3dCore::CommandExecutor.execute(command: "mv #{source_path} #{new_path}", admin: true)
-        UI.success "Successfully moved #{source_path} to #{new_path}"
-      end
-    rescue => e
-      UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
+
+      command = "mv #{source_path} #{new_path}"
+
+      CommonInstaller.sanitize_install(source_path, new_path, command, dry_run: dry_run)
     end
 
     def installed
@@ -287,15 +296,10 @@ module U3d
       new_path = File.join(parent, UNITY_DIR_LINUX % unity.version)
       source_path = source_path.shellescape
       new_path = new_path.shellescape
-      if dry_run
-        UI.message "#{source_path} would move to #{new_path}"
-      else
-        UI.important "Moving #{source_path} to #{new_path}..."
-        U3dCore::CommandExecutor.execute(command: "mv #{source_path} #{new_path}", admin: true)
-        UI.success "Successfully moved #{source_path} to #{new_path}"
-      end
-    rescue => e
-      UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
+
+      command = "mv #{source_path} #{new_path}"
+
+      CommonInstaller.sanitize_install(source_path, new_path, command, dry_run: dry_run)
     end
 
     def installed
@@ -347,15 +351,9 @@ module U3d
       source_path = "\"" + source_path + "\"" if source_path =~ / /
       new_path = "\"" + new_path + "\"" if new_path =~ / /
 
-      if dry_run
-        UI.message "#{source_path} would move to #{new_path}"
-      else
-        UI.important "Moving #{source_path} to #{new_path}..." unless dry_run
-        U3dCore::CommandExecutor.execute(command: "move #{source_path} #{new_path}", admin: true)
-        UI.success "Successfully moved #{source_path} to #{new_path}"
-      end
-    rescue => e
-      UI.error "Unable to move #{source_path} to #{new_path}: #{e}"
+      command = "move #{source_path} #{new_path}"
+
+      CommonInstaller.sanitize_install(source_path, new_path, command, dry_run: dry_run)
     end
 
     def installed
