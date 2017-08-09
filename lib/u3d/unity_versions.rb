@@ -94,26 +94,24 @@ module U3d
 
           data = linux_forum_page_content
 
-          data.gsub(/[ \t]+/, '').each_line { |l| puts l if /<a href=/ =~ l }
           versions = {}
           results = data.scan(LINUX_DOWNLOAD_DATED)
           results.each do |capt|
+            save_package_size(capt[1], capt[0])
             versions[capt[1]] = capt[0]
           end
 
           response = nil
           results = data.scan(LINUX_DOWNLOAD_RECENT_PAGE)
           results.each do |page|
-            url = page[0]
-            uri = URI(url)
-            Net::HTTP.start(uri.host, uri.port) do |http|
-              request = Net::HTTP::Get.new uri
-              response = http.request request
-            end
+            response = linux_forum_version_page_content(page[0])
             if response.is_a? Net::HTTPSuccess
               capt = response.body.match(LINUX_DOWNLOAD_RECENT_FILE)
               if capt && capt[1] && capt[2]
-                versions[capt[2].delete('x')] = capt[1]
+                ver = capt[2].delete('x')
+                UI.important "Version #{ver} does not match standard Unity versions" unless ver =~ Utils::UNITY_VERSION_REGEX
+                save_package_size(ver, capt[1])
+                versions[ver] = capt[1]
               else
                 UI.error("Could not retrieve a fitting file from #{url}")
               end
@@ -127,6 +125,20 @@ module U3d
             UI.success "Found #{versions.count} releases."
           end
           versions
+        end
+
+        def save_package_size(version, url)
+          uri = URI(url)
+          size = nil
+          Net::HTTP.start(uri.host, uri.port) do |http|
+            response = http.request_head url
+            size = Integer(response['Content-Length'])
+          end
+          if size
+            INIparser.create_linux_ini(version, size)
+          else
+            UI.important "u3d tried to get the size of the installer for version #{version}, but wasn't able to"
+          end
         end
 
         def linux_forum_page_content
@@ -187,6 +199,14 @@ module U3d
             end
           end
           data
+        end
+
+        def linux_forum_version_page_content(url)
+          uri = URI(url)
+          Net::HTTP.start(uri.host, uri.port) do |http|
+            request = Net::HTTP::Get.new uri
+            return http.request request
+          end
         end
       end
     end

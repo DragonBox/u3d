@@ -271,8 +271,20 @@ module U3d
           # Check if file already exists
           # Note: without size or hash validation, the file is assumed to be correct
           if File.file?(file_path)
-            UI.important "File already downloaded at #{file_path}"
-            return file_path
+            ini_file = INIparser.load_ini(version, [], os: :linux)
+            size = ini_file['size'] if ini_file
+            if size
+              if File.size(file_path) != size
+                UI.important "File at #{file_path} is corrupted, deleting it"
+                File.delete file_path
+              else
+                UI.important "Unity #{version} installer already downloaded at #{file_path}"
+                return file_path
+              end
+            else
+              UI.important "No file validation available, #{file_path} is assumed to be correct"
+              return file_path
+            end
           end
 
           # Download file

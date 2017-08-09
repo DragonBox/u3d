@@ -37,9 +37,6 @@ module U3d
 
     class << self
       def load_ini(version, cached_versions, os: U3dCore::Helper.operating_system, offline: false)
-        unless %i[win mac].include? os
-          raise ArgumentError, "OS #{os.id2name} does not use ini files"
-        end
         os = if os == :mac
                'osx'
              else
@@ -49,6 +46,10 @@ module U3d
         Utils.ensure_dir(default_ini_path)
         ini_path = File.expand_path(ini_name, default_ini_path)
         unless File.file?(ini_path)
+          if os == 'linux'
+            UI.error "No INI file for version #{version}. Try discovering the available versions with 'u3d available -f'"
+            return nil
+          end
           raise "INI file does not exist at #{ini_path}" if offline
           uri = URI(cached_versions[version] + ini_name)
           File.open(ini_path, 'wb') do |f|
@@ -64,6 +65,23 @@ module U3d
           raise "Could not parse INI data (#{e})"
         end
         result
+      end
+
+      def create_linux_ini(version, size)
+        ini_name = format(INI_NAME, version: version, os: 'linux')
+        Utils.ensure_dir(default_ini_path)
+        ini_path = File.expand_path(ini_name, default_ini_path)
+        return if File.file? ini_path
+        File.open(ini_path, 'wb') do |f|
+          f.write %([Unity]
+; -- NOTE --
+; This is not an official Unity file
+; This has been created by u3d
+; ----------
+title=Unity
+size=#{size}
+)
+        end
       end
 
       private

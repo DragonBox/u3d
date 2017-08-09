@@ -33,10 +33,6 @@ describe U3d do
         @path = File.expand_path(name, "#{ENV['HOME']}/.u3d/ini_files")
       end
 
-      it 'raises an error when trying to load INI files for OS different from Mac or Windows' do
-        expect { U3d::INIparser.load_ini('key', @cache, os: :linux) }.to raise_error(ArgumentError)
-      end
-
       context 'when offline' do
         # this to ensure tests are not failing on Linux platform
         let(:platform_os) { :mac }
