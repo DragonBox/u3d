@@ -179,42 +179,6 @@ module U3d
           return [get_package(package, ini_file, dir, url), ini_file[package]]
         end
 
-        private #---------------------------------------------------------------
-
-        def get_package(name, ini_file, main_dir, base_url)
-          file_name = UNITY_MODULE_FILE_REGEX.match(ini_file[name]['url'])[1]
-          file_path = File.expand_path(file_name, main_dir)
-
-          # Check if file already exists and validate it
-          if File.file?(file_path)
-            if Downloader.size_validation(expected: ini_file[name]['size'], actual: File.size(file_path)) &&
-               Downloader.hash_validation(expected: ini_file[name]['md5'], actual: Utils.hashfile(file_path))
-              UI.important "#{name.capitalize} already downloaded at #{file_path}"
-              return file_path
-            else
-              UI.verbose "Deleting existing file at #{file_path}"
-              File.delete(file_path)
-            end
-          end
-
-          # Download file
-          url = base_url + ini_file[name]['url']
-          UI.header "Downloading #{name}"
-          UI.verbose 'Downloading from ' + url.to_s.cyan.underline
-          Downloader.download_package(file_path, url, size: ini_file[name]['size'])
-
-          # Validation download
-          if Downloader.size_validation(expected: ini_file[name]['size'], actual: File.size(file_path)) &&
-             Downloader.hash_validation(expected: ini_file[name]['md5'], actual: Utils.hashfile(file_path))
-            UI.success "Successfully downloaded #{name}."
-          else
-            File.delete(file_path)
-            raise 'Download failed: file is corrupted, deleting it.'
-          end
-
-          file_path
-        end
-
         def all_local_files(version)
           files = []
           ini_file = INIparser.load_ini(version, {}, offline: true)
@@ -251,6 +215,42 @@ module U3d
           end
 
           return [file_path, ini_file[package]]
+        end
+
+        private #---------------------------------------------------------------
+
+        def get_package(name, ini_file, main_dir, base_url)
+          file_name = UNITY_MODULE_FILE_REGEX.match(ini_file[name]['url'])[1]
+          file_path = File.expand_path(file_name, main_dir)
+
+          # Check if file already exists and validate it
+          if File.file?(file_path)
+            if Downloader.size_validation(expected: ini_file[name]['size'], actual: File.size(file_path)) &&
+               Downloader.hash_validation(expected: ini_file[name]['md5'], actual: Utils.hashfile(file_path))
+              UI.important "#{name.capitalize} already downloaded at #{file_path}"
+              return file_path
+            else
+              UI.verbose "Deleting existing file at #{file_path}"
+              File.delete(file_path)
+            end
+          end
+
+          # Download file
+          url = base_url + ini_file[name]['url']
+          UI.header "Downloading #{name}"
+          UI.verbose 'Downloading from ' + url.to_s.cyan.underline
+          Downloader.download_package(file_path, url, size: ini_file[name]['size'])
+
+          # Validation download
+          if Downloader.size_validation(expected: ini_file[name]['size'], actual: File.size(file_path)) &&
+             Downloader.hash_validation(expected: ini_file[name]['md5'], actual: Utils.hashfile(file_path))
+            UI.success "Successfully downloaded #{name}."
+          else
+            File.delete(file_path)
+            raise 'Download failed: file is corrupted, deleting it.'
+          end
+
+          file_path
         end
       end
     end
