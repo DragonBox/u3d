@@ -23,9 +23,19 @@
 require "bundler/gem_tasks"
 require "rspec/core/rake_task"
 require 'rubocop/rake_task'
+# doesn't yet support dot file
+# https://github.com/skywinder/github-changelog-generator/issues/473
+# require 'github_changelog_generator/task'
 
 RSpec::Core::RakeTask.new(:spec)
 RuboCop::RakeTask.new
+
+task :changelog do
+  puts "Updating changelog #{ENV['CHANGELOG_GITHUB_TOKEN']}"
+  if ENV['CHANGELOG_GITHUB_TOKEN']
+    sh "github_changelog_generator"
+  end
+end
 
 task :test_all do
   formatter = "--format progress"
