@@ -45,7 +45,7 @@ module U3d
              else
                os.id2name
              end
-        ini_name = INI_NAME % { version: version, os: os }
+        ini_name = format(INI_NAME, version: version, os: os)
         Utils.ensure_dir(default_ini_path)
         ini_path = File.expand_path(ini_name, default_ini_path)
         unless File.file?(ini_path)

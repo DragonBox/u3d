@@ -51,7 +51,7 @@ describe U3d do
       end
 
       it 'returns the version as an array' do
-        expect(U3d::Utils.parse_unity_version('1.2.3f4')).to eql(%w(1 2 3 f 4))
+        expect(U3d::Utils.parse_unity_version('1.2.3f4')).to eql(%w[1 2 3 f 4])
       end
     end
   end

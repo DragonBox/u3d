@@ -48,7 +48,7 @@ module U3dCore
     # @return [boolean] true if executing with bundler (like 'bundle exec fastlane [action]')
     def self.bundler?
       # Bundler environment variable
-      %w(BUNDLE_BIN_PATH BUNDLE_GEMFILE).each do |current|
+      %w[BUNDLE_BIN_PATH BUNDLE_GEMFILE].each do |current|
         return true if ENV.key?(current)
       end
       return false
@@ -57,7 +57,7 @@ module U3dCore
     # @return [boolean] true if building in a known CI environment
     def self.ci?
       # Check for Jenkins, Travis CI, ... environment variables
-      %w(JENKINS_HOME JENKINS_URL TRAVIS CIRCLECI CI TEAMCITY_VERSION GO_PIPELINE_NAME bamboo_buildKey GITLAB_CI XCS).each do |current|
+      %w[JENKINS_HOME JENKINS_URL TRAVIS CIRCLECI CI TEAMCITY_VERSION GO_PIPELINE_NAME bamboo_buildKey GITLAB_CI XCS].each do |current|
         return true if ENV.key?(current)
       end
       return false
@@ -79,7 +79,7 @@ module U3dCore
 
     # the valid operating systems
     def self.operating_systems
-      [:linux, :mac, :win]
+      %i[linux mac win]
     end
 
     # the current operating system

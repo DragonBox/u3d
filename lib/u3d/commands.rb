@@ -170,7 +170,7 @@ module U3d
       end
 
       def credentials_actions
-        %w(add remove check)
+        %w[add remove check]
       end
 
       def credentials(args: [], _options: {})
@@ -201,7 +201,7 @@ module U3d
       end
 
       def release_levels
-        [:stable, :beta, :patch]
+        %i[stable beta patch]
       end
 
       def release_letter_mapping

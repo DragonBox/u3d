@@ -33,7 +33,7 @@ module U3dCore
       attr_writer :verbose, :log_timestamps, :use_keychain, :do_not_login
 
       def attributes
-        @attributes ||= ((methods - public_instance_methods).grep(/=$/) - [:<=, :>=]).map do |s|
+        @attributes ||= ((methods - public_instance_methods).grep(/=$/) - %i[<= >=]).map do |s|
           a = s.to_s
           a[0..(a.length - 2)] # remove the '='
         end
