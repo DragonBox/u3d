@@ -268,11 +268,11 @@ module U3d
           file_name = UNITY_MODULE_FILE_REGEX.match(url)[1]
           file_path = File.expand_path(file_name, dir)
 
-          ini_file = INIparser.load_ini(version, [], os: :linux)
-          size = ini_file['size'] if ini_file
           # Check if file already exists
           # Note: without size or hash validation, the file is assumed to be correct
           if File.file?(file_path)
+            ini_file = INIparser.load_ini(version, [], os: :linux)
+            size = ini_file['size'] if ini_file
             if size
               if File.size(file_path) != size
                 UI.important "File at #{file_path} is corrupted, deleting it"
