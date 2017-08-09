@@ -107,7 +107,7 @@ module U3d
         versions = cache[os.id2name]['versions']
         version = interpret_latest(version, versions)
         unless versions[version]
-          UI.error "No version #{version} was found in cache"
+          UI.error "No version #{version} was found in cache. Either it doesn't exist or u3d doesn't know about it yet. Try refreshing with 'u3d available -f'"
           return
         end
 
