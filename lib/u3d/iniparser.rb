@@ -68,12 +68,12 @@ module U3d
       end
 
       def create_linux_ini(version, size)
-        ini_name = INI_NAME % { version: version, os: 'linux' }
+        ini_name = format(INI_NAME, version: version, os: 'linux')
         Utils.ensure_dir(default_ini_path)
         ini_path = File.expand_path(ini_name, default_ini_path)
-        unless File.file?(ini_path)
-          File.open(ini_path, 'wb') do |f|
-            f.write %Q([Unity]
+        return if File.file? ini_path
+        File.open(ini_path, 'wb') do |f|
+          f.write %([Unity]
 ; -- NOTE --
 ; This is not an official Unity file
 ; This has been created by u3d
@@ -81,7 +81,6 @@ module U3d
 title=Unity
 size=#{size}
 )
-          end
         end
       end
 

@@ -94,7 +94,6 @@ module U3d
 
           data = linux_forum_page_content
 
-          data.gsub(/[ \t]+/, '').each_line { |l| puts l if /<a href=/ =~ l }
           versions = {}
           results = data.scan(LINUX_DOWNLOAD_DATED)
           results.each do |capt|
@@ -105,12 +104,7 @@ module U3d
           response = nil
           results = data.scan(LINUX_DOWNLOAD_RECENT_PAGE)
           results.each do |page|
-            url = page[0]
-            uri = URI(url)
-            Net::HTTP.start(uri.host, uri.port) do |http|
-              request = Net::HTTP::Get.new uri
-              response = http.request request
-            end
+            response = linux_forum_version_page_content(page[0])
             if response.is_a? Net::HTTPSuccess
               capt = response.body.match(LINUX_DOWNLOAD_RECENT_FILE)
               if capt && capt[1] && capt[2]
@@ -205,6 +199,14 @@ module U3d
             end
           end
           data
+        end
+
+        def linux_forum_version_page_content(url)
+          uri = URI(url)
+          Net::HTTP.start(uri.host, uri.port) do |http|
+            request = Net::HTTP::Get.new uri
+            return http.request request
+          end
         end
       end
     end
