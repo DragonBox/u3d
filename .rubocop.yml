@@ -50,4 +50,8 @@ Style/RedundantReturn:
 
 # Tell Windows to look the other way
 Layout/EndOfLine:
-  EnforcedStyle: lf  
+  EnforcedStyle: lf
+
+# Some issues with rspec style
+Lint/AmbiguousBlockAssociation:
+  Enabled: false
