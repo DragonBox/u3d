@@ -115,6 +115,7 @@ module U3d
               capt = response.body.match(LINUX_DOWNLOAD_RECENT_FILE)
               if capt && capt[1] && capt[2]
                 ver = capt[2].delete('x')
+                UI.important "Version #{ver} does not match standard Unity versions" unless ver =~ Utils::UNITY_VERSION_REGEX
                 save_package_size(ver, capt[1])
                 versions[ver] = capt[1]
               else
@@ -139,7 +140,11 @@ module U3d
             response = http.request_head url
             size = Integer(response['Content-Length'])
           end
-          INIparser.create_linux_ini(version, size) if size
+          if size
+            INIparser.create_linux_ini(version, size)
+          else
+            UI.important "u3d tried to get the size of the installer for version #{version}, but wasn't able to"
+          end
         end
 
         def linux_forum_page_content
