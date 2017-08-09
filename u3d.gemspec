@@ -36,5 +36,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec_junit_formatter', '~> 0.2.3'
   spec.add_development_dependency "pry"
   spec.add_development_dependency "coveralls"
+  spec.add_development_dependency "github_changelog_generator"
   spec.add_development_dependency 'rubocop', '~> 0.44.0'
 end
