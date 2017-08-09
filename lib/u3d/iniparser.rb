@@ -47,7 +47,7 @@ module U3d
         ini_path = File.expand_path(ini_name, default_ini_path)
         unless File.file?(ini_path)
           if os == 'linux'
-            UI.error "No INI file for version #{version}"
+            UI.error "No INI file for version #{version}. Try discovering the available versions with 'u3d available -f'"
             return nil
           end
           raise "INI file does not exist at #{ini_path}" if offline
@@ -73,7 +73,14 @@ module U3d
         ini_path = File.expand_path(ini_name, default_ini_path)
         unless File.file?(ini_path)
           File.open(ini_path, 'wb') do |f|
-            f.write "[Unity]\ntitle=Unity\nsize=#{size}"
+            f.write %Q([Unity]
+; -- NOTE --
+; This is not an official Unity file
+; This has been created by u3d
+; ----------
+title=Unity
+size=#{size}
+)
           end
         end
       end
