@@ -207,6 +207,11 @@ module U3d
 
   class CommonInstaller
     def self.sanitize_install(source_path, new_path, command, dry_run: false)
+      if source_path == new_path
+        UI.important "sanitize_install does nothing if the path won't change (#{source_path})"
+        return
+      end
+
       if dry_run
         UI.message "'#{source_path}' would move to '#{new_path}'"
       else
