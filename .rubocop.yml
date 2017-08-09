@@ -47,3 +47,11 @@ Style/Documentation:
 # Better too much 'return' than one missing
 Style/RedundantReturn:
   Enabled: false
+
+# Tell Windows to look the other way
+Layout/EndOfLine:
+  EnforcedStyle: lf
+
+# Some issues with rspec style
+Lint/AmbiguousBlockAssociation:
+  Enabled: false

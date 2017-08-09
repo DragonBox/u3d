@@ -399,7 +399,7 @@ module U3d
 
     def editor_version
       require 'yaml'
-      yaml = YAML.load(File.read("#{@path}/ProjectSettings/ProjectVersion.txt"))
+      yaml = YAML.safe_load(File.read("#{@path}/ProjectSettings/ProjectVersion.txt"))
       version = yaml['m_EditorVersion']
       version.gsub!(/(\d+\.\d+\.\d+)(?:x)?(\w\d+)(?:Linux)?/, '\1\2') if Helper.linux?
       version

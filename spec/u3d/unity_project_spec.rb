@@ -12,7 +12,7 @@ describe U3d do
 
       before(:each) do
         allow(File).to receive(:read) { 'bar' }
-        allow(YAML).to receive(:load) { @config }
+        allow(YAML).to receive(:safe_load) { @config }
       end
 
       describe 'when under Linux' do

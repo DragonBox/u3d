@@ -49,4 +49,4 @@ task :test_all do
   sh "rspec #{rspec_args}"
 end
 
-task default: [:rubocop, :test_all]
+task default: %i[rubocop test_all]
