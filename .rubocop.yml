@@ -49,5 +49,5 @@ Style/RedundantReturn:
   Enabled: false
 
 # Tell Windows to look the other way
-Style/EndOfLine:
+Layout/EndOfLine:
   EnforcedStyle: lf  
