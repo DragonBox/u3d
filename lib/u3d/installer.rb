@@ -177,7 +177,9 @@ module U3d
       versions.sort! { |x, y| x.version <=> y.version }
     end
 
-    def install(file_path, version, installation_path: nil, _info: {})
+    # rubocop:disable UnusedMethodArgument
+    def install(file_path, version, installation_path: nil, info: {})
+      # rubocop:enable UnusedMethodArgument
       extension = File.extname(file_path)
       raise "Installation of #{extension} files is not supported on Linux" if extension != '.sh'
       path = installation_path || DEFAULT_LINUX_INSTALL
