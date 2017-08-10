@@ -186,7 +186,8 @@ module U3d
         unclean = []
         installer.installed.each { |unity| unclean << unity unless unity.clean_install? }
         unless unclean.empty?
-          UI.important("u3d can optionally standardize the existing Unity3d installation names and locations. See the documentation for more information.")
+          UI.important("u3d can optionally standardize the existing Unity3d installation names and locations.")
+          UI.important("See the documentation for more information.")
           unclean.each { |unity| installer.sanitize_install(unity, dry_run: true) }
           if UI.confirm("#{unclean.count} Unity installation will be moved. Proceed??")
             unclean.each { |unity| installer.sanitize_install(unity) }
