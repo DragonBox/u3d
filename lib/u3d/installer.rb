@@ -115,7 +115,9 @@ module U3d
       versions.sort! { |x, y| x.version <=> y.version }
     end
 
-    def install(file_path, version, installation_path: nil, _info: {})
+    # rubocop:disable UnusedMethodArgument
+    def install(file_path, version, installation_path: nil, info: {})
+      # rubocop:enable UnusedMethodArgument
       extension = File.extname(file_path)
       raise "Installation of #{extension} files is not supported on Mac" if extension != '.pkg'
       path = installation_path || DEFAULT_MAC_INSTALL
