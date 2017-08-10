@@ -76,6 +76,8 @@ When referencing to a version on the CLI, u3d sanitizes these weird versions. Fo
 
   If you have installed Unity in different locations, u3d might discover them and propose you to move them to its standard location. The procedure should be self described and easily revertible (manually). This sanitization operation is only proposed in interactive mode (i.e. if you are not using u3d unattended, e.g. in a build script on a CI server).
 
+![u3d sanitize](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_sanitize.png)
+
 ## Security
 
 When you install Unity with this tool, you will have to grant it higher privileges so it can perform the installation. It means that under MacOS and Linux, you will be asked for your `sudo` password.
