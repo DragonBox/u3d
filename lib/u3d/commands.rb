@@ -23,6 +23,7 @@
 require 'u3d/unity_versions'
 require 'u3d/downloader'
 require 'u3d/installer'
+require 'u3d/unity_project'
 require 'u3d/cache'
 require 'u3d/utils'
 require 'u3d/log_analyzer'

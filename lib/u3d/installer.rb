@@ -21,6 +21,7 @@
 ## --- END LICENSE BLOCK ---
 
 require 'u3d/utils'
+require 'u3d/installation'
 require 'fileutils'
 require 'file-tail'
 
