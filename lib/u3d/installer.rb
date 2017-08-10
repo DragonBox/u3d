@@ -24,7 +24,6 @@ require 'u3d/utils'
 require 'fileutils'
 require 'file-tail'
 
-# Mac specific only right now
 module U3d
   DEFAULT_LINUX_INSTALL = '/opt/'.freeze
   DEFAULT_MAC_INSTALL = '/'.freeze
