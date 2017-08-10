@@ -1,4 +1,4 @@
-require 'u3d/installer'
+require 'u3d/unity_project'
 require 'u3d_core/helper'
 require 'yaml'
 
