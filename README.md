@@ -42,6 +42,40 @@ The prettifyer is on by default but can be turned off to get Unity3d's raw outpu
 gem install u3d
 ```
 
+## Unity versions numbering
+
+Unity3d uses the following version formatting: 0.0.0x0. The \'x\' can takes different values:
+  * 'f' are the main release candidates for Unity3d
+  * 'p' are patches fixing those releases
+  * 'b' are the beta releases
+  * 'a' are the alpha releases (not currently discovered online)
+
+Some versions are known to have a different numbering, e.g. Linux 2017.1.0f3 is named 2017.1.0xf3Linux. Its `ProjectSettings/ProjectVersion.txt` will contain the Linux specific version.
+
+When referencing to a version on the CLI, u3d sanitizes these weird versions. For example, if you ask u3d to launch unity 2017.1.0f3 on Linux, you can use `u3d -u 2017.1.0f3` and it will find "2017.1.0xf3Linux".
+
+## Default Installation paths
+
+  The standard Unity installer has some quirks:
+
+  * on Mac, it always installs Unity on `/Applications/Unity`. If you want to add a module to a particular version, you will have to move the unity you are trying to extend to that particular location
+
+  * on Linux, most versions are installed as `unity-editor-$version` with `version` following the 'standard' numbering (except for some weird versions, see above). Unity lets you install the program in the directory of your choice
+
+  Also for easing discoverability, it is recommended that you install your Unity versions in a similar area.
+
+  For these reasons, u3d has standardized the installation paths of the Unity version it installs.
+
+  * on Mac, versions are installed under `/Applications/Unity_$version`
+  * on Linux, versions are installed under `/opt/unity-editor-$version`
+  * on Windows, versions are installed under `C:/Program Files/Unity_$version`
+
+  u3d should be able to find the different unity installed under those locations. If the Unity installations are not in those locations, u3d might not find them automatically.
+
+## Sanitize / standardize Unity3d installation paths
+
+  If you have installed Unity in different locations, u3d might discover them and propose you to move them to its standard location. The procedure should be self described and easily revertible (manually). This sanitization operation is only proposed in interactive mode (i.e. if you are not using u3d unattended, e.g. in a build script on a CI server).
+
 ## Security
 
 When you install Unity with this tool, you will have to grant it higher privileges so it can perform the installation. It means that under MacOS and Linux, you will be asked for your `sudo` password.

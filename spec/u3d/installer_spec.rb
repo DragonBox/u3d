@@ -29,19 +29,80 @@ describe U3d do
       context 'when using a default install' do
         let(:unity) { macinstall_5_6_default }
         it 'sanitizes install' do
-          expect(U3d::UI).to receive(:important).with("Moving /Applications/Unity to /Applications/Unity_5.6.0f1...")
+          expect(U3d::UI).to receive(:important).with("Moving '/Applications/Unity' to '/Applications/Unity_5.6.0f1'...")
           expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "mv /Applications/Unity /Applications/Unity_5.6.0f1", admin: true)
-          expect(U3d::UI).to receive(:success).with("Successfully moved /Applications/Unity to /Applications/Unity_5.6.0f1")
+          expect(U3d::UI).to receive(:success).with("Successfully moved '/Applications/Unity' to '/Applications/Unity_5.6.0f1'")
           U3d::MacInstaller.new.sanitize_install(unity)
+        end
+
+        it 'dry runs sanitize install' do
+          expect(U3d::UI).to receive(:message).with("'/Applications/Unity' would move to '/Applications/Unity_5.6.0f1'")
+          U3d::MacInstaller.new.sanitize_install(unity, dry_run: true)
         end
       end
 
       context 'when using a custom install with spaces' do
         let(:unity) { macinstall_5_6_custom_with_space }
         it 'sanitizes install' do
-          expect(U3d::UI).to receive(:important).with("Moving /Applications/Unity 5.6.0f1 to /Applications/Unity_5.6.0f1...")
-          expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "mv \"/Applications/Unity 5.6.0f1\" /Applications/Unity_5.6.0f1", admin: true)
-          expect(U3d::UI).to receive(:success).with("Successfully moved \"/Applications/Unity 5.6.0f1\" to /Applications/Unity_5.6.0f1")
+          expect(U3d::UI).to receive(:important).with("Moving '/Applications/Unity\\ 5.6.0f1' to '/Applications/Unity_5.6.0f1'...")
+          expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "mv /Applications/Unity\\ 5.6.0f1 /Applications/Unity_5.6.0f1", admin: true)
+          expect(U3d::UI).to receive(:success).with("Successfully moved '/Applications/Unity\\ 5.6.0f1' to '/Applications/Unity_5.6.0f1'")
+          U3d::MacInstaller.new.sanitize_install(unity)
+        end
+      end
+    end
+
+    describe U3d::LinuxInstaller do
+      context 'when using a default install' do
+        let(:unity) { linux_5_6_standard }
+        it 'aborts sanitize install' do
+          expect(U3d::UI).to receive(:important).with("sanitize_install does nothing if the path won't change (/opt/unity-editor-5.6.0f1)")
+          U3d::LinuxInstaller.new.sanitize_install(unity)
+        end
+
+        it 'aborts sanitize install in dry_run as well' do
+          expect(U3d::UI).to receive(:important).with("sanitize_install does nothing if the path won't change (/opt/unity-editor-5.6.0f1)")
+          U3d::LinuxInstaller.new.sanitize_install(unity, dry_run: true)
+        end
+      end
+
+      context 'when using a weird install' do
+        let(:unity) { linux_2017_1_weird }
+        it 'sanitizes install' do
+          expect(U3d::UI).to receive(:important).with("Moving '/opt/unity-editor-2017.1.0xf3Linux' to '/opt/unity-editor-2017.1.0f3'...")
+          expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "mv /opt/unity-editor-2017.1.0xf3Linux /opt/unity-editor-2017.1.0f3", admin: true)
+          expect(U3d::UI).to receive(:success).with("Successfully moved '/opt/unity-editor-2017.1.0xf3Linux' to '/opt/unity-editor-2017.1.0f3'")
+          U3d::LinuxInstaller.new.sanitize_install(unity)
+        end
+      end
+    end
+
+    xdescribe U3d::WindowsInstaller do
+      context 'when using a default install' do
+        let(:unity) { windows_5_6_32bits_default }
+        it 'sanitizes install' do
+          allow(File).to receive(:expand_path).with(any_args) { unity.path }
+          allow(File).to receive(:expand_path).with(any_args) { 'C:/Program Files (x86)' }
+          expect(U3d::UI).to receive(:important).with("Moving 'C:\\Program\\ Files\\ \\(x86\\)\\Unity' to 'C:\\Program Files\\Unity_5.6.0f1'...")
+          expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "move C:\\Program Files (x86)\\Unity C:\\Program Files\\Unity_5.6.0f1", admin: true)
+          expect(U3d::UI).to receive(:success).with("Successfully moved 'C:\\Program Files \\(x86\\)\\Unity' to 'C:\\Program Files\\Unity_5.6.0f1'")
+          U3d::MacInstaller.new.sanitize_install(unity)
+        end
+
+        it 'dry runs sanitize install' do
+          allow(File).to receive(:expand_path).with(any_args) { unity.path }
+          allow(File).to receive(:expand_path).with(any_args) { 'C:/Program Files (x86)' }
+          expect(U3d::UI).to receive(:message).with("'C:\\Program Files (x86)\\Unity' would move to 'C:\\Program Files\\Unity_5.6.0f1'")
+          U3d::MacInstaller.new.sanitize_install(unity, dry_run: true)
+        end
+      end
+
+      context 'when using an already renamed version' do
+        let(:unity) { windows_2017_1_64bits_renamed }
+        it 'aborts sanitizes install if already renamed' do
+          allow(File).to receive(:expand_path).with(any_args) { unity.path }
+          allow(File).to receive(:expand_path).with(any_args) { 'C:/Program Files' }
+          expect(U3d::UI).to receive(:important).with("sanitize_install does nothing if the path won't change (C:\\Program Files\\Unity_2017.1.0f3)")
           U3d::MacInstaller.new.sanitize_install(unity)
         end
       end
