@@ -22,41 +22,41 @@
 
 # Various fake download archives
 def windows_archive
-  %{
+  %(
     <li><a href="http://download.unity3d.com/download_unity/d3101c3b8468/Windows64EditorInstaller/UnitySetup64-1.2.3f1.exe">Éditeur 64 bits</a></li>
     <li><a href="http://download.unity3d.com/download_unity/d3101c3b8468/Windows64EditorInstaller/UnitySetup64-1.3.5f1.exe">Éditeur 64 bits</a></li>
     <li><a href="http://download.unity3d.com/download_unity/d3101c3b8468/Windows64EditorInstaller/UnitySetup64-2017.1.6f1.exe">Éditeur 64 bits</a></li>
-  }
+  )
 end
 
 def macosx_archive
-  %{
+  %(
     <li><a href="http://download.unity3d.com/download_unity/d3101c3b8468/MacEditorInstaller/Unity-1.2.3f1.pkg">Éditeur Unity</a></li>
     <li><a href="http://download.unity3d.com/download_unity/d3101c3b8468/MacEditorInstaller/Unity-1.3.5f1.pkg">Éditeur Unity</a></li>
     <li><a href="http://download.unity3d.com/download_unity/d3101c3b8468/MacEditorInstaller/Unity-2017.1.6f1.pkg">Éditeur Unity</a></li>
-  }
+  )
 end
 
 def linux_archive
-  %{
+  %(
     <b>5.4.0b10</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f1+20160316.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f1+20160316.sh</a><br />
     <b>5.4.0b10</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.3.5f1+20160316.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.3.5f1+20160316.sh</a><br />
     <b>5.4.0b10</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-2017.1.6f1+20160316.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-2017.1.6f1+20160316.sh</a><br />
-  }
+  )
 end
 
 def linux_nested_archive
-  %{
+  %(
     <b>5.4.0b10</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f1+20160316.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f1+20160316.sh</a><br />
     <b>5.4.0b10</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.3.5f1+20160316.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.3.5f1+20160316.sh</a><br />
     <b>5.4.0b10</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-2017.1.6f1+20160316.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-2017.1.6f1+20160316.sh</a><br />
     <b>2017.1.0b3</b>:<a href="http://beta.unity3d.com/download/b515b8958382/public_download.html" target="_blank" class="externalLink">
-  }
+  )
 end
 
 def linux_inner_archive
   page_archive = double("Net::HTTPResponse")
-  body = %{
+  body = %(
     <html><head><meta http-equiv='content-type' content='text/html; charset=UTF-8'></head><body><h2>Unity 2017.1.0xb3Linux Linux Editor downloads</h2>
     <p>Welcome to the Linux Editor download repository.  Here, you will find the download links to experimental releases of the Linux Editor.</p>
     <h3>Debian Package</h3>
@@ -64,7 +64,7 @@ def linux_inner_archive
     <h3>Platform-Agnostic Self-Extracting Shell Script</h3>
     <a href='http://beta.unity3d.com/download/b515b8958382/./unity-editor-installer-2017.1.0xb3Linux.sh'>Linux Editor Installer (self-extracting shell script)</a><br>
     </body></html>
-  }
+  )
   allow(page_archive).to receive(:is_a?).with(Net::HTTPSuccess) { true }
   allow(page_archive).to receive(:body) { body }
   return page_archive
