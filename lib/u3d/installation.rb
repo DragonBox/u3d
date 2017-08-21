@@ -65,7 +65,7 @@ module U3d
         return []
       end
       fpath = File.expand_path('../PlaybackEngines', path)
-      raise "Unity installation does not seem correct. Couldn't locate PlaybackEngines." unless Dir.exist? fpath
+      return [] unless Dir.exist? fpath # install without package
       Dir.entries(fpath).select { |e| File.directory?(File.join(fpath, e)) && !(e == '.' || e == '..') }
     end
 
@@ -156,7 +156,7 @@ module U3d
       # Unity prior to Unity5 did not have package
       return [] if Utils.parse_unity_version(version)[0].to_i <= 4
       fpath = "#{path}/Editor/Data/PlaybackEngines/"
-      raise "Unity installation does not seem correct. Couldn't locate PlaybackEngines." unless Dir.exist? fpath
+      return [] unless Dir.exist? fpath # install without package
       Dir.entries(fpath).select { |e| File.directory?(File.join(fpath, e)) && !(e == '.' || e == '..') }
     end
 
