@@ -23,18 +23,27 @@
 require 'u3d/cache'
 require 'json'
 require 'time'
+require 'support/download_archives'
 
 describe U3d do
   describe U3d::UnityVersions do
-    describe 'slow integration tests' do
+    describe '.list_available' do
       it 'retrieves windows versions' do
-        expect(U3d::UnityVersions.list_available(os: :win).count).to be > 49
+        allow(U3d::Utils).to receive(:get_ssl) { windows_archive }
+        expect(U3d::UnityVersions.list_available(os: :win).count).to eql 3
       end
       it 'retrieves mac versions' do
-        expect(U3d::UnityVersions.list_available(os: :mac).count).to be > 49
+        allow(U3d::Utils).to receive(:get_ssl) { macosx_archive }
+        expect(U3d::UnityVersions.list_available(os: :mac).count).to eql 3
       end
-      it 'retrieves linux versions' do
-        expect(U3d::UnityVersions.list_available(os: :linux).count).to be > 42
+      it 'retrieves standard linux versions' do
+        allow(U3d::UnityVersions::LinuxVersions).to receive(:linux_forum_page_content) { linux_archive }
+        expect(U3d::UnityVersions.list_available(os: :linux).count).to eql 3
+      end
+      it 'retrieves nested linux versions' do
+        allow(U3d::UnityVersions::LinuxVersions).to receive(:linux_forum_page_content) { linux_nested_archive }
+        allow(U3d::UnityVersions::LinuxVersions).to receive(:linux_forum_version_page_content).with('http://beta.unity3d.com/download/b515b8958382/public_download.html') { linux_inner_archive }
+        expect(U3d::UnityVersions.list_available(os: :linux).count).to eql 4
       end
     end
   end
