@@ -73,14 +73,14 @@ describe U3d do
               { '1.2.3f4' => 'fakeurl' },
               :fakeos,
               anything
-            )
+            ) { [] }
             U3d::Commands.download(
               args: [],
               options: {
                 no_install: true,
                 packages: [ 'Unity' ]
               }
-            ) { [] }
+            )
           end
 
           it 'raises an error if not in a project folder' do
@@ -192,10 +192,6 @@ describe U3d do
       end
 
       describe 'platforms with modules' do
-        describe 'when Unity version is already installed' do
-
-        end
-
         describe 'when Unity version is not yet installed' do
           it 'logs an error when Unity is not specified in the packages' do
             on_fake_os_not_linux
@@ -329,7 +325,232 @@ describe U3d do
       end
     end
     describe "#local_install" do
-      # very similar to downlad, except that we don't download.
+      describe 'common' do
+        #   no version specified -> look for version in current project folder if any
+        describe 'when no version is specified' do
+          it 'fetches the version of the project in the current folder' do
+            in_a_project '1.2.3f4'
+            on_fake_os
+            expect_privileges_check
+
+            expect(U3d::Downloader).to receive(:local_files).with(
+              '1.2.3f4',
+              :fakeos,
+              anything
+            ) { [] }
+            U3d::Commands.local_install(
+              args: [],
+              options: {
+                packages: [ 'Unity' ]
+              }
+            )
+          end
+
+          it 'raises an error if not in a project folder' do
+            not_in_a_project
+
+            expect {
+              U3d::Commands.local_install(
+                args: [],
+                options: {
+                  packages: [ 'Unity' ]
+                }
+              )
+            }.to raise_error U3dCore::Interface::UIError
+          end
+        end
+
+        #   request a non existing version number -> do nothing
+        #   NOTE: This will be caught by Dowloader.local_file and error will be raised then
+        #   QUESTION: Should we try to catch it sooner?
+        it 'does not log an error when specifying a non existing version' do
+          on_fake_os
+          expect_privileges_check
+
+          expect(U3d::Downloader).to receive(:local_files) { }
+
+          # Allowed for testing purpose. It should not be reach in real case
+          allow(U3d::Installer).to receive(:install_modules) { }
+
+          U3d::Commands.local_install(
+            args: [ 'not.a.version' ],
+            options: {
+              packages: [ 'Unity' ]
+            }
+          )
+        end
+
+        #   support installing multiple versions at once -> not yet supported
+        #   TODO: Implement me
+      end
+
+      describe 'platforms without modules' do
+        #   install a non discovered version -> installed
+        it 'installs Unity when version is not yet present' do
+          on_linux
+          expect_privileges_check
+
+          files = double("files")
+          expect(U3d::Downloader).to receive(:local_files) { files }
+
+          expect(U3d::Installer).to receive(:install_modules).with(
+            files,
+            '1.2.3f4',
+            installation_path: 'foo'
+          ) { }
+
+          U3d::Commands.local_install(
+            args: [ '1.2.3f4' ],
+            options: {
+              installation_path: 'foo'
+            }
+          )
+        end
+
+        #   reinstall a discovered version -> skipped, no credentials asked
+        it 'does not ask for credentials and does nothing when version is already present' do
+          on_linux
+          are_installed([ fake_linux('1.2.3f4') ])
+          expect_no_privileges_check
+          expect_no_install
+
+          U3d::Commands.local_install(
+            args: [ '1.2.3f4' ],
+            options: { }
+          )
+        end
+
+        #   force reinstall a discovered version -> installed (not yet implemented)
+        #   TODO: Implement me
+        it 'forces reinstallation of Unity with option --force' do
+          puts '      --- TODO ---'
+        end
+      end
+
+      describe 'platforms with modules' do
+        describe 'when Unity version is not yet installed' do
+          it 'logs an error when Unity is not specified in the packages' do
+            on_fake_os_not_linux
+            nothing_installed
+            expect_no_privileges_check
+
+            expect(U3dCore::UI).to receive(:error) { }
+
+            U3d::Commands.local_install(
+              args: [ '1.2.3f4' ],
+              options: {
+                packages: [ 'packageA', 'packageB' ]
+              }
+            )
+          end
+
+          it 'installs specified packages and Unity when specified' do
+            on_fake_os_not_linux
+            nothing_installed
+            expect_privileges_check
+
+            files = double("files")
+            expect(U3d::Downloader).to receive(:local_files).with(
+              '1.2.3f4',
+              :fakeos,
+              packages: [ 'Unity', 'packageA', 'packageB' ]
+            ) { files }
+            expect(U3d::Installer).to receive(:install_modules).with(
+              files,
+              '1.2.3f4',
+              installation_path: 'foo'
+            ) { }
+
+            U3d::Commands.local_install(
+              args: [ '1.2.3f4' ],
+              options: {
+                packages: [ 'Unity', 'packageA', 'packageB' ],
+                installation_path: 'foo'
+              }
+            )
+          end
+
+          it 'installs just Unity when no packages are specified' do
+            on_fake_os_not_linux
+            nothing_installed
+            expect_privileges_check
+
+            files = double("files")
+            expect(U3d::Downloader).to receive(:local_files).with(
+              '1.2.3f4',
+              :fakeos,
+              packages: [ 'Unity' ]
+            ) { files }
+            expect(U3d::Installer).to receive(:install_modules).with(
+              files,
+              '1.2.3f4',
+              installation_path: 'foo'
+            ) { }
+
+            U3d::Commands.local_install(
+              args: [ '1.2.3f4' ],
+              options: {
+                installation_path: 'foo'
+              }
+            )
+          end
+
+          #   TODO: Reimplement --all option
+          it 'installs all available packages when --all option is used' do
+            puts '      --- TODO ---'
+          end
+        end
+
+        describe 'when Unity version is already installed' do
+          #   add an existing editor or module to a discovered install -> skipped, no credentials asked
+          it 'does not ask for credentials and does nothing when no packages are specified' do
+            on_fake_os_not_linux
+            are_installed([fake_installation('1.2.3f4', packages: [ 'packageA', 'packageB' ]) ])
+            expect_no_privileges_check
+            expect_no_download
+            expect_no_install
+
+            U3d::Commands.local_install(
+              args: [ '1.2.3f4' ],
+              options: {
+                installation_path: 'foo'
+              }
+            )
+          end
+
+          it 'installs only uninstalled packages when packages are specified' do
+            on_fake_os_not_linux
+            are_installed([fake_installation('1.2.3f4', packages: [ 'packageA' ]) ])
+            expect_privileges_check
+
+            files = double("files")
+            expect(U3d::Downloader).to receive(:local_files).with(
+              '1.2.3f4',
+              :fakeos,
+              packages: [ 'packageB' ]
+            ) { files }
+            expect(U3d::Installer).to receive(:install_modules).with(
+              files,
+              '1.2.3f4',
+              installation_path: 'foo'
+            ) { }
+
+            U3d::Commands.local_install(
+              args: [ '1.2.3f4' ],
+              options: {
+                installation_path: 'foo',
+                packages: [ 'packageA', 'packageB' ]
+              }
+            )
+          end
+
+          #   force reinstall the editor + modules -> installed all (not yet implemented)
+          #   TODO: Implement me
+          it 'forces complete reinstallation of specified packages with option --force' do
+            puts '      --- TODO ---'
+          end
+        end
+      end
     end
     describe "#credentials" do
       # invalid action name: fail
