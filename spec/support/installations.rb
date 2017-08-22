@@ -62,3 +62,19 @@ def windows_2017_1_64bits_renamed
   allow(unity).to receive(:version) { '2017.1.0f3' }
   return unity
 end
+
+def fake_linux(version)
+  unity = double("LinuxInstallation")
+  allow(unity).to receive(:version) { version }
+  allow(unity).to receive(:path) { 'foo' }
+  allow(unity).to receive(:packages) { false }
+  return unity
+end
+
+def fake_installation(version, packages: [])
+  unity = double("Installation")
+  allow(unity).to receive(:version) { version }
+  allow(unity).to receive(:path) { 'foo' }
+  allow(unity).to receive(:packages) { packages }
+  return unity
+end

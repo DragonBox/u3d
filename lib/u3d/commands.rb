@@ -308,9 +308,10 @@ module U3d
               UI.important "Ignoring #{pack} module, it is already installed" if packages.delete(pack)
             end
           end
+          return false if packages.empty?
         else
           unless packages.include?('Unity')
-            UI.error "Please install Unity #{unity.version} before any of its packages"
+            UI.error 'Please install Unity before any of its packages'
             return false
           end
         end
