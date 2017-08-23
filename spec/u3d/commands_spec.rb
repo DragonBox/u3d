@@ -76,6 +76,13 @@ describe U3d do
       #   request a non existing version number -> fail
       #   request an existing version number -> only that version
       #   TODO: Implement me
+      xdescribe 'when specifying a version number' do
+        xit 'raises an error when version does not exist' do
+        end
+
+        xit 'displays only specified version if correct' do
+        end
+      end
     end
 
     # ---
@@ -292,9 +299,12 @@ describe U3d do
         end
         #   support downloading the not current platform -> not yet supported
         #   TODO: Implement me
-
+        xit 'downloads versions for other os when option --operating_system is specified' do
+        end
         #   support installing multiple versions at once -> not yet supported
         #   TODO: Implement me
+        xit 'downloads several versions at once when specified' do
+        end
       end
 
       describe 'platforms without modules' do
@@ -338,8 +348,7 @@ describe U3d do
 
         #   force reinstall a discovered version -> installed (not yet implemented)
         #   TODO: Implement me
-        it 'forces reinstallation of Unity with option --force' do
-          puts '      --- TODO ---'
+        xit 'forces reinstallation of Unity with option --force' do
         end
       end
 
@@ -417,8 +426,7 @@ describe U3d do
           end
 
           #   TODO: Reimplement --all option
-          it 'installs all available packages when --all option is used' do
-            puts '      --- TODO ---'
+          xit 'installs all available packages when --all option is used' do
           end
         end
 
@@ -470,8 +478,7 @@ describe U3d do
 
           #   force reinstall the editor + modules -> installed all (not yet implemented)
           #   TODO: Implement me
-          it 'forces complete reinstallation of specified packages with option --force' do
-            puts '      --- TODO ---'
+          xit 'forces complete reinstallation of specified packages with option --force' do
           end
         end
       end
@@ -578,8 +585,7 @@ describe U3d do
 
         #   force reinstall a discovered version -> installed (not yet implemented)
         #   TODO: Implement me
-        it 'forces reinstallation of Unity with option --force' do
-          puts '      --- TODO ---'
+        xit 'forces reinstallation of Unity with option --force' do
         end
       end
 
@@ -652,8 +658,7 @@ describe U3d do
           end
 
           #   TODO: Reimplement --all option
-          it 'installs all available packages when --all option is used' do
-            puts '      --- TODO ---'
+          xit 'installs all available packages when --all option is used' do
           end
         end
 
@@ -702,8 +707,7 @@ describe U3d do
 
           #   force reinstall the editor + modules -> installed all (not yet implemented)
           #   TODO: Implement me
-          it 'forces complete reinstallation of specified packages with option --force' do
-            puts '      --- TODO ---'
+          xit 'forces complete reinstallation of specified packages with option --force' do
           end
         end
       end
