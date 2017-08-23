@@ -30,13 +30,52 @@ describe U3d do
     # LIST_INSTALLED
     # ---
     describe "#list_installed" do
-      # 0 version installed -> display message
-      # 1 version, without option packages -> only version
-      # multiple versions, with or without option packages, sorted
-      # 1 version, with option packages -> also packages
+      it 'logs a message when no version is installed' do
+        nothing_installed
+
+        expect(U3d::UI).to receive(:important).with(/[nN]o.*install/) {}
+
+        U3d::Commands.list_installed
+      end
+
+      describe 'when one or more version are installed' do
+        it 'logs installed version when there is only one' do
+          are_installed([fake_installation('1.2.3f4')])
+
+          expect(U3d::UI).to receive(:message).with(/1.2.3f4.*foo/)
+
+          U3d::Commands.list_installed
+        end
+
+        it 'logs installed packages as well when --packages option is specified' do
+          are_installed([fake_installation('1.2.3f4', packages: %w[packageA packageB])])
+
+          expect(U3d::UI).to receive(:message).with(/1.2.3f4.*foo/)
+          expect(U3d::UI).to receive(:message).with(/Packages/)
+          expect(U3d::UI).to receive(:message).with(/packageA/)
+          expect(U3d::UI).to receive(:message).with(/packageB/)
+
+          U3d::Commands.list_installed(options: { packages: true })
+        end
+
+        it 'logs sorted versions when several are installed' do
+          are_installed([
+                          fake_installation('1.2.3f6'),
+                          fake_installation('1.2.3b2'),
+                          fake_installation('1.2.3f4')
+                        ])
+
+          expect(U3d::UI).to receive(:message).with(/1.2.3b2.*foo/).ordered
+          expect(U3d::UI).to receive(:message).with(/1.2.3f4.*foo/).ordered
+          expect(U3d::UI).to receive(:message).with(/1.2.3f6.*foo/).ordered
+
+          U3d::Commands.list_installed
+        end
+      end
       # when we support a specific version number (e.g. to list the packages of that version)
       #   request a non existing version number -> fail
       #   request an existing version number -> only that version
+      #   TODO: Implement me
     end
 
     # ---
