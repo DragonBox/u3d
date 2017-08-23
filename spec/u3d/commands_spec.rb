@@ -734,6 +734,30 @@ describe U3d do
     # PRETTIFY
     # ---
     describe "#prettify" do
+      it 'raises an error if no file is specified' do
+        expect { U3d::Commands.local_analyze(args: []) }.to raise_error ArgumentError
+      end
+
+      it 'raises an error if specified file does not exist' do
+        allow(File).to receive(:exist?).with('foo') { false }
+        expect { U3d::Commands.local_analyze(args: ['foo']) }.to raise_error ArgumentError
+      end
+
+      it 'prettifies the log if the specified file is correct' do
+        allow(File).to receive(:exist?).with('foo') { true }
+        analyzer = double('LogAnalyzer')
+        file = double('file')
+        lines = double('file.readlines')
+        line = double('line')
+
+        expect(U3d::LogAnalyzer).to receive(:new) { analyzer }
+        expect(File).to receive(:open).with('foo', 'r').and_yield file
+        expect(file).to receive(:readlines) { lines }
+        expect(lines).to receive(:each).and_yield line
+        expect(analyzer).to receive(:parse_line).with(line) {}
+
+        U3d::Commands.local_analyze(args: ['foo'])
+      end
       # fail if no file arg specified
       # fail if file arg not a file
       # FIXME: no way to specify a different log rule config right now
