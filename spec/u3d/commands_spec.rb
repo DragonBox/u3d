@@ -26,6 +26,9 @@ require 'support/setups'
 
 describe U3d do
   describe U3d::Commands do
+    # ---
+    # LIST_INSTALLED
+    # ---
     describe "#list_installed" do
       # 0 version installed -> display message
       # 1 version, without option packages -> only version
@@ -35,6 +38,10 @@ describe U3d do
       #   request a non existing version number -> fail
       #   request an existing version number -> only that version
     end
+
+    # ---
+    # LIST_AVAILABLE
+    # ---
     describe "#list_available" do
       describe 'common' do
         it 'raises an error when specifying an invalid operating system' do
@@ -166,6 +173,9 @@ describe U3d do
       #   NOTE: Should be tested in INIparser
     end
 
+    # ---
+    # DOWNLOAD
+    # ---
     describe "#download" do
       describe 'common' do
         #   no version specified -> look for version in current project folder if any
@@ -431,6 +441,10 @@ describe U3d do
         end
       end
     end
+
+    # ---
+    # LOCAL_INSTALL
+    # ---
     describe "#local_install" do
       describe 'common' do
         #   no version specified -> look for version in current project folder if any
@@ -659,6 +673,10 @@ describe U3d do
         end
       end
     end
+
+    # ---
+    # CREDENTIALS
+    # ---
     describe "#credentials" do
       # invalid action name: fail
       # add
@@ -676,6 +694,10 @@ describe U3d do
       #     add/remove should fail with 1 if operation fails to add or remove
       #     check: should fail with 1 if user not exist, 2 if invalid
     end
+
+    # ---
+    # PRETTIFY
+    # ---
     describe "#prettify" do
       # fail if no file arg specified
       # fail if file arg not a file
