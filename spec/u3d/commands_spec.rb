@@ -773,14 +773,16 @@ describe U3d do
     # RUN
     # ---
     describe "#run", focus: true do
+      let(:runner) do
+        runner = double("Runner")
+        allow(U3d::Runner).to receive(:new) { runner }
+        runner
+      end
       context 'inside a given unity project' do
         it "fails if it cannot find the project's unity version" do
           are_installed([])
           projectpath = 'fakepath'
           in_a_project(version: '1.2.3f4', path: projectpath)
-
-          runner = double("Runner")
-          allow(U3d::Runner).to receive(:new) { runner }
 
           expect do
             U3d::Commands.run(
@@ -797,8 +799,6 @@ describe U3d do
           are_installed([unity])
           in_a_project(version: unity.version, path: projectpath)
 
-          runner = double("Runner")
-          allow(U3d::Runner).to receive(:new) { runner }
           expect(runner).to receive(:run).with(unity, ['-projectpath', projectpath], raw_logs: nil)
 
           U3d::Commands.run(
@@ -814,8 +814,6 @@ describe U3d do
           are_installed([unity])
           in_a_project(version: unity.version, path: projectpath)
 
-          runner = double("Runner")
-          allow(U3d::Runner).to receive(:new) { runner }
           expect(runner).to receive(:run).with(unity, ['-projectpath', projectpath, "somearg"], raw_logs: nil)
 
           U3d::Commands.run(
@@ -832,8 +830,6 @@ describe U3d do
           are_installed([project_unity, other_unity])
           in_a_project(version: project_unity.version, path: projectpath1)
 
-          runner = double("Runner")
-          allow(U3d::Runner).to receive(:new) { runner }
           expect(runner).to receive(:run).with(other_unity, ['-projectpath', projectpath1, "somearg"], raw_logs: nil)
 
           U3d::Commands.run(
@@ -850,8 +846,6 @@ describe U3d do
           are_installed([project_unity])
           in_a_project(version: project_unity.version, path: current_projectpath)
 
-          runner = double("Runner")
-          allow(U3d::Runner).to receive(:new) { runner }
           expect(runner).to receive(:run).with(project_unity, ['-projectpath', other_projectpath, "somearg"], raw_logs: nil)
 
           U3d::Commands.run(
@@ -878,9 +872,6 @@ describe U3d do
         it "fails if the specified version isn't installed" do
           nothing_installed
 
-          runner = double("Runner")
-          allow(U3d::Runner).to receive(:new) { runner }
-
           expect do
             U3d::Commands.run(
               options: { unity_version: '1.2.3f4' },
@@ -894,8 +885,6 @@ describe U3d do
 
           are_installed([unity])
 
-          runner = double("Runner")
-          allow(U3d::Runner).to receive(:new) { runner }
           expect(runner).to receive(:run).with(unity, ['-projectpath', projectpath], raw_logs: nil)
 
           U3d::Commands.run(
@@ -909,8 +898,6 @@ describe U3d do
 
           are_installed([unity])
 
-          runner = double("Runner")
-          allow(U3d::Runner).to receive(:new) { runner }
           expect(runner).to receive(:run).with(unity, ['-projectpath', projectpath], raw_logs: 'raaaww')
 
           U3d::Commands.run(
