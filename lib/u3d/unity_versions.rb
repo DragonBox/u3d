@@ -135,7 +135,7 @@ module U3d
             size = Integer(response['Content-Length'])
           end
           if size
-            INIparser.create_linux_ini(version, size)
+            INIparser.create_linux_ini(version, size, url)
           else
             UI.important "u3d tried to get the size of the installer for version #{version}, but wasn't able to"
           end

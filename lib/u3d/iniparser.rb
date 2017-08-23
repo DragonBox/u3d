@@ -67,7 +67,7 @@ module U3d
         result
       end
 
-      def create_linux_ini(version, size)
+      def create_linux_ini(version, size, url)
         ini_name = format(INI_NAME, version: version, os: 'linux')
         Utils.ensure_dir(default_ini_path)
         ini_path = File.expand_path(ini_name, default_ini_path)
@@ -80,6 +80,7 @@ module U3d
 ; ----------
 title=Unity
 size=#{size}
+url=#{url}
 )
         end
       end

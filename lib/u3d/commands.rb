@@ -21,6 +21,7 @@
 ## --- END LICENSE BLOCK ---
 
 require 'u3d/unity_versions'
+require 'u3d/unity_version_definition'
 require 'u3d/downloader'
 require 'u3d/installer'
 require 'u3d/unity_project'
@@ -112,20 +113,20 @@ module U3d
           return
         end
 
+        definition = UnityVersionDefinition.new(version, os, versions)
         unity = check_unity_presence(version: version)
-        return unless enforce_setup_coherence(packages, options, unity)
-
-        U3d::Globals.use_keychain = true if options[:keychain] && Helper.mac?
+        return unless enforce_setup_coherence(packages, options, unity, definition)
 
         unless options[:no_install]
+          U3d::Globals.use_keychain = true if options[:keychain] && Helper.mac?
           UI.important 'Root privileges are required'
           raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
         end
 
-        files = Downloader.download_modules(version, versions, os, packages: packages)
+        files = Downloader.download_modules(definition, packages: packages)
 
         return if options[:no_install]
-        Installer.install_modules(files, version, installation_path: options[:installation_path])
+        Installer.install_modules(files, definition.version, installation_path: options[:installation_path])
       end
 
       def local_install(args: [], options: {})
@@ -135,17 +136,18 @@ module U3d
 
         packages = packages_with_unity_first(os, options)
 
+        definition = UnityVersionDefinition.new(version, os, nil)
         unity = check_unity_presence(version: version)
-        return unless enforce_setup_coherence(packages, options, unity)
+        return unless enforce_setup_coherence(packages, options, unity, definition)
 
-        U3d::Globals.use_keychain = true if options[:keychain] && Helper.mac?
+        U3d::Globals.use_keychain = true if options[:keychain] && os == :mac
 
         UI.important 'Root privileges are required'
         raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
 
-        files = Downloader.local_files(version, os, packages: packages)
+        files = Downloader.local_files(definition, packages: packages)
 
-        Installer.install_modules(files, version, installation_path: options[:installation_path])
+        Installer.install_modules(files, definition.version, installation_path: options[:installation_path])
       end
 
       def run(options: {}, run_args: [])
@@ -279,7 +281,6 @@ module U3d
           UI.important 'Option -a | --all not available for Linux' if options[:all]
           UI.important 'Option -p | --packages not available for Linux' if options[:packages]
         end
-        return [] if options[:all]
         temp = options[:packages] || ['Unity']
         temp.insert(0, 'Unity') if temp.delete('Unity')
         temp
@@ -297,14 +298,16 @@ module U3d
         nil
       end
 
-      def enforce_setup_coherence(packages, options, unity)
+      def enforce_setup_coherence(packages, options, unity, definition)
+        packages = definition.available_packages if options[:all]
         if unity
           UI.important "Unity #{unity.version} is already installed"
-          return false if Helper.linux?
+          # Not needed since Linux custom u3d files contain only one entry wich is Unity
+          # return false if definition.os == :linux
           if packages.include?('Unity')
             UI.important 'Ignoring Unity module, it is already installed'
             packages.delete('Unity')
-            options[:installation_path] ||= unity.path if Helper.windows?
+            options[:installation_path] ||= unity.path if definition.os == :win
           end
           if unity.packages
             unity.packages.each do |pack|
