@@ -10,7 +10,11 @@ U3d is a set of tools to interact with Unity3D from command line. It is availabl
 
 ## What can it do?
 
-U3d provides help for running and installing unity from CLI. Available commands are:
+U3d provides help for running and installing unity from CLI.
+
+U3d knows about your Unity project and behaves differently if invoked from within a Unity project directory. For example, it can run or download the version required by your project without you having to specify it.
+
+Available commands are:
 
 * `u3d available`: List download-ready versions of Unity3d
 
@@ -26,9 +30,14 @@ U3d provides help for running and installing unity from CLI. Available commands 
 
 * `u3d local_install`: Install downloaded version of Unity3d
 
-* `u3d run`: Run Unity, and parses its output through u3d's log prettifier
+* `u3d run`: Run Unity, and parses its output through u3d's log prettifier.
 
-![u3d run](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_run.png)
+Here we start with the proper version of Unity:
+
+![u3d run without arguments](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_run_current.png)
+
+Here we pass some arguments:
+![u3d run with arguments](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_run.png)
 
 The prettifyer is on by default but can be turned off to get Unity3d's raw output.
 
