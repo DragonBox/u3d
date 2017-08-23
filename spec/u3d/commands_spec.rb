@@ -290,10 +290,6 @@ describe U3d do
             }
           )
         end
-
-        #   cache is outdated -> cache refreshed
-        #   NOTE: This shoudln't be tested by Commands, but by Cache
-
         #   support downloading the not current platform -> not yet supported
         #   TODO: Implement me
 
