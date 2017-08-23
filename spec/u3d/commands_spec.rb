@@ -40,23 +40,130 @@ describe U3d do
         it 'raises an error when specifying an invalid operating system' do
           expect { U3d::Commands.list_available(options: {:operating_system => 'NotAnOs' }) }.to raise_error StandardError
         end
+
+        it 'forces the cache to refresh with option --force' do
+          on_fake_os
+
+          expect(U3d::Cache).to receive(:new).with(
+            force_os: :fakeos,
+            force_refresh: true
+          ) { { 'fakeos' => { 'versions' => { } } } }
+
+          U3d::Commands.list_available(options: { :force => true })
+        end
+
+        #   request a non existing version number -> fail
+        #   QUESTION: Raises an error instead of logging?
+        it 'logs an error when specifying a non existing version' do
+          on_fake_os
+          with_fake_cache({ 'fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } } })
+
+          expect(U3d::UI).to receive(:error)
+
+          U3d::Commands.list_available(options: { :unity_version => 'not.a.version' })
+        end
+
+        it 'only logs specified version' do
+          on_fake_os
+          with_fake_cache({ 'fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } } })
+
+          expect(U3d::UI).to receive(:message).with(/.*1.2.3f4.*fakeurl.*/)
+
+          U3d::Commands.list_available(options: { :unity_version => '1.2.3f4' })
+        end
+
+        describe 'when parsing user OS input' do
+          it 'uses correct input' do
+            fakeos = double("os")
+            fakeos_sym = double("os_sym")
+            oses = double("oses")
+            allow(fakeos).to receive(:to_sym) { fakeos_sym }
+            allow(U3d::Helper).to receive(:operating_systems) { oses }
+            expect(oses).to receive(:include?).with(fakeos_sym) { true }
+            allow(fakeos_sym).to receive(:id2name) { 'fakeos' }
+
+            expect(U3d::Cache).to receive(:new).with(force_os: fakeos_sym, force_refresh: false) { { 'fakeos' => { 'versions' => { } } } }
+
+            U3d::Commands.list_available(options: { :operating_system => fakeos, :force => false})
+          end
+
+          it 'raises an error with invalid input' do
+            fakeos = double("os")
+            fakeos_sym = double("os_sym")
+            oses = double("oses")
+            allow(fakeos).to receive(:to_sym) { fakeos_sym }
+            allow(U3d::Helper).to receive(:operating_systems) { oses }
+            expect(oses).to receive(:include?).with(fakeos_sym) { false }
+            allow(oses).to receive(:join) { '' }
+
+            expect { U3d::Commands.list_available(options: { :operating_system => fakeos }) }.to raise_error StandardError
+          end
+
+          it 'assumes the OS if nothing specified' do
+            expect(U3d::Helper).to receive(:operating_system) { :fakeos }
+            expect(U3d::Cache).to receive(:new).with(force_os: :fakeos, force_refresh: false) { { 'fakeos' => { 'versions' => { } } } }
+
+            U3d::Commands.list_available(options: { :force => false })
+          end
+        end
       end
 
-      describe 'when loading from cache' do
+      describe 'when listing cached versions' do
+        it 'lists versions in proper order' do
+          on_fake_os
+          with_fake_cache({ 'fakeos' => { 'versions' => {
+            '1.2.3f4' => 'fakeurl',
+            '1.2.3f6' => 'fakeurl',
+            '1.2.3b2' => 'fakeurl',
+            '0.0.0f4' => 'fakeurl'
+            } } })
 
+            expect(U3d::UI).to receive(:message).with(/.*0.0.0f4.*fakeurl.*/).ordered
+            expect(U3d::UI).to receive(:message).with(/.*1.2.3b2.*fakeurl.*/).ordered
+            expect(U3d::UI).to receive(:message).with(/.*1.2.3f4.*fakeurl.*/).ordered
+            expect(U3d::UI).to receive(:message).with(/.*1.2.3f6.*fakeurl.*/).ordered
+
+            U3d::Commands.list_available(options: { :force => false })
+        end
+
+        it 'filters versions based on specified correct release type' do
+          on_fake_os
+          with_fake_cache({ 'fakeos' => { 'versions' => {
+            '1.2.3f4' => 'fakeurl',
+            '1.2.3f6' => 'fakeurl',
+            '1.2.3b2' => 'fakeurl',
+            '0.0.0f4' => 'fakeurl'
+          } } })
+
+          expect(U3d::UI).to receive(:message).with(/.*0.0.0f4.*fakeurl.*/)
+          expect(U3d::UI).to_not receive(:message).with(/.*1.2.3b2.*fakeurl.*/)
+          expect(U3d::UI).to receive(:message).with(/.*1.2.3f4.*fakeurl.*/)
+          expect(U3d::UI).to receive(:message).with(/.*1.2.3f6.*fakeurl.*/)
+
+          U3d::Commands.list_available(options: { :force => false, release_level: 'stable' })
+        end
+
+        it 'displays packages when --packages options is specified' do
+          on_fake_os
+          with_fake_cache({ 'fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } } })
+
+          expect(U3d::INIparser).to receive(:load_ini).with(
+            '1.2.3f4',
+            { '1.2.3f4' => 'fakeurl' },
+            os: :fakeos
+          ) { { 'packageA' => '', 'packageB' => '' } }
+
+          expect(U3d::UI).to receive(:message).with(/.*1.2.3f4.*fakeurl.*/)
+          expect(U3d::UI).to receive(:message).with(/Packages/)
+          expect(U3d::UI).to receive(:message).with(/packageA/)
+          expect(U3d::UI).to receive(:message).with(/packageB/)
+
+          U3d::Commands.list_available(options: { :force => false, :packages => true })
+        end
       end
-
-
-      # common
-      #   force refresh -> cache refreshed
-      #   request a non existing version number -> fail
-      #   request an existing version number -> only that version
-      #   platform: validate, fail, use the specified one, or current as fallback
-      # list from cache
-      #   in proper order
-      #   filter those from the release type if specified
-      #   display packages if specified
-      #     make sure this works properly on Linux support with our fake INI file
+      
+      #   make sure this works properly on Linux support with our fake INI file
+      #   NOTE: Should be tested in INIparser
     end
 
     describe "#download" do
