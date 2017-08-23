@@ -77,22 +77,24 @@ module U3d
       log_file
     end
 
-    # rubocop:disable MethodName
-    def find_logFile_in_args(args)
-      # rubocop:enable MethodName
-      find_arg_in_args('-logFile', args)
-    end
-
-    def find_projectpath_in_args(args)
-      find_arg_in_args('-projectpath', args)
-    end
-
-    def find_arg_in_args(arg_to_find, args)
-      raise 'Only arguments of type array supported right now' unless args.is_a?(Array)
-      args.each_with_index do |arg, index|
-        return args[index + 1] if arg == arg_to_find && index < args.count - 1
+    class << self
+      # rubocop:disable MethodName
+      def find_logFile_in_args(args)
+        # rubocop:enable MethodName
+        find_arg_in_args('-logFile', args)
       end
-      nil
+
+      def find_projectpath_in_args(args)
+        find_arg_in_args('-projectpath', args)
+      end
+
+      def find_arg_in_args(arg_to_find, args)
+        raise 'Only arguments of type array supported right now' unless args.is_a?(Array)
+        args.each_with_index do |arg, index|
+          return args[index + 1] if arg == arg_to_find && index < args.count - 1
+        end
+        nil
+      end
     end
 
     private
