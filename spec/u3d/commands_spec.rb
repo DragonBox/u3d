@@ -161,7 +161,7 @@ describe U3d do
           U3d::Commands.list_available(options: { :force => false, :packages => true })
         end
       end
-      
+
       #   make sure this works properly on Linux support with our fake INI file
       #   NOTE: Should be tested in INIparser
     end
@@ -246,7 +246,7 @@ describe U3d do
         #   NOTE: This shoudln't be tested by Commands, but by Cache
 
         #   support downloading the not current platform -> not yet supported
-        #   TODO: Imlement me
+        #   TODO: Implement me
 
         #   support installing multiple versions at once -> not yet supported
         #   TODO: Implement me
