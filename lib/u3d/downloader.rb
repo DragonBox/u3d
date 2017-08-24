@@ -79,13 +79,13 @@ module U3d
         case os
         when :linux
           validator = LinuxValidator.new
-          downloader = Downloader::LinuxDownloader
+          downloader = Downloader::LinuxDownloader.new
         when :mac
           validator = MacValidator.new
-          downloader = Downloader::MacDownloader
+          downloader = Downloader::MacDownloader.new
         when :win
           validator = WindowsValidator.new
-          downloader = Downloader::WindowsDownloader
+          downloader = Downloader::WindowsDownloader.new
         else
           raise ArgumentError, "Operating system #{os.id2name} is not recognized"
         end

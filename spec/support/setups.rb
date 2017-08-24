@@ -80,7 +80,7 @@ def with_fake_cache(cache)
 end
 
 def expected_definition(version, os, url, packages: [])
-  allow(U3d::INIparser).to receive(:load_ini).with(version, any_args) do
+  allow(U3d::INIparser).to receive(:load_ini).with(version, anything, anything) do
     ini = {}
     packages.each { |pack| ini[pack] = {} }
     ini
