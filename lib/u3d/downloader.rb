@@ -39,25 +39,14 @@ module U3d
       # download packages
       def download_modules(definition, packages: [])
         files = []
-        case definition.os
-        when :linux
-          validator = LinuxValidator.new
-          downloader = Downloader::LinuxDownloader.new
-        when :mac
-          validator = MacValidator.new
-          downloader = Downloader::MacDownloader.new
-        when :win
-          validator = WindowsValidator.new
-          downloader = Downloader::WindowsDownloader.new
-        else
-          raise ArgumentError, "Operating system #{definition.os.id2name} is not recognized"
-        end
+        validator, downloader = setup_os(definition.os)
 
         packages.each do |package|
           get_package(downloader, validator, package, definition, files)
         end
 
         # On Linux, make sure the files are executable
+        # FIXME: Move me to the LinuxInstaller
         files.each { |f| U3dCore::CommandExecutor.execute(command: "chmod a+x #{f[1]}") } if definition.os == :linux
 
         files
@@ -66,19 +55,7 @@ module U3d
       # find already downloaded packages
       def local_files(definition, packages: [])
         files = []
-        case definition.os
-        when :linux
-          validator = LinuxValidator.new
-          downloader = Downloader::LinuxDownloader
-        when :mac
-          validator = MacValidator.new
-          downloader = Downloader::MacDownloader
-        when :win
-          validator = WindowsValidator.new
-          downloader = Downloader::WindowsDownloader
-        else
-          raise ArgumentError, "Operating system #{definition.os.id2name} is not recognized"
-        end
+        validator, downloader = setup_os(definition.os)
 
         packages.each do |package|
           path = downloader.destination_for(package, definition)
@@ -98,6 +75,23 @@ module U3d
 
       private #-----------------------------------------------------------------
 
+      def setup_os(os)
+        case definition.os
+        when :linux
+          validator = LinuxValidator.new
+          downloader = Downloader::LinuxDownloader
+        when :mac
+          validator = MacValidator.new
+          downloader = Downloader::MacDownloader
+        when :win
+          validator = WindowsValidator.new
+          downloader = Downloader::WindowsDownloader
+        else
+          raise ArgumentError, "Operating system #{definition.os.id2name} is not recognized"
+        end
+        return validator, downloader
+      end
+
       def get_package(downloader, validator, package, definition, files)
         path = downloader.destination_for(package, definition)
         url = downloader.url_for(package, definition)
@@ -115,8 +109,7 @@ module U3d
 
         UI.header "Downloading #{package} version #{definition.version}"
         UI.message 'Downloading from ' + url.to_s.cyan.underline
-        size = definition.os == :win ? definition[package]['size'] * 1024 : definition[package]['size']
-        download_package(path, url, size: size)
+        download_package(path, url, size: definition.size_in_kb(package))
 
         if validator.validate(package, path, definition)
           UI.success "Successfully downloaded #{package}."

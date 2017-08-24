@@ -47,5 +47,10 @@ module U3d
       return nil unless @ini
       @ini[key]
     end
+
+    def size_in_kb(package)
+      return -1 unless @ini[package] && @ini[package]['size']
+      @os == :win ? @ini[package]['size'] * 1024 : @ini[package]['size']
+    end
   end
 end
