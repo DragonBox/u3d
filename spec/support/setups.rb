@@ -86,7 +86,7 @@ def expected_definition(version, os, url, packages: [])
     ini
   end
   if url
-    definition = U3d::UnityVersionDefinition.new(version, os, { version => url })
+    definition = U3d::UnityVersionDefinition.new(version, os, version => url)
     expect(U3d::UnityVersionDefinition).to receive(:new).with(version, os, hash_including(version => url)) { definition }
   else
     definition = U3d::UnityVersionDefinition.new(version, os, nil)

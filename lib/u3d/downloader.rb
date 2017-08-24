@@ -76,7 +76,7 @@ module U3d
       private #-----------------------------------------------------------------
 
       def setup_os(os)
-        case definition.os
+        case os
         when :linux
           validator = LinuxValidator.new
           downloader = Downloader::LinuxDownloader
@@ -87,7 +87,7 @@ module U3d
           validator = WindowsValidator.new
           downloader = Downloader::WindowsDownloader
         else
-          raise ArgumentError, "Operating system #{definition.os.id2name} is not recognized"
+          raise ArgumentError, "Operating system #{os.id2name} is not recognized"
         end
         return validator, downloader
       end

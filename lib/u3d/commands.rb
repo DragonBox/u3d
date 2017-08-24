@@ -307,7 +307,7 @@ module U3d
           if packages.include?('Unity')
             UI.important 'Ignoring Unity module, it is already installed'
             packages.delete('Unity')
-            
+
             # FIXME: Move me to the WindowsInstaller
             options[:installation_path] ||= unity.path if definition.os == :win
           end

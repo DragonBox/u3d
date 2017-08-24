@@ -60,7 +60,7 @@ describe U3d do
         end
 
         it 'makes sure that downloaded packages are executable' do
-          allow(U3d::Downloader).to receive(:get_package).with(anything, anything, 'packageA', @definition, anything).and_wrap_original do |m, *args|
+          allow(U3d::Downloader).to receive(:get_package).with(anything, anything, 'packageA', @definition, anything).and_wrap_original do |_m, *args|
             args[4] << ['packageA', 'filepath', {}]
           end
           expect(U3dCore::CommandExecutor).to receive(:execute).with(command: 'chmod a+x filepath') {}
@@ -139,7 +139,7 @@ describe U3d do
               'Unity',
               definition
             )
-          ).to eql File.join("#{ENV['HOME']}", 'Downloads', 'Unity_Packages', '1.2.3f4', 'unity-editor-installer-1.2.3f4+20160628.sh')
+          ).to eql File.join(ENV['HOME'], 'Downloads', 'Unity_Packages', '1.2.3f4', 'unity-editor-installer-1.2.3f4+20160628.sh')
         end
       end
 
@@ -147,7 +147,7 @@ describe U3d do
         it 'returns the correct url for the Unity installer' do
           allow(U3d::INIparser).to receive(:load_ini) { { 'Unity' => { 'url' => 'http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f4+20160628.sh' } } }
 
-          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, { '1.2.3f4' => 'http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f4+20160628.sh' })
+          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, '1.2.3f4' => 'http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f4+20160628.sh')
           expect(
             @downloader.url_for(
               'Unity',
@@ -163,7 +163,6 @@ describe U3d do
         @downloader = U3d::Downloader::MacDownloader.new
       end
 
-
       describe '.destination_for' do
         it 'returns the correct destination the specified package' do
           expect(U3d::Utils).to receive(:ensure_dir) {}
@@ -176,7 +175,7 @@ describe U3d do
               'package',
               definition
             )
-          ).to eql File.join("#{ENV['HOME']}", 'Downloads', 'Unity_Packages', '1.2.3f4', 'Unity.pkg')
+          ).to eql File.join(ENV['HOME'], 'Downloads', 'Unity_Packages', '1.2.3f4', 'Unity.pkg')
         end
       end
 
@@ -184,7 +183,7 @@ describe U3d do
         it 'returns the correct url for the specified package' do
           allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => 'MacEditorInstaller/Unity.pkg' } } }
 
-          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, { '1.2.3f4' => 'http://download.unity3d.com/download_unity/d3101c3b8468/' })
+          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, '1.2.3f4' => 'http://download.unity3d.com/download_unity/d3101c3b8468/')
           expect(
             @downloader.url_for(
               'package',
@@ -200,7 +199,6 @@ describe U3d do
         @downloader = U3d::Downloader::WindowsDownloader.new
       end
 
-
       describe '.destination_for' do
         it 'returns the correct destination the specified package' do
           expect(U3d::Utils).to receive(:ensure_dir) {}
@@ -213,7 +211,7 @@ describe U3d do
               'package',
               definition
             )
-          ).to eql File.join("#{ENV['HOME']}", 'Downloads', 'Unity_Packages', '1.2.3f4', 'UnitySetup64.exe')
+          ).to eql File.join(ENV['HOME'], 'Downloads', 'Unity_Packages', '1.2.3f4', 'UnitySetup64.exe')
         end
       end
 
@@ -221,7 +219,7 @@ describe U3d do
         it 'returns the correct url for the specified package' do
           allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => 'Windows64EditorInstaller/UnitySetup64.exe' } } }
 
-          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, { '1.2.3f4' => 'http://download.unity3d.com/download_unity/d3101c3b8468/' })
+          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, '1.2.3f4' => 'http://download.unity3d.com/download_unity/d3101c3b8468/')
           expect(
             @downloader.url_for(
               'package',

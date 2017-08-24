@@ -48,7 +48,7 @@ module U3d
       true
     end
 
-    def validate(package, file, definition)
+    def validate(_package, _file, _definition)
       raise NotImplementedError, 'Not implemented yet'
     end
   end
@@ -64,7 +64,7 @@ module U3d
   class MacValidator < DownloadValidator
     def validate(package, file, definition)
       size_validation(expected: definition[package]['size'], actual: File.size(file)) &&
-      hash_validation(expected: definition[package]['md5'], actual: Utils.hashfile(file))
+        hash_validation(expected: definition[package]['md5'], actual: Utils.hashfile(file))
     end
   end
 
@@ -72,7 +72,7 @@ module U3d
     def validate(package, file, definition)
       rounded_size = (File.size(file).to_f / 1024).floor
       size_validation(expected: definition[package]['size'], actual: rounded_size) &&
-      hash_validation(expected: definition[package]['md5'], actual: Utils.hashfile(file))
+        hash_validation(expected: definition[package]['md5'], actual: Utils.hashfile(file))
     end
   end
 end

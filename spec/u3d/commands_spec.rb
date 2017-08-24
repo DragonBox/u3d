@@ -357,7 +357,7 @@ describe U3d do
             with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
             nothing_installed
             expect_no_privileges_check
-            definition = expected_definition('1.2.3f4', :fakeos, 'fakeurl')
+            expected_definition('1.2.3f4', :fakeos, 'fakeurl')
 
             expect(U3dCore::UI).to receive(:error) {}
 
@@ -591,7 +591,7 @@ describe U3d do
             on_fake_os_not_linux
             nothing_installed
             expect_no_privileges_check
-            definition = expected_definition('1.2.3f4', :fakeos, nil)
+            expected_definition('1.2.3f4', :fakeos, nil)
 
             expect(U3dCore::UI).to receive(:error) {}
 
