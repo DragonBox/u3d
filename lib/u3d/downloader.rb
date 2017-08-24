@@ -42,13 +42,13 @@ module U3d
         case definition.os
         when :linux
           validator = LinuxValidator.new
-          downloader = Downloader::LinuxDownloader
+          downloader = Downloader::LinuxDownloader.new
         when :mac
           validator = MacValidator.new
-          downloader = Downloader::MacDownloader
+          downloader = Downloader::MacDownloader.new
         when :win
           validator = WindowsValidator.new
-          downloader = Downloader::WindowsDownloader
+          downloader = Downloader::WindowsDownloader.new
         else
           raise ArgumentError, "Operating system #{definition.os.id2name} is not recognized"
         end
@@ -58,7 +58,7 @@ module U3d
         end
 
         # On Linux, make sure the files are executable
-        files.each { |f| U3dCore::CommandExecutor.execute(command: "chmod a+x #{f}") } if definition.os == :linux
+        files.each { |f| U3dCore::CommandExecutor.execute(command: "chmod a+x #{f[1]}") } if definition.os == :linux
 
         files
       end
@@ -166,50 +166,44 @@ module U3d
     end
 
     class MacDownloader
-      class << self
-        def destination_for(package, definition)
-          dir = File.join(DOWNLOAD_PATH, DOWNLOAD_DIRECTORY, definition.version)
-          Utils.ensure_dir(dir)
-          file_name = UNITY_MODULE_FILE_REGEX.match(definition[package]['url'])[1]
+      def destination_for(package, definition)
+        dir = File.join(DOWNLOAD_PATH, DOWNLOAD_DIRECTORY, definition.version)
+        Utils.ensure_dir(dir)
+        file_name = UNITY_MODULE_FILE_REGEX.match(definition[package]['url'])[1]
 
-          File.expand_path(file_name, dir)
-        end
+        File.expand_path(file_name, dir)
+      end
 
-        def url_for(package, definition)
-          definition.url + definition[package]['url']
-        end
+      def url_for(package, definition)
+        definition.url + definition[package]['url']
       end
     end
 
     class LinuxDownloader
-      class << self
-        def destination_for(package, definition)
-          dir = File.join(DOWNLOAD_PATH, DOWNLOAD_DIRECTORY, definition.version)
-          Utils.ensure_dir(dir)
-          file_name = UNITY_MODULE_FILE_REGEX.match(definition[package]['url'])[1]
+      def destination_for(package, definition)
+        dir = File.join(DOWNLOAD_PATH, DOWNLOAD_DIRECTORY, definition.version)
+        Utils.ensure_dir(dir)
+        file_name = UNITY_MODULE_FILE_REGEX.match(definition[package]['url'])[1]
 
-          File.expand_path(file_name, dir)
-        end
+        File.expand_path(file_name, dir)
+      end
 
-        def url_for(_package, definition)
-          definition.url
-        end
+      def url_for(_package, definition)
+        definition.url
       end
     end
 
     class WindowsDownloader
-      class << self
-        def destination_for(package, definition)
-          dir = File.join(DOWNLOAD_PATH, DOWNLOAD_DIRECTORY, definition.version)
-          Utils.ensure_dir(dir)
-          file_name = UNITY_MODULE_FILE_REGEX.match(definition[package]['url'])[1]
+      def destination_for(package, definition)
+        dir = File.join(DOWNLOAD_PATH, DOWNLOAD_DIRECTORY, definition.version)
+        Utils.ensure_dir(dir)
+        file_name = UNITY_MODULE_FILE_REGEX.match(definition[package]['url'])[1]
 
-          File.expand_path(file_name, dir)
-        end
+        File.expand_path(file_name, dir)
+      end
 
-        def url_for(package, definition)
-          definition.url + definition[package]['url']
-        end
+      def url_for(package, definition)
+        definition.url + definition[package]['url']
       end
     end
   end

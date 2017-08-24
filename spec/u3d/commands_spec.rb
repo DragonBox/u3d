@@ -230,11 +230,10 @@ describe U3d do
             in_a_project(version: '1.2.3f4')
             on_fake_os
             with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
+            definition = expected_definition('1.2.3f4', :fakeos, 'fakeurl')
 
             expect(U3d::Downloader).to receive(:download_modules).with(
-              '1.2.3f4',
-              { '1.2.3f4' => 'fakeurl' },
-              :fakeos,
+              definition,
               anything
             ) { [] }
             U3d::Commands.download(
@@ -265,11 +264,10 @@ describe U3d do
         it 'resolves alias when passed as a version' do
           on_fake_os
           with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
+          definition = expected_definition('1.2.3f4', :fakeos, 'fakeurl')
 
           expect(U3d::Downloader).to receive(:download_modules).with(
-            '1.2.3f4',
-            { '1.2.3f4' => 'fakeurl' },
-            :fakeos,
+            definition,
             anything
           )
           U3d::Commands.download(
@@ -359,6 +357,7 @@ describe U3d do
             with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
             nothing_installed
             expect_no_privileges_check
+            definition = expected_definition('1.2.3f4', :fakeos, 'fakeurl')
 
             expect(U3dCore::UI).to receive(:error) {}
 
@@ -375,12 +374,11 @@ describe U3d do
             with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
             nothing_installed
             expect_privileges_check
+            definition = expected_definition('1.2.3f4', :fakeos, 'fakeurl')
 
             files = double('files')
             expect(U3d::Downloader).to receive(:download_modules).with(
-              '1.2.3f4',
-              { '1.2.3f4' => 'fakeurl' },
-              :fakeos,
+              definition,
               packages: %w[Unity packageA packageB]
             ) { files }
             expect(U3d::Installer).to receive(:install_modules).with(
@@ -403,12 +401,11 @@ describe U3d do
             with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
             nothing_installed
             expect_privileges_check
+            definition = expected_definition('1.2.3f4', :fakeos, 'fakeurl')
 
             files = double('files')
             expect(U3d::Downloader).to receive(:download_modules).with(
-              '1.2.3f4',
-              { '1.2.3f4' => 'fakeurl' },
-              :fakeos,
+              definition,
               packages: ['Unity']
             ) { files }
             expect(U3d::Installer).to receive(:install_modules).with(
@@ -453,12 +450,11 @@ describe U3d do
             with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
             are_installed([fake_installation('1.2.3f4', packages: ['packageA'])])
             expect_privileges_check
+            definition = expected_definition('1.2.3f4', :fakeos, 'fakeurl')
 
             files = double("files")
             expect(U3d::Downloader).to receive(:download_modules).with(
-              '1.2.3f4',
-              { '1.2.3f4' => 'fakeurl' },
-              :fakeos,
+              definition,
               packages: ['packageB']
             ) { files }
             expect(U3d::Installer).to receive(:install_modules).with(
@@ -495,10 +491,10 @@ describe U3d do
             in_a_project(version: '1.2.3f4')
             on_fake_os
             expect_privileges_check
+            definition = expected_definition('1.2.3f4', :fakeos, nil)
 
             expect(U3d::Downloader).to receive(:local_files).with(
-              '1.2.3f4',
-              :fakeos,
+              definition,
               anything
             ) { [] }
             U3d::Commands.local_install(
@@ -595,6 +591,7 @@ describe U3d do
             on_fake_os_not_linux
             nothing_installed
             expect_no_privileges_check
+            definition = expected_definition('1.2.3f4', :fakeos, nil)
 
             expect(U3dCore::UI).to receive(:error) {}
 
@@ -610,11 +607,11 @@ describe U3d do
             on_fake_os_not_linux
             nothing_installed
             expect_privileges_check
+            definition = expected_definition('1.2.3f4', :fakeos, nil)
 
             files = double("files")
             expect(U3d::Downloader).to receive(:local_files).with(
-              '1.2.3f4',
-              :fakeos,
+              definition,
               packages: %w[Unity packageA packageB]
             ) { files }
             expect(U3d::Installer).to receive(:install_modules).with(
@@ -636,11 +633,11 @@ describe U3d do
             on_fake_os_not_linux
             nothing_installed
             expect_privileges_check
+            definition = expected_definition('1.2.3f4', :fakeos, nil)
 
             files = double('files')
             expect(U3d::Downloader).to receive(:local_files).with(
-              '1.2.3f4',
-              :fakeos,
+              definition,
               packages: ['Unity']
             ) { files }
             expect(U3d::Installer).to receive(:install_modules).with(
@@ -683,11 +680,11 @@ describe U3d do
             on_fake_os_not_linux
             are_installed([fake_installation('1.2.3f4', packages: ['packageA'])])
             expect_privileges_check
+            definition = expected_definition('1.2.3f4', :fakeos, nil)
 
             files = double('files')
             expect(U3d::Downloader).to receive(:local_files).with(
-              '1.2.3f4',
-              :fakeos,
+              definition,
               packages: ['packageB']
             ) { files }
             expect(U3d::Installer).to receive(:install_modules).with(

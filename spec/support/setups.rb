@@ -78,3 +78,19 @@ end
 def with_fake_cache(cache)
   allow(U3d::Cache).to receive(:new) { cache }
 end
+
+def expected_definition(version, os, url, packages: [])
+  allow(U3d::INIparser).to receive(:load_ini).with(version, any_args) do
+    ini = {}
+    packages.each { |pack| ini[pack] = {} }
+    ini
+  end
+  if url
+    definition = U3d::UnityVersionDefinition.new(version, os, { version => url })
+    expect(U3d::UnityVersionDefinition).to receive(:new).with(version, os, hash_including(version => url)) { definition }
+  else
+    definition = U3d::UnityVersionDefinition.new(version, os, nil)
+    expect(U3d::UnityVersionDefinition).to receive(:new).with(version, os, anything) { definition }
+  end
+  definition
+end
