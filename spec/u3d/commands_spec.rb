@@ -38,7 +38,7 @@ describe U3d do
         U3d::Commands.list_installed
       end
 
-      describe 'when one or more version are installed' do
+      context 'when one or more version are installed' do
         it 'logs installed version when there is only one' do
           are_installed([fake_installation('1.2.3f4')])
 
@@ -76,7 +76,7 @@ describe U3d do
       #   request a non existing version number -> fail
       #   request an existing version number -> only that version
       #   TODO: Implement me
-      xdescribe 'when specifying a version number' do
+      xcontext 'when specifying a version number' do
         xit 'raises an error when version does not exist' do
         end
 
@@ -89,7 +89,7 @@ describe U3d do
     # LIST_AVAILABLE
     # ---
     describe "#list_available" do
-      describe 'common' do
+      context 'common' do
         it 'raises an error when specifying an invalid operating system' do
           expect { U3d::Commands.list_available(options: { operating_system: 'NotAnOs' }) }.to raise_error StandardError
         end
@@ -125,7 +125,7 @@ describe U3d do
           U3d::Commands.list_available(options: { unity_version: '1.2.3f4' })
         end
 
-        describe 'when parsing user OS input' do
+        context 'when parsing user OS input' do
           it 'uses correct input' do
             fakeos = double('os')
             fakeos_sym = double('os_sym')
@@ -161,7 +161,7 @@ describe U3d do
         end
       end
 
-      describe 'when listing cached versions' do
+      context 'when listing cached versions' do
         it 'lists versions in proper order' do
           on_fake_os
           with_fake_cache('fakeos' => { 'versions' => {
@@ -223,9 +223,9 @@ describe U3d do
     # DOWNLOAD
     # ---
     describe "#download" do
-      describe 'common' do
+      context 'common' do
         #   no version specified -> look for version in current project folder if any
-        describe 'when no version is specified' do
+        context 'when no version is specified' do
           it 'fetches the version of the project in the current folder' do
             in_a_project(version: '1.2.3f4')
             on_fake_os
@@ -307,7 +307,7 @@ describe U3d do
         end
       end
 
-      describe 'platforms without modules' do
+      context 'platforms without modules' do
         #   install a non discovered version -> installed
         it 'installs Unity when version is not yet present' do
           on_linux
@@ -352,8 +352,8 @@ describe U3d do
         end
       end
 
-      describe 'platforms with modules' do
-        describe 'when Unity version is not yet installed' do
+      context 'platforms with modules' do
+        context 'when Unity version is not yet installed' do
           it 'logs an error when Unity is not specified in the packages' do
             on_fake_os_not_linux
             with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
@@ -430,7 +430,7 @@ describe U3d do
           end
         end
 
-        describe 'when Unity version is already installed' do
+        context 'when Unity version is already installed' do
           #   add an existing editor or module to a discovered install -> skipped, no credentials asked
           it 'does not ask for credentials and does nothing when no packages are specified' do
             on_fake_os_not_linux
@@ -488,9 +488,9 @@ describe U3d do
     # LOCAL_INSTALL
     # ---
     describe "#local_install" do
-      describe 'common' do
+      context 'common' do
         #   no version specified -> look for version in current project folder if any
-        describe 'when no version is specified' do
+        context 'when no version is specified' do
           it 'fetches the version of the project in the current folder' do
             in_a_project(version: '1.2.3f4')
             on_fake_os
@@ -589,8 +589,8 @@ describe U3d do
         end
       end
 
-      describe 'platforms with modules' do
-        describe 'when Unity version is not yet installed' do
+      context 'platforms with modules' do
+        context 'when Unity version is not yet installed' do
           it 'logs an error when Unity is not specified in the packages' do
             on_fake_os_not_linux
             nothing_installed
@@ -662,7 +662,7 @@ describe U3d do
           end
         end
 
-        describe 'when Unity version is already installed' do
+        context 'when Unity version is already installed' do
           #   add an existing editor or module to a discovered install -> skipped, no credentials asked
           it 'does not ask for credentials and does nothing when no packages are specified' do
             on_fake_os_not_linux
