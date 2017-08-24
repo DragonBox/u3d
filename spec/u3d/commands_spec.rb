@@ -227,7 +227,7 @@ describe U3d do
         #   no version specified -> look for version in current project folder if any
         describe 'when no version is specified' do
           it 'fetches the version of the project in the current folder' do
-            in_a_project '1.2.3f4'
+            in_a_project(version: '1.2.3f4')
             on_fake_os
             with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
 
@@ -492,7 +492,7 @@ describe U3d do
         #   no version specified -> look for version in current project folder if any
         describe 'when no version is specified' do
           it 'fetches the version of the project in the current folder' do
-            in_a_project '1.2.3f4'
+            in_a_project(version: '1.2.3f4')
             on_fake_os
             expect_privileges_check
 
@@ -767,6 +767,145 @@ describe U3d do
       # FIXME: no way to specify a different log rule config right now
       # passes all lines through the log analyser with the configured (default) log rule
       #   QUESTION: EOL issue ? - what about logs from other platforms?
+    end
+
+    # ---
+    # RUN
+    # ---
+    describe "#run", focus: true do
+      let(:runner) do
+        runner = double("Runner")
+        allow(U3d::Runner).to receive(:new) { runner }
+        runner
+      end
+      context 'inside a given unity project' do
+        it "fails if it cannot find the project's unity version" do
+          are_installed([])
+          projectpath = 'fakepath'
+          in_a_project(version: '1.2.3f4', path: projectpath)
+
+          expect do
+            U3d::Commands.run(
+              options: {},
+              run_args: []
+            )
+          end.to raise_error U3dCore::Interface::UIError, "Unity version '1.2.3f4' not found"
+        end
+
+        it "uses the project's unity version and path if there are no arguments" do
+          unity = fake_installation('1.2.3f4')
+          projectpath = 'fakepath'
+
+          are_installed([unity])
+          in_a_project(version: unity.version, path: projectpath)
+
+          expect(runner).to receive(:run).with(unity, ['-projectpath', projectpath], raw_logs: nil)
+
+          U3d::Commands.run(
+            options: {},
+            run_args: []
+          )
+        end
+
+        it "uses the project's unity version and path if there are arguments" do
+          unity = fake_installation('1.2.3f4')
+          projectpath = 'fakepath'
+
+          are_installed([unity])
+          in_a_project(version: unity.version, path: projectpath)
+
+          expect(runner).to receive(:run).with(unity, ['-projectpath', projectpath, "somearg"], raw_logs: nil)
+
+          U3d::Commands.run(
+            options: {},
+            run_args: ["somearg"]
+          )
+        end
+
+        it "prefers the user's unity version if passed as argument" do
+          project_unity = fake_installation('1.2.3f4')
+          other_unity = fake_installation('1.2.3p1')
+          projectpath1 = 'fakepath'
+
+          are_installed([project_unity, other_unity])
+          in_a_project(version: project_unity.version, path: projectpath1)
+
+          expect(runner).to receive(:run).with(other_unity, ['-projectpath', projectpath1, "somearg"], raw_logs: nil)
+
+          U3d::Commands.run(
+            options: { unity_version: other_unity.version },
+            run_args: ["somearg"]
+          )
+        end
+
+        it "prefers the user's unity project path if passed as argument" do
+          project_unity = fake_installation('1.2.3f4')
+          current_projectpath = 'fakepath'
+          other_projectpath = 'fakepath2'
+
+          are_installed([project_unity])
+          in_a_project(version: project_unity.version, path: current_projectpath)
+
+          expect(runner).to receive(:run).with(project_unity, ['-projectpath', other_projectpath, "somearg"], raw_logs: nil)
+
+          U3d::Commands.run(
+            options: {},
+            run_args: ['-projectpath', other_projectpath, 'somearg']
+          )
+        end
+      end
+      context 'outside a unity project' do
+        it 'fails if no unity version specified' do
+          unity = fake_installation('1.2.3f4')
+          are_installed([unity])
+
+          runner = double("Runner")
+          allow(U3d::Runner).to receive(:new) { runner }
+
+          expect do
+            U3d::Commands.run(
+              options: {},
+              run_args: []
+            )
+          end.to raise_error U3dCore::Interface::UIError, /Not sure which version of Unity to run/
+        end
+        it "fails if the specified version isn't installed" do
+          nothing_installed
+
+          expect do
+            U3d::Commands.run(
+              options: { unity_version: '1.2.3f4' },
+              run_args: []
+            )
+          end.to raise_error U3dCore::Interface::UIError, /'1.2.3f4' not found/
+        end
+        it "runs with the specified unity, project version" do
+          unity = fake_installation('1.2.3f4')
+          projectpath = 'fakepath'
+
+          are_installed([unity])
+
+          expect(runner).to receive(:run).with(unity, ['-projectpath', projectpath], raw_logs: nil)
+
+          U3d::Commands.run(
+            options: { unity_version: unity.version },
+            run_args: ["-projectpath", projectpath]
+          )
+        end
+        it "runs with the specified unity, project version and raw_logs" do
+          unity = fake_installation('1.2.3f4')
+          projectpath = 'fakepath'
+
+          are_installed([unity])
+
+          expect(runner).to receive(:run).with(unity, ['-projectpath', projectpath], raw_logs: 'raaaww')
+
+          U3d::Commands.run(
+            options: { unity_version: unity.version, raw_logs: 'raaaww' },
+            run_args: ["-projectpath", projectpath]
+          )
+        end
+      end
     end
   end
 end

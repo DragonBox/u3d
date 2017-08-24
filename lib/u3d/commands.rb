@@ -152,7 +152,8 @@ module U3d
         version = options[:unity_version]
 
         runner = Runner.new
-        pp = runner.find_projectpath_in_args(run_args)
+        args_pp = Runner.find_projectpath_in_args(run_args)
+        pp = args_pp
         pp = Dir.pwd unless pp
         up = UnityProject.new(pp)
 
@@ -163,10 +164,12 @@ module U3d
           end
         end
 
-        run_args = ['-projectpath', up.path] if run_args.empty? && up.exist?
+        if up.exist? && args_pp.nil?
+          extra_run_args = ['-projectpath', up.path]
+          run_args = [extra_run_args, run_args].flatten
+        end
 
-        # we could
-        # * support matching 5.3.6p3 if passed 5.3.6
+        # we could support matching 5.3.6p3 if passed 5.3.6
         unity = Installer.create.installed.find { |u| u.version == version }
         UI.user_error! "Unity version '#{version}' not found" unless unity
         runner.run(unity, run_args, raw_logs: options[:raw_logs])

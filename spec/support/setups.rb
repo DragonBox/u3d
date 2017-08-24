@@ -61,9 +61,10 @@ def expect_no_install
   expect(U3d::Installer).to_not receive(:install_modules)
 end
 
-def in_a_project(version)
+def in_a_project(version: nil, path: nil)
   project = double("UnityProject")
   allow(U3d::UnityProject).to receive(:new) { project }
+  allow(project).to receive(:path) { path }
   allow(project).to receive(:exist?) { true }
   allow(project).to receive(:editor_version) { version }
 end
