@@ -122,6 +122,265 @@ describe U3d do
       end
     end
 
+    describe '#local_files' do
+      it 'raises an error when specifying a definition with unknown operating system' do
+        definition = U3d::UnityVersionDefinition.new('1.2.3f4', :fakeos, nil)
+        expect { U3d::Downloader.local_files(definition, packages: []) }.to raise_error ArgumentError, /[oO]perating system.*/
+      end
+
+      context 'when downloading for Linux' do
+        before(:each) do
+          allow(U3d::INIparser).to receive(:load_ini) { {} }
+          @definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, nil)
+        end
+
+        it 'initializes the Validator and Downloader' do
+          expect(U3d::LinuxValidator).to receive(:new)
+          expect(U3d::Downloader::LinuxDownloader).to receive(:new)
+
+          U3d::Downloader.local_files(@definition, packages: [])
+        end
+
+        it 'does nothing when no packages are specified' do
+          downloader = double('LinuxDownloader')
+          allow(U3d::Downloader::LinuxDownloader).to receive(:new) { downloader }
+          expect(downloader).to_not receive(:destination_for)
+
+          U3d::Downloader.local_files(@definition, packages: [])
+        end
+
+        it 'makes sure all files are present for specified package' do
+          downloader = double('LinuxDownloader')
+          allow(U3d::Downloader::LinuxDownloader).to receive(:new) { downloader }
+          allow(downloader).to receive(:destination_for) { 'fileA' }
+
+          # Return false to skip loop and increase test speed
+          expect(File).to receive(:file?).with('fileA') { false }
+
+          U3d::Downloader.local_files(@definition, packages: ['packageA'])
+        end
+
+        it 'logs an error if no file is found for a package' do
+          downloader = double('LinuxDownloader')
+          allow(U3d::Downloader::LinuxDownloader).to receive(:new) { downloader }
+          allow(downloader).to receive(:destination_for) { 'fileA' }
+          allow(File).to receive(:file?).with('fileA') { false }
+
+          expect(U3d::UI).to receive(:error)
+
+          U3d::Downloader.local_files(@definition, packages: ['packageA'])
+        end
+
+        it 'makes sure all present files are valid for specified package' do
+          downloader = double('LinuxDownloader')
+          validator = double('LinuxValidator')
+          allow(U3d::Downloader::LinuxDownloader).to receive(:new) { downloader }
+          allow(U3d::LinuxValidator).to receive(:new) { validator }
+          allow(downloader).to receive(:destination_for) { 'fileA' }
+          allow(File).to receive(:file?).with('fileA') { true }
+
+          # Return false to skip loop and increase test speed
+          expect(validator).to receive(:validate).with(anything, 'fileA', anything) { false }
+
+          U3d::Downloader.local_files(@definition, packages: ['packageA'])
+        end
+
+        it 'logs a warning and skip the package if present file is not valid' do
+          downloader = double('LinuxDownloader')
+          validator = double('LinuxValidator')
+          allow(U3d::Downloader::LinuxDownloader).to receive(:new) { downloader }
+          allow(U3d::LinuxValidator).to receive(:new) { validator }
+          allow(downloader).to receive(:destination_for) { 'fileA' }
+          allow(File).to receive(:file?).with('fileA') { true }
+          allow(validator).to receive(:validate).with(anything, 'fileA', anything) { false }
+
+          expect(U3d::UI).to receive(:important)
+          expect(U3d::Downloader.local_files(@definition, packages: ['packageA'])).to be_empty
+        end
+
+        it 'returns a correct value when file presents for specified packages are valid' do
+          @definition.ini = { 'packageA' => { 'test' => true } }
+          downloader = double('LinuxDownloader')
+          validator = double('LinuxValidator')
+          allow(U3d::Downloader::LinuxDownloader).to receive(:new) { downloader }
+          allow(U3d::LinuxValidator).to receive(:new) { validator }
+          allow(downloader).to receive(:destination_for) { 'fileA' }
+          allow(File).to receive(:file?).with('fileA') { true }
+          allow(validator).to receive(:validate).with(anything, 'fileA', anything) { true }
+
+          expect(U3d::Downloader.local_files(@definition, packages: ['packageA'])).to eql [['packageA', 'fileA', { 'test' => true }]]
+        end
+      end
+
+      context 'when downloading for Mac' do
+        before(:each) do
+          allow(U3d::INIparser).to receive(:load_ini) { {} }
+          @definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, nil)
+        end
+
+        it 'initializes the Validator and Downloader' do
+          expect(U3d::MacValidator).to receive(:new)
+          expect(U3d::Downloader::MacDownloader).to receive(:new)
+
+          U3d::Downloader.local_files(@definition, packages: [])
+        end
+
+        it 'does nothing when no packages are specified' do
+          downloader = double('MacDownloader')
+          allow(U3d::Downloader::MacDownloader).to receive(:new) { downloader }
+          expect(downloader).to_not receive(:destination_for)
+
+          U3d::Downloader.local_files(@definition, packages: [])
+        end
+
+        it 'makes sure all files are present for specified package' do
+          downloader = double('MacDownloader')
+          allow(U3d::Downloader::MacDownloader).to receive(:new) { downloader }
+          allow(downloader).to receive(:destination_for) { 'fileA' }
+
+          # Return false to skip loop and increase test speed
+          expect(File).to receive(:file?).with('fileA') { false }
+
+          U3d::Downloader.local_files(@definition, packages: ['packageA'])
+        end
+
+        it 'logs an error if no file is found for a package' do
+          downloader = double('MacDownloader')
+          allow(U3d::Downloader::MacDownloader).to receive(:new) { downloader }
+          allow(downloader).to receive(:destination_for) { 'fileA' }
+          allow(File).to receive(:file?).with('fileA') { false }
+
+          expect(U3d::UI).to receive(:error)
+
+          U3d::Downloader.local_files(@definition, packages: ['packageA'])
+        end
+
+        it 'makes sure all present files are valid for specified package' do
+          downloader = double('MacDownloader')
+          validator = double('MacValidator')
+          allow(U3d::Downloader::MacDownloader).to receive(:new) { downloader }
+          allow(U3d::MacValidator).to receive(:new) { validator }
+          allow(downloader).to receive(:destination_for) { 'fileA' }
+          allow(File).to receive(:file?).with('fileA') { true }
+
+          # Return false to skip loop and increase test speed
+          expect(validator).to receive(:validate).with(anything, 'fileA', anything) { false }
+
+          U3d::Downloader.local_files(@definition, packages: ['packageA'])
+        end
+
+        it 'logs a warning and skip the package if present file is not valid' do
+          downloader = double('MacDownloader')
+          validator = double('MacValidator')
+          allow(U3d::Downloader::MacDownloader).to receive(:new) { downloader }
+          allow(U3d::MacValidator).to receive(:new) { validator }
+          allow(downloader).to receive(:destination_for) { 'fileA' }
+          allow(File).to receive(:file?).with('fileA') { true }
+          allow(validator).to receive(:validate).with(anything, 'fileA', anything) { false }
+
+          expect(U3d::UI).to receive(:important)
+          expect(U3d::Downloader.local_files(@definition, packages: ['packageA'])).to be_empty
+        end
+
+        it 'returns a correct value when file presents for specified packages are valid' do
+          @definition.ini = { 'packageA' => { 'test' => true } }
+          downloader = double('MacDownloader')
+          validator = double('MacValidator')
+          allow(U3d::Downloader::MacDownloader).to receive(:new) { downloader }
+          allow(U3d::MacValidator).to receive(:new) { validator }
+          allow(downloader).to receive(:destination_for) { 'fileA' }
+          allow(File).to receive(:file?).with('fileA') { true }
+          allow(validator).to receive(:validate).with(anything, 'fileA', anything) { true }
+
+          expect(U3d::Downloader.local_files(@definition, packages: ['packageA'])).to eql [['packageA', 'fileA', { 'test' => true }]]
+        end
+      end
+
+      context 'when downloading for Windows' do
+        before(:each) do
+          allow(U3d::INIparser).to receive(:load_ini) { {} }
+          @definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, nil)
+        end
+
+        it 'initializes the Validator and Downloader' do
+          expect(U3d::WindowsValidator).to receive(:new)
+          expect(U3d::Downloader::WindowsDownloader).to receive(:new)
+
+          U3d::Downloader.local_files(@definition, packages: [])
+        end
+
+        it 'does nothing when no packages are specified' do
+          downloader = double('WindowsDownloader')
+          allow(U3d::Downloader::WindowsDownloader).to receive(:new) { downloader }
+          expect(downloader).to_not receive(:destination_for)
+
+          U3d::Downloader.local_files(@definition, packages: [])
+        end
+
+        it 'makes sure all files are present for specified package' do
+          downloader = double('WindowsDownloader')
+          allow(U3d::Downloader::WindowsDownloader).to receive(:new) { downloader }
+          allow(downloader).to receive(:destination_for) { 'fileA' }
+
+          # Return false to skip loop and increase test speed
+          expect(File).to receive(:file?).with('fileA') { false }
+
+          U3d::Downloader.local_files(@definition, packages: ['packageA'])
+        end
+
+        it 'logs an error if no file is found for a package' do
+          downloader = double('WindowsDownloader')
+          allow(U3d::Downloader::WindowsDownloader).to receive(:new) { downloader }
+          allow(downloader).to receive(:destination_for) { 'fileA' }
+          allow(File).to receive(:file?).with('fileA') { false }
+
+          expect(U3d::UI).to receive(:error)
+
+          U3d::Downloader.local_files(@definition, packages: ['packageA'])
+        end
+
+        it 'makes sure all present files are valid for specified package' do
+          downloader = double('WindowsDownloader')
+          validator = double('WindowsValidator')
+          allow(U3d::Downloader::WindowsDownloader).to receive(:new) { downloader }
+          allow(U3d::WindowsValidator).to receive(:new) { validator }
+          allow(downloader).to receive(:destination_for) { 'fileA' }
+          allow(File).to receive(:file?).with('fileA') { true }
+
+          # Return false to skip loop and increase test speed
+          expect(validator).to receive(:validate).with(anything, 'fileA', anything) { false }
+
+          U3d::Downloader.local_files(@definition, packages: ['packageA'])
+        end
+
+        it 'logs a warning and skip the package if present file is not valid' do
+          downloader = double('WindowsDownloader')
+          validator = double('WindowsValidator')
+          allow(U3d::Downloader::WindowsDownloader).to receive(:new) { downloader }
+          allow(U3d::WindowsValidator).to receive(:new) { validator }
+          allow(downloader).to receive(:destination_for) { 'fileA' }
+          allow(File).to receive(:file?).with('fileA') { true }
+          allow(validator).to receive(:validate).with(anything, 'fileA', anything) { false }
+
+          expect(U3d::UI).to receive(:important)
+          expect(U3d::Downloader.local_files(@definition, packages: ['packageA'])).to be_empty
+        end
+
+        it 'returns a correct value when file presents for specified packages are valid' do
+          @definition.ini = { 'packageA' => { 'test' => true } }
+          downloader = double('WindowsDownloader')
+          validator = double('WindowsValidator')
+          allow(U3d::Downloader::WindowsDownloader).to receive(:new) { downloader }
+          allow(U3d::WindowsValidator).to receive(:new) { validator }
+          allow(downloader).to receive(:destination_for) { 'fileA' }
+          allow(File).to receive(:file?).with('fileA') { true }
+          allow(validator).to receive(:validate).with(anything, 'fileA', anything) { true }
+
+          expect(U3d::Downloader.local_files(@definition, packages: ['packageA'])).to eql [['packageA', 'fileA', { 'test' => true }]]
+        end
+      end
+    end
+
     describe U3d::Downloader::LinuxDownloader do
       before(:all) do
         @downloader = U3d::Downloader::LinuxDownloader.new
