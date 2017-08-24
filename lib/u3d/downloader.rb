@@ -102,8 +102,10 @@ module U3d
             files << [package, path, definition[package]]
             return
           else
-            UI.important "File present at #{path} is not correct, deleting it"
-            File.delete path
+            extension = File.extname(path)
+            new_path = File.join(File.dirname(path), File.basename(path, extension) + '_CORRUPTED' + extension)
+            UI.important "File present at #{path} is not correct, it has been renamed to #{new_path}"
+            File.rename(path, new_path)
           end
         end
 

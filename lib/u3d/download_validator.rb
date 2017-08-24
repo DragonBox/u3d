@@ -47,10 +47,6 @@ module U3d
       end
       true
     end
-
-    def validate(_package, _file, _definition)
-      raise NotImplementedError, 'Not implemented yet'
-    end
   end
 
   class LinuxValidator < DownloadValidator
