@@ -37,12 +37,26 @@ describe U3d do
         expect(U3d::UnityVersions.list_available(os: :mac).count).to eql 3
       end
       it 'retrieves standard linux versions' do
+        allow(U3d::Utils).to receive(:get_url_content_length).with(/download.un.*1.2.3f1/) { 1005 }
+        allow(U3d::Utils).to receive(:get_url_content_length).with(/download.un.*1.3.5f1/) { 1006 }
+        allow(U3d::Utils).to receive(:get_url_content_length).with(/download.un.*2017.1.6f1/) { 1007 }
         allow(U3d::UnityVersions::LinuxVersions).to receive(:linux_forum_page_content) { linux_archive }
+        expect(U3d::UnityVersionDefinition).to receive(:create_fake).with('1.2.3f1', 1005, /download.un.*1.2.3f1/)
+        expect(U3d::UnityVersionDefinition).to receive(:create_fake).with('1.3.5f1', 1006, /download.un.*1.3.5f1/)
+        expect(U3d::UnityVersionDefinition).to receive(:create_fake).with('2017.1.6f1', 1007, /download.un.*2017.1.6f1/)
         expect(U3d::UnityVersions.list_available(os: :linux).count).to eql 3
       end
       it 'retrieves nested linux versions' do
+        allow(U3d::Utils).to receive(:get_url_content_length).with(/download.un.*1.2.3f1/) { 1005 }
+        allow(U3d::Utils).to receive(:get_url_content_length).with(/download.un.*1.3.5f1/) { 1006 }
+        allow(U3d::Utils).to receive(:get_url_content_length).with(/download.un.*2017.1.6f1/) { 1007 }
+        allow(U3d::Utils).to receive(:get_url_content_length).with(/beta.un.*b515b8958382/) { 1008 }
         allow(U3d::UnityVersions::LinuxVersions).to receive(:linux_forum_page_content) { linux_nested_archive }
         allow(U3d::UnityVersions::LinuxVersions).to receive(:linux_forum_version_page_content).with('http://beta.unity3d.com/download/b515b8958382/public_download.html') { linux_inner_archive }
+        expect(U3d::UnityVersionDefinition).to receive(:create_fake).with('1.2.3f1', 1005, /download.un.*1.2.3f1/)
+        expect(U3d::UnityVersionDefinition).to receive(:create_fake).with('1.3.5f1', 1006, /download.un.*1.3.5f1/)
+        expect(U3d::UnityVersionDefinition).to receive(:create_fake).with('2017.1.6f1', 1007, /download.un.*2017.1.6f1/)
+        expect(U3d::UnityVersionDefinition).to receive(:create_fake).with('2017.1.0b3', 1008, /beta.un.*b515b8958382/)
         expect(U3d::UnityVersions.list_available(os: :linux).count).to eql 4
       end
     end
