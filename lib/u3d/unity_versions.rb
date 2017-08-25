@@ -128,12 +128,7 @@ module U3d
         end
 
         def save_package_size(version, url)
-          uri = URI(url)
-          size = nil
-          Net::HTTP.start(uri.host, uri.port) do |http|
-            response = http.request_head url
-            size = Integer(response['Content-Length'])
-          end
+          size = Utils.get_url_content_length(url)
           if size
             UnityVersionDefinition.create_fake(version, size, url)
           else
