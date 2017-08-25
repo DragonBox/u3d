@@ -64,7 +64,7 @@ module U3d
     end
 
     def find_and_prepare_logfile(installation, args)
-      log_file = find_logFile_in_args(args)
+      log_file = Runner.find_logFile_in_args(args)
 
       if log_file # we wouldn't want to do that for the default log file.
         File.delete(log_file) if File.file?(log_file) # We only delete real files
