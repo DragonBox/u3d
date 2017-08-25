@@ -20,7 +20,7 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
-require 'u3d/iniparser'
+require 'u3d/unity_version_definition'
 require 'u3d_core/helper'
 require 'net/http'
 
@@ -135,7 +135,7 @@ module U3d
             size = Integer(response['Content-Length'])
           end
           if size
-            INIparser.create_linux_ini(version, size)
+            UnityVersionDefinition.create_fake(version, size, url)
           else
             UI.important "u3d tried to get the size of the installer for version #{version}, but wasn't able to"
           end
