@@ -41,19 +41,21 @@ module U3d
                   else
                     WindowsInstaller.new
                   end
-      if UI.interactive?
-        unclean = []
-        installer.installed.each { |unity| unclean << unity unless unity.clean_install? }
-        unless unclean.empty?
-          UI.important("u3d can optionally standardize the existing Unity3d installation names and locations.")
-          UI.important("See the documentation for more information.")
-          unclean.each { |unity| installer.sanitize_install(unity, dry_run: true) }
-          if UI.confirm("#{unclean.count} Unity installation will be moved. Proceed??")
-            unclean.each { |unity| installer.sanitize_install(unity) }
-          end
-        end
-      end
+      sanitize_installs(installer)
       installer
+    end
+
+    def self.sanitize_installs(installer)
+      return unless UI.interactive? || Helper.test?
+      unclean = []
+      installer.installed.each { |unity| unclean << unity unless unity.clean_install? }
+      return if unclean.empty?
+      UI.important("u3d can optionally standardize the existing Unity3d installation names and locations.")
+      UI.important("Check the documentation for more information:")
+      UI.important("** https://github.com/DragonBox/u3d/blob/master/README.md#default-installation-paths **")
+      unclean.each { |unity| installer.sanitize_install(unity, dry_run: true) }
+      return unless UI.confirm("#{unclean.count} Unity installation(s) will be moved. Proceed??")
+      unclean.each { |unity| installer.sanitize_install(unity) }
     end
 
     def self.install_modules(files, version, installation_path: nil)

@@ -25,6 +25,7 @@ def macinstall_5_6_default
   unity = double("MacInstallation")
   allow(unity).to receive(:path) { '/Applications/Unity/Unity.app' }
   allow(unity).to receive(:version) { '5.6.0f1' }
+  allow(unity).to receive(:clean_install?) { false }
   return unity
 end
 
@@ -32,6 +33,7 @@ def macinstall_5_6_custom_with_space
   unity = double("MacInstallation")
   allow(unity).to receive(:path) { '/Applications/Unity 5.6.0f1/Unity.app' }
   allow(unity).to receive(:version) { '5.6.0f1' }
+  allow(unity).to receive(:clean_install?) { false }
   return unity
 end
 
@@ -39,6 +41,7 @@ def linux_5_6_standard
   unity = double("LinuxInstallation")
   allow(unity).to receive(:path) { '/opt/unity-editor-5.6.0f1' }
   allow(unity).to receive(:version) { '5.6.0f1' }
+  allow(unity).to receive(:clean_install?) { true }
   return unity
 end
 
@@ -46,6 +49,7 @@ def linux_2017_1_weird
   unity = double("LinuxInstallation")
   allow(unity).to receive(:path) { '/opt/unity-editor-2017.1.0xf3Linux' }
   allow(unity).to receive(:version) { '2017.1.0f3' }
+  allow(unity).to receive(:clean_install?) { false }
   return unity
 end
 
