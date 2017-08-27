@@ -82,5 +82,36 @@ describe U3d do
         end
       end
     end
+
+    describe '.create_linux_ini', focuss: true do
+      context 'existing ini file' do
+        it 'does not rewrite the file' do
+          path = %r{\/.u3d\/ini_files\/unity-1.2.3f4-linux.ini}
+
+          allow(U3dCore::Helper).to receive(:operating_system) { :linux }
+
+          allow(File).to receive(:file?).with(path) { true }
+          expect(File).to_not receive(:open)
+
+          U3d::INIparser.create_linux_ini('1.2.3f4', 12_345, 'http://example.com/')
+        end
+      end
+
+      context 'non existing ini file' do
+        it 'writes the file' do
+          path = %r{Library\/Application Support\/u3d\/ini_files\/unity-1.2.3f4-linux.ini}
+
+          allow(U3dCore::Helper).to receive(:operating_system) { :mac }
+
+          allow(File).to receive(:file?).with(path) { false }
+          file = double('file')
+          allow(File).to receive(:open).with(path, 'wb') { |&block| block.call(file) }
+
+          expect(file).to receive(:write).with(%r{\[Unity\](.*\n)+title=Unity\nsize=12345\nurl=http:\/\/example.com})
+
+          U3d::INIparser.create_linux_ini('1.2.3f4', 12_345, 'http://example.com/')
+        end
+      end
+    end
   end
 end
