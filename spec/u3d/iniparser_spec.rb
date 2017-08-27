@@ -22,6 +22,7 @@
 
 require 'u3d/iniparser'
 require 'net/http'
+require 'support/setups'
 
 describe U3d do
   describe U3d::INIparser do
@@ -79,6 +80,37 @@ describe U3d do
             expect(data['A']).not_to be_nil
             expect(data['A']['test']).to eql('initesting')
           end
+        end
+      end
+    end
+
+    describe '.create_linux_ini' do
+      context 'existing ini file' do
+        it 'does not rewrite the file' do
+          path = %r{\/.u3d\/ini_files\/unity-1.2.3f4-linux.ini}
+
+          on_linux
+
+          allow(File).to receive(:file?).with(path) { true }
+          expect(File).to_not receive(:open)
+
+          U3d::INIparser.create_linux_ini('1.2.3f4', 12_345, 'http://example.com/')
+        end
+      end
+
+      context 'non existing ini file' do
+        it 'writes the file' do
+          path = %r{Library\/Application Support\/u3d\/ini_files\/unity-1.2.3f4-linux.ini}
+
+          allow(U3dCore::Helper).to receive(:operating_system) { :mac }
+
+          allow(File).to receive(:file?).with(path) { false }
+          file = double('file')
+          allow(File).to receive(:open).with(path, 'wb').and_yield file
+
+          expect(file).to receive(:write).with(%r{\[Unity\](.*\n)+title=Unity\nsize=12345\nurl=http:\/\/example.com})
+
+          U3d::INIparser.create_linux_ini('1.2.3f4', 12_345, 'http://example.com/')
         end
       end
     end
