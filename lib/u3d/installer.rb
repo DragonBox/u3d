@@ -137,7 +137,6 @@ module U3d
         UI.verbose "No Unity install for version #{version} was found"
         U3dCore::CommandExecutor.execute(command: command, admin: true)
         destination_path = File.join(target_path, 'Applications', UNITY_DIR % version)
-        Utils.ensure_dir destination_path
         FileUtils.mv temp_path, destination_path
       else
         begin
