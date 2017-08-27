@@ -58,6 +58,16 @@ module U3d
         end
       end
 
+      def get_url_content_length(url)
+        uri = URI(url)
+        size = nil
+        Net::HTTP.start(uri.host, uri.port) do |http|
+          response = http.request_head url
+          size = Integer(response['Content-Length'])
+        end
+        size
+      end
+
       def hashfile(file_path, blocksize: 65_536)
         require 'digest'
         raise ArgumentError, 'Not a file' unless File.file?(file_path)
