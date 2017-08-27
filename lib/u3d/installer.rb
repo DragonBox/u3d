@@ -134,13 +134,15 @@ module U3d
       target_path ||= DEFAULT_MAC_INSTALL
       command = "installer -pkg #{file_path.shellescape} -target #{target_path.shellescape}"
       unity = installed.find { |u| u.version == version }
+      temp_path = File.join(target_path, 'Applications', 'Unity')
       if unity.nil?
         UI.verbose "No Unity install for version #{version} was found"
         U3dCore::CommandExecutor.execute(command: command, admin: true)
+        destination_path = File.join(target_path, 'Applications', UNITY_DIR % version)
+        FileUtils.mv temp_path, destination_path
       else
         begin
           path = File.expand_path('..', unity.path)
-          temp_path = File.join(target_path, 'Applications', 'Unity')
           move_to_temp = (temp_path != path)
           if move_to_temp
             UI.verbose "Temporary switching location of #{path} to #{temp_path} for installation purpose"
