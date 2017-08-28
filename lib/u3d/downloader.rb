@@ -139,7 +139,8 @@ module U3d
                 f.write(segment)
                 current += segment.length
                 # wait for Net::HTTP buffer on slow networks
-                sleep 0.08 # adjust to reduce CPU
+                # FIXME revisits, this slows down download on fast network
+                # sleep 0.08 # adjust to reduce CPU
                 next unless UI.interactive?
                 next unless Time.now.to_f - last_print_update > 0.5
                 last_print_update = Time.now.to_f
