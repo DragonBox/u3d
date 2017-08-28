@@ -98,7 +98,7 @@ module U3d
         end
       end
 
-      def download(args: [], options: {})
+      def install(args: [], options: {})
         version = specified_or_current_project_version(args[0])
 
         os = U3dCore::Helper.operating_system
@@ -106,47 +106,26 @@ module U3d
         packages = packages_with_unity_first(os, options)
 
         cache = Cache.new(force_os: os)
-        versions = cache[os.id2name]['versions']
-        version = interpret_latest(version, versions)
-        unless versions[version]
-          UI.error "No version #{version} was found in cache. Either it doesn't exist or u3d doesn't know about it yet. Try refreshing with 'u3d available -f'"
+        cache_versions = cache[os.id2name]['versions']
+        version = interpret_latest(version, cache_versions)
+        unless cache_versions[version]
+          UI.error "No version '#{version}' was found in cache. Either it doesn't exist or u3d doesn't know about it yet. Try refreshing with 'u3d available -f'"
           return
         end
 
-        definition = UnityVersionDefinition.new(version, os, versions)
+        definition = UnityVersionDefinition.new(version, os, cache_versions)
         unity = check_unity_presence(version: version)
         return unless enforce_setup_coherence(packages, options, unity, definition)
 
-        unless options[:no_install]
+        if options[:install]
           U3d::Globals.use_keychain = true if options[:keychain] && Helper.mac?
           UI.important 'Root privileges are required'
           raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
         end
 
-        files = Downloader.download_modules(definition, packages: packages)
+        files = Downloader.fetch_modules(definition, packages: packages, download: options[:download])
 
-        return if options[:no_install]
-        Installer.install_modules(files, definition.version, installation_path: options[:installation_path])
-      end
-
-      def local_install(args: [], options: {})
-        version = specified_or_current_project_version(args[0])
-
-        os = U3dCore::Helper.operating_system
-
-        packages = packages_with_unity_first(os, options)
-
-        definition = UnityVersionDefinition.new(version, os, nil)
-        unity = check_unity_presence(version: version)
-        return unless enforce_setup_coherence(packages, options, unity, definition)
-
-        U3d::Globals.use_keychain = true if options[:keychain] && os == :mac
-
-        UI.important 'Root privileges are required'
-        raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
-
-        files = Downloader.local_files(definition, packages: packages)
-
+        return unless options[:install]
         Installer.install_modules(files, definition.version, installation_path: options[:installation_path])
       end
 

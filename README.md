@@ -20,15 +20,13 @@ Available commands are:
 
 ![u3d available](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_available.png)
 
-* `u3d install`: Download (and install) Unity3D packages
+* `u3d install`: Download and/or install Unity3D packages
 
 ![u3d install](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_install.png)
 
 * `u3d list`: List installed versions of Unity3d
 
 ![u3d list](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_list.png)
-
-* `u3d local_install`: Install downloaded version of Unity3d
 
 * `u3d run`: Run Unity, and parses its output through u3d's log prettifier.
 
@@ -112,6 +110,19 @@ u3d available -p -o mac
 ```shell
 u3d install 5.6.0f3 -p Unity,Documentation,WebPlayer
 ```
+
+* Download version 5.6.0f3 of Unity without installing it:
+
+```shell
+u3d install 5.6.0f3 --no-install
+```
+
+* Install version 5.6.0f3 of Unity without downloading it:
+
+```shell
+u3d install 5.6.0f3 --no-download
+```
+
 * Run a CLI on the current project given the project's configured unity version, displaying prettified logs, while keeping the original logs under `editor.log`:
 
 ```shell
