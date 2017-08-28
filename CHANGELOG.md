@@ -1,5 +1,57 @@
 # Change Log
 
+## [v0.9.4](https://github.com/DragonBox/u3d/tree/v0.9.4) (2017-08-28)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v0.9.3...v0.9.4)
+
+**Implemented enhancements:**
+
+- Merge install and local\_install commands [\#84](https://github.com/DragonBox/u3d/issues/84)
+- Document installation path sanitization [\#50](https://github.com/DragonBox/u3d/issues/50)
+- Make unity versions test unit [\#72](https://github.com/DragonBox/u3d/pull/72) ([niezbop](https://github.com/niezbop))
+- \[tech\] rubocop: update version and fix windows compatibility [\#61](https://github.com/DragonBox/u3d/pull/61) ([lacostej](https://github.com/lacostej))
+- u3d/install local\_install: if no version specified, fallback on version required by current project [\#53](https://github.com/DragonBox/u3d/pull/53) ([lacostej](https://github.com/lacostej))
+- u3d/install: display more information during sanization, including what would happen \(fixes \#50\) [\#51](https://github.com/DragonBox/u3d/pull/51) ([lacostej](https://github.com/lacostej))
+
+**Fixed bugs:**
+
+- u3d run not getting project path automatically with some arguments [\#73](https://github.com/DragonBox/u3d/issues/73)
+- u3d/list doesn't list all installed Unity versions [\#69](https://github.com/DragonBox/u3d/issues/69)
+- Installation stays in /Application/Unity when installing on OSX [\#68](https://github.com/DragonBox/u3d/issues/68)
+- u3d local\_install broken on Mac [\#62](https://github.com/DragonBox/u3d/issues/62)
+- u3d/install unnecessarily asking for permissions when it has nothing to do [\#52](https://github.com/DragonBox/u3d/issues/52)
+- downloader \(for linux\) does not detect incomplete files [\#21](https://github.com/DragonBox/u3d/issues/21)
+
+**Closed issues:**
+
+- \[Doc\] make u3d run default behavior more visible in documentation [\#75](https://github.com/DragonBox/u3d/issues/75)
+- \[Feature request\] List available packages [\#70](https://github.com/DragonBox/u3d/issues/70)
+- Refactor the downloader/validator logic [\#66](https://github.com/DragonBox/u3d/issues/66)
+- \[tech\] setup circleci / coverage etc [\#4](https://github.com/DragonBox/u3d/issues/4)
+- migrate available integration tests to mock tests [\#2](https://github.com/DragonBox/u3d/issues/2)
+
+**Merged pull requests:**
+
+- Disable trick to reduce CPU on slow network as it slows down download on fast networks [\#94](https://github.com/DragonBox/u3d/pull/94) ([lacostej](https://github.com/lacostej))
+- Merge download and local\_install into one \(\#84\) [\#92](https://github.com/DragonBox/u3d/pull/92) ([lacostej](https://github.com/lacostej))
+- Add tests for INIParser.create\_linux\_ini' [\#89](https://github.com/DragonBox/u3d/pull/89) ([lacostej](https://github.com/lacostej))
+- u3d/installer: add tests for Installer.create / sanitize [\#88](https://github.com/DragonBox/u3d/pull/88) ([lacostej](https://github.com/lacostej))
+- Make sure tests pass in full offline mode \(no network at all\) [\#87](https://github.com/DragonBox/u3d/pull/87) ([lacostej](https://github.com/lacostej))
+- Mac Installer fix [\#85](https://github.com/DragonBox/u3d/pull/85) ([niezbop](https://github.com/niezbop))
+- u3d/run: add -projectpath also when passing arguments \(fixes \#73\) [\#80](https://github.com/DragonBox/u3d/pull/80) ([lacostej](https://github.com/lacostej))
+- Refactor/downloader and ini [\#79](https://github.com/DragonBox/u3d/pull/79) ([lacostej](https://github.com/lacostej))
+- Improve the docs, in particular with run and auto-detection of the current project [\#78](https://github.com/DragonBox/u3d/pull/78) ([lacostej](https://github.com/lacostej))
+- Improve the docs, in particular with run and auto-detection of the current project \(\#75\) [\#77](https://github.com/DragonBox/u3d/pull/77) ([lacostej](https://github.com/lacostej))
+- u3d/commands: add unit tests and fix 2 small install command issues [\#76](https://github.com/DragonBox/u3d/pull/76) ([lacostej](https://github.com/lacostej))
+- Do not crash when no PlaybackEngines are found [\#74](https://github.com/DragonBox/u3d/pull/74) ([lacostej](https://github.com/lacostej))
+- A missing license header [\#67](https://github.com/DragonBox/u3d/pull/67) ([lacostej](https://github.com/lacostej))
+- \[tech\] Installer unit tests. Initial commit [\#60](https://github.com/DragonBox/u3d/pull/60) ([lacostej](https://github.com/lacostej))
+- \[tech\] automate changelog generation through rake [\#59](https://github.com/DragonBox/u3d/pull/59) ([lacostej](https://github.com/lacostej))
+- u3d/install: do not try to download unknown versions \(i.e. not in cache\) [\#57](https://github.com/DragonBox/u3d/pull/57) ([niezbop](https://github.com/niezbop))
+- u3d/run: improve run inline help [\#54](https://github.com/DragonBox/u3d/pull/54) ([lacostej](https://github.com/lacostej))
+- \[tech\] migrate to circle ci 2.0, using Rakefile as basis for complex operations [\#49](https://github.com/DragonBox/u3d/pull/49) ([lacostej](https://github.com/lacostej))
+- \[tech\] rubocop cleanups [\#46](https://github.com/DragonBox/u3d/pull/46) ([lacostej](https://github.com/lacostej))
+- u3d/install: allow to recover from incomplete downloads on linux by autodetecting size  [\#23](https://github.com/DragonBox/u3d/pull/23) ([niezbop](https://github.com/niezbop))
+
 ## [v0.9.3](https://github.com/DragonBox/u3d/tree/v0.9.3) (2017-08-07)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v0.9.2...v0.9.3)
 
