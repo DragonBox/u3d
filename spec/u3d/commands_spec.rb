@@ -220,10 +220,12 @@ describe U3d do
     end
 
     # ---
-    # DOWNLOAD
+    # INSTALL ONLY
     # ---
-    describe "#download" do
-      context 'common' do
+    describe "#install" do
+      context 'common download' do
+        xit "raises an error if both download and install are disabled" do
+        end
         #   no version specified -> look for version in current project folder if any
         context 'when no version is specified' do
           it 'fetches the version of the project in the current folder' do
@@ -232,14 +234,16 @@ describe U3d do
             with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
             definition = expected_definition('1.2.3f4', :fakeos, 'fakeurl')
 
-            expect(U3d::Downloader).to receive(:download_modules).with(
+            expect(U3d::Downloader).to receive(:fetch_modules).with(
               definition,
-              anything
+              packages: ["Unity"],
+              download: true
             ) { [] }
-            U3d::Commands.download(
+            U3d::Commands.install(
               args: [],
               options: {
-                no_install: true,
+                install: false,
+                download: true,
                 packages: ['Unity']
               }
             )
@@ -249,10 +253,11 @@ describe U3d do
             not_in_a_project
 
             expect do
-              U3d::Commands.download(
+              U3d::Commands.install(
                 args: [],
                 options: {
-                  no_install: true,
+                  install: false,
+                  download: true,
                   packages: ['Unity']
                 }
               )
@@ -266,14 +271,16 @@ describe U3d do
           with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
           definition = expected_definition('1.2.3f4', :fakeos, 'fakeurl')
 
-          expect(U3d::Downloader).to receive(:download_modules).with(
+          expect(U3d::Downloader).to receive(:fetch_modules).with(
             definition,
-            anything
+            packages: ["Unity"],
+            download: true
           )
-          U3d::Commands.download(
+          U3d::Commands.install(
             args: ['latest'],
             options: {
-              no_install: true,
+              install: false,
+              download: true,
               packages: ['Unity']
             }
           )
@@ -287,10 +294,11 @@ describe U3d do
 
           expect(U3dCore::UI).to receive(:error) {}
 
-          U3d::Commands.download(
+          U3d::Commands.install(
             args: ['not.a.version'],
             options: {
-              no_install: true,
+              install: false,
+              download: true,
               packages: ['Unity']
             }
           )
@@ -321,9 +329,11 @@ describe U3d do
             installation_path: 'foo'
           ) {}
 
-          U3d::Commands.download(
+          U3d::Commands.install(
             args: ['1.2.3f4'],
             options: {
+              install: true,
+              download: true,
               installation_path: 'foo'
             }
           )
@@ -338,9 +348,12 @@ describe U3d do
           expect_no_download
           expect_no_install
 
-          U3d::Commands.download(
+          U3d::Commands.install(
             args: ['1.2.3f4'],
-            options: {}
+            options: {
+              install: true,
+              download: true
+            }
           )
         end
 
@@ -361,9 +374,11 @@ describe U3d do
 
             expect(U3dCore::UI).to receive(:error) {}
 
-            U3d::Commands.download(
+            U3d::Commands.install(
               args: ['1.2.3f4'],
               options: {
+                install: true,
+                download: true,
                 packages: %w[packageA packageB]
               }
             )
@@ -387,9 +402,11 @@ describe U3d do
               installation_path: 'foo'
             ) {}
 
-            U3d::Commands.download(
+            U3d::Commands.install(
               args: ['1.2.3f4'],
               options: {
+                install: true,
+                download: true,
                 packages: %w[Unity packageA packageB],
                 installation_path: 'foo'
               }
@@ -414,9 +431,11 @@ describe U3d do
               installation_path: 'foo'
             ) {}
 
-            U3d::Commands.download(
+            U3d::Commands.install(
               args: ['1.2.3f4'],
               options: {
+                install: true,
+                download: true,
                 installation_path: 'foo'
               }
             )
@@ -437,9 +456,11 @@ describe U3d do
             expect_no_download
             expect_no_install
 
-            U3d::Commands.download(
+            U3d::Commands.install(
               args: ['1.2.3f4'],
               options: {
+                install: true,
+                download: true,
                 installation_path: 'foo'
               }
             )
@@ -463,9 +484,11 @@ describe U3d do
               installation_path: 'foo'
             ) {}
 
-            U3d::Commands.download(
+            U3d::Commands.install(
               args: ['1.2.3f4'],
               options: {
+                install: true,
+                download: true,
                 installation_path: 'foo',
                 packages: %w[packageA packageB]
               }
@@ -481,25 +504,30 @@ describe U3d do
     end
 
     # ---
-    # LOCAL_INSTALL
+    # DOWNLOAD ONLY
     # ---
-    describe "#local_install" do
-      context 'common' do
+    describe "#install" do
+      context 'common install' do
         #   no version specified -> look for version in current project folder if any
         context 'when no version is specified' do
           it 'fetches the version of the project in the current folder' do
             in_a_project(version: '1.2.3f4')
             on_fake_os
-            expect_privileges_check
+            with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
             definition = expected_definition('1.2.3f4', :fakeos, nil)
 
-            expect(U3d::Downloader).to receive(:local_files).with(
+            expect_privileges_check
+            expect(U3d::Downloader).to receive(:fetch_modules).with(
               definition,
-              anything
+              packages: ["Unity"],
+              download: false
             ) { [] }
-            U3d::Commands.local_install(
+
+            U3d::Commands.install(
               args: [],
               options: {
+                install: true,
+                download: false,
                 packages: ['Unity']
               }
             )
@@ -509,9 +537,11 @@ describe U3d do
             not_in_a_project
 
             expect do
-              U3d::Commands.local_install(
+              U3d::Commands.install(
                 args: [],
                 options: {
+                  install: true,
+                  download: false,
                   packages: ['Unity']
                 }
               )
@@ -520,20 +550,17 @@ describe U3d do
         end
 
         #   request a non existing version number -> do nothing
-        #   NOTE: This will be caught by Dowloader.local_file and error will be raised then
-        #   QUESTION: Should we try to catch it sooner?
         it 'does not log an error when specifying a non existing version' do
           on_fake_os
-          expect_privileges_check
+          with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
 
-          expect(U3d::Downloader).to receive(:local_files) {}
+          expect(U3dCore::UI).to receive(:error).with(/No version 'not.a.version'/)
 
-          # Allowed for testing purpose. It should not be reach in real case
-          allow(U3d::Installer).to receive(:install_modules) {}
-
-          U3d::Commands.local_install(
+          U3d::Commands.install(
             args: ['not.a.version'],
             options: {
+              install: true,
+              download: false,
               packages: ['Unity']
             }
           )
@@ -547,10 +574,11 @@ describe U3d do
         #   install a non discovered version -> installed
         it 'installs Unity when version is not yet present' do
           on_linux
+          with_fake_cache('linux' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
           expect_privileges_check
 
           files = double('files')
-          expect(U3d::Downloader).to receive(:local_files) { files }
+          expect(U3d::Downloader).to receive(:fetch_modules) { files }
 
           expect(U3d::Installer).to receive(:install_modules).with(
             files,
@@ -558,9 +586,11 @@ describe U3d do
             installation_path: 'foo'
           ) {}
 
-          U3d::Commands.local_install(
+          U3d::Commands.install(
             args: ['1.2.3f4'],
             options: {
+              install: true,
+              download: false,
               installation_path: 'foo'
             }
           )
@@ -573,9 +603,12 @@ describe U3d do
           expect_no_privileges_check
           expect_no_install
 
-          U3d::Commands.local_install(
+          U3d::Commands.install(
             args: ['1.2.3f4'],
-            options: {}
+            options: {
+              install: true,
+              download: false
+            }
           )
         end
 
@@ -589,15 +622,18 @@ describe U3d do
         context 'when Unity version is not yet installed' do
           it 'logs an error when Unity is not specified in the packages' do
             on_fake_os_not_linux
+            with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
             nothing_installed
             expect_no_privileges_check
             expected_definition('1.2.3f4', :fakeos, nil)
 
             expect(U3dCore::UI).to receive(:error) {}
 
-            U3d::Commands.local_install(
+            U3d::Commands.install(
               args: ['1.2.3f4'],
               options: {
+                install: true,
+                download: false,
                 packages: %w[packageA packageB]
               }
             )
@@ -605,6 +641,7 @@ describe U3d do
 
           it 'installs specified packages and Unity when specified' do
             on_fake_os_not_linux
+            with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
             nothing_installed
             expect_privileges_check
             definition = expected_definition('1.2.3f4', :fakeos, nil)
@@ -620,9 +657,11 @@ describe U3d do
               installation_path: 'foo'
             ) {}
 
-            U3d::Commands.local_install(
+            U3d::Commands.install(
               args: ['1.2.3f4'],
               options: {
+                install: true,
+                download: false,
                 packages: %w[Unity packageA packageB],
                 installation_path: 'foo'
               }
@@ -631,6 +670,7 @@ describe U3d do
 
           it 'installs just Unity when no packages are specified' do
             on_fake_os_not_linux
+            with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
             nothing_installed
             expect_privileges_check
             definition = expected_definition('1.2.3f4', :fakeos, nil)
@@ -646,9 +686,11 @@ describe U3d do
               installation_path: 'foo'
             ) {}
 
-            U3d::Commands.local_install(
+            U3d::Commands.install(
               args: ['1.2.3f4'],
               options: {
+                install: true,
+                download: false,
                 installation_path: 'foo'
               }
             )
@@ -663,14 +705,17 @@ describe U3d do
           #   add an existing editor or module to a discovered install -> skipped, no credentials asked
           it 'does not ask for credentials and does nothing when no packages are specified' do
             on_fake_os_not_linux
+            with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
             are_installed([fake_installation('1.2.3f4', packages: %w[packageA packageB])])
             expect_no_privileges_check
             expect_no_download
             expect_no_install
 
-            U3d::Commands.local_install(
+            U3d::Commands.install(
               args: ['1.2.3f4'],
               options: {
+                install: true,
+                download: false,
                 installation_path: 'foo'
               }
             )
@@ -678,6 +723,7 @@ describe U3d do
 
           it 'installs only uninstalled packages when packages are specified' do
             on_fake_os_not_linux
+            with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
             are_installed([fake_installation('1.2.3f4', packages: ['packageA'])])
             expect_privileges_check
             definition = expected_definition('1.2.3f4', :fakeos, nil)
@@ -693,9 +739,11 @@ describe U3d do
               installation_path: 'foo'
             ) {}
 
-            U3d::Commands.local_install(
+            U3d::Commands.install(
               args: ['1.2.3f4'],
               options: {
+                install: true,
+                download: false,
                 installation_path: 'foo',
                 packages: %w[packageA packageB]
               }

@@ -113,31 +113,28 @@ module U3d
 
       command :install do |c|
         c.syntax = 'u3d install [<version>] [ [-p | --packages <package> ...] | [-a | --all] ] [ [-n | --no_install] [-i | --installation_path <path>] ]'
-        c.description = "Download (and install) Unity3D packages."
-        c.option '-p', '--packages PACKAGES', Array, 'Specifies which packages to download. Overriden by --all'
-        c.option '-i', '--installation_path PATH', String, 'Specifies where package(s) will be installed. Overriden by --no_install'
-        c.option '-a', '--all', 'Download all available packages'
-        c.option '-n', '--no_install', 'No installation after download success'
+        c.summary = "Download (and/or) install Unity3D packages."
+        c.description = %(
+#{c.summary}
+
+This command allows you to either:
+* download and install packages
+* download packages but not install them
+* install already downloaded packages
+        )
+        c.option '--[no-]download', 'Perform or not downloading before installation. Downloads by default'
+        c.option '--[no-]install', 'Perform or not installation after downloading. Installs by default'
+        c.option '-p', '--packages PACKAGES', Array, 'Specifies which packages to download/install. Overriden by --all'
+        c.option '-a', '--all', 'Download all available packages. Overrides -p'
+        c.option '-X', '--installation_path PATH', String, 'Specifies where package(s) will be downloaded/installed. Conflicts with --no-install'
         c.option '-k', '--keychain', 'Gain privileges right through the keychain. [OSX only]'
         c.example 'Download and install Unity, its Documentation and the Android build support and install them for version 5.1.2f1', 'u3d install 5.1.2f1 -p Unity,Documentation,Android'
         c.example "The 'version' argument can be a specific version number, such as 5.6.1f1, or an alias in [#{Commands.release_letter_mapping.keys.join(', ')}]. If not specified, u3d will download the unity version for the current project", 'u3d install latest'
         c.action do |args, options|
           options.default all: false
-          options.default no_install: false
-          Commands.download(args: args, options: convert_options(options))
-        end
-      end
-
-      command :local_install do |c|
-        c.syntax = 'u3d local_install [<version>] [ [-p | --packages <package> ...] | [-a | --all] ] [-i | --installation_path <path>]'
-        c.description = 'Install downloaded version of Unity3d'
-        c.option '-p', '--packages PACKAGES', Array, 'Specifies which packages to install. Overriden by --all'
-        c.option '-i', '--installation_path PATH', String, 'Specifies where package(s) will be installed.'
-        c.option '-a', '--all', 'Install all downloaded packages'
-        c.option '-k', '--keychain', 'Gain privileges right through the keychain. [OSX only]'
-        c.example "The 'version' argument can be a specific version number, such as 5.6.1f1. If not specified, u3d will download the unity version for the current project", 'u3d local_install'
-        c.action do |args, options|
-          Commands.local_install(args: args, options: convert_options(options))
+          options.default install: true
+          options.default download: true
+          Commands.install(args: args, options: convert_options(options))
         end
       end
 

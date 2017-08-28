@@ -36,6 +36,15 @@ module U3d
     UNITY_MODULE_FILE_REGEX = %r{\/([\w\-_\.\+]+\.(?:pkg|exe|zip|sh|deb))}
 
     class << self
+      # fetch modules and put them in local cache
+      def fetch_modules(definition, packages: [], download: nil)
+        if download
+          download_modules(definition, packages: packages)
+        else
+          local_files(definition, packages: packages)
+        end
+      end
+
       # download packages
       def download_modules(definition, packages: [])
         files = []
