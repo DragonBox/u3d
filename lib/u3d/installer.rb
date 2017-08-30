@@ -192,7 +192,12 @@ module U3d
         installation_path: path
       )
       # Forces sanitation for installation of 'weird' versions eg 5.6.1xf1Linux
-      sanitize_install(installed.select { |u| u.version == version }.first)
+      unity = installed.select { |u| u.version == version }.first
+      if unity
+        sanitize_install(unity)
+      else
+        UI.error "Unity was not installed properly"
+      end
     end
 
     def install_sh(file, installation_path: nil)
