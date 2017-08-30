@@ -42,7 +42,7 @@ module U3d
       generic_rules = {}
       phases = {}
 
-      data = JSON.parse(File.read(RULES_PATH))
+      data = JSON.parse(File.read(rules_path))
 
       if data['GENERAL'] && data['GENERAL']['active']
         data['GENERAL']['rules'].each do |rn, r|
@@ -194,6 +194,16 @@ module U3d
     end
 
     private
+
+    def rules_path
+      path = ENV["U3D_RULES_PATH"]
+      unless path.nil?
+        UI.user_error!("Specified rules path '#{path}' isn't a file") unless File.exist? path
+        UI.message("Using #{path} for prettify rules path")
+      end
+      path = RULES_PATH if path.nil?
+      path
+    end
 
     def inject(string, params: {})
       message = "This is a default message."

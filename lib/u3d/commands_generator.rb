@@ -71,7 +71,17 @@ module U3d
         run_args = extract_run_args
 
         c.syntax = 'u3d run [-u | --unity_version <version>] [-r | --raw_logs] [ -- <run_args>]'
-        c.description = 'Run unity, and parses its output through u3d\'s log prettifier'
+        c.summary = 'Run unity, and parses its output through u3d\'s log prettifier'
+        c.description =  %(
+#{c.summary}
+
+The default prettifier rules file is packaged with u3d (#{U3d::LogAnalyzer::RULES_PATH}).
+You may which to pass your own using the environment variable U3D_RULES_PATH.
+
+E.g. U3D_RULES_PATH=my_rules.json u3d -- ...
+
+Fore more information about how the rules work, see https://github.com/DragonBox/u3d/blob/master/LOG_RULES.md
+        )
         c.option '-u', '--unity_version STRING', String, 'Version of Unity to run with. If not specified, it runs with the version of the project (either specified as -projectpath or current)'
         c.option '-r', '--raw_logs', 'Raw Unity output, not filtered by u3d\'s log prettifier'
         c.action do |args, options|
