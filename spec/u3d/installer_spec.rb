@@ -128,7 +128,10 @@ describe U3d do
           expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "cd #{U3d::DEFAULT_LINUX_INSTALL}; file.sh", admin: true) {}
 
           installer = U3d::LinuxInstaller.new
-          expect(installer).to receive(:sanitize_install).with(anything)
+          unity = double("UnityProject")
+          allow(installer).to receive(:installed) { [unity] }
+          allow(unity).to receive(:version) { '1.2.3f4' }
+          expect(installer).to receive(:sanitize_install).with(unity)
 
           installer.install(filepath, '1.2.3f4', installation_path: nil)
         end
