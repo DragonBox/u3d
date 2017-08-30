@@ -38,7 +38,7 @@
       },
       "exception_report": {
         "active": true,
-        "start_pattern": "^(?<message>.*threw exception)\\n",
+        "start_pattern": "^(?<message>.*threw exception\\.)\\n",
         "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
         "start_message": false,
         "end_message": "%{file}(line %{line}): %{message}",
