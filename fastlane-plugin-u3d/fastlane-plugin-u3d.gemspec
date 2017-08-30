@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = %q{jerome.lacoste@gmail.com}
 
   spec.summary       = %q{Fastgame's u3d (a Unity3d CLI) integration}
-  # spec.homepage      = "https://github.com/<GITHUB_USERNAME>/fastlane-plugin-u3d"
+  spec.homepage      = "https://github.com/DragonBox/u3d/tree/master/fastlane-plugin-u3d"
   spec.license       = "MIT"
 
   spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)
@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   # Don't add a dependency to fastlane or fastlane_re
   # since this would cause a circular dependency
 
-  spec.add_dependency 'u3d', '~> 0.9'
+  spec.add_dependency 'u3d', '>= 0.9', "<2.0"
 
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'bundler'
