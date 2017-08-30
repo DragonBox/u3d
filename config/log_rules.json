@@ -118,7 +118,7 @@
     "active": true,
     "silent": false,
     "comment": "Initialization on editor launch",
-    "phase_start_pattern": "Initialize mono",
+    "phase_start_pattern": "(?:COMMAND LINE|Initialize mono)",
     "rules": {
       "mono_options": {
         "active": true,
