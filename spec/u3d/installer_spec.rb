@@ -119,6 +119,20 @@ describe U3d do
           U3d::LinuxInstaller.new.sanitize_install(unity)
         end
       end
+
+      describe '.install' do
+        it 'installs a file in standard installation path' do
+          filepath = "file.sh"
+          allow(File).to receive(:directory?).with(U3d::DEFAULT_LINUX_INSTALL) { true }
+          expect(U3dCore::CommandExecutor).to receive(:execute).with(command: 'chmod a+x file.sh') {}
+          expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "cd #{U3d::DEFAULT_LINUX_INSTALL}; file.sh", admin: true) {}
+
+          installer = U3d::LinuxInstaller.new
+          expect(installer).to receive(:sanitize_install).with(anything)
+
+          installer.install(filepath, '1.2.3f4', installation_path: nil)
+        end
+      end
     end
 
     xdescribe U3d::WindowsInstaller do

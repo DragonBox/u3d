@@ -53,11 +53,6 @@ module U3d
         packages.each do |package|
           get_package(downloader, validator, package, definition, files)
         end
-
-        # On Linux, make sure the files are executable
-        # FIXME: Move me to the LinuxInstaller
-        files.each { |f| U3dCore::CommandExecutor.execute(command: "chmod a+x #{f[1]}") } if definition.os == :linux
-
         files
       end
 
