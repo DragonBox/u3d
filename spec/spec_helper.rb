@@ -52,3 +52,16 @@ ensure
     ENV[k] = old_vals[k]
   end
 end
+
+def capture_stds
+  require "stringio"
+  orig_stdout = $stdout
+  orig_stderr = $stderr
+  $stdout = StringIO.new
+  $stderr = StringIO.new
+  yield if block_given?
+  [$stdout.string, $stderr.string]
+ensure
+  $stdout = orig_stdout
+  $stderr = orig_stderr
+end
