@@ -817,7 +817,7 @@ describe U3d do
     # ---
     # RUN
     # ---
-    describe "#run", focus: true do
+    describe "#run" do
       let(:runner) do
         runner = double("Runner")
         allow(U3d::Runner).to receive(:new) { runner }
