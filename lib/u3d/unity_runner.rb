@@ -45,7 +45,8 @@ module U3d
       end
 
       # Wait for tail_thread setup to be complete
-      sleep 0.5 while tail_thread.status != 'sleep'
+      sleep 0.5 while tail_thread.status == 'run'
+      return unless tail_thread.status
       tail_thread.run
 
       begin
