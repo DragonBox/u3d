@@ -22,6 +22,29 @@
         ],
         "type": "error"
       },
+      "exception": {
+        "active": true,
+        "start_pattern": "[eE]xception.*: (?<message>.*)\\n",
+        "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "start_message": false,
+        "end_message": "%{file}(line %{line}): %{message}",
+        "store_lines": false,
+        "ignore_lines": [
+          "UnityEditor",
+          "UnityEngine",
+          "^\\n"
+        ],
+        "type": "error"
+      },
+      "exception_report": {
+        "active": true,
+        "start_pattern": "^(?<message>.*threw exception)\\n",
+        "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "start_message": false,
+        "end_message": "%{file}(line %{line}): %{message}",
+        "store_lines": false,
+        "type": "error"
+      },
       "log": {
         "active": true,
         "start_pattern": "UnityEngine\\.Debug:Log\\(Object\\)",
@@ -99,6 +122,12 @@
         "active": true,
         "start_pattern": "Exiting batchmode successfully now!",
         "type": "success"
+      },
+      "batchmode_abort": {
+        "active": true,
+        "start_pattern": "Aborting batchmode due to failure",
+        "end_pattern": ".*",
+        "type": "error"
       }
     }
   },
