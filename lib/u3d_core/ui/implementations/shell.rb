@@ -33,7 +33,7 @@ module U3dCore
       @log ||= if Helper.test?
                  Logger.new(nil) # don't show any logs when running tests
                else
-                 Logger.new($stdout)
+                 Logger.new(EPipeIgnorerLogDevice.new($stdout))
                end
 
       @log.formatter = proc do |severity, datetime, _progname, msg|
@@ -43,6 +43,20 @@ module U3dCore
       require 'u3d_core/ui/disable_colors' if U3dCore::Helper.colors_disabled?
 
       @log
+    end
+
+    class EPipeIgnorerLogDevice < Logger::LogDevice
+      def initialize(logdev)
+        @logdev = logdev
+      end
+
+      # rubocop:disable HandleExceptions
+      def write(message)
+        @logdev.write(message)
+      rescue Errno::EPIPE
+        # ignored
+      end
+      # rubocop:enable HandleExceptions
     end
 
     def format_string(datetime = Time.now, severity = "")

@@ -26,7 +26,7 @@ describe U3dCore do
       let(:shell) { U3dCore::Shell.new }
       let(:atime) { Time.new(2017, 07, 20, 12, 21, 35) }
 
-      describe "with log timestamp off" do
+      context "with log timestamp off" do
         it "does add a default timestamp prefix" do
           U3dCore::Globals.with_log_timestamps(false) do
             expect(shell.format_string(atime, "")).to eq("")
@@ -48,7 +48,7 @@ describe U3dCore do
         end
       end
 
-      describe "with log timestamp on" do
+      context "with log timestamp on" do
         it "does add a default timestamp prefix" do
           U3dCore::Globals.with_log_timestamps(true) do
             expect(shell.format_string(atime, "")).to eq("[12:21:35] ")
@@ -84,6 +84,32 @@ describe U3dCore do
             end
           end
         end
+      end
+    end
+
+    describe "log" do
+      let(:shell) { U3dCore::Shell.new }
+
+      it "logs as info" do
+        allow(U3d::Helper).to receive(:test?) { false }
+        stdout, stderr = capture_stds do
+          shell.message("This is a log message")
+        end
+        expect(stdout).to eq("This is a log message" + "\n")
+        expect(stderr).to eq("")
+      end
+
+      # #96 u3d list | head -1 causes 'log writing failed. Broken pipe @ io_write - <STDOUT>'
+      it "logs as info but stops on EPIPE errors" do
+        stdout, stderr = capture_stds do
+          allow(U3d::Helper).to receive(:test?) { false }
+          allow($stdout).to receive(:write).with("This is a log message\n").and_call_original
+          allow($stdout).to receive(:write).with("This is a second message\n").and_raise(Errno::EPIPE.new)
+          shell.message("This is a log message")
+          shell.message("This is a second message")
+        end
+        expect(stdout).to eq("This is a log message" + "\n")
+        expect(stderr).to eq("")
       end
     end
   end
