@@ -63,7 +63,6 @@ describe U3d do
           allow(U3d::Downloader).to receive(:get_package).with(anything, anything, 'packageA', @definition, anything).and_wrap_original do |_m, *args|
             args[4] << ['packageA', 'filepath', {}]
           end
-          expect(U3dCore::CommandExecutor).to receive(:execute).with(command: 'chmod a+x filepath') {}
 
           U3d::Downloader.download_modules(@definition, packages: ['packageA'])
         end

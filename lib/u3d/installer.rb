@@ -197,10 +197,13 @@ module U3d
 
     def install_sh(file, installation_path: nil)
       cmd = file.shellescape
+
+      U3dCore::CommandExecutor.execute(command: "chmod a+x #{cmd}")
+
       if installation_path
-        command = "cd \"#{installation_path}\"; #{cmd}"
+        command = "cd #{installation_path.shellescape}; #{cmd}"
         unless File.directory? installation_path
-          command = "mkdir -p \"#{installation_path}\"; #{command}"
+          command = "mkdir -p #{installation_path.shellescape}; #{command}"
         end
         U3dCore::CommandExecutor.execute(command: command, admin: true)
       else
