@@ -1,5 +1,33 @@
 # Change Log
 
+## [v1.0.0.rc1](https://github.com/DragonBox/u3d/tree/v1.0.0.rc1) (2017-08-30)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v0.9.4...v1.0.0.rc1)
+
+**Implemented enhancements:**
+
+- u3d/install: move chmod +x of linux files at install time  [\#91](https://github.com/DragonBox/u3d/issues/91)
+
+**Fixed bugs:**
+
+- Log prettifier not logging command line arguments \(among other initialisation things\) on Unity 2017+ [\#99](https://github.com/DragonBox/u3d/issues/99)
+- Error if stdout closed while writing to it [\#96](https://github.com/DragonBox/u3d/issues/96)
+- Downloader not as fast as it should be [\#93](https://github.com/DragonBox/u3d/issues/93)
+
+**Closed issues:**
+
+- u3d/prettify: missing executeMethod failure / exception catching [\#102](https://github.com/DragonBox/u3d/issues/102)
+- Ensure u3d works well on ruby 2.4.1 [\#82](https://github.com/DragonBox/u3d/issues/82)
+
+**Merged pull requests:**
+
+- fastlane-plugin-u3d: allow to depend on coming 1.0.0 version [\#109](https://github.com/DragonBox/u3d/pull/109) ([lacostej](https://github.com/lacostej))
+- u3d/run allow to configure the rules.json location using U3D\_RULES\_PATH env variable [\#108](https://github.com/DragonBox/u3d/pull/108) ([lacostej](https://github.com/lacostej))
+- u3d/run: if thread exits abnormally, don't wait for it and return [\#107](https://github.com/DragonBox/u3d/pull/107) ([lacostej](https://github.com/lacostej))
+- Add log rules to parse exceptions and aborts [\#106](https://github.com/DragonBox/u3d/pull/106) ([niezbop](https://github.com/niezbop))
+- Fix INIT log phase not starting when intended [\#101](https://github.com/DragonBox/u3d/pull/101) ([niezbop](https://github.com/niezbop))
+- u3d/install: move chmod +x of linux files at install time \(Fixes \#91\) [\#100](https://github.com/DragonBox/u3d/pull/100) ([lacostej](https://github.com/lacostej))
+- logger: Hide EPIPE errors when stdout already closed [\#97](https://github.com/DragonBox/u3d/pull/97) ([lacostej](https://github.com/lacostej))
+
 ## [v0.9.4](https://github.com/DragonBox/u3d/tree/v0.9.4) (2017-08-28)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v0.9.3...v0.9.4)
 
@@ -7,7 +35,6 @@
 
 - Merge install and local\_install commands [\#84](https://github.com/DragonBox/u3d/issues/84)
 - Document installation path sanitization [\#50](https://github.com/DragonBox/u3d/issues/50)
-- Make unity versions test unit [\#72](https://github.com/DragonBox/u3d/pull/72) ([niezbop](https://github.com/niezbop))
 - \[tech\] rubocop: update version and fix windows compatibility [\#61](https://github.com/DragonBox/u3d/pull/61) ([lacostej](https://github.com/lacostej))
 - u3d/install local\_install: if no version specified, fallback on version required by current project [\#53](https://github.com/DragonBox/u3d/pull/53) ([lacostej](https://github.com/lacostej))
 - u3d/install: display more information during sanization, including what would happen \(fixes \#50\) [\#51](https://github.com/DragonBox/u3d/pull/51) ([lacostej](https://github.com/lacostej))
