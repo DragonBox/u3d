@@ -27,6 +27,7 @@ require 'u3d_core/helper'
 
 module U3d
   # Several different utility methods
+  # rubocop:disable ModuleLength
   module Utils
     # Regex to capture each part of a version string (0.0.0x0)
     CSIDL_LOCAL_APPDATA = 0x001c
@@ -55,6 +56,41 @@ module U3d
           UI.verbose "Redirected to #{response['location']}"
           get_ssl(response['location'], redirect_limit: redirect_limit - 1)
         else raise "Request failed with status #{response.code}"
+        end
+      end
+
+      def download_file(path, url, size: nil)
+        File.open(path, 'wb') do |f|
+          uri = URI(url)
+          current = 0
+          last_print_update = 0
+          Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
+            request = Net::HTTP::Get.new uri
+            http.request request do |response|
+              begin
+                size ||= Integer(response['Content-Length'])
+              rescue ArgumentError
+                UI.verbose 'Unable to get length of file in download'
+              end
+              started_at = Time.now.to_i - 1
+              response.read_body do |segment|
+                f.write(segment)
+                current += segment.length
+                # wait for Net::HTTP buffer on slow networks
+                # FIXME revisits, this slows down download on fast network
+                # sleep 0.08 # adjust to reduce CPU
+                next unless UI.interactive?
+                next unless Time.now.to_f - last_print_update > 0.5
+                last_print_update = Time.now.to_f
+                if size
+                  Utils.print_progress(current, size, started_at)
+                else
+                  Utils.print_progress_nosize(current, started_at)
+                end
+              end
+            end
+          end
+          print "\n" if UI.interactive?
         end
       end
 
@@ -128,4 +164,5 @@ module U3d
       end
     end
   end
+  # rubocop:enable ModuleLength
 end
