@@ -130,7 +130,7 @@ module U3d
           uri = URI(url)
           current = 0
           last_print_update = 0
-          Net::HTTP.start(uri.host, uri.port) do |http|
+          Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
             request = Net::HTTP::Get.new uri
             http.request request do |response|
               begin
