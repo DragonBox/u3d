@@ -1,5 +1,15 @@
 # Change Log
 
+## [v1.0.1](https://github.com/DragonBox/u3d/tree/v1.0.1) (2017-08-31)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.0...v1.0.1)
+
+**Merged pull requests:**
+
+- u3d/downloader: use\_ssl should be set dynamically to download from https [\#113](https://github.com/DragonBox/u3d/pull/113) ([lacostej](https://github.com/lacostej))
+
+## [v1.0.0](https://github.com/DragonBox/u3d/tree/v1.0.0) (2017-08-31)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.0.rc1...v1.0.0)
+
 ## [v1.0.0.rc1](https://github.com/DragonBox/u3d/tree/v1.0.0.rc1) (2017-08-30)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v0.9.4...v1.0.0.rc1)
 
@@ -20,6 +30,7 @@
 
 **Merged pull requests:**
 
+- u3d: prepare for 1.0.0.rc1 release [\#111](https://github.com/DragonBox/u3d/pull/111) ([lacostej](https://github.com/lacostej))
 - fastlane-plugin-u3d: allow to depend on coming 1.0.0 version [\#109](https://github.com/DragonBox/u3d/pull/109) ([lacostej](https://github.com/lacostej))
 - u3d/run allow to configure the rules.json location using U3D\_RULES\_PATH env variable [\#108](https://github.com/DragonBox/u3d/pull/108) ([lacostej](https://github.com/lacostej))
 - u3d/run: if thread exits abnormally, don't wait for it and return [\#107](https://github.com/DragonBox/u3d/pull/107) ([lacostej](https://github.com/lacostej))
