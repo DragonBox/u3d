@@ -89,7 +89,7 @@ When referencing to a version on the CLI, u3d sanitizes these weird versions. Fo
 
 When you install Unity with this tool, you will have to grant it higher privileges so it can perform the installation. It means that under MacOS and Linux, you will be asked for your `sudo` password.
 
-On Windows, you must launch a administrative command interface to be able to run `local_install` and `install` (only if you install for the latter).
+On Windows, you must launch an administrative command interface to be able to run `install` without the `--no-install` option. Same goes for any kind of sanitization where u3d would move files around.
 
 ## Examples
 
@@ -117,7 +117,7 @@ u3d install 5.6.0f3 -p Unity,Documentation,WebPlayer
 u3d install 5.6.0f3 --no-install
 ```
 
-* Install version 5.6.0f3 of Unity without downloading it:
+* Install previously downloaded version 5.6.0f3:
 
 ```shell
 u3d install 5.6.0f3 --no-download
@@ -141,9 +141,10 @@ You can get further information on how to use U3d by running `u3d --help` (or `u
 
 If you face an issue similar to this one
 
-    SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed
-
-your ruby setup to work with OpenSSL may want to be fixed.
+```shell
+SSL_connect returned=1 errno=0 state=SSLv3 read server certificate B: certificate verify failed
+```
+your ruby setup to work with OpenSSL probably needs to be fixed.
 
  * __On MacOS:__
 
