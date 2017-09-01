@@ -59,12 +59,14 @@ module U3d
       end
 
       def get_url_content_length(url)
+        UI.verbose "get_url_content_length #{url}"
         uri = URI(url)
         size = nil
         Net::HTTP.start(uri.host, uri.port) do |http|
           response = http.request_head url
           size = Integer(response['Content-Length'])
         end
+        UI.verbose "get_url_content_length #{url}: #{size}"
         size
       end
 

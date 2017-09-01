@@ -47,7 +47,7 @@ module U3d
         ini_path = File.expand_path(ini_name, default_ini_path)
         unless File.file?(ini_path)
           if os == 'linux'
-            UI.error "No INI file for version #{version}. Try discovering the available versions with 'u3d available -f'"
+            UI.error "No INI file for version #{version}. Try discovering the available versions with 'u3d available -f'" unless offline
             return nil
           end
           raise "INI file does not exist at #{ini_path}" if offline
