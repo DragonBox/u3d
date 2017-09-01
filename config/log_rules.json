@@ -24,10 +24,10 @@
       },
       "exception": {
         "active": true,
-        "start_pattern": "[eE]xception.*: (?<message>.*)\\n",
-        "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "start_pattern": "[eE]xception\\w*: (?<message>.*)\\n",
+        "end_pattern": "(?:Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)|(?<fileunknown>filename unknown)>:(?<lineunknown>-?\\d+))",
         "start_message": false,
-        "end_message": "%{file}(line %{line}): %{message}",
+        "end_message": "%{file}%{fileunknown}(line %{line}%{lineunknown}): %{message}",
         "store_lines": false,
         "ignore_lines": [
           "UnityEditor",
