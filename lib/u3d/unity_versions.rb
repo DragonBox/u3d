@@ -128,6 +128,12 @@ module U3d
         end
 
         def save_package_size(version, url)
+          uvd = UnityVersionDefinition.new(version, :linux, nil, offline: true)
+          if (size = uvd.size_in_bytes('Unity'))
+            UI.verbose "Package size for version #{version} already cached: #{size}"
+            return
+          end
+          UI.verbose "Finding out package size for version #{version}"
           size = Utils.get_url_content_length(url)
           if size
             UnityVersionDefinition.create_fake(version, size, url)

@@ -26,14 +26,15 @@ module U3d
   class UnityVersionDefinition
     attr_accessor :version, :os, :url, :ini
 
-    def initialize(version, os, cached_versions)
+    def initialize(version, os, cached_versions, offline: false)
       @version = version
       @os = os
       # Cache is assumed to be correct
       @url = cached_versions ? cached_versions[version] : nil
       begin
-        @ini = INIparser.load_ini(version, cached_versions, os: os)
+        @ini = INIparser.load_ini(version, cached_versions, os: os, offline: offline)
       rescue => e
+        # FIXME: weird that we catch this here
         UI.error "Could not load INI file for version #{@version} on #{@os}: #{e}"
         @ini = nil
       end
@@ -48,7 +49,8 @@ module U3d
       @ini[key]
     end
 
-    def size_in_kb(package)
+    def size_in_bytes(package)
+      return nil unless @ini
       return -1 unless @ini[package] && @ini[package]['size']
       @os == :win ? @ini[package]['size'] * 1024 : @ini[package]['size']
     end
