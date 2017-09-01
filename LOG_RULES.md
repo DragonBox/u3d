@@ -1,6 +1,11 @@
 # Log Analyzer rules
 
-The Log Prettifier processes both Unity output and existing log files thanks to a set of JSON rules. These rules are under ./config/log_rules.json. They are meant to be customizable to fit as best as possible your logging specifications.
+The Log Prettifier processes both Unity output and existing log files thanks to a set of JSON rules. They are meant to be customizable to fit as best as possible your logging specifications. The default rules config found under [config/log_rules.json](https://github.com/DragonBox/u3d/blob/master/config/log_rules.json) is packaged with u3d. To use a custom ruleset set the `U3D_RULES_PATH` environment variable to point to the path of the overriding config.
+```
+U3D_RULES_PATH=./my_custom_rules.json u3d prettify ...
+[...]
+Using ./my_custom_rules.json for prettify rules path
+```
 
 This document explains how to customize the ruleset.
 
