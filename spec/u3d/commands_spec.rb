@@ -599,6 +599,7 @@ describe U3d do
         #   reinstall a discovered version -> skipped, no credentials asked
         it 'does not ask for credentials and does nothing when version is already present' do
           on_linux
+          with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
           are_installed([fake_linux('1.2.3f4')])
           expect_no_privileges_check
           expect_no_install

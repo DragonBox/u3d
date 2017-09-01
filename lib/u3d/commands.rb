@@ -98,6 +98,13 @@ module U3d
         end
       end
 
+      def cache_versions(os, offline: false)
+        cache = Cache.new(force_os: os, offline: offline)
+        cache_os = cache[os.id2name] || {}
+        cache_versions = cache_os['versions'] || {}
+        cache_versions
+      end
+
       def install(args: [], options: {})
         version = specified_or_current_project_version(args[0])
 
@@ -105,8 +112,7 @@ module U3d
 
         packages = packages_with_unity_first(os, options)
 
-        cache = Cache.new(force_os: os)
-        cache_versions = cache[os.id2name]['versions']
+        cache_versions = cache_versions(os, offline: !options[:download])
         version = interpret_latest(version, cache_versions)
         unless cache_versions[version]
           UI.error "No version '#{version}' was found in cache. Either it doesn't exist or u3d doesn't know about it yet. Try refreshing with 'u3d available -f'"
