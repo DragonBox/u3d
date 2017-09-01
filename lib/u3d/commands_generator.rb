@@ -158,7 +158,17 @@ This command allows you to either:
 
       command :prettify do |c|
         c.syntax = 'u3d prettify <logfile>'
-        c.description = 'Prettify a saved logfile'
+        c.summary = 'Prettify a saved logfile'
+        c.description = %(
+          #{c.summary}
+
+          The default prettifier rules file is packaged with u3d (#{U3d::LogAnalyzer::RULES_PATH}).
+          You may which to pass your own using the environment variable U3D_RULES_PATH.
+
+          E.g. U3D_RULES_PATH=my_rules.json u3d prettify ...
+
+          Fore more information about how the rules work, see https://github.com/DragonBox/u3d/blob/master/LOG_RULES.md
+                  )
         c.action do |args, _options|
           Commands.local_analyze(args: args)
         end
