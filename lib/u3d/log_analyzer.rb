@@ -78,15 +78,8 @@ module U3d
       @phases.each do |name, phase|
         next if name == @active_phase
         next unless line =~ phase['phase_start_pattern']
-        if @active_rule
-          # Active rule should be finished
-          # If it is still active during phase change, it means that something went wrong
-          UI.error("[#{@active_phase}] Could not finish active rule '#{@active_rule}'. Aborting it.")
-          @active_rule = nil
-        end
+        finish_phase
         @active_phase = name
-        @context.clear
-        @rule_lines_buffer.clear
         UI.verbose("--- Beginning #{name} phase ---")
         break
       end
@@ -189,11 +182,29 @@ module U3d
         end
       end
 
-      apply_ruleset.call(@phases[@active_phase]['rules'], @active_phase) if @active_phase
+      if @active_phase
+        apply_ruleset.call(@phases[@active_phase]['rules'], @active_phase)
+        if @phases[@active_phase]['phase_end_pattern'] && @phases[@active_phase]['phase_end_pattern'] =~ line
+          UI.verbose("--- Ending #{@active_phase} phase ---")
+          finish_phase
+        end
+      end
       apply_ruleset.call(@generic_rules, 'GENERAL')
     end
 
     private
+
+    def finish_phase
+      if @active_rule
+        # Active rule should be finished
+        # If it is still active during phase change, it means that something went wrong
+        UI.error("[#{@active_phase}] Could not finish active rule '#{@active_rule}'. Aborting it.")
+        @active_rule = nil
+      end
+      @active_phase = nil
+      @context.clear
+      @rule_lines_buffer.clear
+    end
 
     def rules_path
       path = ENV["U3D_RULES_PATH"]
