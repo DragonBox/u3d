@@ -57,7 +57,11 @@ module U3d
           args.map!(&:shellescape)
         end
 
-        U3dCore::CommandExecutor.execute(command: args, print_all: true)
+        output_callback = Proc.new do |line|
+          UI.command_output(line)
+        end
+
+        U3dCore::CommandExecutor.execute_command(command: args, output_callback: output_callback)
       ensure
         sleep 1
         Thread.kill(tail_thread)
