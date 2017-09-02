@@ -41,18 +41,8 @@ module U3d
         end
       end
 
-      tail_thread = Thread.new do
-        begin
-          pipe(log_file) { |line| output_callback.call(line) }
-        rescue => e
-          UI.error "Failure while trying to pipe #{log_file}: #{e.message}"
-          e.backtrace.each { |l| UI.error "  #{l}" }
-        end
-      end if log_file
-
-      if tail_thread
-        # Wait for tail_thread setup to be complete
-        sleep 0.5 while tail_thread.status == 'run'
+      if log_file
+        tail_thread = start_tail_thread(log_file, output_callback)
         return unless tail_thread.status
         tail_thread.run
       end
@@ -111,6 +101,21 @@ module U3d
     end
 
     private
+
+    def start_tail_thread(log_file, output_callback)
+      tail_thread = Thread.new do
+        begin
+          pipe(log_file) { |line| output_callback.call(line) }
+        rescue => e
+          UI.error "Failure while trying to pipe #{log_file}: #{e.message}"
+          e.backtrace.each { |l| UI.error "  #{l}" }
+        end
+      end
+
+      # Wait for tail_thread setup to be complete
+      sleep 0.5 while tail_thread.status == 'run'
+      tail_thread
+    end
 
     def pipe(file)
       File.open(file, 'r') do |f|
