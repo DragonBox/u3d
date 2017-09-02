@@ -48,12 +48,14 @@ module U3d
           UI.error "Failure while trying to pipe #{log_file}: #{e.message}"
           e.backtrace.each { |l| UI.error "  #{l}" }
         end
-      end
+      end if log_file
 
-      # Wait for tail_thread setup to be complete
-      sleep 0.5 while tail_thread.status == 'run'
-      return unless tail_thread.status
-      tail_thread.run
+      if tail_thread
+        # Wait for tail_thread setup to be complete
+        sleep 0.5 while tail_thread.status == 'run'
+        return unless tail_thread.status
+        tail_thread.run
+      end
 
       begin
         args.unshift(installation.exe_path)
@@ -65,13 +67,17 @@ module U3d
 
         U3dCore::CommandExecutor.execute_command(command: args, output_callback: output_callback)
       ensure
-        sleep 1
-        Thread.kill(tail_thread)
+        if tail_thread
+          sleep 1
+          Thread.kill(tail_thread)
+        end
       end
     end
 
     def find_and_prepare_logfile(installation, args)
       log_file = Runner.find_logFile_in_args(args)
+
+      return nil if log_file == '/dev/stdout'
 
       if log_file # we wouldn't want to do that for the default log file.
         File.delete(log_file) if File.file?(log_file) # We only delete real files
