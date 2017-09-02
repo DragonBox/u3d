@@ -30,14 +30,20 @@ module U3d
     def run(installation, args, raw_logs: false)
       log_file = find_and_prepare_logfile(installation, args)
 
+      if raw_logs
+        output_callback = proc do |line|
+          UI.message(line.rstrip)
+        end
+      else
+        analyzer = LogAnalyzer.new
+        output_callback = proc do |line|
+          analyzer.parse_line(line)
+        end
+      end
+
       tail_thread = Thread.new do
         begin
-          if raw_logs
-            pipe(log_file) { |l| UI.message l.rstrip }
-          else
-            analyzer = LogAnalyzer.new
-            pipe(log_file) { |l| analyzer.parse_line l }
-          end
+          pipe(log_file) { |line| output_callback.call(line) }
         rescue => e
           UI.error "Failure while trying to pipe #{log_file}: #{e.message}"
           e.backtrace.each { |l| UI.error "  #{l}" }
@@ -55,10 +61,6 @@ module U3d
           args.map! { |a| a =~ / / ? "\"#{a}\"" : a }
         else
           args.map!(&:shellescape)
-        end
-
-        output_callback = Proc.new do |line|
-          UI.command_output(line)
         end
 
         U3dCore::CommandExecutor.execute_command(command: args, output_callback: output_callback)

@@ -101,7 +101,7 @@ module U3dCore
               line = l.strip # strip so that \n gets removed
               output << line
 
-              output_callback.call(line) if output_callback
+              output_callback.call(l) if output_callback
             end
           end
           raise "Exit status: #{status}".red if !status.nil? && status.nonzero?
