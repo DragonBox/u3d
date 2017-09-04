@@ -148,6 +148,15 @@ This command allows you to either:
         end
       end
 
+      command :dependencies do |c|
+        c.syntax = 'u3d dependencies [-p | --package_manager <package manager>]'
+        c.description = 'Installs Unity dependencies. [Linux only]'
+        c.option '-p', '--package_manager STRING', String, 'Specify which package manager to use (aptitude, rpm...)'
+        c.action do |_args, options|
+          Commands.install_linux_dependencies(options: convert_options(options))
+        end
+      end
+
       command :credentials do |c|
         c.syntax = "u3d credentials <#{Commands.credentials_actions.join(' | ')}>"
         c.description = 'Manages keychain credentials so u3d remembers them. [OSX only]'
