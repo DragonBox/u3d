@@ -45,6 +45,12 @@
         "store_lines": false,
         "type": "error"
       },
+      "error_shared_library": {
+        "active": true,
+        "start_pattern": "error while loading shared libraries: (?<message>.*)\\n",
+        "start_message": "Error while loading shared libraries: %{message}",
+        "type": "error"
+      },
       "log": {
         "active": true,
         "start_pattern": "UnityEngine\\.Debug:Log\\(Object\\)",
