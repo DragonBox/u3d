@@ -108,7 +108,6 @@ module U3d
               message = "[#{header}] " + message
               UI.send(rule['type'], message)
             end
-            UI.verbose("--- Ending #{@active_rule} rule ---")
             @active_rule = nil
             @context.clear
             @rule_lines_buffer.clear
@@ -133,12 +132,7 @@ module U3d
           ruleset.each do |rn, r|
             pattern = r['start_pattern']
             next unless line =~ pattern
-            if r['end_pattern']
-              @active_rule = rn
-              UI.verbose("--- Beginning #{rn} rule ---")
-            else
-              UI.verbose("--- One line rule #{rn} ---")
-            end
+            @active_rule = rn if r['end_pattern']
             match = line.match(pattern)
             @context = match.names.map(&:to_sym).zip(match.captures).to_h
             if r['fetch_line_at_index'] || r['fetch_first_line_not_matching']
