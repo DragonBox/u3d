@@ -108,6 +108,7 @@ module U3d
               message = "[#{header}] " + message
               UI.send(rule['type'], message)
             end
+            UI.verbose("--- Ending #{@active_rule} rule ---")
             @active_rule = nil
             @context.clear
             @rule_lines_buffer.clear
@@ -132,7 +133,12 @@ module U3d
           ruleset.each do |rn, r|
             pattern = r['start_pattern']
             next unless line =~ pattern
-            @active_rule = rn if r['end_pattern']
+            if r['end_pattern']
+              @active_rule = rn
+              UI.verbose("--- Beginning #{rn} rule ---")
+            else
+              UI.verbose("--- One line rule #{rn} ---")
+            end
             match = line.match(pattern)
             @context = match.names.map(&:to_sym).zip(match.captures).to_h
             if r['fetch_line_at_index'] || r['fetch_first_line_not_matching']
@@ -185,7 +191,6 @@ module U3d
       if @active_phase
         apply_ruleset.call(@phases[@active_phase]['rules'], @active_phase)
         if @phases[@active_phase]['phase_end_pattern'] && @phases[@active_phase]['phase_end_pattern'] =~ line
-          UI.verbose("--- Ending #{@active_phase} phase ---")
           finish_phase
         end
       end
@@ -201,6 +206,7 @@ module U3d
         UI.error("[#{@active_phase}] Could not finish active rule '#{@active_rule}'. Aborting it.")
         @active_rule = nil
       end
+      UI.verbose("--- Ending #{@active_phase} phase ---")
       @active_phase = nil
       @context.clear
       @rule_lines_buffer.clear
