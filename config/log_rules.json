@@ -191,13 +191,13 @@
     "active": true,
     "silent": false,
     "comment": "Compiling phase",
-    "phase_start_pattern": "- starting compile",
+    "phase_start_pattern": "- [sS]tarting compile",
     "phase_end_pattern": "- Finished compile",
     "rules": {
       "target": {
         "active": true,
-        "start_pattern": "- starting compile (?<path>.+), for buildtarget (?<target>.+)",
-        "start_message": "Target: %{path} (buildtarget %{target})"
+        "start_pattern": "- [sS]tarting compile (?<path>.+)(?<target>, for buildtarget .+)?",
+        "start_message": "Starting compile: %{path} %{target}"
       },
       "finished": {
         "active": true,
