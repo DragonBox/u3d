@@ -27,6 +27,13 @@ require 'time'
 describe U3d do
   describe U3d::Cache do
     describe '#initialize' do
+      context 'invalid args' do
+        it 'fails if offline and force_refresh are set' do
+          expect do
+            U3d::Cache.new(force_refresh: true, offline: true)
+          end.to raise_error(RuntimeError, /Cache: cannot specify both offline and force_refresh/)
+        end
+      end
       context 'when there is no cache file' do
         before(:each) do
           allow(File).to receive(:file?) { false }
@@ -129,28 +136,42 @@ describe U3d do
     end
 
     describe '#[]' do
-      before(:each) do
-        allow(U3d::UnityVersions).to receive(:list_available)
-        file = double('file')
-        cache_data = '{'\
-        '"win":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}},'\
-        '"mac":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}},'\
-        '"linux":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}}'\
-        '}'
-        allow(File).to receive(:file?) { true }
-        allow(File).to receive(:open).with(anything, 'r').and_yield(file)
-        allow(file).to receive(:read) { cache_data }
+      context 'when there is no cache file' do
+        before(:each) do
+          allow(File).to receive(:file?) { false }
+        end
+
+        let(:cache) { U3d::Cache.new(offline: true) }
+
+        it "doesn't retrieve versions" do
+          expect(cache["win"]).to eq(nil)
+        end
       end
 
-      it 'returns correct object with a matching key' do
-        cache = U3d::Cache.new
-        expect(cache['win']['versions']['key']).to eql('url')
-      end
+      context 'when there is a cache file' do
+        before(:each) do
+          allow(U3d::UnityVersions).to receive(:list_available)
+          file = double('file')
+          cache_data = '{'\
+          '"win":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}},'\
+          '"mac":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}},'\
+          '"linux":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}}'\
+          '}'
+          allow(File).to receive(:file?) { true }
+          allow(File).to receive(:open).with(anything, 'r').and_yield(file)
+          allow(file).to receive(:read) { cache_data }
+        end
 
-      it 'returns nil with wrong key' do
-        cache = U3d::Cache.new
-        expect(cache['win']['versions']['notakey']).not_to eql('url')
-        expect(cache['win']['versions']['notakey']).to be_nil
+        it 'returns correct object with a matching key' do
+          cache = U3d::Cache.new
+          expect(cache['win']['versions']['key']).to eql('url')
+        end
+
+        it 'returns nil with wrong key' do
+          cache = U3d::Cache.new
+          expect(cache['win']['versions']['notakey']).not_to eql('url')
+          expect(cache['win']['versions']['notakey']).to be_nil
+        end
       end
     end
   end

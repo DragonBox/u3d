@@ -51,13 +51,18 @@ module U3d
       @cache[key]
     end
 
-    def initialize(path: nil, force_os: nil, force_refresh: false)
+    def initialize(path: nil, force_os: nil, force_refresh: false, offline: false)
+      raise "Cache: cannot specify both offline and force_refresh" if offline && force_refresh
       @path = path || default_path
       @cache = {}
       os = force_os || U3dCore::Helper.operating_system
       Utils.ensure_dir(@path)
       file_path = File.expand_path(DEFAULT_NAME, @path)
       need_update, data = check_for_update(file_path, os)
+      if offline
+        UI.verbose("Cache outdated but we are working offline, so no updating it.")
+        need_update = false
+      end
       @cache = data
       overwrite_cache(file_path, os) if need_update || force_refresh
     end
@@ -67,7 +72,7 @@ module U3d
     # Checks if the cache needs updating
     def check_for_update(file_path, os)
       need_update = false
-      data = nil
+      data = {}
       if !File.file?(file_path)
         need_update = true
       else
