@@ -157,7 +157,7 @@ This command allows you to either:
 Regarding the package manager: if none is specified, u3d will try to assume it by testing which one.s is.are installed.
 Only apt-get and yum are tested right now.
 
-If several package manager are installed on your machine simultaneously, we recommend that you specify the one you want to use.
+If several package managers are installed on your machine simultaneously, we recommend that you specify the one you want to use.
 
 Regarding the dependencies themselves: only dependencies for the editor are installed. WebGL, Android and Tizen require others that you will have to install manually.
 More on that: https://forum.unity3d.com/threads/unity-on-linux-release-notes-and-known-issues.350256/
