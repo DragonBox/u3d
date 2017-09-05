@@ -56,7 +56,7 @@ module U3dCore
         end
       end
 
-      if @password.to_s.empty?
+      if @password.nil?
         UI.verbose 'Could not retrieve password'
         if U3dCore::Globals.do_not_login?
           UI.verbose 'Login disabled'
@@ -73,8 +73,8 @@ module U3dCore
 
       raise CredentialsError, 'No username specified' unless user
 
-      while @password.to_s.empty?
-        UI.verbose 'Password does not exist or is empty'
+      while @password.nil?
+        UI.verbose 'Password does not exist'
         raise CredentialsError, 'Password missing and context is not interactive. Please make sure it is correct' unless UI.interactive?
         @password = UI.password "Password for #{user}:"
       end

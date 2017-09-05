@@ -32,6 +32,11 @@ describe U3dCore do
       expect(c.password).to eq(password)
     end
 
+    it "allows setting an empty password" do
+      c = U3dCore::Credentials.new(user: user, password: '')
+      expect(c.password).to eq('')
+    end
+
     it "loads the user from the new 'U3D_USER' variable" do
       ENV['U3D_USER'] = user
       c = U3dCore::Credentials.new
@@ -43,6 +48,13 @@ describe U3dCore do
       ENV['U3D_PASSWORD'] = password
       c = U3dCore::Credentials.new
       expect(c.password).to eq(password)
+      ENV.delete('U3D_PASSWORD')
+    end
+
+    it "loads an empty password from the new 'U3D_PASSWORD' variable" do
+      ENV['U3D_PASSWORD'] = ''
+      c = U3dCore::Credentials.new
+      expect(c.password).to eq('')
       ENV.delete('U3D_PASSWORD')
     end
 
