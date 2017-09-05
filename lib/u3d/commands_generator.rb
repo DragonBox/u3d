@@ -149,7 +149,7 @@ This command allows you to either:
       end
 
       command :dependencies do |c|
-        c.syntax = 'u3d dependencies [-p | --package_manager <package manager>]'
+        c.syntax = 'u3d dependencies'
         c.summary = 'Installs Unity dependencies. [Linux only]'
         c.description = %(
 #{c.summary}
@@ -159,7 +159,6 @@ Regarding the package manager: if dpkg is installed, u3d uses apt-get else if rp
 Regarding the dependencies themselves: only dependencies for the editor are installed. WebGL, Android and Tizen require others that you will have to install manually.
 More on that: https://forum.unity3d.com/threads/unity-on-linux-release-notes-and-known-issues.350256/
                   )
-        c.option '-p', '--package_manager STRING', String, 'Specify which package manager to use (apt-get, yum...)'
         c.action do |_args, _options|
           Commands.install_dependencies
         end

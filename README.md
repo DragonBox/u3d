@@ -43,6 +43,8 @@ The prettifyer is on by default but can be turned off to get Unity3d's raw outpu
 
   [Information on how `prettify` works](https://github.com/DragonBox/u3d/blob/master/LOG_RULES.md)
 
+* `u3d dependencies`: [Linux] Install dependencies that Unity don't install by default on Linux.
+
 ## Installation
 
 ```shell
