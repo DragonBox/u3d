@@ -129,6 +129,15 @@ module U3d
         Installer.install_modules(files, definition.version, installation_path: options[:installation_path])
       end
 
+      def install_dependencies
+        unless Helper.linux?
+          UI.important 'u3d dependencies is Linux-only, and not needed on other OS'
+          return
+        end
+
+        LinuxDependencies.install
+      end
+
       def run(options: {}, run_args: [])
         version = options[:unity_version]
 

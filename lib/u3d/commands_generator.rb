@@ -148,6 +148,22 @@ This command allows you to either:
         end
       end
 
+      command :dependencies do |c|
+        c.syntax = 'u3d dependencies'
+        c.summary = 'Installs Unity dependencies. [Linux only]'
+        c.description = %(
+#{c.summary}
+
+Regarding the package manager: if dpkg is installed, u3d uses apt-get else if rpm is installed yum is used. If none of them is insalled, fails.
+
+Regarding the dependencies themselves: only dependencies for the editor are installed. WebGL, Android and Tizen require others that you will have to install manually.
+More on that: https://forum.unity3d.com/threads/unity-on-linux-release-notes-and-known-issues.350256/
+                  )
+        c.action do |_args, _options|
+          Commands.install_dependencies
+        end
+      end
+
       command :credentials do |c|
         c.syntax = "u3d credentials <#{Commands.credentials_actions.join(' | ')}>"
         c.description = 'Manages keychain credentials so u3d remembers them. [OSX only]'
