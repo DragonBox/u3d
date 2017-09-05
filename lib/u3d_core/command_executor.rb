@@ -53,26 +53,43 @@ module U3dCore
       # @param print_command [Boolean] Should we print the command that's being executed
       # @param error [Block] A block that's called if an error occurs
       # @param prefix [Array] An array containg a prefix + block which might get applied to the output
-      # @param loading [String] A loading string that is shown before the first output
       # @param admin [Boolean] Do we need admin privilege for this command?
-      # @param keychain [Boolean] Should we fetch admin rights from the keychain on OSX
       # @return [String] All the output as string
-      def execute(command: nil, print_all: false, print_command: true, error: nil, prefix: nil, loading: nil, admin: false)
+      # @deprecated
+      def execute(command: nil, print_all: false, print_command: true, error: nil, prefix: nil, admin: false)
         print_all = true if U3dCore::Globals.verbose?
         prefix ||= {}
 
+        output_callback = nil
+        if print_all
+          output_callback = proc do |line|
+            # Prefix the current line with a string
+            prefix.each do |element|
+              line = element[:prefix] + line if element[:block] && element[:block].call(line)
+            end
+            UI.command_output(line)
+          end
+        end
+
+        execute_command(command: command, output_callback: output_callback, print_command: print_command, error_callback: error, admin: admin)
+      end
+
+      # @param command [String] The command to be executed
+      # @param output_callback [Block] the command to pass to print output
+      # @param print_command [Boolean] Should we print the command that's being executed
+      # @param error_callback [Block] A block that's called if an error occurs
+      # @param admin [Boolean] Do we need admin privilege for this command?
+      # @return [String] All the output as string
+      def execute_command(command: nil, output_callback: nil, print_command: true, error_callback: nil, admin: false)
         command = command.join(' ') if command.is_a?(Array)
         UI.command(command) if print_command
 
-        # this is only used to show the "Loading text"...
-        UI.command_output(loading) if print_all && loading
-
         command = grant_admin_privileges(command) if admin
 
-        execute_command(command: command, print_all: print_all, error: error, prefix: prefix)
+        execute_command_low(command: command, output_callback: output_callback, error_callback: error_callback)
       end
 
-      def execute_command(command: nil, print_all: nil, error: nil, prefix: nil)
+      def execute_command_low(command: nil, output_callback: nil, error_callback: nil)
         output = []
         begin
           status = U3dCore::Runner.run(command) do |stdin, _stdout, _pid|
@@ -80,14 +97,7 @@ module U3dCore
               line = l.strip # strip so that \n gets removed
               output << line
 
-              next unless print_all
-
-              # Prefix the current line with a string
-              prefix.each do |element|
-                line = element[:prefix] + line if element[:block] && element[:block].call(line)
-              end
-
-              UI.command_output(line)
+              output_callback.call(l) if output_callback
             end
           end
           raise "Exit status: #{status}".red if !status.nil? && status.nonzero?
@@ -99,8 +109,8 @@ module U3dCore
           output << ex.to_s
           o = output.join("\n")
           UI.verbose o
-          raise ex unless error
-          error.call(o, nil)
+          raise ex unless error_callback
+          error_callback.call(o, nil)
         end
         return output.join("\n")
       end
@@ -141,6 +151,6 @@ module U3dCore
       end
     end
 
-    private_class_method :execute_command
+    private_class_method :execute_command_low
   end
 end

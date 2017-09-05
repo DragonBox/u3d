@@ -30,24 +30,22 @@ module U3d
     def run(installation, args, raw_logs: false)
       log_file = find_and_prepare_logfile(installation, args)
 
-      tail_thread = Thread.new do
-        begin
-          if raw_logs
-            pipe(log_file) { |l| UI.message l.rstrip }
-          else
-            analyzer = LogAnalyzer.new
-            pipe(log_file) { |l| analyzer.parse_line l }
-          end
-        rescue => e
-          UI.error "Failure while trying to pipe #{log_file}: #{e.message}"
-          e.backtrace.each { |l| UI.error "  #{l}" }
+      if raw_logs
+        output_callback = proc do |line|
+          UI.command_output(line.rstrip)
+        end
+      else
+        analyzer = LogAnalyzer.new
+        output_callback = proc do |line|
+          analyzer.parse_line(line)
         end
       end
 
-      # Wait for tail_thread setup to be complete
-      sleep 0.5 while tail_thread.status == 'run'
-      return unless tail_thread.status
-      tail_thread.run
+      if log_file
+        tail_thread = start_tail_thread(log_file, output_callback)
+        return unless tail_thread.status
+        tail_thread.run
+      end
 
       begin
         args.unshift(installation.exe_path)
@@ -57,15 +55,19 @@ module U3d
           args.map!(&:shellescape)
         end
 
-        U3dCore::CommandExecutor.execute(command: args, print_all: true)
+        U3dCore::CommandExecutor.execute_command(command: args, output_callback: output_callback)
       ensure
-        sleep 1
-        Thread.kill(tail_thread)
+        if tail_thread
+          sleep 1
+          Thread.kill(tail_thread)
+        end
       end
     end
 
     def find_and_prepare_logfile(installation, args)
       log_file = Runner.find_logFile_in_args(args)
+
+      return nil if log_file == '/dev/stdout'
 
       if log_file # we wouldn't want to do that for the default log file.
         File.delete(log_file) if File.file?(log_file) # We only delete real files
@@ -99,6 +101,21 @@ module U3d
     end
 
     private
+
+    def start_tail_thread(log_file, output_callback)
+      tail_thread = Thread.new do
+        begin
+          pipe(log_file) { |line| output_callback.call(line) }
+        rescue => e
+          UI.error "Failure while trying to pipe #{log_file}: #{e.message}"
+          e.backtrace.each { |l| UI.error "  #{l}" }
+        end
+      end
+
+      # Wait for tail_thread setup to be complete
+      sleep 0.5 while tail_thread.status == 'run'
+      tail_thread
+    end
 
     def pipe(file)
       File.open(file, 'r') do |f|
