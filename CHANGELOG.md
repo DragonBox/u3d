@@ -1,5 +1,27 @@
 # Change Log
 
+## [v1.0.2](https://github.com/DragonBox/u3d/tree/v1.0.2) (2017-09-05)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.1...v1.0.2)
+
+**Implemented enhancements:**
+
+- u3d/prettify: catch missing dependencies errors on Linux [\#123](https://github.com/DragonBox/u3d/issues/123)
+- Prettifyer not plugged when using -logFile /dev/stdout [\#18](https://github.com/DragonBox/u3d/issues/18)
+- u3d/prettify: modify compiler rule parsing for 2017+ [\#121](https://github.com/DragonBox/u3d/pull/121) ([niezbop](https://github.com/niezbop))
+- ud3/prettify: improve exception logging rules [\#118](https://github.com/DragonBox/u3d/pull/118) ([niezbop](https://github.com/niezbop))
+- u3d/available: linux: do not try to fetch package size if already cached [\#116](https://github.com/DragonBox/u3d/pull/116) ([lacostej](https://github.com/lacostej))
+- u3d/dependencies: add command to install Linux dependencies [\#25](https://github.com/DragonBox/u3d/pull/25) ([niezbop](https://github.com/niezbop))
+
+**Fixed bugs:**
+
+- u3d install updating cache even with --no-download option [\#104](https://github.com/DragonBox/u3d/issues/104)
+
+**Merged pull requests:**
+
+- u3d/prettify: add rule to catch library loading errors [\#124](https://github.com/DragonBox/u3d/pull/124) ([niezbop](https://github.com/niezbop))
+- u3d/prettify: also plug log analyzer on stdout \(Fixes \#18 \#43\) [\#122](https://github.com/DragonBox/u3d/pull/122) ([lacostej](https://github.com/lacostej))
+- u3d/install: do not refresh cache when download disabled \(Fixes \#104\) [\#120](https://github.com/DragonBox/u3d/pull/120) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.1](https://github.com/DragonBox/u3d/tree/v1.0.1) (2017-08-31)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.0...v1.0.1)
 
