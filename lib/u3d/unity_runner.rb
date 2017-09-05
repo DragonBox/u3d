@@ -32,7 +32,7 @@ module U3d
 
       if raw_logs
         output_callback = proc do |line|
-          UI.message(line.rstrip)
+          UI.command_output(line.rstrip)
         end
       else
         analyzer = LogAnalyzer.new
