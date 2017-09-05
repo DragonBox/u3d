@@ -88,6 +88,7 @@ module U3d
                 else
                   Utils.print_progress_nosize(current, started_at)
                 end
+                print "\n" unless UI.interactive?
               end
             end
           end
