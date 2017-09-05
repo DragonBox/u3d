@@ -323,16 +323,15 @@ module U3d
       'libpq5' # missing from original list
     ].freeze
 
-    def self.install(prefix: nil)
-      unless prefix
-        if `which dpkg` != ''
-          prefix = 'apt-get -y install'
-        elsif `which rpm` != ''
-          prefix = 'yum -y install'
-        else
-          raise 'Cannot install dependencies on your Linux distribution'
-        end
+    def self.install
+      if `which dpkg` != ''
+        prefix = 'apt-get -y install'
+      elsif `which rpm` != ''
+        prefix = 'yum -y install'
+      else
+        raise 'Cannot install dependencies on your Linux distribution'
       end
+
       if UI.interactive?
         return unless UI.confirm "Install dependencies? (#{DEPENDENCIES.length} dependency(ies) to install)"
       end
