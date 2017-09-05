@@ -164,7 +164,7 @@ More on that: https://forum.unity3d.com/threads/unity-on-linux-release-notes-and
                   )
         c.option '-p', '--package_manager STRING', String, 'Specify which package manager to use (apt-get, yum...)'
         c.action do |_args, options|
-          Commands.install_linux_dependencies(options: convert_options(options))
+          Commands.install_dependencies(options: convert_options(options))
         end
       end
 
