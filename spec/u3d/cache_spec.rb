@@ -143,7 +143,7 @@ describe U3d do
 
         let(:cache) { U3d::Cache.new(offline: true) }
 
-        it 'retrieves versions' do
+        it "doesn't retrieve versions" do
           expect(cache["win"]).to eq(nil)
         end
       end
