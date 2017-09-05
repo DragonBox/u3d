@@ -64,6 +64,7 @@ module U3d
           uri = URI(url)
           current = 0
           last_print_update = 0
+          print_progress = UI.interactive? || U3dCore::Globals.verbose?
           Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
             request = Net::HTTP::Get.new uri
             http.request request do |response|
@@ -79,7 +80,7 @@ module U3d
                 # wait for Net::HTTP buffer on slow networks
                 # FIXME revisits, this slows down download on fast network
                 # sleep 0.08 # adjust to reduce CPU
-                next unless UI.interactive?
+                next unless print_progress
                 next unless Time.now.to_f - last_print_update > 0.5
                 last_print_update = Time.now.to_f
                 if size
@@ -90,7 +91,7 @@ module U3d
               end
             end
           end
-          print "\n" if UI.interactive?
+          print "\n" if print_progress
         end
       end
 
