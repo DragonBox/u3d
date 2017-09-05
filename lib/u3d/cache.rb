@@ -72,7 +72,7 @@ module U3d
     # Checks if the cache needs updating
     def check_for_update(file_path, os)
       need_update = false
-      data = nil
+      data = {}
       if !File.file?(file_path)
         need_update = true
       else
