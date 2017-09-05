@@ -57,7 +57,7 @@ module U3dCore
       # @return [String] All the output as string
       # @deprecated
       def execute(command: nil, print_all: false, print_command: true, error: nil, prefix: nil, admin: false)
-        UI.deprecated("use execute_command instead")
+        # UI.deprecated("use execute_command instead")
         print_all = true if U3dCore::Globals.verbose?
         prefix ||= {}
 
