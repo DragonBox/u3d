@@ -57,7 +57,6 @@ module U3dCore
       # @return [String] All the output as string
       # @deprecated
       def execute(command: nil, print_all: false, print_command: true, error: nil, prefix: nil, admin: false)
-        # UI.deprecated("use execute_command instead")
         print_all = true if U3dCore::Globals.verbose?
         prefix ||= {}
 
@@ -84,9 +83,6 @@ module U3dCore
       def execute_command(command: nil, output_callback: nil, print_command: true, error_callback: nil, admin: false)
         command = command.join(' ') if command.is_a?(Array)
         UI.command(command) if print_command
-
-        # this is only used to show the "Loading text"...
-        # UI.command_output(loading) if print_all && loading
 
         command = grant_admin_privileges(command) if admin
 
