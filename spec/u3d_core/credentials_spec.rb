@@ -60,6 +60,8 @@ describe U3dCore do
 
     it "automatically loads the password from the keychain" do
       U3dCore::Globals.with_use_keychain(true) do
+        allow(U3d::Helper).to receive(:mac?) { true }
+
         ENV['U3D_USER'] = user
         c = U3dCore::Credentials.new
 
