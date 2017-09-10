@@ -21,6 +21,7 @@
 ## --- END LICENSE BLOCK ---
 
 require 'u3d/utils'
+require 'u3d_core/core_ext/string'
 require 'u3d/installation'
 require 'fileutils'
 require 'file-tail'
@@ -229,8 +230,8 @@ module U3d
 
       source_path.tr!('/', '\\')
       new_path.tr!('/', '\\')
-      source_path = "\"" + source_path + "\"" if source_path =~ / /
-      new_path = "\"" + new_path + "\"" if new_path =~ / /
+      source_path = source_path.argescape
+      new_path = new_path.argescape
 
       command = "move #{source_path} #{new_path}"
 
