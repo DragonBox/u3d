@@ -25,7 +25,7 @@ require 'u3d/unity_version_number'
 
 require 'u3d_core'
 # require 'terminal-table'
-require 'shellwords'
+require 'u3d_core/core_ext/string'
 
 module U3d
   Helper = U3dCore::Helper
