@@ -95,8 +95,9 @@ task :ensure_git_clean do
 end
 
 # ensure ready to prepare a PR
-task :prepare_git_pr do |_t, args|
+task :prepare_git_pr, [:pr_branch] do |_t, args|
   pr_branch = args['pr_branch']
+  raise "Missing pr_branch argument" unless pr_branch
   UI.user_error! "Prepare git PR stopped by user" unless UI.confirm("Creating PR branch #{pr_branch}")
   run_command("git checkout -b #{pr_branch}")
 end
