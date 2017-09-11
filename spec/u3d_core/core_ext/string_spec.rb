@@ -1,5 +1,6 @@
 ## --- BEGIN LICENSE BLOCK ---
-# Copyright (c) 2016-present WeWantToKnow AS
+# Original work Copyright (c) 2015-present the fastlane authors
+# Modified work Copyright 2016-present WeWantToKnow AS
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,14 +21,32 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
-require 'u3d/version'
-require 'u3d/unity_version_number'
-
-require 'u3d_core'
-# require 'terminal-table'
 require 'u3d_core/core_ext/string'
 
-module U3d
-  Helper = U3dCore::Helper
-  UI = U3dCore::UI
+describe String do
+  describe ".argescape" do
+    context "on windows" do
+      before(:each) do
+        allow(U3d::Helper).to receive(:windows?) { true }
+      end
+      it "doesn't quote arguments without spaces" do
+        puts "apath".argescape
+        expect("apath".argescape).to eq("apath")
+      end
+      it "quotes arguments with spaces" do
+        expect("a path".argescape).to eq("\"a path\"")
+      end
+    end
+    context "oustide windows" do
+      before(:each) do
+        allow(U3d::Helper).to receive(:windows?) { false }
+      end
+      it "doesn't quote arguments without spaces" do
+        expect("apath".argescape).to eq("apath")
+      end
+      it "escapes arguments with spaces" do
+        expect("a path".argescape).to eq("a\\ path")
+      end
+    end
+  end
 end

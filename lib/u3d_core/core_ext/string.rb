@@ -20,14 +20,16 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
-require 'u3d/version'
-require 'u3d/unity_version_number'
+require 'u3d_core/helper'
 
-require 'u3d_core'
-# require 'terminal-table'
-require 'u3d_core/core_ext/string'
-
-module U3d
-  Helper = U3dCore::Helper
-  UI = U3dCore::UI
+class String
+  # a crossplatform version of shellescape
+  def argescape
+    if U3dCore::Helper.windows?
+      self =~ / / ? "\"#{self}\"" : self
+    else
+      require 'shellwords'
+      Shellwords.escape(self)
+    end
+  end
 end

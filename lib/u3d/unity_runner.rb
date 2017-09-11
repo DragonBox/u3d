@@ -21,6 +21,7 @@
 ## --- END LICENSE BLOCK ---
 
 require 'u3d/utils'
+require 'u3d_core/core_ext/string'
 require 'fileutils'
 require 'file-tail'
 
@@ -49,11 +50,7 @@ module U3d
 
       begin
         args.unshift(installation.exe_path)
-        if Helper.windows?
-          args.map! { |a| a =~ / / ? "\"#{a}\"" : a }
-        else
-          args.map!(&:shellescape)
-        end
+        args.map!(&:argescape)
 
         U3dCore::CommandExecutor.execute_command(command: args, output_callback: output_callback)
       ensure
