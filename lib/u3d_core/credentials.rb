@@ -51,12 +51,12 @@ module U3dCore
       if Helper.mac? && @use_keychain
         unless @password
           UI.message 'Fetching password from keychain'
-          password_holder = Security::InternetPassword.find(server: MAC_U3D_SERVER)
+          password_holder = Security::InternetPassword.find(server: server_name)
           @password = password_holder.password unless password_holder.nil?
         end
       end
 
-      if @password.to_s.empty?
+      if @password.nil?
         UI.verbose 'Could not retrieve password'
         if U3dCore::Globals.do_not_login?
           UI.verbose 'Login disabled'
@@ -73,8 +73,8 @@ module U3dCore
 
       raise CredentialsError, 'No username specified' unless user
 
-      while @password.to_s.empty?
-        UI.verbose 'Password does not exist or is empty'
+      while @password.nil?
+        UI.verbose 'Password does not exist'
         raise CredentialsError, 'Password missing and context is not interactive. Please make sure it is correct' unless UI.interactive?
         @password = UI.password "Password for #{user}:"
       end
@@ -91,7 +91,7 @@ module U3dCore
       ENV['U3D_PASSWORD'] = @password
       if Helper.mac? && @use_keychain
         UI.message 'Storing credentials to the keychain'
-        return Security::InternetPassword.add(MAC_U3D_SERVER, user, password)
+        return Security::InternetPassword.add(server_name, user, password)
       end
 
       return false
@@ -103,11 +103,15 @@ module U3dCore
       if force || UI.interactive?
         if Helper.mac? && @use_keychain && (force || UI.confirm('Remove credentials from the keychain?'))
           UI.message 'Deleting credentials from the keychain'
-          Security::InternetPassword.delete(server: MAC_U3D_SERVER)
+          Security::InternetPassword.delete(server: server_name)
         end
       elsif Helper.mac?
         UI.verbose 'Keychain may store invalid credentials for u3d'
       end
+    end
+
+    def server_name
+      MAC_U3D_SERVER
     end
   end
 
