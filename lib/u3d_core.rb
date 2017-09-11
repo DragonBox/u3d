@@ -20,6 +20,7 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
+require 'u3d_core/core_ext/string'
 require 'u3d_core/globals'
 require 'u3d_core/helper'
 require 'u3d_core/credentials'

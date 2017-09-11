@@ -20,12 +20,25 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
-require 'u3d/version'
-require 'u3d/unity_version_number'
-
 require 'u3d_core'
-# require 'terminal-table'
-require 'u3d_core/core_ext/string'
+
+require 'u3d/utils'
+require 'u3d/version'
+
+require 'u3d/cache'
+require 'u3d/commands'
+require 'u3d/commands_generator'
+require 'u3d/download_validator'
+require 'u3d/downloader'
+require 'u3d/iniparser'
+require 'u3d/installation'
+require 'u3d/installer'
+require 'u3d/log_analyzer'
+require 'u3d/unity_project'
+require 'u3d/unity_runner'
+require 'u3d/unity_version_definition'
+require 'u3d/unity_version_number'
+require 'u3d/unity_versions'
 
 module U3d
   Helper = U3dCore::Helper
