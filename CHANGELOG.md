@@ -1,5 +1,30 @@
 # Change Log
 
+## [v1.0.3](https://github.com/DragonBox/u3d/tree/v1.0.3) (2017-09-11)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.2...v1.0.3)
+
+**Implemented enhancements:**
+
+- u3d/internal: create a argescape cross platform method [\#132](https://github.com/DragonBox/u3d/issues/132)
+- u3d/prettifyer should fail with contextual information to ease improvement [\#128](https://github.com/DragonBox/u3d/issues/128)
+- u3d: accept password-less sudo [\#126](https://github.com/DragonBox/u3d/issues/126)
+
+**Fixed bugs:**
+
+- u3d run: -logFile /dev/stdout causes crashes on Linux [\#43](https://github.com/DragonBox/u3d/issues/43)
+
+**Closed issues:**
+
+- Create a full circleci mac/linux example [\#15](https://github.com/DragonBox/u3d/issues/15)
+
+**Merged pull requests:**
+
+- Automate bump & changelog tasks [\#135](https://github.com/DragonBox/u3d/pull/135) ([lacostej](https://github.com/lacostej))
+- u3d/prettifyer: fail with contextual information \(Fixes \#128\) [\#134](https://github.com/DragonBox/u3d/pull/134) ([lacostej](https://github.com/lacostej))
+- u3d/internal: introduce a argescape string function \(Fixes \#132\) [\#133](https://github.com/DragonBox/u3d/pull/133) ([lacostej](https://github.com/lacostej))
+- u3d/credentials support empty passwords for passwordless sudo \(Fixes \#128\) [\#130](https://github.com/DragonBox/u3d/pull/130) ([lacostej](https://github.com/lacostej))
+- Download file now prints progress also in non interactive mode \(only in verbose\) [\#129](https://github.com/DragonBox/u3d/pull/129) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.2](https://github.com/DragonBox/u3d/tree/v1.0.2) (2017-09-05)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.1...v1.0.2)
 
