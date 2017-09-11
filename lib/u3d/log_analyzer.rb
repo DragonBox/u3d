@@ -197,7 +197,8 @@ module U3d
       if @active_rule
         # Active rule should be finished
         # If it is still active during phase change, it means that something went wrong
-        UI.error("[#{@active_phase}] Could not finish active rule '#{@active_rule}'. Aborting it.")
+        context = @lines_memory.map { |l| "\n> #{l}" }.join('')
+        UI.error("[#{@active_phase}] Could not finish active rule '#{@active_rule}'. Aborting it. Context:#{context}")
         @active_rule = nil
       end
       UI.verbose("--- Ending #{@active_phase} phase ---")
