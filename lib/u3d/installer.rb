@@ -101,7 +101,8 @@ module U3d
     end
 
     def installed
-      versions = spotlight_installed_paths.map { |path| MacInstallation.new(path: path) }
+      paths = (list_installed_paths + spotlight_installed_paths).uniq
+      versions = paths.map { |path| MacInstallation.new(path: path) }
 
       # sorting should take into account stable/patch etc
       versions.sort! { |x, y| x.version <=> y.version }
@@ -150,6 +151,12 @@ module U3d
     end
 
     private
+
+    def list_installed_paths
+      find = File.join(DEFAULT_MAC_INSTALL, 'Unity*', 'Unity.app')
+      paths = Dir[find].map { |path| File.expand_path('..', path) }
+      paths
+    end
 
     def spotlight_installed_paths
       unless (`mdutil -s /` =~ /disabled/).nil?
