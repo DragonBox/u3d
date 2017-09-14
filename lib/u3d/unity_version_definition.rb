@@ -44,6 +44,10 @@ module U3d
       @ini.keys
     end
 
+    def available_package?(p)
+      available_packages.include? p
+    end
+
     def [](key)
       return nil unless @ini
       @ini[key]

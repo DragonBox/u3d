@@ -123,6 +123,8 @@ module U3d
         unity = check_unity_presence(version: version)
         return unless enforce_setup_coherence(packages, options, unity, definition)
 
+        verify_package_names(definition, packages)
+
         if options[:install]
           U3d::Globals.use_keychain = true if options[:keychain] && Helper.mac?
           UI.important 'Root privileges are required'
@@ -216,6 +218,12 @@ module U3d
       end
 
       private
+
+      def verify_package_names(definition, packages)
+        packages.each do |package|
+          UI.user_error! "package '#{package}' doesn't exist" unless definition.available_package? package
+        end
+      end
 
       def specified_or_current_project_version(version)
         unless version # no version specified, use the one from the current unity project if any
