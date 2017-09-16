@@ -119,14 +119,15 @@ task pre_release: 'ensure_git_clean' do
   Rake::Task["changelog"].invoke
 
   sh('git diff')
+  # FIXME: cleanup branch, etc
   UI.user_error! "Pre release stopped by user." unless UI.confirm("CHANGELOG PR for version #{nextversion}. Confirm?")
 
   msg = "Preparing release for #{nextversion}"
   sh 'git add CHANGELOG.md'
   sh "git commit -m '#{msg}'"
   sh "git push lacostej" # FIXME: hardcoded
-  # FIXME check hub present
-  sh "hub pull-request -m '#{msg}' -l nochangelog"
+  # FIXME: check hub present
+  sh "hub pull-request -m '#{msg}'" # requires hub pre-release " -l nochangelog"
   sh 'git checkout master'
   sh "git branch -D #{pr_branch}"
 end
