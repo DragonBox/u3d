@@ -1,5 +1,21 @@
 # Change Log
 
+## [v1.0.4](https://github.com/DragonBox/u3d/tree/v1.0.4) (2017-09-16)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.3...v1.0.4)
+
+**Fixed bugs:**
+
+- u3d/installer might not see a newly installed version on Mac [\#139](https://github.com/DragonBox/u3d/issues/139)
+- Issue with using installer \(error: undefined method `\[\]' for nil:NilClass.\) [\#138](https://github.com/DragonBox/u3d/issues/138)
+
+**Merged pull requests:**
+
+- u3d/available: restore Linux version. [\#144](https://github.com/DragonBox/u3d/pull/144) ([lacostej](https://github.com/lacostej))
+- u3d/installer: allow to find the installation we just installed, and fallback on spotlight on mac [\#143](https://github.com/DragonBox/u3d/pull/143) ([lacostej](https://github.com/lacostej))
+- u3d/analyzer: remove extra end of lines in context information [\#141](https://github.com/DragonBox/u3d/pull/141) ([lacostej](https://github.com/lacostej))
+- u3d/installer: hard fail if we ask for a non existant package \(Related to \#138\) [\#140](https://github.com/DragonBox/u3d/pull/140) ([lacostej](https://github.com/lacostej))
+- u3d/internal: load all internal modules in top 'u3d' file [\#137](https://github.com/DragonBox/u3d/pull/137) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.3](https://github.com/DragonBox/u3d/tree/v1.0.3) (2017-09-11)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.2...v1.0.3)
 
