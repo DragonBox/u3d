@@ -101,18 +101,8 @@ module U3d
     end
 
     def installed
-      unless (`mdutil -s /` =~ /disabled/).nil?
-        $stderr.puts 'Please enable Spotlight indexing for /Applications.'
-        exit(1)
-      end
-
-      bundle_identifiers = ['com.unity3d.UnityEditor4.x', 'com.unity3d.UnityEditor5.x']
-
-      mdfind_args = bundle_identifiers.map { |bi| "kMDItemCFBundleIdentifier == '#{bi}'" }.join(' || ')
-
-      cmd = "mdfind \"#{mdfind_args}\" 2>/dev/null"
-      UI.verbose cmd
-      versions = `#{cmd}`.split("\n").map { |path| MacInstallation.new(path: path) }
+      paths = (list_installed_paths + spotlight_installed_paths).uniq
+      versions = paths.map { |path| MacInstallation.new(path: path) }
 
       # sorting should take into account stable/patch etc
       versions.sort! { |x, y| x.version <=> y.version }
@@ -158,6 +148,30 @@ module U3d
       UI.error "Failed to install pkg at #{file_path}: #{e}"
     else
       UI.success "Successfully installed package from #{file_path}"
+    end
+
+    private
+
+    def list_installed_paths
+      find = File.join(DEFAULT_MAC_INSTALL, 'Unity*', 'Unity.app')
+      paths = Dir[find].map { |path| File.expand_path('..', path) }
+      paths
+    end
+
+    def spotlight_installed_paths
+      unless (`mdutil -s /` =~ /disabled/).nil?
+        UI.warning 'Please enable Spotlight indexing for /Applications.'
+        return []
+      end
+
+      bundle_identifiers = ['com.unity3d.UnityEditor4.x', 'com.unity3d.UnityEditor5.x']
+
+      mdfind_args = bundle_identifiers.map { |bi| "kMDItemCFBundleIdentifier == '#{bi}'" }.join(' || ')
+
+      cmd = "mdfind \"#{mdfind_args}\" 2>/dev/null"
+      UI.verbose cmd
+      paths = `#{cmd}`.split("\n")
+      paths
     end
   end
 
