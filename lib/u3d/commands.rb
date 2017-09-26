@@ -177,7 +177,7 @@ module U3d
         %w[add remove check]
       end
 
-      def credentials(args: [], _options: {})
+      def credentials(args: [])
         action = args[0]
         raise "Please specify an action to perform, one of #{credentials_actions.join(',')}" unless action
         raise "Unknown action '#{action}'. Use one of #{credentials_actions.join(',')}" unless credentials_actions.include? action
