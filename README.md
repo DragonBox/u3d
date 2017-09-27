@@ -155,7 +155,7 @@ Use the global `--verbose` argument to enable debug logs.
 
 Use the global `-t` argument to display stack traces if a crash occurs.
 
-## SSL Error
+### Solve SSL Errors
 
 If you face an issue similar to this one
 
