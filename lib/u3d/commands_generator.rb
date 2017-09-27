@@ -63,7 +63,7 @@ module U3d
       program :help, 'Authors', 'Jerome Lacoste <jerome@wewanttoknow.com>, Paul Niezborala <p.niezborala@wewanttoknow.com>'
       program :help, 'A word on Unity versions', U3d::UNITY_VERSIONS_NOTE
 
-      global_option('--verbose') { U3dCore::Globals.verbose = true }
+      global_option('--verbose', 'Run in verbose mode') { U3dCore::Globals.verbose = true }
 
       command :run do |c|
         # Intended for backward compatibilty purposes for run command
