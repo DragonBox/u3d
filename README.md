@@ -149,6 +149,12 @@ Here you have multiple options
 
 * if on Mac, use the keychain option (you set it before hand on the machine, e.g. from the command line using `u3d credentials` add (use `u3d credentials check` to verify) and then use `u3d install -k` to activate the keychain while installing.
 
+### Troubleshoot
+
+Use the global `--verbose` argument to enable debug logs.
+
+Use the global `-t` argument to display stack traces if a crash occurs.
+
 ## SSL Error
 
 If you face an issue similar to this one
