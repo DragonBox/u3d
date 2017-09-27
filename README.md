@@ -139,6 +139,16 @@ u3d run -r
 
 You can get further information on how to use U3d by running `u3d --help` (or `u3d -h`).
 
+## How-tos
+
+### Reuse u3d install on a CI environment
+
+Here you have multiple options
+
+* pass the password using `U3D_PASSWORD` environment variable
+
+* if on Mac, use the keychain option (you set it before hand on the machine, e.g. from the command line using `u3d credentials` add (use `u3d credentials check` to verify) and then use `u3d install -k` to activate the keychain while installing.
+
 ## SSL Error
 
 If you face an issue similar to this one
