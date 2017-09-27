@@ -1,5 +1,4 @@
-U3D
-###
+# U3D
 
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/DragonBox/u3d/blob/master/LICENSE)
 [![Gem](https://img.shields.io/gem/v/u3d.svg?style=flat)](https://rubygems.org/gems/u3d)
@@ -7,6 +6,8 @@ U3D
 [![Coverage Status](https://coveralls.io/repos/github/DragonBox/u3d/badge.svg?branch=master)](https://coveralls.io/github/DragonBox/u3d?branch=master)
 
 U3d is a set of tools to interact with Unity3D from command line. It is available on Linux, Macintosh and Windows.
+
+---
 
 ## What can it do?
 
