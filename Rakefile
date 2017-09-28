@@ -102,6 +102,7 @@ task :prepare_git_pr, [:pr_branch] do |_t, args|
   run_command("git checkout -b #{pr_branch}")
 end
 
+desc 'Prepare a release. Check repo status, generate changelog, create PR'
 task pre_release: 'ensure_git_clean' do
   require 'u3d/version'
   nextversion = U3d::VERSION
@@ -132,6 +133,7 @@ task pre_release: 'ensure_git_clean' do
   sh "git branch -D #{pr_branch}"
 end
 
+desc 'Bump the version number to the version entered interactively. Pushes a commit to master'
 task bump: 'ensure_git_clean' do
   nextversion = UI.input "Next version will be:"
   UI.user_error! "Bump version stopped by user" unless UI.confirm("Next version will be #{nextversion}. Confirm?")
@@ -143,11 +145,13 @@ task bump: 'ensure_git_clean' do
   sh 'git push'
 end
 
+desc 'Update the changelog. No commit made'
 task :changelog do
   puts "Updating changelog #{ENV['CHANGELOG_GITHUB_TOKEN']}"
   sh "github_changelog_generator" if ENV['CHANGELOG_GITHUB_TOKEN']
 end
 
+desc 'Run all rspec tests'
 task :test_all do
   formatter = "--format progress"
   if ENV["CIRCLECI"]
