@@ -1,5 +1,14 @@
 # Change Log
 
+## [v1.0.5](https://github.com/DragonBox/u3d/tree/v1.0.5) (2017-09-28)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.4...v1.0.5)
+
+**Merged pull requests:**
+
+- u3d/help: document verbose [\#152](https://github.com/DragonBox/u3d/pull/152) ([lacostej](https://github.com/lacostej))
+- docs: document u3d usage on CI servers and how-to troubleshoot [\#151](https://github.com/DragonBox/u3d/pull/151) ([lacostej](https://github.com/lacostej))
+- u3d/credentials fix ArgumentError in commands \(fixes \#148\) [\#149](https://github.com/DragonBox/u3d/pull/149) ([niezbop](https://github.com/niezbop))
+
 ## [v1.0.4](https://github.com/DragonBox/u3d/tree/v1.0.4) (2017-09-16)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.3...v1.0.4)
 
