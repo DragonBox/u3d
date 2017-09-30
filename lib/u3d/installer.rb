@@ -160,7 +160,7 @@ module U3d
 
     def spotlight_installed_paths
       unless (`mdutil -s /` =~ /disabled/).nil?
-        UI.warning 'Please enable Spotlight indexing for /Applications.'
+        UI.important 'Please enable Spotlight indexing for /Applications.'
         return []
       end
 
