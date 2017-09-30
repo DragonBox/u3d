@@ -150,6 +150,18 @@ Here you have multiple options
 
 * if on Mac, use the keychain option (you set it before hand on the machine, e.g. from the command line using `u3d credentials` add (use `u3d credentials check` to verify) and then use `u3d install -k` to activate the keychain while installing.
 
+### Install ruby
+
+ * __On MacOS and Linux:__
+
+Your usual package manager should be available to install it easily for you. On UNIX systems, we recommend you use [RVM (Ruby Version Manager)](https://rvm.io/rvm/install), which lets you manage several versions of Ruby.
+
+  * __On Windows:__
+
+Installing Ruby on Windows is a bit more complicated than installing it on Linux or Mac. You have several options available: Bash on Ubuntu on Windows (see further note), Cygwin but we recommend you use the [Ruby Installer for Windows](https://rubyinstaller.org/).
+
+_NOTE:_ We do not support Bash on Ubuntu on Windows. Most features of u3d will not work as intended on this platform and we therefore strongly advice you against using u3d on it.  
+
 ### Troubleshoot
 
 Use the global `--verbose` argument to enable debug logs.
