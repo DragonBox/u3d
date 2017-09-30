@@ -158,7 +158,9 @@ Your usual package manager should be available to install it easily for you. On 
 
   * __On Windows:__
 
-Installing Ruby on Windows is a bit more complicated than installing it on Linux or Mac. You have several options available: Bash on Ubuntu on Windows, Cygwin but we recommend you use the [Ruby Installer for Windows](https://rubyinstaller.org/).
+Installing Ruby on Windows is a bit more complicated than installing it on Linux or Mac. You have several options available: Bash on Ubuntu on Windows (see further note), Cygwin but we recommend you use the [Ruby Installer for Windows](https://rubyinstaller.org/).
+
+_NOTE:_ We do not support Bash on Ubuntu on Windows. Most features of u3d will not work as intended on this platform and we therefore strongly advice you against using u3d on it.  
 
 ### Troubleshoot
 
