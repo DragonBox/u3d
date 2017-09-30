@@ -72,6 +72,15 @@ module U3dCore
       (/linux/ =~ RUBY_PLATFORM) != nil
     end
 
+    def self.ubuntu_on_windows?
+      # taken from: https://github.com/Microsoft/BashOnWindows/issues/423#issuecomment-221627364
+      proc_version = '/proc/version'
+      return false unless File.exist? proc_version
+      File.open(proc_version, 'r') do |f|
+        return !(/Microsof|WSL/ =~ f.read).nil?
+      end
+    end
+
     # Is the currently running computer a Mac?
     def self.mac?
       (/darwin/ =~ RUBY_PLATFORM) != nil

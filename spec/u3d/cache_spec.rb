@@ -36,6 +36,7 @@ describe U3d do
       end
       context 'when there is no cache file' do
         before(:each) do
+          allow(U3dCore::Helper).to receive(:ubuntu_on_windows?) { false }
           allow(File).to receive(:file?) { false }
         end
 
