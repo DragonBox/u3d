@@ -33,6 +33,8 @@ require 'u3d_core/command_executor'
 require 'u3d_core/credentials'
 require 'fileutils'
 
+U3dCore::UI.important "Bash on Ubuntu on Windows is not supported by u3d. Unexpected behaviour may occur." if U3dCore::Helper.ubuntu_on_windows?
+
 module U3d
   # API for U3d, redirecting calls to class they concern
   # rubocop:disable ClassLength

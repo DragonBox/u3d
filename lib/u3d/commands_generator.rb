@@ -22,7 +22,7 @@
 
 require 'commander'
 require 'u3d_core'
-require 'u3d/commands_caller'
+require 'u3d/commands'
 
 HighLine.track_eof = false
 
@@ -87,7 +87,7 @@ Fore more information about how the rules work, see https://github.com/DragonBox
         c.action do |args, options|
           UI.user_error! "Run doesn't take arguments. Did you forget '--' or did you mistake your command? (#{args})" if args.count > 0
           U3dCore::Globals.log_timestamps = true
-          CommandsCaller.run(options: convert_options(options), run_args: run_args)
+          Commands.run(options: convert_options(options), run_args: run_args)
         end
       end
 
@@ -97,14 +97,14 @@ Fore more information about how the rules work, see https://github.com/DragonBox
         c.example 'List currently installed Unity3d versions, as well as installed packages', 'u3d list -p'
         c.description = 'List installed versions of Unity3d'
         c.action do |_args, options|
-          CommandsCaller.list_installed(options: convert_options(options))
+          Commands.list_installed(options: convert_options(options))
         end
       end
 
       command :available do |c|
         oses = U3dCore::Helper.operating_systems
         c.syntax = 'u3d available [-r | --release_level <level>] [-o | --operating_system <OS>] [-u | --unity_version <version>] [-p | --packages] [-f | --force]'
-        levels = CommandsCaller.release_levels
+        levels = Commands.release_levels
         c.option '-f', '--force', 'Force refresh list of available versions'
         c.option '-r', '--release_level STRING', String, "Checks for availability on specific release level [#{levels.join(', ')}]"
         c.option '-o', '--operating_system STRING', String, "Checks for availability on specific OS [#{oses.join(', ')}]"
@@ -117,7 +117,7 @@ Fore more information about how the rules work, see https://github.com/DragonBox
         c.description = 'List download-ready versions of Unity3d'
         c.action do |_args, options|
           options.default packages: false
-          CommandsCaller.list_available(options: convert_options(options))
+          Commands.list_available(options: convert_options(options))
         end
       end
 
@@ -139,12 +139,12 @@ This command allows you to either:
         c.option '-X', '--installation_path PATH', String, 'Specifies where package(s) will be downloaded/installed. Conflicts with --no-install'
         c.option '-k', '--keychain', 'Gain privileges right through the keychain. [OSX only]'
         c.example 'Download and install Unity, its Documentation and the Android build support and install them for version 5.1.2f1', 'u3d install 5.1.2f1 -p Unity,Documentation,Android'
-        c.example "The 'version' argument can be a specific version number, such as 5.6.1f1, or an alias in [#{CommandsCaller.release_letter_mapping.keys.join(', ')}]. If not specified, u3d will download the unity version for the current project", 'u3d install latest'
+        c.example "The 'version' argument can be a specific version number, such as 5.6.1f1, or an alias in [#{Commands.release_letter_mapping.keys.join(', ')}]. If not specified, u3d will download the unity version for the current project", 'u3d install latest'
         c.action do |args, options|
           options.default all: false
           options.default install: true
           options.default download: true
-          CommandsCaller.install(args: args, options: convert_options(options))
+          Commands.install(args: args, options: convert_options(options))
         end
       end
 
@@ -160,15 +160,15 @@ Regarding the dependencies themselves: only dependencies for the editor are inst
 More on that: https://forum.unity3d.com/threads/unity-on-linux-release-notes-and-known-issues.350256/
                   )
         c.action do |_args, _options|
-          CommandsCaller.install_dependencies
+          Commands.install_dependencies
         end
       end
 
       command :credentials do |c|
-        c.syntax = "u3d credentials <#{CommandsCaller.credentials_actions.join(' | ')}>"
+        c.syntax = "u3d credentials <#{Commands.credentials_actions.join(' | ')}>"
         c.description = 'Manages keychain credentials so u3d remembers them. [OSX only]'
         c.action do |args, _options|
-          CommandsCaller.credentials(args: args)
+          Commands.credentials(args: args)
         end
       end
 
@@ -186,7 +186,7 @@ More on that: https://forum.unity3d.com/threads/unity-on-linux-release-notes-and
           Fore more information about how the rules work, see https://github.com/DragonBox/u3d/blob/master/LOG_RULES.md
                   )
         c.action do |args, _options|
-          CommandsCaller.local_analyze(args: args)
+          Commands.local_analyze(args: args)
         end
       end
 
