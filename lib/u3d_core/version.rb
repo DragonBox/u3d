@@ -32,6 +32,10 @@ module U3dCore
       [major, minor, patch].compact
     end
 
+    def to_s
+      to_a.join('.')
+    end
+
     def <=>(other)
       (major <=> other.major).nonzero? ||
         (minor <=> other.minor).nonzero? ||
