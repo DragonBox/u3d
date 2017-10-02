@@ -1,5 +1,21 @@
 # Change Log
 
+## [v1.0.6](https://github.com/DragonBox/u3d/tree/v1.0.6) (2017-10-02)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.5...v1.0.6)
+
+**Implemented enhancements:**
+
+- docs/Add how to install ruby to README [\#154](https://github.com/DragonBox/u3d/pull/154) ([niezbop](https://github.com/niezbop))
+
+**Closed issues:**
+
+- Make it obvious that ruby 2.0 is not properly supported [\#157](https://github.com/DragonBox/u3d/issues/157)
+
+**Merged pull requests:**
+
+- u3d/all: detect ruby 2.0 usage and move checks into compatibility file \(fixes \#157\) [\#158](https://github.com/DragonBox/u3d/pull/158) ([lacostej](https://github.com/lacostej))
+- u3d/all feature/detect bash on ubuntu on windows \(fixed \#150\) [\#155](https://github.com/DragonBox/u3d/pull/155) ([niezbop](https://github.com/niezbop))
+
 ## [v1.0.5](https://github.com/DragonBox/u3d/tree/v1.0.5) (2017-09-28)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.4...v1.0.5)
 
