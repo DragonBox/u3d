@@ -20,6 +20,7 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
+require 'u3d/compatibility'
 require 'u3d/unity_versions'
 require 'u3d/unity_version_definition'
 require 'u3d/downloader'
@@ -32,8 +33,6 @@ require 'u3d/unity_runner'
 require 'u3d_core/command_executor'
 require 'u3d_core/credentials'
 require 'fileutils'
-
-U3dCore::UI.important "Bash on Ubuntu on Windows is not supported by u3d. Unexpected behaviour may occur." if U3dCore::Helper.ubuntu_on_windows?
 
 module U3d
   # API for U3d, redirecting calls to class they concern
