@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.0.7](https://github.com/DragonBox/u3d/tree/v1.0.7) (2017-10-03)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.6...v1.0.7)
+
+**Closed issues:**
+
+- u3d/install: weird mac spurious install issues [\#160](https://github.com/DragonBox/u3d/issues/160)
+
+**Merged pull requests:**
+
+- u3d/install: properly search for freshly installed versions on Mac \(fixes \#160\) [\#162](https://github.com/DragonBox/u3d/pull/162) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.6](https://github.com/DragonBox/u3d/tree/v1.0.6) (2017-10-02)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.5...v1.0.6)
 
