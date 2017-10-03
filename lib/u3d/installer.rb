@@ -132,6 +132,7 @@ module U3d
         destination_path = File.join(target_path, 'Applications', UNITY_DIR % version)
         FileUtils.mv temp_path, destination_path
       else
+        UI.verbose "Unity install for version #{version} found under #{unity.path}"
         begin
           path = File.expand_path('..', unity.path)
           move_to_temp = (temp_path != path)
@@ -153,8 +154,9 @@ module U3d
     private
 
     def list_installed_paths
-      find = File.join(DEFAULT_MAC_INSTALL, 'Unity*', 'Unity.app')
-      paths = Dir[find].map { |path| File.expand_path('..', path) }
+      find = File.join(DEFAULT_MAC_INSTALL, 'Applications', 'Unity*', 'Unity.app')
+      paths = Dir[find]
+      UI.verbose "Found list_installed_paths: #{paths}"
       paths
     end
 
@@ -171,6 +173,7 @@ module U3d
       cmd = "mdfind \"#{mdfind_args}\" 2>/dev/null"
       UI.verbose cmd
       paths = `#{cmd}`.split("\n")
+      UI.verbose "Found spotlight_installed_paths: #{paths}"
       paths
     end
   end
