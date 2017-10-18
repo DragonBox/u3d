@@ -1,5 +1,18 @@
 # Change Log
 
+## [v1.0.8](https://github.com/DragonBox/u3d/tree/v1.0.8) (2017-10-18)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.7...v1.0.8)
+
+**Fixed bugs:**
+
+- `install': uninitialized constant U3d::Globals \(NameError\) [\#166](https://github.com/DragonBox/u3d/issues/166)
+- u3d doesn't detect Unity version anterior to 5.0 on Windows [\#165](https://github.com/DragonBox/u3d/issues/165)
+
+**Merged pull requests:**
+
+- Fix Windows version detection for Unity4 \(fixes \#165\) [\#168](https://github.com/DragonBox/u3d/pull/168) ([niezbop](https://github.com/niezbop))
+- Fix module name issue for Globals call [\#167](https://github.com/DragonBox/u3d/pull/167) ([niezbop](https://github.com/niezbop))
+
 ## [v1.0.7](https://github.com/DragonBox/u3d/tree/v1.0.7) (2017-10-03)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.6...v1.0.7)
 
