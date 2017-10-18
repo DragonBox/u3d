@@ -126,7 +126,10 @@ module U3d
 
     def version
       require 'rexml/document'
+      # For versions >= 5
       fpath = "#{path}/Editor/Data/PlaybackEngines/windowsstandalonesupport/ivy.xml"
+      # For versions < 5      
+      fpath = "#{path}/Editor/Data/PlaybackEngines/wp8support/ivy.xml" unless File.exist? fpath
       raise "Couldn't find file #{fpath}" unless File.exist? fpath
       doc = REXML::Document.new(File.read(fpath))
       version = REXML::XPath.first(doc, 'ivy-module/info/@e:unityVersion').value
