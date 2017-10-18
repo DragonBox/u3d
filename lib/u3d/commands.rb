@@ -127,7 +127,7 @@ module U3d
         verify_package_names(definition, packages)
 
         if options[:install]
-          U3d::Globals.use_keychain = true if options[:keychain] && Helper.mac?
+          U3dCore::Globals.use_keychain = true if options[:keychain] && Helper.mac?
           UI.important 'Root privileges are required'
           raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
         end
