@@ -29,11 +29,11 @@ module U3d
   class Installation
     def self.create(path: nil)
       if Helper.mac?
-        MacInstallation.new path
+        MacInstallation.new(path: path)
       elsif Helper.linux?
-        LinuxInstallation.new path
+        LinuxInstallation.new(path: path)
       else
-        WindowsInstallation.new path
+        WindowsInstallation.new(path: path)
       end
     end
   end
