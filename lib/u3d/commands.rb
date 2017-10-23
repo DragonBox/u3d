@@ -164,8 +164,7 @@ module U3d
           run_args = [extra_run_args, run_args].flatten
         end
 
-        # we could support matching 5.3.6p3 if passed 5.3.6
-        unity = Installer.create.installed.find { |u| u.version == version }
+        unity = check_unity_presence(version: version)
         UI.user_error! "Unity version '#{version}' not found" unless unity
         runner.run(unity, run_args, raw_logs: options[:raw_logs])
       end
@@ -286,6 +285,7 @@ module U3d
       end
 
       def check_unity_presence(version: nil)
+        # idea: we could support matching 5.3.6p3 if passed 5.3.6
         installed = Installer.create.installed
         unity = installed.find { |u| u.version == version }
         if unity.nil?
