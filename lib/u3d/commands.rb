@@ -126,11 +126,7 @@ module U3d
 
         verify_package_names(definition, packages)
 
-        if options[:install]
-          U3dCore::Globals.use_keychain = true if options[:keychain] && Helper.mac?
-          UI.important 'Root privileges are required'
-          raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
-        end
+        get_administrative_privileges(options) if options[:install]
 
         files = Downloader.fetch_modules(definition, packages: packages, download: options[:download])
 
@@ -327,6 +323,12 @@ module U3d
           end
         end
         true
+      end
+
+      def get_administrative_privileges(options)
+        U3dCore::Globals.use_keychain = true if options[:keychain] && Helper.mac?
+        UI.important 'Root privileges are required'
+        raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
       end
     end
   end
