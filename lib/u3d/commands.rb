@@ -126,11 +126,7 @@ module U3d
 
         verify_package_names(definition, packages)
 
-        if options[:install]
-          U3dCore::Globals.use_keychain = true if options[:keychain] && Helper.mac?
-          UI.important 'Root privileges are required'
-          raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
-        end
+        get_administrative_privileges(options) if options[:install]
 
         files = Downloader.fetch_modules(definition, packages: packages, download: options[:download])
 
@@ -168,8 +164,7 @@ module U3d
           run_args = [extra_run_args, run_args].flatten
         end
 
-        # we could support matching 5.3.6p3 if passed 5.3.6
-        unity = Installer.create.installed.find { |u| u.version == version }
+        unity = check_unity_presence(version: version)
         UI.user_error! "Unity version '#{version}' not found" unless unity
         runner.run(unity, run_args, raw_logs: options[:raw_logs])
       end
@@ -290,6 +285,7 @@ module U3d
       end
 
       def check_unity_presence(version: nil)
+        # idea: we could support matching 5.3.6p3 if passed 5.3.6
         installed = Installer.create.installed
         unity = installed.find { |u| u.version == version }
         if unity.nil?
@@ -327,6 +323,12 @@ module U3d
           end
         end
         true
+      end
+
+      def get_administrative_privileges(options)
+        U3dCore::Globals.use_keychain = true if options[:keychain] && Helper.mac?
+        UI.important 'Root privileges are required'
+        raise 'Could not get administrative privileges' unless U3dCore::CommandExecutor.has_admin_privileges?
       end
     end
   end

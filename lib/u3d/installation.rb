@@ -29,11 +29,11 @@ module U3d
   class Installation
     def self.create(path: nil)
       if Helper.mac?
-        MacInstallation.new path
+        MacInstallation.new(path: path)
       elsif Helper.linux?
-        LinuxInstallation.new path
+        LinuxInstallation.new(path: path)
       else
-        WindowsInstallation.new path
+        WindowsInstallation.new(path: path)
       end
     end
   end
@@ -70,7 +70,7 @@ module U3d
     end
 
     def clean_install?
-      path =~ UNITY_DIR_CHECK
+      !(path =~ UNITY_DIR_CHECK).nil?
     end
 
     private
@@ -113,7 +113,7 @@ module U3d
     end
 
     def clean_install?
-      path =~ UNITY_DIR_CHECK_LINUX
+      !(path =~ UNITY_DIR_CHECK_LINUX).nil?
     end
   end
 
@@ -164,7 +164,7 @@ module U3d
     end
 
     def clean_install?
-      path =~ UNITY_DIR_CHECK
+      !(path =~ UNITY_DIR_CHECK).nil?
     end
   end
 end

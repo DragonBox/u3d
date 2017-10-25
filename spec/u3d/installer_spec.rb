@@ -88,9 +88,9 @@ describe U3d do
       context 'when using a custom install with spaces' do
         let(:unity) { macinstall_5_6_custom_with_space }
         it 'sanitizes install' do
-          expect(U3d::UI).to receive(:important).with("Moving '/Applications/Unity\\ 5.6.0f1' to '/Applications/Unity_5.6.0f1'...")
+          expect(U3d::UI).to receive(:important).with("Moving '/Applications/Unity 5.6.0f1' to '/Applications/Unity_5.6.0f1'...")
           expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "mv /Applications/Unity\\ 5.6.0f1 /Applications/Unity_5.6.0f1", admin: true)
-          expect(U3d::UI).to receive(:success).with("Successfully moved '/Applications/Unity\\ 5.6.0f1' to '/Applications/Unity_5.6.0f1'")
+          expect(U3d::UI).to receive(:success).with("Successfully moved '/Applications/Unity 5.6.0f1' to '/Applications/Unity_5.6.0f1'")
           U3d::MacInstaller.new.sanitize_install(unity)
         end
       end

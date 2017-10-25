@@ -92,10 +92,8 @@ module U3d
       source_path = File.expand_path('..', unity.path)
       parent = File.expand_path('..', source_path)
       new_path = File.join(parent, UNITY_DIR % unity.version)
-      source_path = source_path.shellescape
-      new_path = new_path.shellescape
 
-      command = "mv #{source_path} #{new_path}"
+      command = "mv #{source_path.shellescape} #{new_path.shellescape}"
 
       CommonInstaller.sanitize_install(source_path, new_path, command, dry_run: dry_run)
     end
@@ -183,10 +181,8 @@ module U3d
       source_path = File.expand_path(unity.path)
       parent = File.expand_path('..', source_path)
       new_path = File.join(parent, UNITY_DIR_LINUX % unity.version)
-      source_path = source_path.shellescape
-      new_path = new_path.shellescape
 
-      command = "mv #{source_path} #{new_path}"
+      command = "mv #{source_path.shellescape} #{new_path.shellescape}"
 
       CommonInstaller.sanitize_install(source_path, new_path, command, dry_run: dry_run)
     end
@@ -247,10 +243,8 @@ module U3d
 
       source_path.tr!('/', '\\')
       new_path.tr!('/', '\\')
-      source_path = source_path.argescape
-      new_path = new_path.argescape
 
-      command = "move #{source_path} #{new_path}"
+      command = "move #{source_path.argescape} #{new_path.argescape}"
 
       CommonInstaller.sanitize_install(source_path, new_path, command, dry_run: dry_run)
     end
