@@ -148,6 +148,16 @@ This command allows you to either:
         end
       end
 
+      command :uninstall do |c|
+        c.syntax = 'u3d uninstall [<version>]'
+        c.description = "Uninstall the specified Unity3d version."
+        c.option '-k', '--keychain', 'Gain privileges right through the keychain. [OSX only]'
+        c.example 'Uninstall Unity version 5.2.1f1', 'u3d uninstall 5.1.2f1'
+        c.action do |args, options|
+          Commands.uninstall(args: args, options: convert_options(options))
+        end
+      end
+
       command :dependencies do |c|
         c.syntax = 'u3d dependencies'
         c.summary = 'Installs Unity dependencies. [Linux only]'

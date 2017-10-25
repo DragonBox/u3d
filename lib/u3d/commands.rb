@@ -134,6 +134,20 @@ module U3d
         Installer.install_modules(files, definition.version, installation_path: options[:installation_path])
       end
 
+      def uninstall(args: [], options: [])
+        version = specified_or_current_project_version(args[0])
+
+        unity = check_unity_presence(version: version)
+
+        unless unity
+          UI.user_error!('Unity version #{version} is not present and cannot be uninstalled')
+        end
+
+        get_administrative_privileges(options)
+
+        Installer.uninstall(unity: unity)
+      end
+
       def install_dependencies
         unless Helper.linux?
           UI.important 'u3d dependencies is Linux-only, and not needed on other OS'

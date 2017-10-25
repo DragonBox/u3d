@@ -84,6 +84,13 @@ describe U3d do
           expect(U3d::UI).to receive(:message).with("'/Applications/Unity' would move to '/Applications/Unity_5.6.0f1'")
           U3d::MacInstaller.new.sanitize_install(unity, dry_run: true)
         end
+
+        it 'uninstalls' do
+          expect(U3d::UI).to receive(:verbose).with("Uninstalling Unity at '/Applications/Unity'...")
+          expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "rm -r /Applications/Unity", admin: true)
+          expect(U3d::UI).to receive(:success).with("Successfully uninstalled '/Applications/Unity'")
+          U3d::MacInstaller.new.uninstall(unity: unity)
+        end
       end
 
       context 'when using a custom install with spaces' do
@@ -93,6 +100,13 @@ describe U3d do
           expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "mv /Applications/Unity\\ 5.6.0f1 /Applications/Unity_5.6.0f1", admin: true)
           expect(U3d::UI).to receive(:success).with("Successfully moved '/Applications/Unity 5.6.0f1' to '/Applications/Unity_5.6.0f1'")
           U3d::MacInstaller.new.sanitize_install(unity)
+        end
+
+        it 'uninstalls' do
+          expect(U3d::UI).to receive(:verbose).with("Uninstalling Unity at '/Applications/Unity 5.6.0f1'...")
+          expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "rm -r /Applications/Unity\\ 5.6.0f1", admin: true)
+          expect(U3d::UI).to receive(:success).with("Successfully uninstalled '/Applications/Unity 5.6.0f1'")
+          U3d::MacInstaller.new.uninstall(unity: unity)
         end
       end
     end

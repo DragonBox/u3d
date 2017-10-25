@@ -67,6 +67,11 @@ module U3d
         installer.install(file, version, installation_path: installation_path, info: info)
       end
     end
+
+    def self.uninstall(unity: nil)
+      installer = Installer.create
+      installer.uninstall(unity: unity)
+    end
   end
 
   class CommonInstaller
@@ -148,6 +153,16 @@ module U3d
       UI.error "Failed to install pkg at #{file_path}: #{e}"
     else
       UI.success "Successfully installed package from #{file_path}"
+    end
+
+    def uninstall(unity: nil)
+      UI.verbose("Uninstalling Unity at '#{unity.root_path}'...")
+      command = "rm -r #{unity.root_path.argescape}"
+      U3dCore::CommandExecutor.execute(command: command, admin: true)
+    rescue => e
+      UI.error "Failed to uninstall unity at #{unity.path}: #{e}"
+    else
+      UI.success "Successfully uninstalled '#{unity.root_path}'"
     end
 
     private
@@ -236,6 +251,16 @@ module U3d
     else
       UI.success 'Installation successful'
     end
+
+    def uninstall(unity: nil)
+      UI.verbose("Uninstalling Unity at '#{unity.root_path}'...")
+      command = "rm -r #{unity.root_path}"
+      U3dCore::CommandExecutor.execute(command: command, admin: true)
+    rescue => e
+      UI.error "Failed to uninstall unity at #{unity.path}: #{e}"
+    else
+      UI.success "Successfully uninstalled '#{unity.root_path}'"
+    end
   end
 
   class WindowsInstaller
@@ -292,6 +317,18 @@ module U3d
       else
         UI.success "Successfully installed #{info['title']}"
       end
+    end
+
+    def uninstall(unity: nil)
+      UI.verbose("Uninstalling Unity at '#{unity.root_path}'...")
+      uninstall_exe = File.join(unity.root_path, 'Editor', 'Uninstall.exe')
+      command = "#{uninstall_exe.argescape} /S"
+      # FIXME: we should consider waiting a few seconds here as the files are not deleted right away?
+      U3dCore::CommandExecutor.execute(command: command, admin: true)
+    rescue => e
+      UI.error "Failed to uninstall unity at #{unity.path}: #{e}"
+    else
+      UI.success "Successfully uninstalled '#{unity.root_path}'"
     end
   end
 
