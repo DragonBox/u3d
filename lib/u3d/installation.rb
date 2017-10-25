@@ -27,6 +27,12 @@ module U3d
   UNITY_DIR_CHECK_LINUX = /unity-editor-\d+\.\d+\.\d+[a-z]\d+\z/
 
   class Installation
+    attr_reader :path
+
+    def initialize(path: nil)
+      @path = path
+    end
+
     def self.create(path: nil)
       if Helper.mac?
         MacInstallation.new(path: path)
@@ -39,13 +45,7 @@ module U3d
   end
 
   class MacInstallation < Installation
-    attr_reader :path
-
     require 'plist'
-
-    def initialize(path: nil)
-      @path = path
-    end
 
     def version
       plist['CFBundleVersion']
@@ -57,6 +57,10 @@ module U3d
 
     def exe_path
       "#{path}/Contents/MacOS/Unity"
+    end
+
+    def root_path
+      File.expand_path(File.join(@path, '..'))
     end
 
     def packages
@@ -81,12 +85,6 @@ module U3d
   end
 
   class LinuxInstallation < Installation
-    attr_reader :path
-
-    def initialize(path: nil)
-      @path = path
-    end
-
     def version
       # I don't find an easy way to extract the version on Linux
       require 'rexml/document'
@@ -108,6 +106,10 @@ module U3d
       "#{path}/Editor/Unity"
     end
 
+    def root_path
+      @path
+    end
+
     def packages
       false
     end
@@ -118,12 +120,6 @@ module U3d
   end
 
   class WindowsInstallation < Installation
-    attr_reader :path
-
-    def initialize(path: nil)
-      @path = path
-    end
-
     def version
       require 'rexml/document'
       # For versions >= 5
@@ -153,6 +149,10 @@ module U3d
 
     def exe_path
       File.join(@path, 'Editor', 'Unity.exe')
+    end
+
+    def root_path
+      @path
     end
 
     def packages

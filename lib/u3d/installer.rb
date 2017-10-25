@@ -89,7 +89,7 @@ module U3d
 
   class MacInstaller
     def sanitize_install(unity, dry_run: false)
-      source_path = File.expand_path('..', unity.path)
+      source_path = unity.root_path
       parent = File.expand_path('..', source_path)
       new_path = File.join(parent, UNITY_DIR % unity.version)
 
@@ -132,7 +132,7 @@ module U3d
       else
         UI.verbose "Unity install for version #{version} found under #{unity.path}"
         begin
-          path = File.expand_path('..', unity.path)
+          path = unity.root_path
           move_to_temp = (temp_path != path)
           if move_to_temp
             UI.verbose "Temporary switching location of #{path} to #{temp_path} for installation purpose"

@@ -37,6 +37,7 @@ describe U3d do
           expect(unity.path).to eq('/Applications/Unity_5.6.0f1/Unity.app')
           expect(unity.exe_path).to eq('/Applications/Unity_5.6.0f1/Unity.app/Contents/MacOS/Unity')
           expect(unity.clean_install?).to eq(true)
+          expect(unity.root_path).to eq('/Applications/Unity_5.6.0f1')
         end
       end
 
@@ -49,6 +50,7 @@ describe U3d do
 
           expect(unity.class).to eq(U3d::LinuxInstallation)
           expect(unity.path).to eq('/opt/unity-editor-5.6.0f1')
+          expect(unity.root_path).to eq(unity.path)
         end
       end
 
@@ -61,6 +63,7 @@ describe U3d do
 
           expect(unity.class).to eq(U3d::WindowsInstallation)
           expect(unity.path).to eq('C:/Program Files/Unity_2017.1.0f3')
+          expect(unity.root_path).to eq(unity.path)
         end
       end
     end
