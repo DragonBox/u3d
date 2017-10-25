@@ -25,6 +25,7 @@ require 'u3d_core/core_ext/string'
 require 'u3d/installation'
 require 'fileutils'
 require 'file-tail'
+require 'pathname'
 
 module U3d
   DEFAULT_LINUX_INSTALL = '/opt/'.freeze
@@ -100,7 +101,7 @@ module U3d
 
     def installed
       paths = (list_installed_paths + spotlight_installed_paths).uniq
-      versions = paths.map { |path| MacInstallation.new(path: path) }
+      versions = paths.map { |path| MacInstallation.new(root_path: path) }
 
       # sorting should take into account stable/patch etc
       versions.sort! { |x, y| x.version <=> y.version }
@@ -130,7 +131,7 @@ module U3d
         destination_path = File.join(target_path, 'Applications', UNITY_DIR % version)
         FileUtils.mv temp_path, destination_path
       else
-        UI.verbose "Unity install for version #{version} found under #{unity.path}"
+        UI.verbose "Unity install for version #{version} found under #{unity.root_path}"
         begin
           path = unity.root_path
           move_to_temp = (temp_path != path)
@@ -154,6 +155,7 @@ module U3d
     def list_installed_paths
       find = File.join(DEFAULT_MAC_INSTALL, 'Applications', 'Unity*', 'Unity.app')
       paths = Dir[find]
+      paths = paths.map { |u| Pathname.new(u).parent.to_s }
       UI.verbose "Found list_installed_paths: #{paths}"
       paths
     end
@@ -171,6 +173,7 @@ module U3d
       cmd = "mdfind \"#{mdfind_args}\" 2>/dev/null"
       UI.verbose cmd
       paths = `#{cmd}`.split("\n")
+      paths = paths.map { |u| Pathname.new(u).parent.to_s }
       UI.verbose "Found spotlight_installed_paths: #{paths}"
       paths
     end
@@ -178,7 +181,7 @@ module U3d
 
   class LinuxInstaller
     def sanitize_install(unity, dry_run: false)
-      source_path = File.expand_path(unity.path)
+      source_path = File.expand_path(unity.root_path)
       parent = File.expand_path('..', source_path)
       new_path = File.join(parent, UNITY_DIR_LINUX % unity.version)
 
@@ -189,7 +192,7 @@ module U3d
 
     def installed
       find = File.join(DEFAULT_LINUX_INSTALL, 'unity-editor-*')
-      versions = Dir[find].map { |path| LinuxInstallation.new(path: path) }
+      versions = Dir[find].map { |path| LinuxInstallation.new(root_path: path) }
 
       # sorting should take into account stable/patch etc
       versions.sort! { |x, y| x.version <=> y.version }
@@ -237,7 +240,7 @@ module U3d
 
   class WindowsInstaller
     def sanitize_install(unity, dry_run: false)
-      source_path = File.expand_path(unity.path)
+      source_path = File.expand_path(unity.root_path)
       parent = File.expand_path('..', source_path)
       new_path = File.join(parent, UNITY_DIR % unity.version)
 
@@ -251,7 +254,7 @@ module U3d
 
     def installed
       find = File.join(DEFAULT_WINDOWS_INSTALL, 'Unity*', 'Editor', 'Uninstall.exe')
-      versions = Dir[find].map { |path| WindowsInstallation.new(path: File.expand_path('../..', path)) }
+      versions = Dir[find].map { |path| WindowsInstallation.new(root_path: File.expand_path('../..', path)) }
 
       # sorting should take into account stable/patch etc
       versions.sort! { |x, y| x.version <=> y.version }

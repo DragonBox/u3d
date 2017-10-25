@@ -28,6 +28,7 @@ describe U3d do
     describe ".create" do
       context "Clean installs" do
         it "allows to list the installed versions and doesn't ask for sanitization" do
+          allow(U3d::Helper).to receive(:mac?) { false }
           allow(U3d::Helper).to receive(:linux?) { true }
           allow(U3dCore::UI).to receive(:confirm).with(/2 Unity .* will be moved/) { 'y' }
 

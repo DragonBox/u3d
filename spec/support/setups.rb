@@ -21,9 +21,25 @@
 ## --- END LICENSE BLOCK ---#
 
 # various fake setups
+def on_mac
+  allow(U3d::Helper).to receive(:mac?) { true }
+  allow(U3d::Helper).to receive(:linux?) { false }
+  allow(U3d::Helper).to receive(:windows?) { false }
+  allow(U3d::Helper).to receive(:operating_system) { :mac }
+end
+
 def on_linux
   allow(U3d::Helper).to receive(:operating_system) { :linux }
+  allow(U3d::Helper).to receive(:mac?) { false }
   allow(U3d::Helper).to receive(:linux?) { true }
+  allow(U3d::Helper).to receive(:windows?) { false }
+end
+
+def on_windows
+  allow(U3d::Helper).to receive(:mac?) { false }
+  allow(U3d::Helper).to receive(:linux?) { false }
+  allow(U3d::Helper).to receive(:windows?) { true }
+  allow(U3d::Helper).to receive(:operating_system) { :windows }
 end
 
 def on_fake_os

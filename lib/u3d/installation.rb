@@ -27,19 +27,21 @@ module U3d
   UNITY_DIR_CHECK_LINUX = /unity-editor-\d+\.\d+\.\d+[a-z]\d+\z/
 
   class Installation
-    attr_reader :path
+    attr_reader :root_path
 
-    def initialize(path: nil)
+    def initialize(root_path: nil, path: nil)
+      @root_path = root_path
       @path = path
     end
 
-    def self.create(path: nil)
+    def self.create(root_path: nil, path: nil)
+      UI.deprecated("path is deprecated. Use root_path instead") unless path.nil?
       if Helper.mac?
-        MacInstallation.new(path: path)
+        MacInstallation.new(root_path: root_path, path: path)
       elsif Helper.linux?
-        LinuxInstallation.new(path: path)
+        LinuxInstallation.new(root_path: root_path, path: path)
       else
-        WindowsInstallation.new(path: path)
+        WindowsInstallation.new(root_path: root_path, path: path)
       end
     end
   end
@@ -56,11 +58,13 @@ module U3d
     end
 
     def exe_path
-      "#{path}/Contents/MacOS/Unity"
+      "#{root_path}/Unity.app/Contents/MacOS/Unity"
     end
 
-    def root_path
-      File.expand_path(File.join(@path, '..'))
+    def path
+      UI.deprecated("path is deprecated. Use root_path instead")
+      return @path if @path
+      "#{@root_path}/Unity.app"
     end
 
     def packages
@@ -68,19 +72,24 @@ module U3d
         # Unity < 5 doesn't have packages
         return []
       end
-      fpath = File.expand_path('../PlaybackEngines', path)
+      fpath = File.expand_path('PlaybackEngines', root_path)
       return [] unless Dir.exist? fpath # install without package
       Dir.entries(fpath).select { |e| File.directory?(File.join(fpath, e)) && !(e == '.' || e == '..') }
     end
 
     def clean_install?
-      !(path =~ UNITY_DIR_CHECK).nil?
+      !(root_path =~ UNITY_DIR_CHECK).nil?
     end
 
     private
 
     def plist
-      @plist ||= Plist.parse_xml("#{@path}/Contents/Info.plist")
+      @plist ||=
+        begin
+          fpath = "#{root_path}/Unity.app/Contents/Info.plist"
+          raise "#{fpath} doesn't exist" unless File.exist? fpath
+          Plist.parse_xml(fpath)
+        end
     end
   end
 
@@ -88,7 +97,7 @@ module U3d
     def version
       # I don't find an easy way to extract the version on Linux
       require 'rexml/document'
-      fpath = "#{path}/Editor/Data/PlaybackEngines/LinuxStandaloneSupport/ivy.xml"
+      fpath = "#{root_path}/Editor/Data/PlaybackEngines/LinuxStandaloneSupport/ivy.xml"
       raise "Couldn't find file #{fpath}" unless File.exist? fpath
       doc = REXML::Document.new(File.read(fpath))
       version = REXML::XPath.first(doc, 'ivy-module/info/@e:unityVersion').value
@@ -103,11 +112,12 @@ module U3d
     end
 
     def exe_path
-      "#{path}/Editor/Unity"
+      "#{root_path}/Editor/Unity"
     end
 
-    def root_path
-      @path
+    def path
+      UI.deprecated("path is deprecated. Use root_path instead")
+      @root_path || @path
     end
 
     def packages
@@ -115,7 +125,7 @@ module U3d
     end
 
     def clean_install?
-      !(path =~ UNITY_DIR_CHECK_LINUX).nil?
+      !(root_path =~ UNITY_DIR_CHECK_LINUX).nil?
     end
   end
 
@@ -123,9 +133,9 @@ module U3d
     def version
       require 'rexml/document'
       # For versions >= 5
-      fpath = "#{path}/Editor/Data/PlaybackEngines/windowsstandalonesupport/ivy.xml"
+      fpath = "#{root_path}/Editor/Data/PlaybackEngines/windowsstandalonesupport/ivy.xml"
       # For versions < 5
-      fpath = "#{path}/Editor/Data/PlaybackEngines/wp8support/ivy.xml" unless File.exist? fpath
+      fpath = "#{root_path}/Editor/Data/PlaybackEngines/wp8support/ivy.xml" unless File.exist? fpath
       raise "Couldn't find file #{fpath}" unless File.exist? fpath
       doc = REXML::Document.new(File.read(fpath))
       version = REXML::XPath.first(doc, 'ivy-module/info/@e:unityVersion').value
@@ -148,23 +158,24 @@ module U3d
     end
 
     def exe_path
-      File.join(@path, 'Editor', 'Unity.exe')
+      File.join(@root_path, 'Editor', 'Unity.exe')
     end
 
-    def root_path
-      @path
+    def path
+      UI.deprecated("path is deprecated. Use root_path instead")
+      @root_path || @path
     end
 
     def packages
       # Unity prior to Unity5 did not have package
       return [] if Utils.parse_unity_version(version)[0].to_i <= 4
-      fpath = "#{path}/Editor/Data/PlaybackEngines/"
+      fpath = "#{root_path}/Editor/Data/PlaybackEngines/"
       return [] unless Dir.exist? fpath # install without package
       Dir.entries(fpath).select { |e| File.directory?(File.join(fpath, e)) && !(e == '.' || e == '..') }
     end
 
     def clean_install?
-      !(path =~ UNITY_DIR_CHECK).nil?
+      !(root_path =~ UNITY_DIR_CHECK).nil?
     end
   end
 end
