@@ -25,6 +25,10 @@ Available commands are:
 
 ![u3d install](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_install.png)
 
+* `u3d uninstall`: Uninstall Unity3D versions
+
+![u3d uninstall](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_uninstall.png)
+
 * `u3d list`: List installed versions of Unity3d
 
 ![u3d list](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_list.png)
