@@ -323,7 +323,7 @@ module U3d
       UI.verbose("Uninstalling Unity at '#{unity.root_path}'...")
       uninstall_exe = File.join(unity.root_path, 'Editor', 'Uninstall.exe')
       command = "#{uninstall_exe.argescape} /S"
-      # FIXME: we should consider waiting a few seconds here as the files are not deleted right away?
+      UI.message("Although the uninstall process completed, it takes a few seconds before the files are actually removed")
       U3dCore::CommandExecutor.execute(command: command, admin: true)
     rescue => e
       UI.error "Failed to uninstall unity at #{unity.path}: #{e}"
