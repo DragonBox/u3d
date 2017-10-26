@@ -21,46 +21,68 @@
 ## --- END LICENSE BLOCK ---
 
 require 'u3d/installation'
+require 'support/setups'
 require 'support/installations'
 
 describe U3d do
   describe U3d::Installation do
     describe ".create" do
       context "Mac installation" do
-        it "creates a Mac installation" do
-          allow(U3d::Helper).to receive(:mac?) { true }
-          allow(U3d::Helper).to receive(:linux?) { false }
+        before(:each) do
+          on_mac
+        end
 
+        it "supports deprecated .path" do
           unity = U3d::Installation.create(path: '/Applications/Unity_5.6.0f1/Unity.app')
+          expect(unity.path).to eq('/Applications/Unity_5.6.0f1/Unity.app')
+        end
+
+        it "creates a Mac installation" do
+          unity = U3d::Installation.create(root_path: '/Applications/Unity_5.6.0f1')
 
           expect(unity.class).to eq(U3d::MacInstallation)
           expect(unity.path).to eq('/Applications/Unity_5.6.0f1/Unity.app')
           expect(unity.exe_path).to eq('/Applications/Unity_5.6.0f1/Unity.app/Contents/MacOS/Unity')
           expect(unity.clean_install?).to eq(true)
+          expect(unity.root_path).to eq('/Applications/Unity_5.6.0f1')
         end
       end
 
       context "Linux installation" do
-        it "creates a Linux installation" do
-          allow(U3d::Helper).to receive(:mac?) { false }
-          allow(U3d::Helper).to receive(:linux?) { true }
+        before(:each) do
+          on_linux
+        end
 
+        it "supports deprecated .path" do
           unity = U3d::Installation.create(path: '/opt/unity-editor-5.6.0f1')
+          expect(unity.path).to eq('/opt/unity-editor-5.6.0f1')
+        end
+
+        it "creates a Linux installation" do
+          unity = U3d::Installation.create(root_path: '/opt/unity-editor-5.6.0f1')
 
           expect(unity.class).to eq(U3d::LinuxInstallation)
           expect(unity.path).to eq('/opt/unity-editor-5.6.0f1')
+          expect(unity.root_path).to eq('/opt/unity-editor-5.6.0f1')
         end
       end
 
       context "Windows installation" do
-        it "creates a Windows installation" do
-          allow(U3d::Helper).to receive(:mac?) { false }
-          allow(U3d::Helper).to receive(:linux?) { false }
+        before(:each) do
+          on_windows
+        end
 
+        it "supports deprecated .path" do
           unity = U3d::Installation.create(path: 'C:/Program Files/Unity_2017.1.0f3')
+          expect(unity.path).to eq('C:/Program Files/Unity_2017.1.0f3')
+        end
+
+        it "creates a Windows installation" do
+          unity = U3d::Installation.create(root_path: 'C:/Program Files/Unity_2017.1.0f3')
 
           expect(unity.class).to eq(U3d::WindowsInstallation)
           expect(unity.path).to eq('C:/Program Files/Unity_2017.1.0f3')
+          expect(unity.root_path).to eq('C:/Program Files/Unity_2017.1.0f3')
         end
       end
     end

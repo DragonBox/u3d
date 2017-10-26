@@ -230,6 +230,7 @@ describe U3d do
         context 'when no version is specified' do
           it 'fetches the version of the project in the current folder' do
             in_a_project(version: '1.2.3f4')
+            are_installed([])
             on_fake_os
             with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
             definition = expected_definition('1.2.3f4', :fakeos, 'fakeurl', packages: ['Unity'])
@@ -268,6 +269,7 @@ describe U3d do
         #   request an aliased version -> resolve alias
         it 'resolves alias when passed as a version' do
           on_fake_os
+          are_installed([])
           with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
           definition = expected_definition('1.2.3f4', :fakeos, 'fakeurl', packages: ['Unity'])
 
@@ -317,6 +319,7 @@ describe U3d do
         #   install a non discovered version -> installed
         it 'installs Unity when version is not yet present' do
           on_linux
+          are_installed([])
           with_fake_cache('linux' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
           expect_privileges_check
           expected_definition('1.2.3f4', :linux, 'fakeurl', packages: %w[Unity])
@@ -514,6 +517,7 @@ describe U3d do
           it 'fetches the version of the project in the current folder' do
             in_a_project(version: '1.2.3f4')
             on_fake_os
+            are_installed([])
             with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
             definition = expected_definition('1.2.3f4', :fakeos, nil, packages: %w[Unity])
 
@@ -575,6 +579,7 @@ describe U3d do
         #   install a non discovered version -> installed
         it 'installs Unity when version is not yet present' do
           on_linux
+          are_installed([])
           with_fake_cache('linux' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
           expect_privileges_check
           expected_definition('1.2.3f4', :linux, nil, packages: %w[Unity])

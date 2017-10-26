@@ -53,7 +53,7 @@ module U3d
         sorted_keys = vcomparators.sort.map { |v| v.version.to_s }
         sorted_keys.each do |k|
           u = map[k]
-          UI.message "Version #{u.version.ljust(30)}(#{u.path})"
+          UI.message "Version #{u.version.ljust(30)}(#{u.root_path})"
           packages = u.packages
           next unless options[:packages] && packages && !packages.empty?
           UI.message 'Packages:'
@@ -132,6 +132,20 @@ module U3d
 
         return unless options[:install]
         Installer.install_modules(files, definition.version, installation_path: options[:installation_path])
+      end
+
+      def uninstall(args: [], options: [])
+        version = specified_or_current_project_version(args[0])
+
+        unity = check_unity_presence(version: version)
+
+        unless unity
+          UI.user_error!('Unity version #{version} is not present and cannot be uninstalled')
+        end
+
+        get_administrative_privileges(options)
+
+        Installer.uninstall(unity: unity)
       end
 
       def install_dependencies
@@ -291,7 +305,7 @@ module U3d
         if unity.nil?
           UI.verbose "Version #{version} of Unity is not installed yet"
         else
-          UI.verbose "Unity #{version} is installed at #{unity.path}"
+          UI.verbose "Unity #{version} is installed at #{unity.root_path}"
           return unity
         end
         nil
@@ -308,7 +322,7 @@ module U3d
             packages.delete('Unity')
 
             # FIXME: Move me to the WindowsInstaller
-            options[:installation_path] ||= unity.path if definition.os == :win
+            options[:installation_path] ||= unity.root_path if definition.os == :win
           end
           if unity.packages
             unity.packages.each do |pack|

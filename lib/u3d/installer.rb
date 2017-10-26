@@ -25,6 +25,7 @@ require 'u3d_core/core_ext/string'
 require 'u3d/installation'
 require 'fileutils'
 require 'file-tail'
+require 'pathname'
 
 module U3d
   DEFAULT_LINUX_INSTALL = '/opt/'.freeze
@@ -66,6 +67,11 @@ module U3d
         installer.install(file, version, installation_path: installation_path, info: info)
       end
     end
+
+    def self.uninstall(unity: nil)
+      installer = Installer.create
+      installer.uninstall(unity: unity)
+    end
   end
 
   class CommonInstaller
@@ -89,7 +95,7 @@ module U3d
 
   class MacInstaller
     def sanitize_install(unity, dry_run: false)
-      source_path = File.expand_path('..', unity.path)
+      source_path = unity.root_path
       parent = File.expand_path('..', source_path)
       new_path = File.join(parent, UNITY_DIR % unity.version)
 
@@ -100,7 +106,7 @@ module U3d
 
     def installed
       paths = (list_installed_paths + spotlight_installed_paths).uniq
-      versions = paths.map { |path| MacInstallation.new(path: path) }
+      versions = paths.map { |path| MacInstallation.new(root_path: path) }
 
       # sorting should take into account stable/patch etc
       versions.sort! { |x, y| x.version <=> y.version }
@@ -130,9 +136,9 @@ module U3d
         destination_path = File.join(target_path, 'Applications', UNITY_DIR % version)
         FileUtils.mv temp_path, destination_path
       else
-        UI.verbose "Unity install for version #{version} found under #{unity.path}"
+        UI.verbose "Unity install for version #{version} found under #{unity.root_path}"
         begin
-          path = File.expand_path('..', unity.path)
+          path = unity.root_path
           move_to_temp = (temp_path != path)
           if move_to_temp
             UI.verbose "Temporary switching location of #{path} to #{temp_path} for installation purpose"
@@ -149,11 +155,22 @@ module U3d
       UI.success "Successfully installed package from #{file_path}"
     end
 
+    def uninstall(unity: nil)
+      UI.verbose("Uninstalling Unity at '#{unity.root_path}'...")
+      command = "rm -r #{unity.root_path.argescape}"
+      U3dCore::CommandExecutor.execute(command: command, admin: true)
+    rescue => e
+      UI.error "Failed to uninstall unity at #{unity.path}: #{e}"
+    else
+      UI.success "Successfully uninstalled '#{unity.root_path}'"
+    end
+
     private
 
     def list_installed_paths
       find = File.join(DEFAULT_MAC_INSTALL, 'Applications', 'Unity*', 'Unity.app')
       paths = Dir[find]
+      paths = paths.map { |u| Pathname.new(u).parent.to_s }
       UI.verbose "Found list_installed_paths: #{paths}"
       paths
     end
@@ -171,6 +188,7 @@ module U3d
       cmd = "mdfind \"#{mdfind_args}\" 2>/dev/null"
       UI.verbose cmd
       paths = `#{cmd}`.split("\n")
+      paths = paths.map { |u| Pathname.new(u).parent.to_s }
       UI.verbose "Found spotlight_installed_paths: #{paths}"
       paths
     end
@@ -178,7 +196,7 @@ module U3d
 
   class LinuxInstaller
     def sanitize_install(unity, dry_run: false)
-      source_path = File.expand_path(unity.path)
+      source_path = File.expand_path(unity.root_path)
       parent = File.expand_path('..', source_path)
       new_path = File.join(parent, UNITY_DIR_LINUX % unity.version)
 
@@ -189,7 +207,7 @@ module U3d
 
     def installed
       find = File.join(DEFAULT_LINUX_INSTALL, 'unity-editor-*')
-      versions = Dir[find].map { |path| LinuxInstallation.new(path: path) }
+      versions = Dir[find].map { |path| LinuxInstallation.new(root_path: path) }
 
       # sorting should take into account stable/patch etc
       versions.sort! { |x, y| x.version <=> y.version }
@@ -233,11 +251,21 @@ module U3d
     else
       UI.success 'Installation successful'
     end
+
+    def uninstall(unity: nil)
+      UI.verbose("Uninstalling Unity at '#{unity.root_path}'...")
+      command = "rm -r #{unity.root_path}"
+      U3dCore::CommandExecutor.execute(command: command, admin: true)
+    rescue => e
+      UI.error "Failed to uninstall unity at #{unity.path}: #{e}"
+    else
+      UI.success "Successfully uninstalled '#{unity.root_path}'"
+    end
   end
 
   class WindowsInstaller
     def sanitize_install(unity, dry_run: false)
-      source_path = File.expand_path(unity.path)
+      source_path = File.expand_path(unity.root_path)
       parent = File.expand_path('..', source_path)
       new_path = File.join(parent, UNITY_DIR % unity.version)
 
@@ -251,7 +279,7 @@ module U3d
 
     def installed
       find = File.join(DEFAULT_WINDOWS_INSTALL, 'Unity*', 'Editor', 'Uninstall.exe')
-      versions = Dir[find].map { |path| WindowsInstallation.new(path: File.expand_path('../..', path)) }
+      versions = Dir[find].map { |path| WindowsInstallation.new(root_path: File.expand_path('../..', path)) }
 
       # sorting should take into account stable/patch etc
       versions.sort! { |x, y| x.version <=> y.version }
@@ -289,6 +317,18 @@ module U3d
       else
         UI.success "Successfully installed #{info['title']}"
       end
+    end
+
+    def uninstall(unity: nil)
+      UI.verbose("Uninstalling Unity at '#{unity.root_path}'...")
+      uninstall_exe = File.join(unity.root_path, 'Editor', 'Uninstall.exe')
+      command = "#{uninstall_exe.argescape} /S"
+      UI.message("Although the uninstall process completed, it takes a few seconds before the files are actually removed")
+      U3dCore::CommandExecutor.execute(command: command, admin: true)
+    rescue => e
+      UI.error "Failed to uninstall unity at #{unity.path}: #{e}"
+    else
+      UI.success "Successfully uninstalled '#{unity.root_path}'"
     end
   end
 
