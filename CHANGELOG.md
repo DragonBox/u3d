@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.0.9](https://github.com/DragonBox/u3d/tree/v1.0.9) (2017-10-31)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.8...v1.0.9)
+
+**Implemented enhancements:**
+
+- Implement uninstall [\#174](https://github.com/DragonBox/u3d/issues/174)
+- u3d/install: find all patched versions [\#172](https://github.com/DragonBox/u3d/issues/172)
+
+**Merged pull requests:**
+
+- u3d/available: discover all patched releases \(fixes \#172\) [\#173](https://github.com/DragonBox/u3d/pull/173) ([lacostej](https://github.com/lacostej))
+- Implement uninstall. Also modify the output of list on Mac and deprecate Installation.path in favor of Installation.root\_path [\#171](https://github.com/DragonBox/u3d/pull/171) ([lacostej](https://github.com/lacostej))
+- u3d/cleanups small refactorings and cleanups [\#170](https://github.com/DragonBox/u3d/pull/170) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.8](https://github.com/DragonBox/u3d/tree/v1.0.8) (2017-10-18)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.7...v1.0.8)
 
