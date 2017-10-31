@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    u3d (1.0.9)
+    u3d (1.0.10)
       colored (>= 1.2, < 2.0.0)
       commander (>= 4.4.0, < 5.0.0)
       file-tail (>= 1.2.0)
