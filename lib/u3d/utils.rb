@@ -59,6 +59,7 @@ module U3d
         end
       end
 
+      # size a hint of the expected size
       def download_file(path, url, size: nil)
         File.open(path, 'wb') do |f|
           uri = URI(url)
@@ -69,7 +70,9 @@ module U3d
             request = Net::HTTP::Get.new uri
             http.request request do |response|
               begin
-                size ||= Integer(response['Content-Length'])
+                # override with actual results, this should help with
+                # innacurrate declared sizes, especially on Windows platform
+                size = Integer(response['Content-Length'])
               rescue ArgumentError
                 UI.verbose 'Unable to get length of file in download'
               end
