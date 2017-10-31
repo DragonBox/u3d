@@ -78,6 +78,12 @@ module U3d
         return hash
       end
 
+      def fetch_version_paged(url, pattern)
+        U3d::Utils.get_ssl(url).scan(/\?page=\d+/).map do |page|
+          fetch_version("#{url}#{page}", pattern)
+        end.reduce({}, :merge)
+      end
+
       def fetch_betas(url, pattern)
         hash = {}
         data = Utils.get_ssl(url)
@@ -221,7 +227,7 @@ module U3d
           UI.success "Found #{current.count} releases." if current.count.nonzero?
           versions = versions.merge(current)
           UI.message 'Loading Unity patch releases'
-          current = UnityVersions.fetch_version(UNITY_PATCHES, MAC_DOWNLOAD)
+          current = UnityVersions.fetch_version_paged(UNITY_PATCHES, MAC_DOWNLOAD)
           UI.success "Found #{current.count} patch releases." if current.count.nonzero?
           versions = versions.merge(current)
           UI.message 'Loading Unity beta releases'
@@ -242,7 +248,7 @@ module U3d
           UI.success "Found #{current.count} releases." if current.count.nonzero?
           versions = versions.merge(current)
           UI.message 'Loading Unity patch releases'
-          current = UnityVersions.fetch_version(UNITY_PATCHES, WIN_DOWNLOAD)
+          current = UnityVersions.fetch_version_paged(UNITY_PATCHES, WIN_DOWNLOAD)
           UI.success "Found #{current.count} patch releases." if current.count.nonzero?
           versions = versions.merge(current)
           UI.message 'Loading Unity beta releases'
