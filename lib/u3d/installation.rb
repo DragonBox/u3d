@@ -90,8 +90,6 @@ module U3d
     end
 
     def packages
-      # Unity prior to Unity5 did not have package
-      return [] if Utils.parse_unity_version(version)[0].to_i <= 4
       PlaybackEngineUtils.list_module_configs(root_path).map do |mpath|
         PlaybackEngineUtils.module_name(mpath)
       end
@@ -180,8 +178,6 @@ module U3d
     end
 
     def packages
-      # Unity prior to Unity5 did not have package
-      return [] if Utils.parse_unity_version(version)[0].to_i <= 4
       path = "#{root_path}/Editor/Data/"
       PlaybackEngineUtils.list_module_configs(path).map do |mpath|
         PlaybackEngineUtils.module_name(mpath)
