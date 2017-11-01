@@ -46,6 +46,28 @@ module U3d
     end
   end
 
+  class PlaybackEngineUtils
+    def self.list_module_configs(playbackengine_parent_path)
+      Dir.glob("#{playbackengine_parent_path}/PlaybackEngines/*/ivy.xml")
+    end
+
+    def self.node_value(config_path, node_name)
+      require 'rexml/document'
+      UI.verbose("reading #{config_path}")
+      raise "File not found at #{config_path}" unless File.exist? config_path
+      doc = REXML::Document.new(File.read(config_path))
+      REXML::XPath.first(doc, node_name).value
+    end
+
+    def self.module_name(config_path)
+      node_value(config_path, 'ivy-module/info/@module')
+    end
+
+    def self.unity_version(config_path)
+      node_value(config_path, 'ivy-module/info/@e:unityVersion')
+    end
+  end
+
   class MacInstallation < Installation
     require 'plist'
 
@@ -68,13 +90,11 @@ module U3d
     end
 
     def packages
-      if Utils.parse_unity_version(version)[0].to_i <= 4
-        # Unity < 5 doesn't have packages
-        return []
+      # Unity prior to Unity5 did not have package
+      return [] if Utils.parse_unity_version(version)[0].to_i <= 4
+      PlaybackEngineUtils.list_module_configs(root_path).map do |mpath|
+        PlaybackEngineUtils.module_name(mpath)
       end
-      fpath = File.expand_path('PlaybackEngines', root_path)
-      return [] unless Dir.exist? fpath # install without package
-      Dir.entries(fpath).select { |e| File.directory?(File.join(fpath, e)) && !(e == '.' || e == '..') }
     end
 
     def clean_install?
@@ -96,11 +116,10 @@ module U3d
   class LinuxInstallation < Installation
     def version
       # I don't find an easy way to extract the version on Linux
-      require 'rexml/document'
-      fpath = "#{root_path}/Editor/Data/PlaybackEngines/LinuxStandaloneSupport/ivy.xml"
-      raise "Couldn't find file #{fpath}" unless File.exist? fpath
-      doc = REXML::Document.new(File.read(fpath))
-      version = REXML::XPath.first(doc, 'ivy-module/info/@e:unityVersion').value
+      path = "#{root_path}/Editor/Data/"
+      package = PlaybackEngineUtils.list_module_configs(path).first
+      raise "Couldn't find a module under #{path}" unless package
+      version = PlaybackEngineUtils.unity_version(package)
       if (m = version.match(/^(.*)x(.*)Linux$/))
         version = "#{m[1]}#{m[2]}"
       end
@@ -131,16 +150,10 @@ module U3d
 
   class WindowsInstallation < Installation
     def version
-      require 'rexml/document'
-      # For versions >= 5
-      fpath = "#{root_path}/Editor/Data/PlaybackEngines/windowsstandalonesupport/ivy.xml"
-      # For versions < 5
-      fpath = "#{root_path}/Editor/Data/PlaybackEngines/wp8support/ivy.xml" unless File.exist? fpath
-      raise "Couldn't find file #{fpath}" unless File.exist? fpath
-      doc = REXML::Document.new(File.read(fpath))
-      version = REXML::XPath.first(doc, 'ivy-module/info/@e:unityVersion').value
-
-      version
+      path = "#{root_path}/Editor/Data/"
+      package = PlaybackEngineUtils.list_module_configs(path).first
+      raise "Couldn't find a module under #{path}" unless package
+      PlaybackEngineUtils.unity_version(package)
     end
 
     def default_log_file
@@ -169,9 +182,10 @@ module U3d
     def packages
       # Unity prior to Unity5 did not have package
       return [] if Utils.parse_unity_version(version)[0].to_i <= 4
-      fpath = "#{root_path}/Editor/Data/PlaybackEngines/"
-      return [] unless Dir.exist? fpath # install without package
-      Dir.entries(fpath).select { |e| File.directory?(File.join(fpath, e)) && !(e == '.' || e == '..') }
+      path = "#{root_path}/Editor/Data/"
+      PlaybackEngineUtils.list_module_configs(path).map do |mpath|
+        PlaybackEngineUtils.module_name(mpath)
+      end
     end
 
     def clean_install?
