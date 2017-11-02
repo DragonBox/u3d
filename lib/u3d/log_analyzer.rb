@@ -78,7 +78,7 @@ module U3d
       @phases.each do |name, phase|
         next if name == @active_phase
         next unless line =~ phase['phase_start_pattern']
-        finish_phase
+        finish_phase if @active_phase
         @active_phase = name
         UI.verbose("--- Beginning #{name} phase ---")
         break

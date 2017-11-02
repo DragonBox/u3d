@@ -61,7 +61,7 @@
         "fetched_line_pattern": "(?<message>.*)\\n",
         "fetched_line_message": false,
         "start_message": false,
-        "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_pattern": "Filename: (?:.+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
         "end_message": "[LOG] %{file}(line %{line}): %{message}"
       },
       "log_assertion": {
