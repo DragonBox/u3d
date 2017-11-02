@@ -59,6 +59,7 @@ module U3d
         end
       end
 
+      # size a hint of the expected size
       def download_file(path, url, size: nil)
         File.open(path, 'wb') do |f|
           uri = URI(url)
@@ -69,7 +70,9 @@ module U3d
             request = Net::HTTP::Get.new uri
             http.request request do |response|
               begin
-                size ||= Integer(response['Content-Length'])
+                # override with actual results, this should help with
+                # innacurrate declared sizes, especially on Windows platform
+                size = Integer(response['Content-Length'])
               rescue ArgumentError
                 UI.verbose 'Unable to get length of file in download'
               end
@@ -81,13 +84,12 @@ module U3d
                 # FIXME revisits, this slows down download on fast network
                 # sleep 0.08 # adjust to reduce CPU
                 next unless print_progress
-                next unless Time.now.to_f - last_print_update > 0.5
+                print_progress_now = Time.now.to_f - last_print_update > 0.5
+                # force printing when done downloading
+                print_progress_now = true if !print_progress_now && size && current >= size
+                next unless print_progress_now
                 last_print_update = Time.now.to_f
-                if size
-                  Utils.print_progress(current, size, started_at)
-                else
-                  Utils.print_progress_nosize(current, started_at)
-                end
+                Utils.print_progress(current, size, started_at)
                 print "\n" unless UI.interactive?
               end
             end
@@ -122,7 +124,12 @@ module U3d
         FileUtils.mkpath(dir) unless File.directory?(dir)
       end
 
+      # if total is nil (unknown, falls back to print_progress_nosize)
       def print_progress(current, total, started_at)
+        if total.nil?
+          print_progress_nosize(current, started_at)
+          return
+        end
         ratio = [current.to_f / total, 1.0].min
         percent = (ratio * 100.0).round(1)
         arrow = (ratio * 20.0).floor
