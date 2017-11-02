@@ -84,7 +84,12 @@ module U3d
                 # FIXME revisits, this slows down download on fast network
                 # sleep 0.08 # adjust to reduce CPU
                 next unless print_progress
-                next unless Time.now.to_f - last_print_update > 0.5
+                should_print_progress = Time.now.to_f - last_print_update > 0.5
+                # force printing when done downloading
+                if !should_print_progress && size && current >= size
+                  should_print_progress = true
+                end
+                next unless should_print_progress
                 last_print_update = Time.now.to_f
                 if size
                   Utils.print_progress(current, size, started_at)
