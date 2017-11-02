@@ -86,16 +86,10 @@ module U3d
                 next unless print_progress
                 should_print_progress = Time.now.to_f - last_print_update > 0.5
                 # force printing when done downloading
-                if !should_print_progress && size && current >= size
-                  should_print_progress = true
-                end
+                should_print_progress = true if !should_print_progress && size && current >= size
                 next unless should_print_progress
                 last_print_update = Time.now.to_f
-                if size
-                  Utils.print_progress(current, size, started_at)
-                else
-                  Utils.print_progress_nosize(current, started_at)
-                end
+                Utils.print_progress(current, size, started_at)
                 print "\n" unless UI.interactive?
               end
             end
@@ -130,7 +124,12 @@ module U3d
         FileUtils.mkpath(dir) unless File.directory?(dir)
       end
 
+      # if total is nil (unknown, falls back to print_progress_nosize)
       def print_progress(current, total, started_at)
+        if total.nil?
+          print_progress_nosize(current, started_at)
+          return
+        end
         ratio = [current.to_f / total, 1.0].min
         percent = (ratio * 100.0).round(1)
         arrow = (ratio * 20.0).floor
