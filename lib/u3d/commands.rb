@@ -290,8 +290,8 @@ module U3d
 
       def packages_with_unity_first(os, options)
         if os == :linux
-          UI.important 'Option -a | --all not available for Linux' if options[:all]
-          UI.important 'Option -p | --packages not available for Linux' if options[:packages]
+          UI.important 'Option -a | --all currently meaningless for Linux (only one package available)' if options[:all]
+          UI.important 'Option -p | --packages currently meaningless for Linux (only one package available)' if options[:packages]
         end
         temp = options[:packages] || ['Unity']
         temp.insert(0, 'Unity') if temp.delete('Unity')
