@@ -1,5 +1,26 @@
 # Change Log
 
+## [v1.0.10](https://github.com/DragonBox/u3d/tree/v1.0.10) (2017-11-03)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.9...v1.0.10)
+
+**Fixed bugs:**
+
+- u3d/download progress bar on Windows not going to 100% [\#164](https://github.com/DragonBox/u3d/issues/164)
+
+**Closed issues:**
+
+- u3d/install: confusing "-p not available on linux" message [\#181](https://github.com/DragonBox/u3d/issues/181)
+- Linux CLI Activation in Unity \>= 5.4 [\#176](https://github.com/DragonBox/u3d/issues/176)
+- u3d/install: already installed packages are reinstalled [\#161](https://github.com/DragonBox/u3d/issues/161)
+
+**Merged pull requests:**
+
+- u3d/download/install: --all option was broken. Added tests [\#184](https://github.com/DragonBox/u3d/pull/184) ([lacostej](https://github.com/lacostej))
+- u3d install: Improve Linux warnings for package options \(fixes \#181\) [\#183](https://github.com/DragonBox/u3d/pull/183) ([lacostej](https://github.com/lacostej))
+- Fix log termination [\#180](https://github.com/DragonBox/u3d/pull/180) ([niezbop](https://github.com/niezbop))
+- u3d/list find package names under PlaybackEngines ivy.xml [\#178](https://github.com/DragonBox/u3d/pull/178) ([lacostej](https://github.com/lacostej))
+- u3d/downloader: print progress improvements \(fix \#164\) [\#177](https://github.com/DragonBox/u3d/pull/177) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.9](https://github.com/DragonBox/u3d/tree/v1.0.9) (2017-10-31)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.8...v1.0.9)
 
