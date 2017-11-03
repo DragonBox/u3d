@@ -312,7 +312,10 @@ module U3d
       end
 
       def enforce_setup_coherence(packages, options, unity, definition)
-        packages = definition.available_packages if options[:all]
+        if options[:all]
+          packages.clear
+          packages.concat(definition.available_packages)
+        end
         if unity
           UI.important "Unity #{unity.version} is already installed"
           # Not needed since Linux custom u3d files contain only one entry wich is Unity

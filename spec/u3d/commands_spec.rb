@@ -445,8 +445,33 @@ describe U3d do
             )
           end
 
-          #   TODO: Reimplement --all option
-          xit 'installs all available packages when --all option is used' do
+          it 'installs all available packages when --all option is used' do
+            on_fake_os_not_linux
+            with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
+            nothing_installed
+            expect_privileges_check
+            definition = expected_definition('1.2.3f4', :fakeos, 'fakeurl', packages: %w[Unity WebGL Android])
+
+            files = double('files')
+            expect(U3d::Downloader).to receive(:download_modules).with(
+              definition,
+              packages: ['Unity', 'WebGL', 'Android']
+            ) { files }
+            expect(U3d::Installer).to receive(:install_modules).with(
+              files,
+              '1.2.3f4',
+              installation_path: 'foo'
+            ) {}
+
+            U3d::Commands.install(
+              args: ['1.2.3f4'],
+              options: {
+                install: true,
+                download: true,
+                all: true,
+                installation_path: 'foo'
+              }
+            )
           end
         end
 
@@ -704,8 +729,33 @@ describe U3d do
             )
           end
 
-          #   TODO: Reimplement --all option
-          xit 'installs all available packages when --all option is used' do
+          it 'installs all available packages when --all option is used' do
+            on_fake_os_not_linux
+            with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
+            nothing_installed
+            expect_privileges_check
+            definition = expected_definition('1.2.3f4', :fakeos, 'fakeurl', packages: %w[Unity WebGL Android])
+
+            files = double('files')
+            expect(U3d::Downloader).to receive(:local_files).with(
+              definition,
+              packages: ['Unity', 'WebGL', 'Android']
+            ) { files }
+            expect(U3d::Installer).to receive(:install_modules).with(
+              files,
+              '1.2.3f4',
+              installation_path: 'foo'
+            ) {}
+
+            U3d::Commands.install(
+              args: ['1.2.3f4'],
+              options: {
+                install: true,
+                download: false,
+                all: true,
+                installation_path: 'foo'
+              }
+            )
           end
         end
 
