@@ -33,6 +33,7 @@ describe U3d do
       end
 
       before(:each) do
+        allow(File).to receive(:exist?) { true }
         allow(File).to receive(:read) { 'bar' }
         allow(YAML).to receive(:safe_load) { @config }
       end
