@@ -169,7 +169,7 @@ module U3d
         unless version # fall back in project default if we are on a Unity project
           version = up.editor_version if up.exist?
           unless version
-            UI.user_error!('Not sure which version of Unity to run. Are you in a project?')
+            UI.user_error!('Not sure which version of Unity to run. Are you in a Unity5 or later project?')
           end
         end
 
