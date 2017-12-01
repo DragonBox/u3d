@@ -151,6 +151,22 @@ describe U3d do
           installer.install(filepath, '1.2.3f4', installation_path: nil)
         end
       end
+
+      describe '.list' do
+        it 'finds both entries we install and those previously installed using the deb package and doesn\'t sort them' do
+          u1 = linux_5_6_standard
+          u2 = linux_5_6_debian
+          u3 = linux_2017_1_weird
+          allow(Dir).to receive(:[]).with('/opt/unity-editor-*/Editor') { ["#{u1.root_path}/Editor", "#{u3.root_path}/Editor"] }
+          allow(Dir).to receive(:[]).with('/opt/Unity/Editor') { ["#{u2.root_path}/Editor"] }
+
+          allow(U3d::LinuxInstallation).to receive(:new).with(root_path: u1.root_path) { u1 }
+          allow(U3d::LinuxInstallation).to receive(:new).with(root_path: u2.root_path) { u2 }
+          allow(U3d::LinuxInstallation).to receive(:new).with(root_path: u3.root_path) { u3 }
+
+          expect(U3d::LinuxInstaller.new.installed).to eql [u1, u3, u2]
+        end
+      end
     end
 
     xdescribe U3d::WindowsInstaller do

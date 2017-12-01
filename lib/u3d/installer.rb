@@ -106,10 +106,7 @@ module U3d
 
     def installed
       paths = (list_installed_paths + spotlight_installed_paths).uniq
-      versions = paths.map { |path| MacInstallation.new(root_path: path) }
-
-      # sorting should take into account stable/patch etc
-      versions.sort! { |x, y| x.version <=> y.version }
+      paths.map { |path| MacInstallation.new(root_path: path) }
     end
 
     # rubocop:disable UnusedMethodArgument
@@ -206,11 +203,8 @@ module U3d
     end
 
     def installed
-      find = File.join(DEFAULT_LINUX_INSTALL, 'unity-editor-*')
-      versions = Dir[find].map { |path| LinuxInstallation.new(root_path: path) }
-
-      # sorting should take into account stable/patch etc
-      versions.sort! { |x, y| x.version <=> y.version }
+      paths = (list_installed_paths + debian_installed_paths).uniq
+      paths.map { |path| LinuxInstallation.new(root_path: path) }
     end
 
     # rubocop:disable UnusedMethodArgument
@@ -261,6 +255,24 @@ module U3d
     else
       UI.success "Successfully uninstalled '#{unity.root_path}'"
     end
+
+    private
+
+    def list_installed_paths
+      find = File.join(DEFAULT_LINUX_INSTALL, 'unity-editor-*', 'Editor')
+      paths = Dir[find]
+      paths = paths.map { |u| Pathname.new(u).parent.to_s }
+      UI.verbose "Found list_installed_paths: #{paths}"
+      paths
+    end
+
+    def debian_installed_paths
+      find = File.join(DEFAULT_LINUX_INSTALL, 'Unity', 'Editor')
+      paths = Dir[find]
+      paths = paths.map { |u| Pathname.new(u).parent.to_s }
+      UI.verbose "Found debian_installed_paths: #{paths}"
+      paths
+    end
   end
 
   class WindowsInstaller
@@ -279,10 +291,7 @@ module U3d
 
     def installed
       find = File.join(DEFAULT_WINDOWS_INSTALL, 'Unity*', 'Editor', 'Uninstall.exe')
-      versions = Dir[find].map { |path| WindowsInstallation.new(root_path: File.expand_path('../..', path)) }
-
-      # sorting should take into account stable/patch etc
-      versions.sort! { |x, y| x.version <=> y.version }
+      Dir[find].map { |path| WindowsInstallation.new(root_path: File.expand_path('../..', path)) }
     end
 
     def install(file_path, version, installation_path: nil, info: {})
