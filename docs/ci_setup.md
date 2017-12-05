@@ -48,7 +48,7 @@ Set up an install job:
 
 
 * add an "execute Shell" step
-```
+```bash
 # config. We could make this an option to the job. Or be project specific.
 U3D_INSTALL_ARGS=-p Unity,Android,iOS,Linux,Windows,WebGL
 
