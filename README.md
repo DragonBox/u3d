@@ -154,6 +154,9 @@ Here you have multiple options
 
 * if on Mac, use the keychain option (you set it before hand on the machine, e.g. from the command line using `u3d credentials` add (use `u3d credentials check` to verify) and then use `u3d install -k` to activate the keychain while installing.
 
+
+For more information see also [how to use u3d to install Unity on a CI server](docs/ci_setup.md).
+
 ### Install ruby
 
  * __On MacOS and Linux:__
