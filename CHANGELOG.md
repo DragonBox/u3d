@@ -1,5 +1,17 @@
 # Change Log
 
+## [v1.0.11](https://github.com/DragonBox/u3d/tree/v1.0.11) (2017-12-07)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.10...v1.0.11)
+
+**Implemented enhancements:**
+
+- u3d/list: also detect previously installed deb packages on Linux \(fixes \#189\) [\#190](https://github.com/DragonBox/u3d/pull/190) ([lacostej](https://github.com/lacostej))
+
+**Merged pull requests:**
+
+- doc: explain CI setup with jenkins [\#191](https://github.com/DragonBox/u3d/pull/191) ([lacostej](https://github.com/lacostej))
+- u3d/run: fail with a proper message when opening a Unity4 project [\#187](https://github.com/DragonBox/u3d/pull/187) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.10](https://github.com/DragonBox/u3d/tree/v1.0.10) (2017-11-03)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.9...v1.0.10)
 
