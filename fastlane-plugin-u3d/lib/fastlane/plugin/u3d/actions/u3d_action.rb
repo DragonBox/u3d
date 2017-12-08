@@ -57,7 +57,7 @@ module Fastlane
                                   env_name: "U3D_VERSION",
                                description: "Unity version",
                                   optional: true,
-                                      type: Array),
+                                      type: String),
           FastlaneCore::ConfigItem.new(key: :raw_logs,
           #                       env_name: "U3D_YOUR_OPTION",
                                description: "Disable u3d log parsing",
