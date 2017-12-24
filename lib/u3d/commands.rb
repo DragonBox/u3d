@@ -328,8 +328,10 @@ module U3d
             options[:installation_path] ||= unity.root_path if definition.os == :win
           end
           if unity.packages
-            unity.packages.each do |pack|
-              UI.important "Ignoring #{pack} module, it is already installed" if packages.delete(pack)
+            packages.each do |pack|
+              if unity.packages.include?(pack) || unity.packages.any? { |installed| package_aliases[pack].include?(installed) }
+                UI.important "Ignoring #{pack} module, it is already installed" if packages.delete(pack)
+              end
             end
           end
           return false if packages.empty?
@@ -340,6 +342,23 @@ module U3d
           end
         end
         true
+    end
+
+      def package_aliases
+        {
+          'Android' => [],
+          'iOS' => ['iPhone'],
+          'AppleTV' => [],
+          'Linux' => ['StandaloneLinux'],
+          'Mac' => %w[StandaloneOSXIntel StandaloneOSXIntel64 StandaloneOSX],
+          'Windows' => ['StandaloneWindows'],
+          'Metro' => [],
+          'UWP-IL2CPP' => [],
+          'Samsung-TV' => [],
+          'Tizen' => [],
+          'WebGL' => [],
+          'Facebook-Games' => []
+        }
       end
 
       def get_administrative_privileges(options)
