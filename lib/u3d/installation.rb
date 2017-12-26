@@ -184,13 +184,13 @@ module U3d
         pack << PlaybackEngineUtils.module_name(mpath)
       end
       pack << 'Documentation' if specific_dir?("#{root_path}/Editor/Data/Documentation/", check_empty: true)
-	  pack << 'StandardAssets' if specific_dir?("#{root_path}/Editor/Standard Assets/", check_empty: true)
-	  pack << 'MonoDevelop' if specific_dir?("#{root_path}/MonoDevelop/")
+      pack << 'StandardAssets' if specific_dir?("#{root_path}/Editor/Standard Assets/", check_empty: true)
+      pack << 'MonoDevelop' if specific_dir?("#{root_path}/MonoDevelop/")
       pack
     end
 
-	def specific_dir?(directory, check_empty: false)
-	  File.directory?(directory) && (check_empty || !Dir[File.join(directory, '*')].empty?)
+    def specific_dir?(directory, check_empty: false)
+      File.directory?(directory) && (check_empty || !Dir[File.join(directory, '*')].empty?)
     end
 
     def clean_install?
