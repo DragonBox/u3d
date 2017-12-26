@@ -348,7 +348,7 @@ module U3d
         {
           'Android' => [],
           'iOS' => ['iPhone'],
-          'AppleTV' => [],
+          'AppleTV' => ['tvOS'],
           'Linux' => ['StandaloneLinux'],
           'Mac' => %w[StandaloneOSXIntel StandaloneOSXIntel64 StandaloneOSX],
           'Windows' => ['StandaloneWindows'],
@@ -357,7 +357,8 @@ module U3d
           'Samsung-TV' => [],
           'Tizen' => [],
           'WebGL' => [],
-          'Facebook-Games' => []
+          'Facebook-Games' => ['Facebook'],
+          'Vuforia-AR' => ['UnityExtensions']
         }
       end
 
