@@ -327,7 +327,7 @@ module U3d
             # FIXME: Move me to the WindowsInstaller
             options[:installation_path] ||= unity.root_path if definition.os == :win
           end
-          skippable_packages(unity, packages).each do |pack|
+          packages.select { |pack| unity.package_installed?(pack) }.each do |pack|
             packages.delete pack
             UI.important "Ignoring #{pack} module, it is already installed"
           end
@@ -339,45 +339,6 @@ module U3d
           end
         end
         true
-      end
-
-      def skippable_packages(unity, packages)
-        return [] if unity.packages.nil?
-        result = []
-
-        installed_packages = unity.packages
-        packages.each do |pack|
-          result << pack if package_installed?(pack, installed_packages)
-        end
-
-        result
-      end
-
-      def package_installed?(package, installed_packages)
-        return true if installed_packages.include?(package)
-
-        aliases = package_aliases[package]
-        return false if package_aliases[package].nil?
-
-        return !(aliases & installed_packages).empty?
-      end
-
-      def package_aliases
-        {
-          'Android' => [],
-          'iOS' => ['iPhone'],
-          'AppleTV' => ['tvOS'],
-          'Linux' => ['StandaloneLinux'],
-          'Mac' => %w[StandaloneOSXIntel StandaloneOSXIntel64 StandaloneOSX],
-          'Windows' => ['StandaloneWindows'],
-          'Metro' => [],
-          'UWP-IL2CPP' => [],
-          'Samsung-TV' => [],
-          'Tizen' => [],
-          'WebGL' => [],
-          'Facebook-Games' => ['Facebook'],
-          'Vuforia-AR' => ['UnityExtensions']
-        }
       end
 
       def get_administrative_privileges(options)

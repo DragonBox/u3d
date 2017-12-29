@@ -44,6 +44,39 @@ module U3d
         WindowsInstallation.new(root_path: root_path, path: path)
       end
     end
+
+    def self.package_aliases
+      {
+        'Android' => [],
+        'iOS' => ['iPhone'],
+        'AppleTV' => ['tvOS'],
+        'Linux' => ['StandaloneLinux'],
+        'Mac' => %w[StandaloneOSXIntel StandaloneOSXIntel64 StandaloneOSX],
+        'Windows' => ['StandaloneWindows'],
+        'Metro' => [],
+        'UWP-IL2CPP' => [],
+        'Samsung-TV' => [],
+        'Tizen' => [],
+        'WebGL' => [],
+        'Facebook-Games' => ['Facebook'],
+        'Vuforia-AR' => ['UnityExtensions']
+      }
+    end
+
+    def packages
+      false
+    end
+
+    def package_installed?(package)
+      return false unless packages
+
+      return true if packages.include?(package)
+
+      aliases = Installation.package_aliases[package]
+      return false if aliases[package].nil?
+
+      return !(aliases & packages).empty?
+    end
   end
 
   class PlaybackEngineUtils
@@ -153,10 +186,6 @@ module U3d
     def path
       UI.deprecated("path is deprecated. Use root_path instead")
       @root_path || @path
-    end
-
-    def packages
-      false
     end
 
     def clean_install?
