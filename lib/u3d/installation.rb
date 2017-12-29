@@ -142,7 +142,7 @@ module U3d
       when 'MonoDevelop'
         return "#{root_path}/MonoDevelop.app/"
       else
-        return ''
+        UI.user_error! "No pattern is known for #{module_name} on Mac"
       end
     end
 
@@ -245,7 +245,7 @@ module U3d
       when 'MonoDevelop'
         return "#{root_path}/MonoDevelop/"
       else
-        return ''
+        UI.user_error! "No pattern is known for #{module_name} on Windows"
       end
     end
 
