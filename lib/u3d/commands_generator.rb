@@ -140,6 +140,8 @@ This command allows you to either:
         c.option '-k', '--keychain', 'Gain privileges right through the keychain. [OSX only]'
         c.example 'Download and install Unity, its Documentation and the Android build support and install them for version 5.1.2f1', 'u3d install 5.1.2f1 -p Unity,Documentation,Android'
         c.example "The 'version' argument can be a specific version number, such as 5.6.1f1, or an alias in [#{Commands.release_letter_mapping.keys.join(', ')}]. If not specified, u3d will download the unity version for the current project", 'u3d install latest'
+        c.example "The admin password can be passed through the U3D_PASSWORD environment variable.", 'U3D_PASSWORD=mysecret u3d install a_version'
+        c.example "On Mac, the admin password can be fetched from (and stored into) the keychain.", 'u3d install -k a_version'
         c.action do |args, options|
           options.default all: false
           options.default install: true
