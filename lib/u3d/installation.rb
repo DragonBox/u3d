@@ -94,7 +94,7 @@ module U3d
       PlaybackEngineUtils.list_module_configs(root_path).each do |mpath|
         pack << PlaybackEngineUtils.module_name(mpath)
       end
-      ['Documentation', 'StandardAssets', 'MonoDevelop'].each do |module_name|
+      %w[Documentation StandardAssets MonoDevelop].each do |module_name|
         pack << module_name unless Dir[module_name_pattern(module_name)].empty?
       end
       pack
@@ -201,12 +201,12 @@ module U3d
       PlaybackEngineUtils.list_module_configs(path).each do |mpath|
         pack << PlaybackEngineUtils.module_name(mpath)
       end
-      ['Documentation', 'StandardAssets', 'MonoDevelop'].each do |module_name|
+      %w[Documentation StandardAssets MonoDevelop].each do |module_name|
         pack << module_name unless Dir[module_name_pattern(module_name)].empty?
       end
       pack
     end
-    
+
     def module_name_pattern(module_name)
       case module_name
       when 'Documentation'

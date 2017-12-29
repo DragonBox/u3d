@@ -340,19 +340,19 @@ module U3d
         end
         true
       end
-      
+
       def skippable_packages(unity, packages)
         return [] if unity.packages.nil?
         result = []
 
-        installed_packages = unity.packages        
+        installed_packages = unity.packages
         packages.each do |pack|
           result << pack if package_installed?(pack, installed_packages)
         end
-        
+
         result
       end
-      
+
       def package_installed?(package, installed_packages)
         return true if installed_packages.include?(package)
 
