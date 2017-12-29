@@ -90,8 +90,26 @@ module U3d
     end
 
     def packages
-      PlaybackEngineUtils.list_module_configs(root_path).map do |mpath|
-        PlaybackEngineUtils.module_name(mpath)
+      pack = []
+      PlaybackEngineUtils.list_module_configs(root_path).each do |mpath|
+        pack << PlaybackEngineUtils.module_name(mpath)
+      end
+      ['Documentation', 'StandardAssets', 'MonoDevelop'].each do |module_name|
+        pack << module_name unless Dir[module_name_pattern(module_name)].empty?
+      end
+      pack
+    end
+
+    def module_name_pattern(module_name)
+      case module_name
+      when 'Documentation'
+        return "#{root_path}/Documentation/"
+      when 'StandardAssets'
+        return "#{root_path}/Standard Assets/"
+      when 'MonoDevelop'
+        return "#{root_path}/MonoDevelop.app/"
+      else
+        return ''
       end
     end
 
