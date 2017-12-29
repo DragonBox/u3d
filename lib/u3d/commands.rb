@@ -327,13 +327,9 @@ module U3d
             # FIXME: Move me to the WindowsInstaller
             options[:installation_path] ||= unity.root_path if definition.os == :win
           end
-          if unity.packages
-            installed_packages = unity.packages
-            packages.each do |pack|
-              if installed_packages.include?(pack) || installed_packages.any? { |installed| !package_aliases[pack].nil? && package_aliases[pack].include?(installed) }
-                UI.important "Ignoring #{pack} module, it is already installed" if packages.delete(pack)
-              end
-            end
+          skippable_packages(unity, packages).each do |pack|
+            packages.delete pack
+            UI.important "Ignoring #{pack} module, it is already installed"
           end
           return false if packages.empty?
         else
@@ -343,6 +339,27 @@ module U3d
           end
         end
         true
+      end
+      
+      def skippable_packages(unity, packages)
+        return [] if unity.packages.nil?
+        result = []
+
+        installed_packages = unity.packages        
+        packages.each do |pack|
+          result << pack if package_installed?(pack, installed_packages)
+        end
+        
+        result
+      end
+      
+      def package_installed?(package, installed_packages)
+        return true if installed_packages.include?(package)
+
+        aliases = package_aliases[package]
+        return false if package_aliases[package].nil?
+
+        return !(aliases & installed_packages).empty?
       end
 
       def package_aliases
