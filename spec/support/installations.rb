@@ -95,6 +95,6 @@ def fake_installation(version, packages: [])
   allow(unity).to receive(:version) { version }
   allow(unity).to receive(:root_path) { 'foo' }
   allow(unity).to receive(:packages) { packages }
-  unity.stub(:package_installed?) { |arg| packages.include?(arg) }
+  allow(unity).to receive(:package_installed?) { |arg| packages.include?(arg) }
   return unity
 end
