@@ -140,7 +140,7 @@ module U3d
       when 'MonoDevelop'
         return "#{root_path}/MonoDevelop.app/"
       else
-        UI.user_error! "No pattern is known for #{module_name} on Mac"
+        UI.crash! "No pattern is known for #{module_name} on Mac"
       end
     end
 
@@ -243,7 +243,7 @@ module U3d
       when 'MonoDevelop'
         return "#{root_path}/MonoDevelop/"
       else
-        UI.user_error! "No pattern is known for #{module_name} on Windows"
+        UI.crash! "No pattern is known for #{module_name} on Windows"
       end
     end
 
