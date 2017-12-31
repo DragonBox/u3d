@@ -29,6 +29,8 @@ module U3d
   class Installation
     attr_reader :root_path
 
+    NOT_PLAYBACKENGINE_PACKAGES = %w[Documentation StandardAssets MonoDevelop].freeze
+
     def initialize(root_path: nil, path: nil)
       @root_path = root_path
       @path = path
@@ -125,7 +127,7 @@ module U3d
       PlaybackEngineUtils.list_module_configs(root_path).each do |mpath|
         pack << PlaybackEngineUtils.module_name(mpath)
       end
-      %w[Documentation StandardAssets MonoDevelop].each do |module_name|
+      NOT_PLAYBACKENGINE_PACKAGES.each do |module_name|
         pack << module_name unless Dir[module_name_pattern(module_name)].empty?
       end
       pack
@@ -228,7 +230,7 @@ module U3d
       PlaybackEngineUtils.list_module_configs(path).each do |mpath|
         pack << PlaybackEngineUtils.module_name(mpath)
       end
-      %w[Documentation StandardAssets MonoDevelop].each do |module_name|
+      NOT_PLAYBACKENGINE_PACKAGES.each do |module_name|
         pack << module_name unless Dir[module_name_pattern(module_name)].empty?
       end
       pack
