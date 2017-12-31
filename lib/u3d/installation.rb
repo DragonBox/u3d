@@ -68,9 +68,7 @@ module U3d
     end
 
     def package_installed?(package)
-      return false unless packages
-
-      return true if packages.include?(package)
+      return true if (packages || []).include?(package)
 
       aliases = Installation.package_aliases[package]
       return false if aliases[package].nil?
