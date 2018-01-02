@@ -71,7 +71,10 @@ module U3d
       return true if (packages || []).include?(package)
 
       aliases = PACKAGE_ALIASES[package]
-      return false if aliases[package].nil?
+
+      # If no aliases for the package are found, then it's a new package not yet known by Unity
+      # If the exact name doesn't match then we have to suppose it's not installed
+      return false unless aliases
 
       return !(aliases & packages).empty?
     end
