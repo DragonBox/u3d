@@ -29,6 +29,24 @@ module U3d
   class Installation
     attr_reader :root_path
 
+    NOT_PLAYBACKENGINE_PACKAGES = %w[Documentation StandardAssets MonoDevelop].freeze
+    PACKAGE_ALIASES =
+      {
+        'Android' => [],
+        'iOS' => ['iPhone'],
+        'AppleTV' => ['tvOS'],
+        'Linux' => ['StandaloneLinux'],
+        'Mac' => %w[StandaloneOSXIntel StandaloneOSXIntel64 StandaloneOSX],
+        'Windows' => ['StandaloneWindows'],
+        'Metro' => [],
+        'UWP-IL2CPP' => [],
+        'Samsung-TV' => [],
+        'Tizen' => [],
+        'WebGL' => [],
+        'Facebook-Games' => ['Facebook'],
+        'Vuforia-AR' => ['UnityExtensions']
+      }.freeze
+
     def initialize(root_path: nil, path: nil)
       @root_path = root_path
       @path = path
@@ -43,6 +61,22 @@ module U3d
       else
         WindowsInstallation.new(root_path: root_path, path: path)
       end
+    end
+
+    def packages
+      false
+    end
+
+    def package_installed?(package)
+      return true if (packages || []).include?(package)
+
+      aliases = PACKAGE_ALIASES[package]
+
+      # If no aliases for the package are found, then it's a new package not yet known by Unity
+      # If the exact name doesn't match then we have to suppose it's not installed
+      return false unless aliases
+
+      return !(aliases & packages).empty?
     end
   end
 
@@ -90,8 +124,26 @@ module U3d
     end
 
     def packages
-      PlaybackEngineUtils.list_module_configs(root_path).map do |mpath|
-        PlaybackEngineUtils.module_name(mpath)
+      pack = []
+      PlaybackEngineUtils.list_module_configs(root_path).each do |mpath|
+        pack << PlaybackEngineUtils.module_name(mpath)
+      end
+      NOT_PLAYBACKENGINE_PACKAGES.each do |module_name|
+        pack << module_name unless Dir[module_name_pattern(module_name)].empty?
+      end
+      pack
+    end
+
+    def module_name_pattern(module_name)
+      case module_name
+      when 'Documentation'
+        return "#{root_path}/Documentation/"
+      when 'StandardAssets'
+        return "#{root_path}/Standard Assets/"
+      when 'MonoDevelop'
+        return "#{root_path}/MonoDevelop.app/"
+      else
+        UI.crash! "No pattern is known for #{module_name} on Mac"
       end
     end
 
@@ -137,10 +189,6 @@ module U3d
       @root_path || @path
     end
 
-    def packages
-      false
-    end
-
     def clean_install?
       !(root_path =~ UNITY_DIR_CHECK_LINUX).nil?
     end
@@ -179,8 +227,26 @@ module U3d
 
     def packages
       path = "#{root_path}/Editor/Data/"
-      PlaybackEngineUtils.list_module_configs(path).map do |mpath|
-        PlaybackEngineUtils.module_name(mpath)
+      pack = []
+      PlaybackEngineUtils.list_module_configs(path).each do |mpath|
+        pack << PlaybackEngineUtils.module_name(mpath)
+      end
+      NOT_PLAYBACKENGINE_PACKAGES.each do |module_name|
+        pack << module_name unless Dir[module_name_pattern(module_name)].empty?
+      end
+      pack
+    end
+
+    def module_name_pattern(module_name)
+      case module_name
+      when 'Documentation'
+        return "#{root_path}/Editor/Data/Documentation/"
+      when 'StandardAssets'
+        return "#{root_path}/Editor/Standard Assets/"
+      when 'MonoDevelop'
+        return "#{root_path}/MonoDevelop/"
+      else
+        UI.crash! "No pattern is known for #{module_name} on Windows"
       end
     end
 

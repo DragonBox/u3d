@@ -327,10 +327,9 @@ module U3d
             # FIXME: Move me to the WindowsInstaller
             options[:installation_path] ||= unity.root_path if definition.os == :win
           end
-          if unity.packages
-            unity.packages.each do |pack|
-              UI.important "Ignoring #{pack} module, it is already installed" if packages.delete(pack)
-            end
+          packages.select { |pack| unity.package_installed?(pack) }.each do |pack|
+            packages.delete pack
+            UI.important "Ignoring #{pack} module, it is already installed"
           end
           return false if packages.empty?
         else
