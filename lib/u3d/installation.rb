@@ -30,6 +30,22 @@ module U3d
     attr_reader :root_path
 
     NOT_PLAYBACKENGINE_PACKAGES = %w[Documentation StandardAssets MonoDevelop].freeze
+    PACKAGE_ALIASES =
+      {
+        'Android' => [],
+        'iOS' => ['iPhone'],
+        'AppleTV' => ['tvOS'],
+        'Linux' => ['StandaloneLinux'],
+        'Mac' => %w[StandaloneOSXIntel StandaloneOSXIntel64 StandaloneOSX],
+        'Windows' => ['StandaloneWindows'],
+        'Metro' => [],
+        'UWP-IL2CPP' => [],
+        'Samsung-TV' => [],
+        'Tizen' => [],
+        'WebGL' => [],
+        'Facebook-Games' => ['Facebook'],
+        'Vuforia-AR' => ['UnityExtensions']
+      }.freeze
 
     def initialize(root_path: nil, path: nil)
       @root_path = root_path
@@ -47,24 +63,6 @@ module U3d
       end
     end
 
-    def self.package_aliases
-      {
-        'Android' => [],
-        'iOS' => ['iPhone'],
-        'AppleTV' => ['tvOS'],
-        'Linux' => ['StandaloneLinux'],
-        'Mac' => %w[StandaloneOSXIntel StandaloneOSXIntel64 StandaloneOSX],
-        'Windows' => ['StandaloneWindows'],
-        'Metro' => [],
-        'UWP-IL2CPP' => [],
-        'Samsung-TV' => [],
-        'Tizen' => [],
-        'WebGL' => [],
-        'Facebook-Games' => ['Facebook'],
-        'Vuforia-AR' => ['UnityExtensions']
-      }
-    end
-
     def packages
       false
     end
@@ -72,7 +70,7 @@ module U3d
     def package_installed?(package)
       return true if (packages || []).include?(package)
 
-      aliases = Installation.package_aliases[package]
+      aliases = PACKAGE_ALIASES[package]
       return false if aliases[package].nil?
 
       return !(aliases & packages).empty?
