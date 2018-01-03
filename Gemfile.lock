@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    u3d (1.0.12)
+    u3d (1.0.13)
       colored (>= 1.2, < 2.0.0)
       commander (>= 4.4.0, < 5.0.0)
       file-tail (>= 1.2.0)
@@ -50,7 +50,7 @@ GEM
       rainbow (>= 2.1)
       rake (>= 10.0)
       retriable (~> 2.1)
-    highline (1.7.8)
+    highline (1.7.10)
     i18n (0.8.6)
     inifile (3.0.0)
     json (2.1.0)
@@ -63,7 +63,7 @@ GEM
     parallel (1.12.0)
     parser (2.4.0.0)
       ast (~> 2.2)
-    plist (3.3.0)
+    plist (3.4.0)
     powerpack (0.1.1)
     pry (0.10.4)
       coderay (~> 1.1.0)
@@ -133,4 +133,4 @@ DEPENDENCIES
   u3d!
 
 BUNDLED WITH
-   1.16.0
+   1.16.1
