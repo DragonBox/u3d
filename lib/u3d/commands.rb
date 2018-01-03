@@ -316,26 +316,28 @@ module U3d
           packages.clear
           packages.concat(definition.available_packages)
         end
-        if unity
-          UI.important "Unity #{unity.version} is already installed"
-          # Not needed since Linux custom u3d files contain only one entry wich is Unity
-          # return false if definition.os == :linux
-          if packages.include?('Unity')
-            UI.important 'Ignoring Unity module, it is already installed'
-            packages.delete('Unity')
+        if options[:install]
+          if unity
+            UI.important "Unity #{unity.version} is already installed"
+            # Not needed since Linux custom u3d files contain only one entry wich is Unity
+            # return false if definition.os == :linux
+            if packages.include?('Unity')
+              UI.important 'Ignoring Unity module, it is already installed'
+              packages.delete('Unity')
 
-            # FIXME: Move me to the WindowsInstaller
-            options[:installation_path] ||= unity.root_path if definition.os == :win
-          end
-          packages.select { |pack| unity.package_installed?(pack) }.each do |pack|
-            packages.delete pack
-            UI.important "Ignoring #{pack} module, it is already installed"
-          end
-          return false if packages.empty?
-        else
-          unless packages.include?('Unity')
-            UI.error 'Please install Unity before any of its packages'
-            return false
+              # FIXME: Move me to the WindowsInstaller
+              options[:installation_path] ||= unity.root_path if definition.os == :win
+            end
+            packages.select { |pack| unity.package_installed?(pack) }.each do |pack|
+              packages.delete pack
+              UI.important "Ignoring #{pack} module, it is already installed"
+            end
+            return false if packages.empty?
+          else
+            unless packages.include?('Unity')
+              UI.error 'Please install Unity before any of its packages'
+              return false
+            end
           end
         end
         true
