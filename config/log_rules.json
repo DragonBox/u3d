@@ -137,18 +137,6 @@
       }
     }
   },
-  "JENKINS": {
-    "active": true,
-    "silent": false,
-    "comment": "Jenkins specific, used to catch build launchs via Jenkins",
-    "phase_start_pattern": "Started by",
-    "rules": {
-      "start": {
-        "active": true,
-        "start_pattern": "Started by"
-      }
-    }
-  },
   "LICENSE": {
     "active": true,
     "silent": false,
