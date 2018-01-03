@@ -149,6 +149,66 @@
       }
     }
   },
+  "LICENSE": {
+    "active": true,
+    "silent": false,
+    "comment": "Unity license system logic",
+    "phase_start_pattern": "LICENSE SYSTEM",
+    "rules": {
+      "next_check": {
+        "active": true,
+        "start_pattern": "LICENSE SYSTEM \\[.*\\] Next license update check is after (?<date>[\\d\\-]+)T(?<time>[\\d+\\:]+)",
+        "start_message": "Next update check after %{date} at %{time}"
+      },
+      "opening": {
+        "active": true,
+        "start_pattern": "LICENSE SYSTEM \\[.*\\] Opening (?<address>.*)$",
+        "start_message": "Opening %{address}",
+        "store_lines": false,
+        "end_pattern": "(?:\\[CEF\\]|LICENSE SYSTEM \\[.*\\] Received)",
+        "end_message": false
+      },
+      "received": {
+        "active": true,
+        "start_pattern": "LICENSE SYSTEM \\[.*\\] Received (?<address>.*)$",
+        "start_message": "Received %{address}",
+        "store_lines": false,
+        "end_pattern": "(?:\\[CEF\\]|LICENSE SYSTEM \\[.*\\] (?!Headers)|Cancelling)",
+        "end_message": false
+      },
+      "cef_undefined": {
+        "active": true,
+        "start_pattern": "\\[CEF\\] undefined in.*$",
+        "type": "warning"
+      },
+      "error": {
+        "active": true,
+        "start_pattern": "LICENSE SYSTEM \\[.*\\] (?<message>Error.*)",
+        "start_message": "%{message}",
+        "store_lines": true,
+        "end_pattern": "(?:^\\n|\\[CEF\\] undefined)",
+        "end_message": false,
+        "type": "error"
+      },
+      "timeout": {
+        "active": true,
+        "start_pattern": "Cancelling.*Timeout",
+        "start_message": "Timeout while trying to activate license. Please try again later or contact support@unity3d.com",
+        "type": "error"
+      },
+      "starting_activation": {
+        "active": true,
+        "start_pattern": "LICENSE SYSTEM \\[.*\\] Starting license activation with account (?<account>.*)$",
+        "start_message": "Starting license activation for account %{account}"
+      },
+      "successful_activation": {
+        "active": true,
+        "start_pattern": "LICENSE SYSTEM \\[.*\\] License activated successfully with user: (?<account>.*)$",
+        "start_message": "License activated for account %{account}",
+        "type": "success"
+      }
+    }
+  },
   "INIT": {
     "active": true,
     "silent": false,
