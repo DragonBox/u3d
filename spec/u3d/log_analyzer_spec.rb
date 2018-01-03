@@ -66,7 +66,7 @@ describe U3d do
       it "loads defaults rules without problem" do
         gen, phases = U3d::LogAnalyzer.new.load_rules
         expect(gen.keys.count).to be > 5
-        expect(phases.keys).to eq %w[JENKINS LICENSE INIT COMPILER ASSET]
+        expect(phases.keys).to eq %w[LICENSE INIT COMPILER ASSET]
       end
 
       it "parses a simple file" do
