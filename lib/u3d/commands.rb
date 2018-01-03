@@ -311,6 +311,7 @@ module U3d
         nil
       end
 
+      # rubocop:disable Metrics/BlockNesting
       def enforce_setup_coherence(packages, options, unity, definition)
         if options[:all]
           packages.clear
@@ -342,6 +343,7 @@ module U3d
         end
         true
       end
+      # rubocop:enable Metrics/BlockNesting
 
       def get_administrative_privileges(options)
         U3dCore::Globals.use_keychain = true if options[:keychain] && Helper.mac?
