@@ -1,5 +1,24 @@
 # Change Log
 
+## [v1.0.12](https://github.com/DragonBox/u3d/tree/v1.0.12) (2018-01-03)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.11...v1.0.12)
+
+**Implemented enhancements:**
+
+- Incorrect package check downloads and reinstalls it [\#198](https://github.com/DragonBox/u3d/issues/198)
+
+**Fixed bugs:**
+
+- u3d/install enforce\_setup\_coherence interferes with download only operation [\#206](https://github.com/DragonBox/u3d/issues/206)
+- Fix unity\_version argument of fastlane plugin u3d type [\#193](https://github.com/DragonBox/u3d/pull/193) ([niezbop](https://github.com/niezbop))
+
+**Merged pull requests:**
+
+- u3d/install: download only should not filter out already installed packages \(fixes \#206\) [\#208](https://github.com/DragonBox/u3d/pull/208) ([lacostej](https://github.com/lacostej))
+- u3d/install: help fixes [\#207](https://github.com/DragonBox/u3d/pull/207) ([lacostej](https://github.com/lacostej))
+- u3d/install: do not reinstall already installed packages [\#202](https://github.com/DragonBox/u3d/pull/202) ([niezbop](https://github.com/niezbop))
+- u3d/install: describe how password can be passed to u3d \(fixes \#200\) [\#201](https://github.com/DragonBox/u3d/pull/201) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.11](https://github.com/DragonBox/u3d/tree/v1.0.11) (2017-12-07)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.10...v1.0.11)
 
@@ -9,6 +28,7 @@
 
 **Merged pull requests:**
 
+- Preparing release for 1.0.11 [\#192](https://github.com/DragonBox/u3d/pull/192) ([lacostej](https://github.com/lacostej))
 - doc: explain CI setup with jenkins [\#191](https://github.com/DragonBox/u3d/pull/191) ([lacostej](https://github.com/lacostej))
 - u3d/run: fail with a proper message when opening a Unity4 project [\#187](https://github.com/DragonBox/u3d/pull/187) ([lacostej](https://github.com/lacostej))
 
@@ -22,7 +42,6 @@
 **Closed issues:**
 
 - u3d/install: confusing "-p not available on linux" message [\#181](https://github.com/DragonBox/u3d/issues/181)
-- Linux CLI Activation in Unity \>= 5.4 [\#176](https://github.com/DragonBox/u3d/issues/176)
 - u3d/install: already installed packages are reinstalled [\#161](https://github.com/DragonBox/u3d/issues/161)
 
 **Merged pull requests:**
