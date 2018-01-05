@@ -27,12 +27,12 @@
 require 'colored'
 
 class String
-  Colored::COLORS.keys.each do |color|
+  Colored::COLORS.keys.each_key do |color|
     define_method(color) do
       self # do nothing with the string, but return it
     end
   end
-  Colored::EXTRAS.keys.each do |extra|
+  Colored::EXTRAS.keys.each_key do |extra|
     define_method(extra) do
       self # do nothing with the string, but return it
     end

@@ -63,13 +63,11 @@ module U3dCore
       if U3dCore::Globals.log_timestamps?
         timestamp = ENV["U3D_UI_TIMESTAMP"]
         # default timestamp if none specified
-        unless timestamp
-          timestamp = if U3dCore::Globals.verbose?
+        timestamp ||= if U3dCore::Globals.verbose?
                         '%Y-%m-%d %H:%M:%S.%2N'
                       else
                         '%H:%M:%S'
                       end
-        end
       end
       # hide has last word
       timestamp = nil if ENV["U3D_HIDE_TIMESTAMP"]

@@ -33,7 +33,7 @@ module U3d
       @url = cached_versions ? cached_versions[version] : nil
       begin
         @ini = INIparser.load_ini(version, cached_versions, os: os, offline: offline)
-      rescue => e
+      rescue StandardError => e
         # FIXME: weird that we catch this here
         UI.error "Could not load INI file for version #{@version} on #{@os}: #{e}"
         @ini = nil

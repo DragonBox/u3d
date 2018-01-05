@@ -90,11 +90,11 @@ module U3d
           inif = nil
           begin
             inif = U3d::INIparser.load_ini(k, versions, os: os)
-          rescue => e
+          rescue StandardError => e
             UI.error "Could not load packages for this version (#{e})"
           else
             UI.message 'Packages:'
-            inif.keys.each { |pack| UI.message " - #{pack}" }
+            inif.each_key { |pack| UI.message " - #{pack}" }
           end
         end
       end
@@ -139,9 +139,7 @@ module U3d
 
         unity = check_unity_presence(version: version)
 
-        unless unity
-          UI.user_error!('Unity version #{version} is not present and cannot be uninstalled')
-        end
+        UI.user_error!("Unity version #{version} is not present and cannot be uninstalled") unless unity
 
         get_administrative_privileges(options)
 
@@ -163,14 +161,12 @@ module U3d
         runner = Runner.new
         args_pp = Runner.find_projectpath_in_args(run_args)
         pp = args_pp
-        pp = Dir.pwd unless pp
+        pp ||= Dir.pwd
         up = UnityProject.new(pp)
 
         unless version # fall back in project default if we are on a Unity project
           version = up.editor_version if up.exist?
-          unless version
-            UI.user_error!('Not sure which version of Unity to run. Are you in a Unity5 or later project?')
-          end
+          UI.user_error!('Not sure which version of Unity to run. Are you in a Unity5 or later project?') unless version
         end
 
         if up.exist? && args_pp.nil?

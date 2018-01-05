@@ -184,9 +184,7 @@ module U3d
 
       if @active_phase
         apply_ruleset.call(@phases[@active_phase]['rules'], @active_phase)
-        if @phases[@active_phase]['phase_end_pattern'] && @phases[@active_phase]['phase_end_pattern'] =~ line
-          finish_phase
-        end
+        finish_phase if @phases[@active_phase]['phase_end_pattern'] && @phases[@active_phase]['phase_end_pattern'] =~ line
       end
       apply_ruleset.call(@generic_rules, 'GENERAL')
     end
@@ -242,9 +240,7 @@ module U3d
         r['fetched_line_pattern'] = Regexp.new r['fetched_line_pattern'] if r['fetched_line_pattern']
       end
       r['type'] = 'important' if r['type'] == 'warning'
-      if r['type'] && r['type'] != 'error' && r['type'] != 'important' && r['type'] != 'success'
-        r['type'] = 'message'
-      end
+      r['type'] = 'message' if r['type'] && r['type'] != 'error' && r['type'] != 'important' && r['type'] != 'success'
       r['type'] ||= 'message'
       r['ignore_lines'].map! { |pat| Regexp.new pat } if r['ignore_lines']
       true

@@ -74,12 +74,9 @@ module U3d
         c.summary = 'Run unity, and parses its output through u3d\'s log prettifier'
         c.description =  %(
 #{c.summary}
-
 The default prettifier rules file is packaged with u3d (#{U3d::LogAnalyzer::RULES_PATH}).
 You may which to pass your own using the environment variable U3D_RULES_PATH.
-
 E.g. U3D_RULES_PATH=my_rules.json u3d -- ...
-
 Fore more information about how the rules work, see https://github.com/DragonBox/u3d/blob/master/LOG_RULES.md
         )
         c.option '-u', '--unity_version STRING', String, 'Version of Unity to run with. If not specified, it runs with the version of the project (either specified as -projectpath or current)'
@@ -126,12 +123,10 @@ Fore more information about how the rules work, see https://github.com/DragonBox
         c.summary = "Download (and/or) install Unity3D editor packages."
         c.description = %(
 #{c.summary}
-
 This command allows you to either:
 * download and install packages
 * download packages but not install them
 * install already downloaded packages
-
 Already installed packages are skipped if asked to be installed again (except for the 'Example' package).
         )
         c.option '--[no-]download', 'Perform or not downloading before installation. Downloads by default'
@@ -167,9 +162,7 @@ Already installed packages are skipped if asked to be installed again (except fo
         c.summary = 'Installs Unity dependencies. [Linux only]'
         c.description = %(
 #{c.summary}
-
 Regarding the package manager: if dpkg is installed, u3d uses apt-get else if rpm is installed yum is used. If none of them is insalled, fails.
-
 Regarding the dependencies themselves: only dependencies for the editor are installed. WebGL, Android and Tizen require others that you will have to install manually.
 More on that: https://forum.unity3d.com/threads/unity-on-linux-release-notes-and-known-issues.350256/
                   )
@@ -191,12 +184,9 @@ More on that: https://forum.unity3d.com/threads/unity-on-linux-release-notes-and
         c.summary = 'Prettify a saved logfile'
         c.description = %(
           #{c.summary}
-
           The default prettifier rules file is packaged with u3d (#{U3d::LogAnalyzer::RULES_PATH}).
           You may which to pass your own using the environment variable U3D_RULES_PATH.
-
           E.g. U3D_RULES_PATH=my_rules.json u3d prettify ...
-
           Fore more information about how the rules work, see https://github.com/DragonBox/u3d/blob/master/LOG_RULES.md
                   )
         c.action do |args, _options|

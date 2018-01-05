@@ -42,12 +42,12 @@ end
 # completes, restores the ENV to its previous state.
 def with_env_values(hash)
   old_vals = ENV.select { |k, _v| hash.include?(k) }
-  hash.each do |k, _v|
+  hash.each_key do |k|
     ENV[k] = hash[k]
   end
   yield
 ensure
-  hash.each do |k, _v|
+  hash.each_key do |k|
     ENV.delete(k) unless old_vals.include?(k)
     ENV[k] = old_vals[k]
   end

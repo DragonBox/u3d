@@ -101,7 +101,7 @@ module U3dCore
             end
           end
           raise "Exit status: #{status}".red if !status.nil? && status.nonzero?
-        rescue => ex
+        rescue StandardError => ex
           # This could happen
           # * if the status is failed
           # * when the environment is wrong:
@@ -121,7 +121,7 @@ module U3dCore
         if Helper.windows?
           begin
             result = system('reg query HKU\\S-1-5-19', out: File::NULL, err: File::NULL)
-          rescue
+          rescue StandardError
             result = false
           end
         else
@@ -130,7 +130,7 @@ module U3dCore
             result = system("sudo -k && echo #{credentials.password.shellescape} | sudo -S /usr/bin/whoami",
                             out: File::NULL,
                             err: File::NULL)
-          rescue
+          rescue StandardError
             result = false
           end
           credentials.forget_credentials unless result # FIXME: why?
