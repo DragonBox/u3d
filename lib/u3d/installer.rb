@@ -31,8 +31,8 @@ module U3d
   DEFAULT_LINUX_INSTALL = '/opt/'.freeze
   DEFAULT_MAC_INSTALL = '/'.freeze
   DEFAULT_WINDOWS_INSTALL = 'C:/Program Files/'.freeze
-  UNITY_DIR = "Unity_%s".freeze
-  UNITY_DIR_LINUX = "unity-editor-%s".freeze
+  UNITY_DIR = "Unity_%<version>s".freeze
+  UNITY_DIR_LINUX = "unity-editor-%<version>s".freeze
 
   class Installer
     def self.create
@@ -88,7 +88,7 @@ module U3d
         U3dCore::CommandExecutor.execute(command: command, admin: true)
         UI.success "Successfully moved '#{source_path}' to '#{new_path}'"
       end
-    rescue => e
+    rescue StandardError => e
       UI.error "Unable to move '#{source_path}' to '#{new_path}': #{e}"
     end
   end
@@ -97,7 +97,7 @@ module U3d
     def sanitize_install(unity, dry_run: false)
       source_path = unity.root_path
       parent = File.expand_path('..', source_path)
-      new_path = File.join(parent, UNITY_DIR % unity.version)
+      new_path = File.join(parent, format(UNITY_DIR, version: unity.version))
 
       command = "mv #{source_path.shellescape} #{new_path.shellescape}"
 
@@ -130,7 +130,7 @@ module U3d
       if unity.nil?
         UI.verbose "No Unity install for version #{version} was found"
         U3dCore::CommandExecutor.execute(command: command, admin: true)
-        destination_path = File.join(target_path, 'Applications', UNITY_DIR % version)
+        destination_path = File.join(target_path, 'Applications', format(UNITY_DIR, version: version))
         FileUtils.mv temp_path, destination_path
       else
         UI.verbose "Unity install for version #{version} found under #{unity.root_path}"
@@ -146,7 +146,7 @@ module U3d
           FileUtils.mv temp_path, path if move_to_temp
         end
       end
-    rescue => e
+    rescue StandardError => e
       UI.error "Failed to install pkg at #{file_path}: #{e}"
     else
       UI.success "Successfully installed package from #{file_path}"
@@ -156,7 +156,7 @@ module U3d
       UI.verbose("Uninstalling Unity at '#{unity.root_path}'...")
       command = "rm -r #{unity.root_path.argescape}"
       U3dCore::CommandExecutor.execute(command: command, admin: true)
-    rescue => e
+    rescue StandardError => e
       UI.error "Failed to uninstall unity at #{unity.path}: #{e}"
     else
       UI.success "Successfully uninstalled '#{unity.root_path}'"
@@ -195,7 +195,7 @@ module U3d
     def sanitize_install(unity, dry_run: false)
       source_path = File.expand_path(unity.root_path)
       parent = File.expand_path('..', source_path)
-      new_path = File.join(parent, UNITY_DIR_LINUX % unity.version)
+      new_path = File.join(parent, format(UNITY_DIR_LINUX, version: unity.version))
 
       command = "mv #{source_path.shellescape} #{new_path.shellescape}"
 
@@ -233,14 +233,12 @@ module U3d
 
       if installation_path
         command = "cd #{installation_path.shellescape}; #{cmd}"
-        unless File.directory? installation_path
-          command = "mkdir -p #{installation_path.shellescape}; #{command}"
-        end
+        command = "mkdir -p #{installation_path.shellescape}; #{command}" unless File.directory? installation_path
         U3dCore::CommandExecutor.execute(command: command, admin: true)
       else
         U3dCore::CommandExecutor.execute(command: cmd, admin: true)
       end
-    rescue => e
+    rescue StandardError => e
       UI.error "Failed to install bash file at #{file}: #{e}"
     else
       UI.success 'Installation successful'
@@ -250,7 +248,7 @@ module U3d
       UI.verbose("Uninstalling Unity at '#{unity.root_path}'...")
       command = "rm -r #{unity.root_path}"
       U3dCore::CommandExecutor.execute(command: command, admin: true)
-    rescue => e
+    rescue StandardError => e
       UI.error "Failed to uninstall unity at #{unity.path}: #{e}"
     else
       UI.success "Successfully uninstalled '#{unity.root_path}'"
@@ -279,7 +277,7 @@ module U3d
     def sanitize_install(unity, dry_run: false)
       source_path = File.expand_path(unity.root_path)
       parent = File.expand_path('..', source_path)
-      new_path = File.join(parent, UNITY_DIR % unity.version)
+      new_path = File.join(parent, format(UNITY_DIR, version: unity.version))
 
       source_path.tr!('/', '\\')
       new_path.tr!('/', '\\')
@@ -297,7 +295,7 @@ module U3d
     def install(file_path, version, installation_path: nil, info: {})
       extension = File.extname(file_path)
       raise "Installation of #{extension} files is not supported on Windows" if extension != '.exe'
-      path = installation_path || File.join(DEFAULT_WINDOWS_INSTALL, UNITY_DIR % version)
+      path = installation_path || File.join(DEFAULT_WINDOWS_INSTALL, format(UNITY_DIR, version: version))
       install_exe(
         file_path,
         installation_path: path,
@@ -321,7 +319,7 @@ module U3d
         end
         command ||= file_path.to_s
         U3dCore::CommandExecutor.execute(command: command, admin: true)
-      rescue => e
+      rescue StandardError => e
         UI.error "Failed to install exe at #{file_path}: #{e}"
       else
         UI.success "Successfully installed #{info['title']}"
@@ -334,7 +332,7 @@ module U3d
       command = "#{uninstall_exe.argescape} /S"
       UI.message("Although the uninstall process completed, it takes a few seconds before the files are actually removed")
       U3dCore::CommandExecutor.execute(command: command, admin: true)
-    rescue => e
+    rescue StandardError => e
       UI.error "Failed to uninstall unity at #{unity.path}: #{e}"
     else
       UI.success "Successfully uninstalled '#{unity.root_path}'"

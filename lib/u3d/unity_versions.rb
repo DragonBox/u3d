@@ -39,7 +39,7 @@ module U3d
     # URL for the beta releases list, they need to be accessed after
     UNITY_BETAS = 'https://unity3d.com/unity/beta/archive'.freeze
     # URL for a specific beta, takes into parameter a version string (%s)
-    UNITY_BETA_URL = 'https://unity3d.com/unity/beta/unity%s'.freeze
+    UNITY_BETA_URL = 'https://unity3d.com/unity/beta/unity%<version>s'.freeze
 
     #####################################################
     # @!group REGEX: expressions to interpret data
@@ -88,7 +88,7 @@ module U3d
         hash = {}
         data = Utils.get_ssl(url)
         results = data.scan(UNITY_BETAVERSION_REGEX).uniq
-        results.each { |beta| hash.merge!(fetch_version(UNITY_BETA_URL % beta[0], pattern)) }
+        results.each { |beta| hash.merge!(fetch_version(format(UNITY_BETA_URL, version: beta[0]), pattern)) }
         hash
       end
     end

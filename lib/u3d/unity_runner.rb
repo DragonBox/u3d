@@ -103,7 +103,7 @@ module U3d
       tail_thread = Thread.new do
         begin
           pipe(log_file) { |line| output_callback.call(line) }
-        rescue => e
+        rescue StandardError => e
           UI.error "Failure while trying to pipe #{log_file}: #{e.message}"
           e.backtrace.each { |l| UI.error "  #{l}" }
         end
