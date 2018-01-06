@@ -386,7 +386,7 @@ describe U3d do
       end
 
       describe '.destination_for' do
-        it 'returns the correct default destination for the specified package' do
+        it 'returns the correct default destination for the Unity installer' do
           warn_if_env('U3D_DOWNLOAD_PATH')
           expect(U3d::Utils).to receive(:ensure_dir) {}
           allow(U3d::INIparser).to receive(:load_ini) { { 'Unity' => { 'url' => 'http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f4+20160628.sh' } } }
@@ -401,7 +401,7 @@ describe U3d do
           ).to eql File.join(ENV['HOME'], 'Downloads', 'Unity_Packages', '1.2.3f4', 'unity-editor-installer-1.2.3f4+20160628.sh')
         end
 
-        it 'returns the custom destination for the specified package when the environment variable is specified' do
+        it 'returns the custom destination for the Unity installer when the environment variable is specified' do
           with_env_values('U3D_DOWNLOAD_PATH' => '/foo') do
             expect(U3d::Utils).to receive(:ensure_dir) {}
             allow(U3d::INIparser).to receive(:load_ini) { { 'Unity' => { 'url' => 'http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f4+20160628.sh' } } }
