@@ -53,7 +53,7 @@ module U3d
 
     def initialize(path: nil, force_os: nil, force_refresh: false, offline: false)
       raise "Cache: cannot specify both offline and force_refresh" if offline && force_refresh
-      @path = path || default_path
+      @path = path || Cache.default_os_path
       @cache = {}
       os = force_os || U3dCore::Helper.operating_system
       Utils.ensure_dir(@path)
@@ -65,6 +65,17 @@ module U3d
       end
       @cache = data
       overwrite_cache(file_path, os) if need_update || force_refresh
+    end
+
+    def self.default_os_path
+      case U3dCore::Helper.operating_system
+      when :linux
+        DEFAULT_LINUX_PATH
+      when :mac
+        DEFAULT_MAC_PATH
+      when :win
+        DEFAULT_WINDOWS_PATH
+      end
     end
 
     private #-------------------------------------------------------------------
@@ -109,17 +120,6 @@ module U3d
       @cache[os.id2name]['versions'] = UnityVersions.list_available(os: os)
       File.delete(file_path) if File.file?(file_path)
       File.open(file_path, 'w') { |f| f.write(@cache.to_json) }
-    end
-
-    def default_path
-      case U3dCore::Helper.operating_system
-      when :linux
-        DEFAULT_LINUX_PATH
-      when :mac
-        DEFAULT_MAC_PATH
-      when :win
-        DEFAULT_WINDOWS_PATH
-      end
     end
   end
 end
