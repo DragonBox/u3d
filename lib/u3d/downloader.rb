@@ -34,6 +34,10 @@ module U3d
     UNITY_MODULE_FILE_REGEX = %r{\/([\w\-_\.\+]+\.(?:pkg|exe|zip|sh|deb))}
 
     class << self
+      def download_directory
+        File.expand_path(ENV['U3D_DOWNLOAD_PATH'] || File.join(DOWNLOAD_PATH, DOWNLOAD_DIRECTORY))
+      end
+
       # fetch modules and put them in local cache
       def fetch_modules(definition, packages: [], download: nil)
         if download
@@ -134,7 +138,7 @@ module U3d
 
     class MacDownloader
       def destination_for(package, definition)
-        dir = File.join(DOWNLOAD_PATH, DOWNLOAD_DIRECTORY, definition.version)
+        dir = File.join(Downloader.download_directory, definition.version)
         Utils.ensure_dir(dir)
         file_name = UNITY_MODULE_FILE_REGEX.match(definition[package]['url'])[1]
 
@@ -148,7 +152,7 @@ module U3d
 
     class LinuxDownloader
       def destination_for(package, definition)
-        dir = File.join(DOWNLOAD_PATH, DOWNLOAD_DIRECTORY, definition.version)
+        dir = File.join(Downloader.download_directory, definition.version)
         Utils.ensure_dir(dir)
         file_name = UNITY_MODULE_FILE_REGEX.match(definition[package]['url'])[1]
 
@@ -162,7 +166,7 @@ module U3d
 
     class WindowsDownloader
       def destination_for(package, definition)
-        dir = File.join(DOWNLOAD_PATH, DOWNLOAD_DIRECTORY, definition.version)
+        dir = File.join(Downloader.download_directory, definition.version)
         Utils.ensure_dir(dir)
         file_name = UNITY_MODULE_FILE_REGEX.match(definition[package]['url'])[1]
 
