@@ -98,29 +98,36 @@ module U3d
           UI.error 'Failed to open cache.json: ' + file_error.to_s
           need_update = true
         else
-          need_update = data[os.id2name].nil?\
-          || data[os.id2name]['lastupdate'].nil?\
-          || (Time.now.to_i - data[os.id2name]['lastupdate'] > CACHE_LIFE)\
-          || (data[os.id2name]['versions'] || []).empty?
+          need_update = os_data_need_update?(data, os)
           data[os.id2name] = nil if need_update
         end
       end
       return need_update, data
     end
 
+    def os_data_need_update?(data, os)
+      data[os.id2name].nil?\
+      || data[os.id2name]['lastupdate'].nil?\
+      || (Time.now.to_i - data[os.id2name]['lastupdate'] > CACHE_LIFE)\
+      || (data[os.id2name]['versions'] || []).empty?
+    end
+
     # Updates cache by retrieving versions with U3d::Downloader
     def overwrite_cache(file_path, os, central_cache: false)
       UI.message("central_cache #{central_cache} ")
-      update_cache(os) unless central_cache && fetch_central_cache
+      update_cache(os) unless central_cache && fetch_central_cache(os)
 
       File.delete(file_path) if File.file?(file_path)
       File.open(file_path, 'w') { |f| f.write(@cache.to_json) }
     end
 
-    def fetch_central_cache
+    # Fetches central versions.json. Ignore it if it is too old
+    def fetch_central_cache(os)
       UI.message("Fetching central 'versions.json' cache")
-      @cache = JSON.parse(Utils.get_ssl("https://dragonbox.github.io/unities/versions.json".freeze))
-      true
+      data = JSON.parse(Utils.get_ssl("https://dragonbox.github.io/unities/versions.json".freeze))
+      need_update = os_data_need_update?(data, os)
+      @cache = data unless need_update
+      !need_update
     rescue StandardError => e
       UI.error("Failed fetching central versions.json. Manual fetch for platform #{os} #{e}")
       false
