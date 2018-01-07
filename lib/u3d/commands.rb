@@ -65,17 +65,15 @@ module U3d
         ver = options[:unity_version]
         os = valid_os_or_current(options[:operating_system])
         rl = options[:release_level]
-        cache = Cache.new(force_os: os, force_refresh: options[:force])
 
-        return UI.error "Version #{ver} is not in cache" if ver && cache[os.id2name]['versions'][ver].nil?
+        cache_versions = cache_versions(os, force_refresh: options[:force])
 
-        versions = if ver
-                     { ver => cache[os.id2name]['versions'][ver] }
-                   else
-                     cache[os.id2name]['versions']
-                   end
+        if ver
+          return UI.error "Version #{ver} is not in cache" if cache_versions[ver].nil?
+          cache_versions = { ver => cache_versions[ver] }
+        end
 
-        vcomparators = versions.keys.map { |k| UnityVersionComparator.new(k) }
+        vcomparators = cache_versions.keys.map { |k| UnityVersionComparator.new(k) }
         if rl
           letter = release_letter_mapping["latest_#{rl}".to_sym]
           UI.message "Filtering available versions with release level '#{rl}' [letter '#{letter}']"
@@ -84,12 +82,12 @@ module U3d
         sorted_keys = vcomparators.sort.map { |v| v.version.to_s }
 
         sorted_keys.each do |k|
-          v = versions[k]
+          v = cache_versions[k]
           UI.message "Version #{k}: " + v.to_s.cyan.underline
           next unless options[:packages]
           inif = nil
           begin
-            inif = U3d::INIparser.load_ini(k, versions, os: os)
+            inif = U3d::INIparser.load_ini(k, cache_versions, os: os)
           rescue StandardError => e
             UI.error "Could not load packages for this version (#{e})"
           else
@@ -218,8 +216,8 @@ module U3d
 
       private
 
-      def cache_versions(os, offline: false)
-        cache = Cache.new(force_os: os, offline: offline)
+      def cache_versions(os, offline: false, force_refresh: false)
+        cache = Cache.new(force_os: os, offline: offline, force_refresh: force_refresh)
         cache_os = cache[os.id2name] || {}
         cache_versions = cache_os['versions'] || {}
         cache_versions
