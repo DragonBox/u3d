@@ -126,6 +126,15 @@ describe U3d do
           U3d::Commands.list_available(options: { unity_version: '1.2.3f4' })
         end
 
+        it 'only logs specified version found using regular expression' do
+          on_fake_os
+          with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl', '1.3.3f4' => 'fakeurl' } })
+
+          expect(U3d::UI).to receive(:message).with(/.*1.2.3f4.*fakeurl.*/)
+
+          U3d::Commands.list_available(options: { unity_version: '1.2' })
+        end
+
         context 'when parsing user OS input' do
           it 'uses correct input' do
             fakeos = double('os')

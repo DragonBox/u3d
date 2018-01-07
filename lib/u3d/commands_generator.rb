@@ -105,12 +105,13 @@ Fore more information about how the rules work, see https://github.com/DragonBox
         c.option '-f', '--force', 'Force refresh list of available versions'
         c.option '-r', '--release_level STRING', String, "Checks for availability on specific release level [#{levels.join(', ')}]"
         c.option '-o', '--operating_system STRING', String, "Checks for availability on specific OS [#{oses.join(', ')}]"
-        c.option '-u', '--unity_version STRING', String, 'Checks if specified version is available'
+        c.option '-u', '--unity_version STRING', String, 'Checks if specified version is available. Can be a regular expression'
         c.option '-p', '--packages', 'Lists available packages as well'
         c.example 'List all versions available, forcing a refresh of the available packages from Unity servers', 'u3d available -f'
         c.example 'List stable versions available', 'u3d available -r stable -p'
         c.example 'List all versions available for Linux platform', 'u3d available -o linux'
         c.example 'List packages available for Unity version 5.6.0f3', 'u3d available -u 5.6.0f3 -p'
+        c.example 'List packages available for Unity version containing the 5.6 string', 'u3d available -u \'5.6\' -p'
         c.description = 'List download-ready versions of Unity3d'
         c.action do |_args, options|
           options.default packages: false
