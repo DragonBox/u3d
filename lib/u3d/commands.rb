@@ -99,13 +99,6 @@ module U3d
         end
       end
 
-      def cache_versions(os, offline: false)
-        cache = Cache.new(force_os: os, offline: offline)
-        cache_os = cache[os.id2name] || {}
-        cache_versions = cache_os['versions'] || {}
-        cache_versions
-      end
-
       def install(args: [], options: {})
         version = specified_or_current_project_version(args[0])
 
@@ -224,6 +217,13 @@ module U3d
       end
 
       private
+
+      def cache_versions(os, offline: false)
+        cache = Cache.new(force_os: os, offline: offline)
+        cache_os = cache[os.id2name] || {}
+        cache_versions = cache_os['versions'] || {}
+        cache_versions
+      end
 
       def verify_package_names(definition, packages)
         packages.each do |package|
