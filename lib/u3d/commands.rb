@@ -220,7 +220,7 @@ module U3d
       private
 
       def cache_versions(os, offline: false, force_refresh: false)
-        cache = Cache.new(force_os: os, offline: offline, force_refresh: force_refresh)
+        cache = Cache.new(force_os: os, offline: offline, force_refresh: force_refresh, central_cache: true)
         cache_os = cache[os.id2name] || {}
         cache_versions = cache_os['versions'] || {}
         cache_versions

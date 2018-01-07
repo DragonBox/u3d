@@ -51,7 +51,7 @@ module U3d
       @cache[key]
     end
 
-    def initialize(path: nil, force_os: nil, force_refresh: false, offline: false)
+    def initialize(path: nil, force_os: nil, force_refresh: false, offline: false, central_cache: false)
       raise "Cache: cannot specify both offline and force_refresh" if offline && force_refresh
       @path = path || Cache.default_os_path
       @cache = {}
@@ -64,7 +64,7 @@ module U3d
         need_update = false
       end
       @cache = data
-      overwrite_cache(file_path, os) if need_update || force_refresh
+      overwrite_cache(file_path, os, central_cache: central_cache) if need_update || force_refresh
     end
 
     def self.default_os_path
@@ -109,17 +109,33 @@ module U3d
     end
 
     # Updates cache by retrieving versions with U3d::Downloader
-    def overwrite_cache(file_path, os)
+    def overwrite_cache(file_path, os, central_cache: false)
+      UI.message("central_cache #{central_cache} ")
+      update_cache(os) unless central_cache && fetch_central_cache
+
+      File.delete(file_path) if File.file?(file_path)
+      File.open(file_path, 'w') { |f| f.write(@cache.to_json) }
+    end
+
+    def fetch_central_cache
+      UI.message("Fetching central 'versions.json' cache")
+      @cache = JSON.parse(Utils.get_ssl("https://dragonbox.github.io/unities/versions.json".freeze))
+      true
+    rescue StandardError => e
+      UI.error("Failed fetching central versions.json. Manual fetch for platform #{os} #{e}")
+      false
+    end
+
+    def update_cache(os)
       platform = 'Windows' if os == :win
       platform = 'Mac OSX' if os == :mac
       platform = 'Linux' if os == :linux
       UI.important "Cache is out of date. Updating cache for #{platform}"
+
       @cache ||= {}
       @cache[os.id2name] = {}
       @cache[os.id2name]['lastupdate'] = Time.now.to_i
       @cache[os.id2name]['versions'] = UnityVersions.list_available(os: os)
-      File.delete(file_path) if File.file?(file_path)
-      File.open(file_path, 'w') { |f| f.write(@cache.to_json) }
     end
   end
 end
