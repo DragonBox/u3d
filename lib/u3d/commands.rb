@@ -72,7 +72,7 @@ module U3d
         cache_versions = cache_versions(os, force_refresh: options[:force])
 
         if ver
-          cache_versions = cache_versions.extract(*cache_versions.keys.select { |k| /#{Regexp.quote(ver)}/.match(k) })
+          cache_versions = cache_versions.extract(*cache_versions.keys.select { |k| Regexp.new(ver).match(k) })
           return UI.error "Version #{ver} doesn't match any in cache" if cache_versions.empty?
         end
 
