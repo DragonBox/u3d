@@ -22,12 +22,15 @@
 
 require 'json'
 require 'time'
+require 'u3d_core/core_ext/operating_system_symbol'
 require 'u3d/unity_versions'
 require 'u3d/utils'
 
 module U3d
   # Cache stores the informations regarding versions
   class Cache
+    using ::CoreExtensions::OperatingSystem
+
     # Path to the directory containing the cache for the different OS
     DEFAULT_LINUX_PATH = File.join(ENV['HOME'], '.u3d').freeze
     DEFAULT_MAC_PATH = File.join(ENV['HOME'], 'Library', 'Application Support', 'u3d').freeze
@@ -51,7 +54,7 @@ module U3d
       @cache[key]
     end
 
-    def initialize(path: nil, force_os: nil, force_refresh: false, offline: false)
+    def initialize(path: nil, force_os: nil, force_refresh: false, offline: false, central_cache: false)
       raise "Cache: cannot specify both offline and force_refresh" if offline && force_refresh
       @path = path || Cache.default_os_path
       @cache = {}
@@ -64,7 +67,7 @@ module U3d
         need_update = false
       end
       @cache = data
-      overwrite_cache(file_path, os) if need_update || force_refresh
+      overwrite_cache(file_path, os, central_cache: central_cache) if need_update || force_refresh
     end
 
     def self.default_os_path
@@ -98,28 +101,48 @@ module U3d
           UI.error 'Failed to open cache.json: ' + file_error.to_s
           need_update = true
         else
-          need_update = data[os.id2name].nil?\
-          || data[os.id2name]['lastupdate'].nil?\
-          || (Time.now.to_i - data[os.id2name]['lastupdate'] > CACHE_LIFE)\
-          || (data[os.id2name]['versions'] || []).empty?
+          need_update = os_data_need_update?(data, os)
           data[os.id2name] = nil if need_update
         end
       end
       return need_update, data
     end
 
+    def os_data_need_update?(data, os)
+      data[os.id2name].nil?\
+      || data[os.id2name]['lastupdate'].nil?\
+      || (Time.now.to_i - data[os.id2name]['lastupdate'] > CACHE_LIFE)\
+      || (data[os.id2name]['versions'] || []).empty?
+    end
+
     # Updates cache by retrieving versions with U3d::Downloader
-    def overwrite_cache(file_path, os)
-      platform = 'Windows' if os == :win
-      platform = 'Mac OSX' if os == :mac
-      platform = 'Linux' if os == :linux
-      UI.important "Cache is out of date. Updating cache for #{platform}"
+    def overwrite_cache(file_path, os, central_cache: false)
+      UI.message("central_cache #{central_cache} ")
+      update_cache(os) unless central_cache && fetch_central_cache(os)
+
+      File.delete(file_path) if File.file?(file_path)
+      File.open(file_path, 'w') { |f| f.write(@cache.to_json) }
+    end
+
+    # Fetches central versions.json. Ignore it if it is too old
+    def fetch_central_cache(os)
+      UI.message("Fetching central 'versions.json' cache")
+      data = JSON.parse(Utils.get_ssl("https://dragonbox.github.io/unities/versions.json".freeze))
+      need_update = os_data_need_update?(data, os)
+      @cache = data unless need_update
+      !need_update
+    rescue StandardError => e
+      UI.error("Failed fetching central versions.json. Manual fetch for platform #{os} #{e}")
+      false
+    end
+
+    def update_cache(os)
+      UI.important "Cache is out of date. Updating cache for #{os.human_name}"
+
       @cache ||= {}
       @cache[os.id2name] = {}
       @cache[os.id2name]['lastupdate'] = Time.now.to_i
       @cache[os.id2name]['versions'] = UnityVersions.list_available(os: os)
-      File.delete(file_path) if File.file?(file_path)
-      File.open(file_path, 'w') { |f| f.write(@cache.to_json) }
     end
   end
 end
