@@ -386,18 +386,36 @@ describe U3d do
       end
 
       describe '.destination_for' do
-        it 'returns the correct destination the Unity installer' do
-          expect(U3d::Utils).to receive(:ensure_dir) {}
-          allow(U3d::INIparser).to receive(:load_ini) { { 'Unity' => { 'url' => 'http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f4+20160628.sh' } } }
+        it 'returns the correct default destination for the Unity installer' do
+          with_env_values('U3D_DOWNLOAD_PATH' => nil) do
+            expect(U3d::Utils).to receive(:ensure_dir) {}
+            allow(U3d::INIparser).to receive(:load_ini) { { 'Unity' => { 'url' => 'http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f4+20160628.sh' } } }
 
-          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, nil)
+            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, nil)
 
-          expect(
-            @downloader.destination_for(
-              'Unity',
-              definition
-            )
-          ).to eql File.join(ENV['HOME'], 'Downloads', 'Unity_Packages', '1.2.3f4', 'unity-editor-installer-1.2.3f4+20160628.sh')
+            expect(
+              @downloader.destination_for(
+                'Unity',
+                definition
+              )
+            ).to eql File.join(ENV['HOME'], 'Downloads', 'Unity_Packages', '1.2.3f4', 'unity-editor-installer-1.2.3f4+20160628.sh')
+          end
+        end
+
+        it 'returns the custom destination for the Unity installer when the environment variable is specified' do
+          with_env_values('U3D_DOWNLOAD_PATH' => '/foo') do
+            expect(U3d::Utils).to receive(:ensure_dir) {}
+            allow(U3d::INIparser).to receive(:load_ini) { { 'Unity' => { 'url' => 'http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f4+20160628.sh' } } }
+
+            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, nil)
+
+            expect(
+              @downloader.destination_for(
+                'Unity',
+                definition
+              )
+            ).to eql File.join(File.expand_path('/foo'), '1.2.3f4', 'unity-editor-installer-1.2.3f4+20160628.sh')
+          end
         end
       end
 
@@ -422,18 +440,36 @@ describe U3d do
       end
 
       describe '.destination_for' do
-        it 'returns the correct destination the specified package' do
-          expect(U3d::Utils).to receive(:ensure_dir) {}
-          allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => 'MacEditorInstaller/Unity.pkg' } } }
+        it 'returns the correct default destination for the specified package' do
+          with_env_values('U3D_DOWNLOAD_PATH' => nil) do
+            expect(U3d::Utils).to receive(:ensure_dir) {}
+            allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => 'MacEditorInstaller/Unity.pkg' } } }
 
-          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, nil)
+            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, nil)
 
-          expect(
-            @downloader.destination_for(
-              'package',
-              definition
-            )
-          ).to eql File.join(ENV['HOME'], 'Downloads', 'Unity_Packages', '1.2.3f4', 'Unity.pkg')
+            expect(
+              @downloader.destination_for(
+                'package',
+                definition
+              )
+            ).to eql File.join(ENV['HOME'], 'Downloads', 'Unity_Packages', '1.2.3f4', 'Unity.pkg')
+          end
+        end
+
+        it 'returns the custom destination for the specified package when the environment variable is specified' do
+          with_env_values('U3D_DOWNLOAD_PATH' => '/foo') do
+            expect(U3d::Utils).to receive(:ensure_dir) {}
+            allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => 'MacEditorInstaller/Unity.pkg' } } }
+
+            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, nil)
+
+            expect(
+              @downloader.destination_for(
+                'package',
+                definition
+              )
+            ).to eql File.join(File.expand_path('/foo'), '1.2.3f4', 'Unity.pkg')
+          end
         end
       end
 
@@ -458,18 +494,36 @@ describe U3d do
       end
 
       describe '.destination_for' do
-        it 'returns the correct destination the specified package' do
-          expect(U3d::Utils).to receive(:ensure_dir) {}
-          allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => 'Windows64EditorInstaller/UnitySetup64.exe' } } }
+        it 'returns the correct default destination the specified package' do
+          with_env_values('U3D_DOWNLOAD_PATH' => nil) do
+            expect(U3d::Utils).to receive(:ensure_dir) {}
+            allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => 'Windows64EditorInstaller/UnitySetup64.exe' } } }
 
-          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, nil)
+            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, nil)
 
-          expect(
-            @downloader.destination_for(
-              'package',
-              definition
-            )
-          ).to eql File.join(ENV['HOME'], 'Downloads', 'Unity_Packages', '1.2.3f4', 'UnitySetup64.exe')
+            expect(
+              @downloader.destination_for(
+                'package',
+                definition
+              )
+            ).to eql File.join(ENV['HOME'], 'Downloads', 'Unity_Packages', '1.2.3f4', 'UnitySetup64.exe')
+          end
+        end
+
+        it 'returns the custom destination for the specified package when the environment variable is specified' do
+          with_env_values('U3D_DOWNLOAD_PATH' => '/foo') do
+            expect(U3d::Utils).to receive(:ensure_dir) {}
+            allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => 'Windows64EditorInstaller/UnitySetup64.exe' } } }
+
+            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, nil)
+
+            expect(
+              @downloader.destination_for(
+                'package',
+                definition
+              )
+            ).to eql File.join(File.expand_path('/foo'), '1.2.3f4', 'UnitySetup64.exe')
+          end
         end
       end
 

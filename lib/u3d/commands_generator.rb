@@ -128,6 +128,10 @@ This command allows you to either:
 * download packages but not install them
 * install already downloaded packages
 Already installed packages are skipped if asked to be installed again (except for the 'Example' package).
+
+The default download path is $HOME/Downloads/Unity_Packages/, but you may change that by specifying the environment variable U3D_DOWNLOAD_PATH.
+
+E.g. U3D_DOWNLOAD_PATH=/some/path/you/want u3d install ...
         )
         c.option '--[no-]download', 'Perform or not downloading before installation. Downloads by default'
         c.option '--[no-]install', 'Perform or not installation after downloading. Installs by default'
