@@ -99,6 +99,7 @@ describe U3d do
 
           expect(U3d::Cache).to receive(:new).with(
             force_os: :fakeos,
+            offline: false,
             force_refresh: true
           ) { { 'fakeos' => { 'versions' => {} } } }
 
@@ -135,7 +136,7 @@ describe U3d do
             expect(oses).to receive(:include?).with(fakeos_sym) { true }
             allow(fakeos_sym).to receive(:id2name) { 'fakeos' }
 
-            expect(U3d::Cache).to receive(:new).with(force_os: fakeos_sym, force_refresh: false) { { 'fakeos' => { 'versions' => {} } } }
+            expect(U3d::Cache).to receive(:new).with(force_os: fakeos_sym, offline: false, force_refresh: false) { { 'fakeos' => { 'versions' => {} } } }
 
             U3d::Commands.list_available(options: { operating_system: fakeos, force: false })
           end
@@ -154,7 +155,7 @@ describe U3d do
 
           it 'assumes the OS if nothing specified' do
             expect(U3d::Helper).to receive(:operating_system) { :fakeos }
-            expect(U3d::Cache).to receive(:new).with(force_os: :fakeos, force_refresh: false) { { 'fakeos' => { 'versions' => {} } } }
+            expect(U3d::Cache).to receive(:new).with(force_os: :fakeos, offline: false, force_refresh: false) { { 'fakeos' => { 'versions' => {} } } }
 
             U3d::Commands.list_available(options: { force: false })
           end
