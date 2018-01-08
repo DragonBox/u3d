@@ -53,11 +53,6 @@ ensure
   end
 end
 
-def warn_if_env(variable)
-  return unless ENV[variable] && !ENV[variable].empty?
-  puts "[WARNING] Environment variable #{variable} should not be assigned during testing. Results may be affected."
-end
-
 def capture_stds
   require "stringio"
   orig_stdout = $stdout
