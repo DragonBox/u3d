@@ -20,6 +20,7 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
+require 'u3d_core/core_ext/hash'
 require 'u3d/compatibility'
 require 'u3d/unity_versions'
 require 'u3d/unity_version_definition'
@@ -38,6 +39,8 @@ module U3d
   # API for U3d, redirecting calls to class they concern
   # rubocop:disable ClassLength
   class Commands
+    using ::CoreExtensions::Extractable
+
     class << self
       def list_installed(options: {})
         list = Installer.create.installed
@@ -69,8 +72,8 @@ module U3d
         cache_versions = cache_versions(os, force_refresh: options[:force])
 
         if ver
-          return UI.error "Version #{ver} is not in cache" if cache_versions[ver].nil?
-          cache_versions = { ver => cache_versions[ver] }
+          cache_versions = cache_versions.extract(*cache_versions.keys.select { |k| /#{Regexp.quote(ver)}/.match(k) })
+          return UI.error "Version #{ver} doesn't match any in cache" if cache_versions.empty?
         end
 
         vcomparators = cache_versions.keys.map { |k| UnityVersionComparator.new(k) }
