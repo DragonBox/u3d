@@ -22,12 +22,15 @@
 
 require 'json'
 require 'time'
+require 'u3d_core/core_ext/operating_system_symbol'
 require 'u3d/unity_versions'
 require 'u3d/utils'
 
 module U3d
   # Cache stores the informations regarding versions
   class Cache
+    using ::CoreExtensions::OperatingSystem
+
     # Path to the directory containing the cache for the different OS
     DEFAULT_LINUX_PATH = File.join(ENV['HOME'], '.u3d').freeze
     DEFAULT_MAC_PATH = File.join(ENV['HOME'], 'Library', 'Application Support', 'u3d').freeze
@@ -134,10 +137,7 @@ module U3d
     end
 
     def update_cache(os)
-      platform = 'Windows' if os == :win
-      platform = 'Mac OSX' if os == :mac
-      platform = 'Linux' if os == :linux
-      UI.important "Cache is out of date. Updating cache for #{platform}"
+      UI.important "Cache is out of date. Updating cache for #{os.human_name}"
 
       @cache ||= {}
       @cache[os.id2name] = {}
