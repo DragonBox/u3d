@@ -117,7 +117,6 @@ module U3d
 
     # Updates cache by retrieving versions with U3d::Downloader
     def overwrite_cache(file_path, os, central_cache: false)
-      UI.message("central_cache #{central_cache} ")
       update_cache(os) unless central_cache && fetch_central_cache(os)
 
       File.delete(file_path) if File.file?(file_path)
