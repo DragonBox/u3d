@@ -41,6 +41,8 @@ module U3d
     # Currently set to 24h
     CACHE_LIFE = 60 * 60 * 24
 
+    GLOBAL_CACHE_URL = 'https://dragonbox.github.io/unities/v1/versions.json'.freeze
+
     private
 
     attr_accessor :cache
@@ -126,7 +128,7 @@ module U3d
     # Fetches central versions.json. Ignore it if it is too old
     def fetch_central_cache(os)
       UI.message("Fetching central 'versions.json' cache")
-      data = JSON.parse(Utils.get_ssl("https://dragonbox.github.io/unities/versions.json".freeze))
+      data = JSON.parse(Utils.get_ssl(GLOBAL_CACHE_URL))
       need_update = os_data_need_update?(data, os)
       @cache = data unless need_update
       !need_update
