@@ -1,5 +1,24 @@
 # Change Log
 
+## [v1.0.13](https://github.com/DragonBox/u3d/tree/v1.0.13) (2018-01-09)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.12...v1.0.13)
+
+**Implemented enhancements:**
+
+- u3d/install: allow to specify packages download directory [\#213](https://github.com/DragonBox/u3d/issues/213)
+- u3d/available: fetch versions data from a central repository, speeding up identification of available releases [\#142](https://github.com/DragonBox/u3d/issues/142)
+- u3d/available: introduce a central cache \(fixes \#142\) [\#217](https://github.com/DragonBox/u3d/pull/217) ([lacostej](https://github.com/lacostej))
+- u3d/available: allow to match using regular expression [\#216](https://github.com/DragonBox/u3d/pull/216) ([lacostej](https://github.com/lacostej))
+- u3d/install: allow to specify packages download directory using an environment variable [\#214](https://github.com/DragonBox/u3d/pull/214) ([niezbop](https://github.com/niezbop))
+- u3d/prettify: remove Jenkins rules [\#211](https://github.com/DragonBox/u3d/pull/211) ([niezbop](https://github.com/niezbop))
+- u3d/prettify: update ruleset with LICENSE SYSTEM rules [\#210](https://github.com/DragonBox/u3d/pull/210) ([niezbop](https://github.com/niezbop))
+
+**Merged pull requests:**
+
+- Rubocop 0.52.1 workaround. Fixed in rubocop master [\#218](https://github.com/DragonBox/u3d/pull/218) ([lacostej](https://github.com/lacostej))
+- u3d/internals: a serie of cache related refactors [\#215](https://github.com/DragonBox/u3d/pull/215) ([lacostej](https://github.com/lacostej))
+- Update to latest rubocop [\#212](https://github.com/DragonBox/u3d/pull/212) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.12](https://github.com/DragonBox/u3d/tree/v1.0.12) (2018-01-03)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.11...v1.0.12)
 
@@ -28,7 +47,6 @@
 
 **Merged pull requests:**
 
-- Preparing release for 1.0.11 [\#192](https://github.com/DragonBox/u3d/pull/192) ([lacostej](https://github.com/lacostej))
 - doc: explain CI setup with jenkins [\#191](https://github.com/DragonBox/u3d/pull/191) ([lacostej](https://github.com/lacostej))
 - u3d/run: fail with a proper message when opening a Unity4 project [\#187](https://github.com/DragonBox/u3d/pull/187) ([lacostej](https://github.com/lacostej))
 
