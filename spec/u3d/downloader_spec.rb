@@ -383,13 +383,15 @@ describe U3d do
     describe U3d::Downloader::LinuxDownloader do
       before(:all) do
         @downloader = U3d::Downloader::LinuxDownloader.new
+        @url = 'http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f4+20160628.sh'
       end
 
       describe '.destination_for' do
         it 'returns the correct default destination for the Unity installer' do
           with_env_values('U3D_DOWNLOAD_PATH' => nil) do
+            expect(U3d::Utils).to receive(:final_url).with(@url).and_return(@url)
             expect(U3d::Utils).to receive(:ensure_dir) {}
-            allow(U3d::INIparser).to receive(:load_ini) { { 'Unity' => { 'url' => 'http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f4+20160628.sh' } } }
+            allow(U3d::INIparser).to receive(:load_ini) { { 'Unity' => { 'url' => @url } } }
 
             definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, nil)
 
@@ -404,8 +406,9 @@ describe U3d do
 
         it 'returns the custom destination for the Unity installer when the environment variable is specified' do
           with_env_values('U3D_DOWNLOAD_PATH' => '/foo') do
+            expect(U3d::Utils).to receive(:final_url).with(@url).and_return(@url)
             expect(U3d::Utils).to receive(:ensure_dir) {}
-            allow(U3d::INIparser).to receive(:load_ini) { { 'Unity' => { 'url' => 'http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f4+20160628.sh' } } }
+            allow(U3d::INIparser).to receive(:load_ini) { { 'Unity' => { 'url' => @url } } }
 
             definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, nil)
 
@@ -421,15 +424,16 @@ describe U3d do
 
       describe '.url_for' do
         it 'returns the correct url for the Unity installer' do
-          allow(U3d::INIparser).to receive(:load_ini) { { 'Unity' => { 'url' => 'http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f4+20160628.sh' } } }
+          expect(U3d::Utils).to receive(:final_url).with(@url).and_return(@url)
+          allow(U3d::INIparser).to receive(:load_ini) { { 'Unity' => { 'url' => @url } } }
 
-          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, '1.2.3f4' => 'http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f4+20160628.sh')
+          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, '1.2.3f4' => @url)
           expect(
             @downloader.url_for(
               'Unity',
               definition
             )
-          ).to eql 'http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f4+20160628.sh'
+          ).to eql @url
         end
       end
     end
@@ -437,15 +441,19 @@ describe U3d do
     describe U3d::Downloader::MacDownloader do
       before(:all) do
         @downloader = U3d::Downloader::MacDownloader.new
+
+        @url = 'http://download.unity3d.com/download_unity/d3101c3b8468/'
+        @path = 'MacEditorInstaller/Unity.pkg'
+        @final_url = "#{@url}#{@path}"
       end
 
       describe '.destination_for' do
         it 'returns the correct default destination for the specified package' do
           with_env_values('U3D_DOWNLOAD_PATH' => nil) do
             expect(U3d::Utils).to receive(:ensure_dir) {}
-            allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => 'MacEditorInstaller/Unity.pkg' } } }
+            allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
 
-            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, nil)
+            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, '1.2.3f4' => @url)
 
             expect(
               @downloader.destination_for(
@@ -459,9 +467,9 @@ describe U3d do
         it 'returns the custom destination for the specified package when the environment variable is specified' do
           with_env_values('U3D_DOWNLOAD_PATH' => '/foo') do
             expect(U3d::Utils).to receive(:ensure_dir) {}
-            allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => 'MacEditorInstaller/Unity.pkg' } } }
+            allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
 
-            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, nil)
+            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, '1.2.3f4' => @url)
 
             expect(
               @downloader.destination_for(
@@ -475,15 +483,15 @@ describe U3d do
 
       describe '.url_for' do
         it 'returns the correct url for the specified package' do
-          allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => 'MacEditorInstaller/Unity.pkg' } } }
+          allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
 
-          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, '1.2.3f4' => 'http://download.unity3d.com/download_unity/d3101c3b8468/')
+          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, '1.2.3f4' => @url)
           expect(
             @downloader.url_for(
               'package',
               definition
             )
-          ).to eql 'http://download.unity3d.com/download_unity/d3101c3b8468/MacEditorInstaller/Unity.pkg'
+          ).to eql @final_url
         end
       end
     end
@@ -491,15 +499,18 @@ describe U3d do
     describe U3d::Downloader::WindowsDownloader do
       before(:all) do
         @downloader = U3d::Downloader::WindowsDownloader.new
+        @url = 'http://download.unity3d.com/download_unity/d3101c3b8468/'
+        @path = 'Windows64EditorInstaller/UnitySetup64.exe'
+        @final_url = "#{@url}#{@path}"
       end
 
       describe '.destination_for' do
         it 'returns the correct default destination the specified package' do
           with_env_values('U3D_DOWNLOAD_PATH' => nil) do
             expect(U3d::Utils).to receive(:ensure_dir) {}
-            allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => 'Windows64EditorInstaller/UnitySetup64.exe' } } }
+            allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
 
-            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, nil)
+            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, '1.2.3f4' => @url)
 
             expect(
               @downloader.destination_for(
@@ -513,9 +524,9 @@ describe U3d do
         it 'returns the custom destination for the specified package when the environment variable is specified' do
           with_env_values('U3D_DOWNLOAD_PATH' => '/foo') do
             expect(U3d::Utils).to receive(:ensure_dir) {}
-            allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => 'Windows64EditorInstaller/UnitySetup64.exe' } } }
+            allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
 
-            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, nil)
+            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, '1.2.3f4' => @url)
 
             expect(
               @downloader.destination_for(
@@ -529,15 +540,15 @@ describe U3d do
 
       describe '.url_for' do
         it 'returns the correct url for the specified package' do
-          allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => 'Windows64EditorInstaller/UnitySetup64.exe' } } }
+          allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
 
-          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, '1.2.3f4' => 'http://download.unity3d.com/download_unity/d3101c3b8468/')
+          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, '1.2.3f4' => @url)
           expect(
             @downloader.url_for(
               'package',
               definition
             )
-          ).to eql 'http://download.unity3d.com/download_unity/d3101c3b8468/Windows64EditorInstaller/UnitySetup64.exe'
+          ).to eql @final_url
         end
       end
     end

@@ -34,14 +34,27 @@ module U3d
     UNITY_VERSION_REGEX = /(\d+)(?:\.(\d+)(?:\.(\d+))?)?(?:(\w)(?:(\d+))?)?/
 
     class << self
+      def final_url(url, redirect_limit: 10)
+        follow_redirects(url, redirect_limit: redirect_limit, http_method: :head) do |request, _response|
+          request.uri.to_s
+        end
+      end
+
       def get_ssl(url, redirect_limit: 10)
+        follow_redirects(url, redirect_limit: redirect_limit) do |_request, response|
+          response.body
+        end
+      end
+
+      def follow_redirects(url, redirect_limit: 10, http_method: :get, &block)
         raise 'Too many redirections' if redirect_limit.zero?
         response = nil
         request = nil
         uri = URI(url)
         begin
-          Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
-            request = Net::HTTP::Get.new uri
+          use_ssl = /^https/.match(url)
+          Net::HTTP.start(uri.host, uri.port, use_ssl: use_ssl) do |http|
+            request = http_request_class http_method, uri
             response = http.request request
           end
         rescue OpenSSL::OpenSSLError => ssl_error
@@ -51,12 +64,18 @@ module U3d
 
         case response
         when Net::HTTPSuccess then
-          response.body
+          yield(request, response)
         when Net::HTTPRedirection then
           UI.verbose "Redirected to #{response['location']}"
-          get_ssl(response['location'], redirect_limit: redirect_limit - 1)
+          follow_redirects(response['location'], redirect_limit: redirect_limit - 1, http_method: http_method, &block)
         else raise "Request failed with status #{response.code}"
         end
+      end
+
+      def http_request_class(method, uri)
+        return Net::HTTP::Get.new uri if method == :get
+        return Net::HTTP::Head.new uri if method == :head
+        raise "Unknown method #{method}"
       end
 
       # size a hint of the expected size
