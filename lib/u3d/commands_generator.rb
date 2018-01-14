@@ -140,7 +140,7 @@ E.g. U3D_DOWNLOAD_PATH=/some/path/you/want u3d install ...
         c.option '--[no-]download', 'Perform or not downloading before installation. Downloads by default'
         c.option '--[no-]install', 'Perform or not installation after downloading. Installs by default'
         c.option '-p', '--packages PACKAGES', Array, 'Specifies which packages to download/install. Overriden by --all'
-        c.option '-o', '--operating_system STRING', String, "Checks for availability on specific OS [#{oses.join(', ')}]"
+        c.option '-o', '--operating_system STRING', String, "Downloads packages for specific OS [#{oses.join(', ')}]. Requires the --no-install option."
         c.option '-a', '--all', 'Download all available packages. Overrides -p'
         c.option '-i', '--installation_path PATH', String, 'Specifies where package(s) will be downloaded/installed. Conflicts with --no-install'
         c.option '-k', '--keychain', 'Gain privileges right through the keychain. [OSX only]'
