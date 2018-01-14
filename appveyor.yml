@@ -3,7 +3,7 @@
 version: "{build}"
 
 init:
-  - git config --global core.autocrlf true
+  - git config --global core.autocrlf false
 
 # cloning the repository happens here
 
