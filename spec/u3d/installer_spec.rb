@@ -70,7 +70,7 @@ describe U3d do
       end
     end
 
-    describe U3d::MacInstaller do
+    describe U3d::MacInstaller, unless: WINDOWS do
       context 'when using a default install' do
         let(:unity) { macinstall_5_6_default }
         it 'sanitizes install' do
@@ -111,7 +111,7 @@ describe U3d do
       end
     end
 
-    describe U3d::LinuxInstaller do
+    describe U3d::LinuxInstaller, unless: WINDOWS do
       context 'when using a default install' do
         let(:unity) { linux_5_6_standard }
         it 'aborts sanitize install' do
