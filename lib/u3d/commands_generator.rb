@@ -122,7 +122,8 @@ Fore more information about how the rules work, see https://github.com/DragonBox
       end
 
       command :install do |c|
-        c.syntax = 'u3d install [<version>] [ [-p | --packages <package1>,<package2> ...] | [-a | --all] ] [--[no-]download] [ [--[no-]install] [-i | --installation_path <path>] ]'
+        oses = U3dCore::Helper.operating_systems
+        c.syntax = 'u3d install [<version>] [ [-p | --packages <package1>,<package2> ...] | [-o | --operating_system <OS>] [-a | --all] ] [--[no-]download] [ [--[no-]install] [-i | --installation_path <path>] ]'
         c.summary = "Download (and/or) install Unity3D editor packages."
         c.description = %(
 #{c.summary}
@@ -139,10 +140,12 @@ E.g. U3D_DOWNLOAD_PATH=/some/path/you/want u3d install ...
         c.option '--[no-]download', 'Perform or not downloading before installation. Downloads by default'
         c.option '--[no-]install', 'Perform or not installation after downloading. Installs by default'
         c.option '-p', '--packages PACKAGES', Array, 'Specifies which packages to download/install. Overriden by --all'
+        c.option '-o', '--operating_system STRING', String, "Downloads packages for specific OS [#{oses.join(', ')}]. Requires the --no-install option."
         c.option '-a', '--all', 'Download all available packages. Overrides -p'
         c.option '-i', '--installation_path PATH', String, 'Specifies where package(s) will be downloaded/installed. Conflicts with --no-install'
         c.option '-k', '--keychain', 'Gain privileges right through the keychain. [OSX only]'
         c.example 'Download and install Unity, its Documentation and the Android build support and install them for version 5.1.2f1', 'u3d install 5.1.2f1 -p Unity,Documentation,Android'
+        c.example 'Download but do not install all Unity version 2018.1.0b2 packages for platform Windows (while e.g. on Mac)', 'u3d install 2018.1.0b2 -o win -a --no-install'
         c.example "The 'version' argument can be a specific version number, such as 5.6.1f1, or an alias in [#{Commands.release_letter_mapping.keys.join(', ')}]. If not specified, u3d will download the unity version for the current project", 'u3d install latest'
         c.example "The admin password can be passed through the U3D_PASSWORD environment variable.", 'U3D_PASSWORD=mysecret u3d install a_version'
         c.example "On Mac, the admin password can be fetched from (and stored into) the keychain.", 'u3d install -k a_version'

@@ -103,7 +103,8 @@ module U3d
       def install(args: [], options: {})
         version = specified_or_current_project_version(args[0])
 
-        os = U3dCore::Helper.operating_system
+        UI.user_error!("You cannot use the --operating_system and the --install options together") if options[:install] && options[:operating_system]
+        os = valid_os_or_current(options[:operating_system])
 
         packages = packages_with_unity_first(os, options)
 
