@@ -1,5 +1,20 @@
 # Change Log
 
+## [v1.0.14](https://github.com/DragonBox/u3d/tree/v1.0.14) (2018-01-15)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.13...v1.0.14)
+
+**Implemented enhancements:**
+
+- Support 2018.1.0b2 VisualStudio package installation [\#225](https://github.com/DragonBox/u3d/issues/225)
+- u3d/install: improve messages [\#231](https://github.com/DragonBox/u3d/pull/231) ([niezbop](https://github.com/niezbop))
+- u3d/install: add support for installing .msi packages on Windows [\#230](https://github.com/DragonBox/u3d/pull/230) ([niezbop](https://github.com/niezbop))
+
+**Merged pull requests:**
+
+- Appveyor support / Windows build automation [\#228](https://github.com/DragonBox/u3d/pull/228) ([lacostej](https://github.com/lacostej))
+- u3d/install Unity 2018. Download works on Windows and Mac and Mac installs. Fixes \#225 [\#227](https://github.com/DragonBox/u3d/pull/227) ([lacostej](https://github.com/lacostej))
+- u3d/install: allow to download from one platform while on another one [\#226](https://github.com/DragonBox/u3d/pull/226) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.13](https://github.com/DragonBox/u3d/tree/v1.0.13) (2018-01-09)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.12...v1.0.13)
 
