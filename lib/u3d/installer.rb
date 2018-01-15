@@ -63,7 +63,8 @@ module U3d
     def self.install_modules(files, version, installation_path: nil)
       installer = Installer.create
       files.each do |name, file, info|
-        UI.verbose "Installing #{name}#{info['mandatory'] ? ' (mandatory package)' : ''}, with file #{file}"
+        UI.header "Installing #{name}"
+        UI.message 'Installing with ' + file
         installer.install(file, version, installation_path: installation_path, info: info)
       end
     end
