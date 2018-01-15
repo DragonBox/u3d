@@ -305,14 +305,14 @@ module U3d
 
     def install_exe(file_path, installation_path: nil, info: {})
       installation_path ||= DEFAULT_WINDOWS_INSTALL
-      final_path = installation_path.tr('/', '\\')
+      final_path = Utils.windows_path(installation_path)
       Utils.ensure_dir(final_path)
       begin
         command = nil
         if info['cmd']
           command = info['cmd']
           if /msiexec/ =~ command
-            command.sub!(/{FILENAME}/, Utils.windows_path(file_path))
+            command.sub!(/{FILENAME}/, '"' + Utils.windows_path(file_path) + '"')
           else
             command.sub!(/{FILENAME}/, file_path)
           end

@@ -194,7 +194,7 @@ module U3d
       end
 
       def windows_path(path)
-        '"' + path.gsub(%r{\/(\d)}, '/\\\\\1').tr('/', '\\') + '"'
+        path.gsub(%r{\/(\d)}, '/\\\\\1').tr('/', '\\')
       end
     end
   end
