@@ -294,7 +294,7 @@ module U3d
 
     def install(file_path, version, installation_path: nil, info: {})
       extension = File.extname(file_path)
-      raise "Installation of #{extension} files is not supported on Windows" if !(extension == '.exe' || extension == '.msi')
+      raise "Installation of #{extension} files is not supported on Windows" unless %w[.exe .msi].include? extension
       path = installation_path || File.join(DEFAULT_WINDOWS_INSTALL, format(UNITY_DIR, version: version))
       install_exe(
         file_path,
@@ -311,10 +311,11 @@ module U3d
         command = nil
         if info['cmd']
           command = info['cmd']
-          command.sub!(/{FILENAME}/, (%r{msiexec} =~ command ?
-            '"' + file_path.gsub(/\/(\d)/, '/\\\\\1').gsub('/', '\\') + '"' : 
-            file_path
-          ))
+          if /msiexec/ =~ command
+            command.sub!(/{FILENAME}/, '"' + file_path.gsub(%r{\/(\d)}, '/\\\\\1').tr('/', '\\') + '"')
+          else
+            command.sub!(/{FILENAME}/, file_path)
+          end
           command.sub!(/{INSTDIR}/, final_path)
           command.sub!(/{DOCDIR}/, final_path)
           command.sub!(/{MODULEDIR}/, final_path)
