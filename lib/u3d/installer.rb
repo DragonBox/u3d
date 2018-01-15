@@ -312,7 +312,7 @@ module U3d
         if info['cmd']
           command = info['cmd']
           if /msiexec/ =~ command
-            command.sub!(/{FILENAME}/, '"' + file_path.gsub(%r{\/(\d)}, '/\\\\\1').tr('/', '\\') + '"')
+            command.sub!(/{FILENAME}/, Utils.windows_path(file_path))
           else
             command.sub!(/{FILENAME}/, file_path)
           end

@@ -192,6 +192,10 @@ module U3d
       def pretty_filesize(filesize)
         Filesize.from(filesize.round.to_s + ' B').pretty
       end
+
+      def windows_path(path)
+        '"' + path.gsub(%r{\/(\d)}, '/\\\\\1').tr('/', '\\') + '"'
+      end
     end
   end
   # rubocop:enable ModuleLength
