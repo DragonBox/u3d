@@ -82,6 +82,7 @@ module U3d
       private #-----------------------------------------------------------------
 
       def setup_os(os)
+        # downloader = Downloader::StandardPackageDownloader.new
         case os
         when :linux
           validator = LinuxValidator.new
@@ -99,8 +100,7 @@ module U3d
       end
 
       def get_package(downloader, validator, package, definition, files)
-        path = downloader.destination_for(package, definition)
-        url = downloader.url_for(package, definition)
+        path, url = downloader.destination_and_url_for(package, definition)
         if File.file?(path)
           UI.verbose "Installer file for #{package} seems to be present at #{path}"
           if validator.validate(package, path, definition)
@@ -137,46 +137,44 @@ module U3d
       end
     end
 
-    class MacDownloader
+    class StandardPackageDownloader
+      # for backward compatibility
       def destination_for(package, definition)
+        destination_and_url_for(package, definition)[0]
+      end
+
+      def destination_and_url_for(package, definition)
+        final_url = url_for(package, definition)
+
         dir = File.join(Downloader.download_directory, definition.version)
         Utils.ensure_dir(dir)
-        file_name = UNITY_MODULE_FILE_REGEX.match(definition[package]['url'])[1]
+        file_name = UNITY_MODULE_FILE_REGEX.match(final_url)[1]
 
-        File.expand_path(file_name, dir)
+        destination = File.expand_path(file_name, dir)
+
+        [destination, final_url]
       end
 
       def url_for(package, definition)
-        definition.url + definition[package]['url']
+        url = definition[package]['url']
+        if url
+          if url =~ /^http/
+            Utils.final_url(url)
+          else
+            definition.url + url
+          end
+        else
+          definition.url
+        end
       end
     end
 
-    class LinuxDownloader
-      def destination_for(package, definition)
-        dir = File.join(Downloader.download_directory, definition.version)
-        Utils.ensure_dir(dir)
-        file_name = UNITY_MODULE_FILE_REGEX.match(definition[package]['url'])[1]
-
-        File.expand_path(file_name, dir)
-      end
-
-      def url_for(_package, definition)
-        definition.url
-      end
+    # for backward compatibility
+    class MacDownloader < StandardPackageDownloader
     end
-
-    class WindowsDownloader
-      def destination_for(package, definition)
-        dir = File.join(Downloader.download_directory, definition.version)
-        Utils.ensure_dir(dir)
-        file_name = UNITY_MODULE_FILE_REGEX.match(definition[package]['url'])[1]
-
-        File.expand_path(file_name, dir)
-      end
-
-      def url_for(package, definition)
-        definition.url + definition[package]['url']
-      end
+    class LinuxDownloader < StandardPackageDownloader
+    end
+    class WindowsDownloader < StandardPackageDownloader
     end
   end
 end
