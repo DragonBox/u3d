@@ -3,3 +3,4 @@ coverage/
 gems/
 doc/
 LOCAL/
+.DS_Store
