@@ -37,6 +37,8 @@ require 'u3d'
 module SpecHelper
 end
 
+WINDOWS = U3dCore::Helper.windows?
+
 # Executes the provided block after adjusting the ENV to have the
 # provided keys and values set as defined in hash. After the block
 # completes, restores the ENV to its previous state.
