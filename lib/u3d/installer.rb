@@ -294,7 +294,7 @@ module U3d
 
     def install(file_path, version, installation_path: nil, info: {})
       extension = File.extname(file_path)
-      raise "Installation of #{extension} files is not supported on Windows" if extension != '.exe'
+      raise "Installation of #{extension} files is not supported on Windows" if !(extension == '.exe' || extension == '.msi')
       path = installation_path || File.join(DEFAULT_WINDOWS_INSTALL, format(UNITY_DIR, version: version))
       install_exe(
         file_path,
@@ -311,7 +311,10 @@ module U3d
         command = nil
         if info['cmd']
           command = info['cmd']
-          command.sub!(/{FILENAME}/, file_path)
+          command.sub!(/{FILENAME}/, (%r{msiexec} =~ command ?
+            '"' + file_path.gsub(/\/(\d)/, '/\\\\\1').gsub('/', '\\') + '"' : 
+            file_path
+          ))
           command.sub!(/{INSTDIR}/, final_path)
           command.sub!(/{DOCDIR}/, final_path)
           command.sub!(/{MODULEDIR}/, final_path)
@@ -320,7 +323,7 @@ module U3d
         command ||= file_path.to_s
         U3dCore::CommandExecutor.execute(command: command, admin: true)
       rescue StandardError => e
-        UI.error "Failed to install exe at #{file_path}: #{e}"
+        UI.error "Failed to install package at #{file_path}: #{e}"
       else
         UI.success "Successfully installed #{info['title']}"
       end
