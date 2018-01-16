@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.0.15](https://github.com/DragonBox/u3d/tree/v1.0.15) (2018-01-16)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.14...v1.0.15)
+
+**Merged pull requests:**
+
+- u3d/install: download beta for mac also needs to discard checking md5s on Windows packages [\#234](https://github.com/DragonBox/u3d/pull/234) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.14](https://github.com/DragonBox/u3d/tree/v1.0.14) (2018-01-15)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.13...v1.0.14)
 
