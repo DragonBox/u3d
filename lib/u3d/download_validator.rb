@@ -59,6 +59,10 @@ module U3d
 
   class MacValidator < DownloadValidator
     def validate(package, file, definition)
+      if definition[package]['size'] % 1000 && definition[package]['md5'].nil?
+        UI.verbose "File '#{definition[package]['title']}' seems external. Validation skipped"
+        return true
+      end
       size_validation(expected: definition[package]['size'], actual: File.size(file)) &&
         hash_validation(expected: definition[package]['md5'], actual: Utils.hashfile(file))
     end
