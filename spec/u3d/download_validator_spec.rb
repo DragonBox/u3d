@@ -70,32 +70,32 @@ describe U3d do
 
       context 'when both sizes match' do
         it 'returns true' do
-          result = @validator.size_validation(expected: 123456, actual: 123456)
+          result = @validator.size_validation(expected: 123_456, actual: 123_456)
           expect(result).to be true
         end
       end
 
       context 'when no expected size is given' do
         it 'returns true' do
-          result = @validator.size_validation(expected: nil, actual: 123456)
+          result = @validator.size_validation(expected: nil, actual: 123_456)
           expect(result).to be true
         end
 
         it 'logs a verbose message' do
           expect(U3dCore::UI).to receive(:verbose).with(/[Nn]o.*size.*validation/)
-          @validator.size_validation(expected: nil, actual: 123456)
+          @validator.size_validation(expected: nil, actual: 123_456)
         end
       end
 
       context 'when sizes do not match' do
         it 'returns false' do
-          result = @validator.size_validation(expected: 123456, actual: 654321)
+          result = @validator.size_validation(expected: 123_456, actual: 654_321)
           expect(result).to be false
         end
 
         it 'logs an important message' do
           expect(U3dCore::UI).to receive(:important).with(/[Ww]rong.*size/)
-          @validator.size_validation(expected: 123456, actual: 654321)
+          @validator.size_validation(expected: 123_456, actual: 654_321)
         end
       end
     end
@@ -123,12 +123,12 @@ describe U3d do
         context 'when an ini file is present' do
           before(:all) do
             @package = 'somepackage'
-            @ini = { @package => { 'size' => 123456 } }
+            @ini = { @package => { 'size' => 123_456 } }
           end
 
           it 'reads the size of the file' do
             definition = mock_version_definition(ini: @ini)
-            expect(File).to receive(:size).with('somefile') { 123456 }
+            expect(File).to receive(:size).with('somefile') { 123_456 }
             @validator.validate(@package, 'somefile', definition)
           end
 
@@ -136,7 +136,7 @@ describe U3d do
             it 'returns true' do
               definition = mock_version_definition(ini: @ini)
               allow(@validator).to receive(:size_validation) { true }
-              allow(File).to receive(:size) { 123456 }
+              allow(File).to receive(:size) { 123_456 }
               result = @validator.validate(@package, 'somefile', definition)
               expect(result).to be true
             end
@@ -146,7 +146,7 @@ describe U3d do
             it 'returns false' do
               definition = mock_version_definition(ini: @ini)
               allow(@validator).to receive(:size_validation) { false }
-              allow(File).to receive(:size) { 123456 }
+              allow(File).to receive(:size) { 123_456 }
               result = @validator.validate(@package, 'somefile', definition)
               expect(result).to be false
             end
@@ -164,7 +164,7 @@ describe U3d do
         context 'when the ini file does not contain md5 (package is external)' do
           before(:all) do
             @package = 'somepackage'
-            @ini = { @package => { 'size' => 123456, 'md5' => nil } }
+            @ini = { @package => { 'size' => 123_456, 'md5' => nil } }
           end
 
           it 'skips validation' do
@@ -191,7 +191,7 @@ describe U3d do
         context 'when there is an ini file' do
           before(:all) do
             @package = 'somepackage'
-            @ini = { @package => { 'size' => 123456, 'md5' => 'somehash' } }
+            @ini = { @package => { 'size' => 123_456, 'md5' => 'somehash' } }
           end
 
           context 'when sizes do not match' do
@@ -199,7 +199,7 @@ describe U3d do
               definition = mock_version_definition(ini: @ini)
               allow(@validator).to receive(:size_validation) { false }
               allow(@validator).to receive(:hash_validation) { true }
-              allow(File).to receive(:size) { 123456 }
+              allow(File).to receive(:size) { 123_456 }
               allow(U3d::Utils).to receive(:hashfile) { 'somehash' }
               result = @validator.validate(@package, 'somefile', definition)
               expect(result).to be false
@@ -211,7 +211,7 @@ describe U3d do
               definition = mock_version_definition(ini: @ini)
               allow(@validator).to receive(:size_validation) { true }
               allow(@validator).to receive(:hash_validation) { false }
-              allow(File).to receive(:size) { 123456 }
+              allow(File).to receive(:size) { 123_456 }
               allow(U3d::Utils).to receive(:hashfile) { 'somehash' }
               result = @validator.validate(@package, 'somefile', definition)
               expect(result).to be false
@@ -223,7 +223,7 @@ describe U3d do
               definition = mock_version_definition(ini: @ini)
               allow(@validator).to receive(:size_validation) { true }
               allow(@validator).to receive(:hash_validation) { true }
-              allow(File).to receive(:size) { 123456 }
+              allow(File).to receive(:size) { 123_456 }
               allow(U3d::Utils).to receive(:hashfile) { 'somehash' }
               result = @validator.validate(@package, 'somefile', definition)
               expect(result).to be true
@@ -242,7 +242,7 @@ describe U3d do
         context 'when the ini file does not contain md5 (package is external)' do
           before(:all) do
             @package = 'somepackage'
-            @ini = { @package => { 'size' => 123456, 'md5' => nil } }
+            @ini = { @package => { 'size' => 123_456, 'md5' => nil } }
           end
 
           it 'skips validation' do
@@ -269,7 +269,7 @@ describe U3d do
         context 'when there is an ini file' do
           before(:all) do
             @package = 'somepackage'
-            @ini = { @package => { 'size' => 123456, 'md5' => 'somehash' } }
+            @ini = { @package => { 'size' => 123_456, 'md5' => 'somehash' } }
           end
 
           context 'when sizes do not match' do
@@ -277,7 +277,7 @@ describe U3d do
               definition = mock_version_definition(ini: @ini)
               allow(@validator).to receive(:size_validation) { false }
               allow(@validator).to receive(:hash_validation) { true }
-              allow(File).to receive(:size) { 123456 }
+              allow(File).to receive(:size) { 123_456 }
               allow(U3d::Utils).to receive(:hashfile) { 'somehash' }
               result = @validator.validate(@package, 'somefile', definition)
               expect(result).to be false
@@ -289,7 +289,7 @@ describe U3d do
               definition = mock_version_definition(ini: @ini)
               allow(@validator).to receive(:size_validation) { true }
               allow(@validator).to receive(:hash_validation) { false }
-              allow(File).to receive(:size) { 123456 }
+              allow(File).to receive(:size) { 123_456 }
               allow(U3d::Utils).to receive(:hashfile) { 'somehash' }
               result = @validator.validate(@package, 'somefile', definition)
               expect(result).to be false
@@ -301,7 +301,7 @@ describe U3d do
               definition = mock_version_definition(ini: @ini)
               allow(@validator).to receive(:size_validation) { true }
               allow(@validator).to receive(:hash_validation) { true }
-              allow(File).to receive(:size) { 123456 }
+              allow(File).to receive(:size) { 123_456 }
               allow(U3d::Utils).to receive(:hashfile) { 'somehash' }
               result = @validator.validate(@package, 'somefile', definition)
               expect(result).to be true
