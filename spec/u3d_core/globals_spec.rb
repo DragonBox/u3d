@@ -84,5 +84,33 @@ describe U3dCore do
         end
       end
     end
+
+    describe "respond_to_missing" do
+      describe "With existing properties" do
+        it 'responds to with_XXXX methods' do
+          expect { U3dCore::Globals.method(:with_verbose).name.to eq('with_verbose') }
+        end
+        it 'responds to XXXX? methods' do
+          expect { U3dCore::Globals.method(:verbose?).name.to eq('with_verbose') }
+        end
+
+        it 'responds to the property' do
+          expect { U3dCore::Globals.method(:verbose).call.to eq(false) }
+        end
+      end
+
+      describe "With non existing properties" do
+        it 'doesn\'t respond to with_XXXX methods' do
+          expect { U3dCore::Globals.method(:with_XXXX) }.to raise_error(NameError)
+        end
+        it 'doesn\'t respond to XXXX? methods' do
+          expect { U3dCore::Globals.method(:XXXX?) }.to raise_error(NameError)
+        end
+
+        it 'doesn\'t respond to the property' do
+          expect { U3dCore::Globals.method(:XXXX) }.to raise_error(NameError)
+        end
+      end
+    end
   end
 end
