@@ -42,5 +42,47 @@ describe U3dCore do
         end
       end
     end
+
+    describe "With non existing properties" do
+      it 'doesn\'t find with_XXXX methods' do
+        expect { U3dCore::Globals.with_XXXXX(true) }.to raise_error(NoMethodError)
+      end
+
+      it 'doesn\'t find XXXX? methods' do
+        expect { U3dCore::Globals.XXXXX? }.to raise_error(NoMethodError)
+      end
+
+      it 'doesn\'t find the property' do
+        expect { U3dCore::Globals.XXXXX }.to raise_error(NoMethodError)
+      end
+    end
+
+    describe "respond_to" do
+      describe "With existing properties" do
+        it 'responds to with_XXXX methods' do
+          expect { U3dCore::Globals.respond_to?(:with_verbose).to be(true) }
+        end
+        it 'responds to XXXX? methods' do
+          expect { U3dCore::Globals.respond_to?(:verbose?).to be(true) }
+        end
+
+        it 'responds to the property' do
+          expect { U3dCore::Globals.respond_to?(:verbose).to be(true) }
+        end
+      end
+
+      describe "With non existing properties" do
+        it 'doesn\'t respond to with_XXXX methods' do
+          expect { U3dCore::Globals.respond_to?(:with_XXXX).to be(false) }
+        end
+        it 'doesn\'t respond to XXXX? methods' do
+          expect { U3dCore::Globals.respond_to?(:XXXX?).to be(false) }
+        end
+
+        it 'doesn\'t respond to the property' do
+          expect { U3dCore::Globals.respond_to?(:XXXX).to be(false) }
+        end
+      end
+    end
   end
 end
