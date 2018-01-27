@@ -97,9 +97,21 @@ module U3d
       class << self
         def list_available
           UI.message 'Loading Unity releases'
+          unity_forums = UnityForums.new
+          versions = unity_forums.pagination_urls(UNITY_LINUX_DOWNLOADS).map do |page_url|
+            list_available_from_page(unity_forums, unity_forums.page_content(page_url))
+          end.reduce({}, :merge)
+          if versions.count.zero?
+            UI.important 'Found no releases'
+          else
+            UI.success "Found #{versions.count} releases."
+          end
+          versions
+        end
 
-          data = linux_forum_page_content
+        private
 
+        def list_available_from_page(unity_forums, data)
           versions = {}
           results = data.scan(LINUX_DOWNLOAD_DATED)
           results.each do |capt|
@@ -107,28 +119,21 @@ module U3d
             versions[capt[1]] = capt[0]
           end
 
-          response = nil
           results = data.scan(LINUX_DOWNLOAD_RECENT_PAGE)
           results.each do |page|
-            response = linux_forum_version_page_content(page[0])
-            if response.is_a? Net::HTTPSuccess
-              capt = response.body.match(LINUX_DOWNLOAD_RECENT_FILE)
-              if capt && capt[1] && capt[2]
-                ver = capt[2].delete('x')
-                UI.important "Version #{ver} does not match standard Unity versions" unless ver =~ Utils::UNITY_VERSION_REGEX
-                save_package_size(ver, capt[1])
-                versions[ver] = capt[1]
-              else
-                UI.error("Could not retrieve a fitting file from #{url}")
-              end
+            url = page[0]
+            page_body = unity_forums.page_content(url)
+            capt = page_body.match(LINUX_DOWNLOAD_RECENT_FILE)
+            if capt && capt[1] && capt[2]
+              ver = capt[2].delete('x')
+              UI.important "Version #{ver} does not match standard Unity versions" unless ver =~ Utils::UNITY_VERSION_REGEX
+              save_package_size(ver, capt[1])
+              versions[ver] = capt[1]
             else
-              UI.error("Could not access #{url}")
+              # newer version of unity on linux support ini files
+              # http://beta.unity3d.com/download/3c89f8d277f5/unity-2017.3.0f1-linux.ini
+              UI.error("Could not retrieve a fitting file from #{url}")
             end
-          end
-          if versions.count.zero?
-            UI.important 'Found no releases'
-          else
-            UI.success "Found #{versions.count} releases."
           end
           versions
         end
@@ -147,74 +152,79 @@ module U3d
             UI.important "u3d tried to get the size of the installer for version #{version}, but wasn't able to"
           end
         end
+      end
+    end
 
-        def linux_forum_page_content
-          response = nil
-          data = ''
-          uri = URI(UNITY_LINUX_DOWNLOADS)
-          Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+    class UnityForums
+      def pagination_urls(url)
+        # hardcoded for now
+        # otherwise maybe
+        # # <div class="PageNav" data-page="7" data-range="2" data-start="5" data-end="9" data-last="10" data-sentinel="{{sentinel}}" data-baseurl="threads/twitter.12003/page-{{sentinel}}"
+        #  <span class="pageNavHeader">Page 7 of 10</span>
+        [url,
+         "#{url}page-2"]
+      end
+
+      def page_content(url)
+        fetch_cookie
+        request_headers = { 'Connection' => 'keep-alive', 'Cookie' => @cookie }
+        UI.verbose "Fetching from #{url}"
+        Utils.page_content(url, request_headers: request_headers)
+      end
+
+      private
+
+      def fetch_cookie
+        UI.verbose "FetchCookie? #{@cookie}"
+        return @cookie if @cookie
+        cookie_str = ''
+        url = UNITY_LINUX_DOWNLOADS
+        uri = URI(url)
+        Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+          request = Net::HTTP::Get.new uri
+          request['Connection'] = 'keep-alive'
+          response = http.request request
+
+          case response
+          when Net::HTTPSuccess then
+            UI.verbose "unexpected result"
+          when Net::HTTPRedirection then
+            # A session must be opened with the server before accessing forum
+            res = nil
+            cookie_str = ''
+            # Store the name and value of the cookies returned by the server
+            response['set-cookie'].gsub(/\s+/, '').split(',').each do |c|
+              cookie_str << c.split(';', 2)[0] + '; '
+            end
+            cookie_str.chomp!('; ')
+
+            # It should be the Unity register API
+            uri = URI(response['location'])
+            UI.verbose "Redirecting to #{uri}"
+            Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http_api|
+              request = Net::HTTP::Get.new uri
+              request['Connection'] = 'keep-alive'
+              res = http_api.request request
+            end
+
+            raise 'Unexpected result' unless res.is_a? Net::HTTPRedirection
+            # It should be a redirection to the forum to perform authentication
+            uri = URI(res['location'])
+            UI.verbose "Redirecting to #{uri}"
             request = Net::HTTP::Get.new uri
             request['Connection'] = 'keep-alive'
-            response = http.request request
+            request['Cookie'] = cookie_str
 
-            case response
-            when Net::HTTPSuccess then
-              # Successfully retrieved forum content
-              data = response.body
-            when Net::HTTPRedirection then
-              # A session must be opened with the server before accessing forum
-              res = nil
-              cookie_str = ''
-              # Store the name and value of the cookies returned by the server
-              response['set-cookie'].gsub(/\s+/, '').split(',').each do |c|
-                cookie_str << c.split(';', 2)[0] + '; '
-              end
-              cookie_str.chomp!('; ')
+            res = http.request request
 
-              # It should be the Unity register API
-              uri = URI(response['location'])
-              Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http_api|
-                request = Net::HTTP::Get.new uri
-                request['Connection'] = 'keep-alive'
-                res = http_api.request request
-              end
+            raise 'Unable to establish a session with Unity forum' unless res.is_a? Net::HTTPRedirection
 
-              raise 'Unexpected result' unless res.is_a? Net::HTTPRedirection
-              # It should be a redirection to the forum to perform authentication
-              uri = URI(res['location'])
-
-              request = Net::HTTP::Get.new uri
-              request['Connection'] = 'keep-alive'
-              request['Cookie'] = cookie_str
-
-              res = http.request request
-
-              raise 'Unable to establish a session with Unity forum' unless res.is_a? Net::HTTPRedirection
-
-              cookie_str << '; ' + res['set-cookie'].gsub(/\s+/, '').split(';', 2)[0]
-
-              uri = URI(res['location'])
-
-              request = Net::HTTP::Get.new uri
-              request['Connection'] = 'keep-alive'
-              request['Cookie'] = cookie_str
-
-              res = http.request request
-
-              data = res.body if res.is_a? Net::HTTPSuccess
-            else raise "Request failed with status #{response.code}"
-            end
-          end
-          data
-        end
-
-        def linux_forum_version_page_content(url)
-          uri = URI(url)
-          Net::HTTP.start(uri.host, uri.port) do |http|
-            request = Net::HTTP::Get.new uri
-            return http.request request
+            UI.verbose "Found cookie_str #{cookie_str}"
+            cookie_str << '; ' + res['set-cookie'].gsub(/\s+/, '').split(';', 2)[0]
           end
         end
+        UI.verbose "Found @cookie #{cookie_str}"
+        @cookie = cookie_str
       end
     end
 
