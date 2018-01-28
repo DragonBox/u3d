@@ -25,6 +25,80 @@ require 'u3d_core/helper'
 require 'net/http'
 
 module U3d
+  class UnityForums
+    def initialize
+    end
+    def pagination_urls(url)
+      # hardcoded for now
+      # otherwise maybe
+      # # <div class="PageNav" data-page="7" data-range="2" data-start="5" data-end="9" data-last="10" data-sentinel="{{sentinel}}" data-baseurl="threads/twitter.12003/page-{{sentinel}}"
+      #  <span class="pageNavHeader">Page 7 of 10</span>
+      [url,
+       "#{url}page-2"]
+    end
+
+    def page_content(url)
+      fetch_cookie
+      request_headers = { 'Connection' => 'keep-alive', 'Cookie' => @cookie }
+      UI.verbose "Fetching from #{url}"
+      Utils.page_content(url, request_headers: request_headers)
+    end
+
+    private
+
+    def fetch_cookie
+      UI.verbose "FetchCookie? #{@cookie}"
+      return @cookie if @cookie
+      cookie_str = ''
+      url = UNITY_LINUX_DOWNLOADS
+      uri = URI(url)
+      Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
+        request = Net::HTTP::Get.new uri
+        request['Connection'] = 'keep-alive'
+        response = http.request request
+
+        case response
+        when Net::HTTPSuccess then
+          UI.verbose "unexpected result"
+        when Net::HTTPRedirection then
+          # A session must be opened with the server before accessing forum
+          res = nil
+          cookie_str = ''
+          # Store the name and value of the cookies returned by the server
+          response['set-cookie'].gsub(/\s+/, '').split(',').each do |c|
+            cookie_str << c.split(';', 2)[0] + '; '
+          end
+          cookie_str.chomp!('; ')
+
+          # It should be the Unity register API
+          uri = URI(response['location'])
+          UI.verbose "Redirecting to #{uri}"
+          Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http_api|
+            request = Net::HTTP::Get.new uri
+            request['Connection'] = 'keep-alive'
+            res = http_api.request request
+          end
+
+          raise 'Unexpected result' unless res.is_a? Net::HTTPRedirection
+          # It should be a redirection to the forum to perform authentication
+          uri = URI(res['location'])
+          UI.verbose "Redirecting to #{uri}"
+          request = Net::HTTP::Get.new uri
+          request['Connection'] = 'keep-alive'
+          request['Cookie'] = cookie_str
+
+          res = http.request request
+
+          raise 'Unable to establish a session with Unity forum' unless res.is_a? Net::HTTPRedirection
+
+          UI.verbose "Found cookie_str #{cookie_str}"
+          cookie_str << '; ' + res['set-cookie'].gsub(/\s+/, '').split(';', 2)[0]
+        end
+      end
+      UI.verbose "Found @cookie #{cookie_str}"
+      @cookie = cookie_str
+    end
+  end
   # Takes care of fectching versions and version list
   module UnityVersions
     #####################################################
@@ -94,12 +168,14 @@ module U3d
     end
 
     class LinuxVersions
+      @unity_forums = U3d::UnityForums.new
       class << self
+        attr_accessor :unity_forums
+
         def list_available
           UI.message 'Loading Unity releases'
-          unity_forums = UnityForums.new
-          versions = unity_forums.pagination_urls(UNITY_LINUX_DOWNLOADS).map do |page_url|
-            list_available_from_page(unity_forums, unity_forums.page_content(page_url))
+          versions = @unity_forums.pagination_urls(UNITY_LINUX_DOWNLOADS).map do |page_url|
+            list_available_from_page(@unity_forums, unity_forums.page_content(page_url))
           end.reduce({}, :merge)
           if versions.count.zero?
             UI.important 'Found no releases'
@@ -152,79 +228,6 @@ module U3d
             UI.important "u3d tried to get the size of the installer for version #{version}, but wasn't able to"
           end
         end
-      end
-    end
-
-    class UnityForums
-      def pagination_urls(url)
-        # hardcoded for now
-        # otherwise maybe
-        # # <div class="PageNav" data-page="7" data-range="2" data-start="5" data-end="9" data-last="10" data-sentinel="{{sentinel}}" data-baseurl="threads/twitter.12003/page-{{sentinel}}"
-        #  <span class="pageNavHeader">Page 7 of 10</span>
-        [url,
-         "#{url}page-2"]
-      end
-
-      def page_content(url)
-        fetch_cookie
-        request_headers = { 'Connection' => 'keep-alive', 'Cookie' => @cookie }
-        UI.verbose "Fetching from #{url}"
-        Utils.page_content(url, request_headers: request_headers)
-      end
-
-      private
-
-      def fetch_cookie
-        UI.verbose "FetchCookie? #{@cookie}"
-        return @cookie if @cookie
-        cookie_str = ''
-        url = UNITY_LINUX_DOWNLOADS
-        uri = URI(url)
-        Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
-          request = Net::HTTP::Get.new uri
-          request['Connection'] = 'keep-alive'
-          response = http.request request
-
-          case response
-          when Net::HTTPSuccess then
-            UI.verbose "unexpected result"
-          when Net::HTTPRedirection then
-            # A session must be opened with the server before accessing forum
-            res = nil
-            cookie_str = ''
-            # Store the name and value of the cookies returned by the server
-            response['set-cookie'].gsub(/\s+/, '').split(',').each do |c|
-              cookie_str << c.split(';', 2)[0] + '; '
-            end
-            cookie_str.chomp!('; ')
-
-            # It should be the Unity register API
-            uri = URI(response['location'])
-            UI.verbose "Redirecting to #{uri}"
-            Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http_api|
-              request = Net::HTTP::Get.new uri
-              request['Connection'] = 'keep-alive'
-              res = http_api.request request
-            end
-
-            raise 'Unexpected result' unless res.is_a? Net::HTTPRedirection
-            # It should be a redirection to the forum to perform authentication
-            uri = URI(res['location'])
-            UI.verbose "Redirecting to #{uri}"
-            request = Net::HTTP::Get.new uri
-            request['Connection'] = 'keep-alive'
-            request['Cookie'] = cookie_str
-
-            res = http.request request
-
-            raise 'Unable to establish a session with Unity forum' unless res.is_a? Net::HTTPRedirection
-
-            UI.verbose "Found cookie_str #{cookie_str}"
-            cookie_str << '; ' + res['set-cookie'].gsub(/\s+/, '').split(';', 2)[0]
-          end
-        end
-        UI.verbose "Found @cookie #{cookie_str}"
-        @cookie = cookie_str
       end
     end
 
