@@ -26,8 +26,6 @@ require 'net/http'
 
 module U3d
   class UnityForums
-    def initialize
-    end
     def pagination_urls(url)
       # hardcoded for now
       # otherwise maybe

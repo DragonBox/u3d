@@ -48,11 +48,10 @@ describe U3d do
         end
 
         def with_forum_page(content)
-          paginations_urls = [ 'https://forums_page_1' ]
+          paginations_urls = ['https://forums_page_1']
           allow(@unity_forums).to receive(:pagination_urls) { paginations_urls }
           allow(@unity_forums).to receive(:page_content).with(paginations_urls[0]) { content } # main page
         end
-
 
         it 'retrieves standard linux versions' do
           with_forum_page(linux_archive)
