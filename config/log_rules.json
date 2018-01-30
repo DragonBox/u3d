@@ -307,6 +307,40 @@
         "start_pattern": "Textures\\s+\\d+\\.?\\d* .b\\s+\\d{1,3}\\.?\\d*%",
         "end_pattern": "Complete size\\s+\\d+\\.?\\d* .b\\s+\\d{1,3}\\.?\\d*%",
         "store_lines": true
+      },
+      "command_invokation_failure": {
+        "active": true,
+        "start_pattern": "CommandInvokationFailure: (?<message>.+\\.)",
+        "store_lines": true,
+        "end_pattern": "^\\n",
+        "start_message": "[ANDROID] Command invokation failure: %{message}",
+        "end_message": false,
+        "type": "error"
+      },
+      "command_invokation_failure_stderr": {
+        "active": true,
+        "start_pattern": "stderr\\[",
+        "store_lines": true,
+        "end_pattern": "\\]\\n",
+        "start_message": "[ANDROID] Errors:",
+        "end_message": false,
+        "type": "error"
+      },
+      "command_invokation_failure_stdout": {
+        "active": true,
+        "start_pattern": "stdout\\[",
+        "store_lines": true,
+        "end_pattern": "\\]\\n",
+        "start_message": "[ANDROID] Warnings:",
+        "end_message": false,
+        "type": "warning"
+      },
+      "command_invokation_failure_stack": {
+        "active": true,
+        "start_pattern": "[Ee]xit code: (?<code>\\d+)",
+        "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "start_message": false,
+        "end_message": "[ANDROID] %{file}(line %{line}) Exit code %{code}"
       }
     }
   }
