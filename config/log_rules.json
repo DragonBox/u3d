@@ -11,7 +11,7 @@
       "fail": {
         "active": true,
         "start_pattern": "^(?<fail>Failed to .+)\\n",
-        "end_pattern": "Filename: (?:[\\w/:\\.\\s-_]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_pattern": "Filename: (?:.+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
         "start_message": false,
         "end_message": "%{file}(line %{line}): %{fail}",
         "store_lines": false,
@@ -39,7 +39,7 @@
       "exception_report": {
         "active": true,
         "start_pattern": "^(?<message>.*threw exception\\.)\\n",
-        "end_pattern": "Filename: (?:[\\w/:\\.\\s-_]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_pattern": "Filename: (?:.+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
         "start_message": false,
         "end_message": "%{file}(line %{line}): %{message}",
         "store_lines": false,
@@ -74,7 +74,7 @@
         "fetched_line_pattern": "(?<message>.*)\\n",
         "fetched_line_message": false,
         "start_message": false,
-        "end_pattern": "Filename: (?:[\\w/:\\.\\s-_]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_pattern": "Filename: (?:.+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
         "end_message": "[LOG] %{file}(line %{line}): %{message}",
         "type": "warning"
       },
@@ -89,7 +89,7 @@
         "fetched_line_pattern": "(?<message>.*)\\n",
         "fetched_line_message": false,
         "start_message": false,
-        "end_pattern": "Filename: (?:[\\w/:\\.\\s-_]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_pattern": "Filename: (?:.+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
         "end_message": "[LOG] %{file}(line %{line}): %{message}",
         "type": "warning"
       },
@@ -105,7 +105,7 @@
         "fetched_line_pattern": "(?<message>.*)\\n",
         "fetched_line_message": false,
         "start_message": false,
-        "end_pattern": "Filename: (?:[\\w/:\\.\\s-_]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_pattern": "Filename: (?:.+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
         "end_message": "[LOG] %{file}(line %{line}): %{message}",
         "type": "error"
       },
@@ -121,7 +121,7 @@
         "fetched_line_pattern": "(?<message>.*)\\n",
         "fetched_line_message": false,
         "start_message": false,
-        "end_pattern": "Filename: (?:[\\w/:\\.\\s-_]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_pattern": "Filename: (?:.+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
         "end_message": "[LOG] %{file}(line %{line}): %{message}",
         "type": "error"
       },
@@ -341,7 +341,7 @@
       "command_invocation_failure_stack": {
         "active": true,
         "start_pattern": "[Ee]xit code: (?<code>\\d+)",
-        "end_pattern": "Filename: (?:[\\w/:]+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_pattern": "Filename: (?:.+/(?<file>\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
         "start_message": false,
         "end_message": "[ANDROID] %{file}(line %{line}) Exit code %{code}"
       }
