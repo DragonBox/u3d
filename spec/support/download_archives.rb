@@ -55,8 +55,7 @@ def linux_nested_archive
 end
 
 def linux_inner_archive
-  page_archive = double("Net::HTTPResponse")
-  body = %(
+  %(
     <html><head><meta http-equiv='content-type' content='text/html; charset=UTF-8'></head><body><h2>Unity 2017.1.0xb3Linux Linux Editor downloads</h2>
     <p>Welcome to the Linux Editor download repository.  Here, you will find the download links to experimental releases of the Linux Editor.</p>
     <h3>Debian Package</h3>
@@ -65,7 +64,4 @@ def linux_inner_archive
     <a href='http://beta.unity3d.com/download/b515b8958382/./unity-editor-installer-2017.1.0xb3Linux.sh'>Linux Editor Installer (self-extracting shell script)</a><br>
     </body></html>
   )
-  allow(page_archive).to receive(:is_a?).with(Net::HTTPSuccess) { true }
-  allow(page_archive).to receive(:body) { body }
-  return page_archive
 end

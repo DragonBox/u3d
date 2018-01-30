@@ -40,13 +40,18 @@ module U3d
         end
       end
 
-      def get_ssl(url, redirect_limit: 10)
-        follow_redirects(url, redirect_limit: redirect_limit) do |_request, response|
+      # FIXME: alias deprecated
+      def get_ssl(url, redirect_limit: 10, request_headers: {})
+        page_content(url, url, redirect_limit: redirect_limit, request_headers: request_headers)
+      end
+
+      def page_content(url, redirect_limit: 10, request_headers: {})
+        follow_redirects(url, redirect_limit: redirect_limit, request_headers: request_headers) do |_request, response|
           response.body
         end
       end
 
-      def follow_redirects(url, redirect_limit: 10, http_method: :get, &block)
+      def follow_redirects(url, redirect_limit: 10, http_method: :get, request_headers: {}, &block)
         raise 'Too many redirections' if redirect_limit.zero?
         response = nil
         request = nil
@@ -55,6 +60,9 @@ module U3d
           use_ssl = /^https/.match(url)
           Net::HTTP.start(uri.host, uri.port, use_ssl: use_ssl) do |http|
             request = http_request_class http_method, uri
+            request_headers.each do |k, v|
+              request[k] = v
+            end
             response = http.request request
           end
         rescue OpenSSL::OpenSSLError => ssl_error
@@ -67,7 +75,7 @@ module U3d
           yield(request, response)
         when Net::HTTPRedirection then
           UI.verbose "Redirected to #{response['location']}"
-          follow_redirects(response['location'], redirect_limit: redirect_limit - 1, http_method: http_method, &block)
+          follow_redirects(response['location'], redirect_limit: redirect_limit - 1, http_method: http_method, request_headers: request_headers, &block)
         else raise "Request failed with status #{response.code}"
         end
       end
