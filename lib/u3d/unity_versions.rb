@@ -48,7 +48,7 @@ module U3d
       UI.verbose "FetchCookie? #{@cookie}"
       return @cookie if @cookie
       cookie_str = ''
-      url = UNITY_LINUX_DOWNLOADS
+      url = 'https://forum.unity.com/forums/linux-editor.93/' # a page that triggers cookies
       uri = URI(url)
       Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         request = Net::HTTP::Get.new uri

@@ -42,7 +42,7 @@ module U3d
 
       # FIXME: alias deprecated
       def get_ssl(url, redirect_limit: 10, request_headers: {})
-        page_content(url, url, redirect_limit: redirect_limit, request_headers: request_headers)
+        page_content(url, redirect_limit: redirect_limit, request_headers: request_headers)
       end
 
       def page_content(url, redirect_limit: 10, request_headers: {})

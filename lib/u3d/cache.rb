@@ -133,6 +133,7 @@ module U3d
       @cache = data unless need_update
       !need_update
     rescue StandardError => e
+      UI.verbose(e.backtrace.join("\n"))
       UI.error("Failed fetching central versions.json. Manual fetch for platform #{os} #{e}")
       false
     end
