@@ -53,6 +53,15 @@ describe U3d do
             expect(data['A']['test']).to eql('initesting')
           end
         end
+
+        it 'loads and filters broken Linux INI' do
+          broken_ini = 'spec/fixtures/unity-2017.3.0f1-linux.ini'
+          allow(File).to receive(:file?) { true }
+          allow(IniFile).to receive(:load).and_wrap_original { |m, _args| m.call(broken_ini) }
+
+          data = U3d::INIparser.load_ini('key', @cache, os: :linux, offline: true)
+          expect(data.keys).to eq (['Unity', 'iOS', 'WebGL'])
+        end
       end
 
       context 'when online' do
