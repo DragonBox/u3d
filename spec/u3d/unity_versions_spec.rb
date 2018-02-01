@@ -54,35 +54,26 @@ describe U3d do
         end
 
         it 'retrieves standard linux versions' do
-          with_forum_page(linux_archive)
+          with_forum_page(linux_archive_old)
           allow(U3d::Utils).to receive(:get_url_content_length).with(/download.un.*1.2.3f1/) { 1005 }
           allow(U3d::Utils).to receive(:get_url_content_length).with(/download.un.*1.3.5f1/) { 1006 }
           allow(U3d::Utils).to receive(:get_url_content_length).with(/download.un.*2017.1.6f1/) { 1007 }
 
-          expect(U3d::UnityVersions.list_available(os: :linux).count).to eql 3
+          expect(U3d::UnityVersions.list_available(os: :linux).keys).to eql ['1.2.3f1', '1.3.5f1', '2017.1.6f1']
         end
 
-        it 'doesn\'t retrieves standard linux versions if their size are already cached' do
-          with_forum_page(linux_archive)
-          # FIXME: unused
-          # allow(U3d::INIparser).to receive(:load_ini).with('1.2.3f1', nil, os: :linux, offline: true) { fake_linux_ini_data(1005, 'something 1.2.3f1') }
-          allow(U3d::INIparser).to receive(:load_ini).with('1.3.5f1', nil, os: :linux, offline: true) { fake_linux_ini_data(1006, 'something 1.3.5f1') }
-          allow(U3d::INIparser).to receive(:load_ini).with('2017.1.6f1', nil, os: :linux, offline: true) { fake_linux_ini_data(1007, 'something 2017.1.6f1') }
-          expect(U3d::UnityVersionDefinition).to_not receive(:create_fake)
-          expect(U3d::UnityVersions.list_available(os: :linux).count).to eql 3
-        end
-
-        it 'retrieves nested linux versions' do
-          with_forum_page(linux_nested_archive)
-          allow(@unity_forums).to receive(:page_content).with('http://beta.unity3d.com/download/b515b8958382/public_download.html') { linux_inner_archive }
+        it 'retrieves nested and packaged linux versions' do
+          with_forum_page(linux_archive_all)
+          allow(@unity_forums).to receive(:page_content).with('http://beta.unity3d.com/download/b515b8958382/public_download.html') { linux_public_archive_standalone }
+          allow(@unity_forums).to receive(:page_content).with('http://beta.unity3d.com/download/3c89f8d277f5/public_download.html') { linux_public_archive_assistant }
 
           allow(U3d::INIparser).to receive(:load_ini).with('1.2.3f1', nil, os: :linux, offline: true) { fake_linux_ini_data(1005, 'something 1.2.3f1') }
           allow(U3d::INIparser).to receive(:load_ini).with('1.3.5f1', nil, os: :linux, offline: true) {}
-          allow(U3d::Utils).to receive(:get_url_content_length).with(/download.un.*1.3.5f1/) { 1006 }
           allow(U3d::INIparser).to receive(:load_ini).with('2017.1.6f1', nil, os: :linux, offline: true) { fake_linux_ini_data(1007, 'something 1.2.3f1') }
           allow(U3d::INIparser).to receive(:load_ini).with('2017.1.0b3', nil, os: :linux, offline: true) {}
-          allow(U3d::Utils).to receive(:get_url_content_length).with(/beta.un.*b515b8958382/) { 1008 }
-          expect(U3d::UnityVersions.list_available(os: :linux).count).to eql 4
+          allow(U3d::INIparser).to receive(:load_ini).with('2017.3.0f1', nil, os: :linux, offline: true) {}
+
+          expect(U3d::UnityVersions.list_available(os: :linux).keys).to eql ['1.2.3f1', '1.3.5f1', '2017.1.6f1', '2017.1.0b3', '2017.3.0f1']
         end
       end
     end
