@@ -51,6 +51,7 @@ module U3d
         end
         begin
           result = IniFile.load(ini_path).to_h
+          result = filter_broken_linux(result) if os == 'linux'
         rescue StandardError => e
           raise "Could not parse INI data (#{e})"
         end
@@ -98,6 +99,10 @@ url=#{url}
           data.gsub!(/Note:.+\n/, '')
           f.write(data)
         end
+      end
+
+      def filter_broken_linux(ini_hash)
+        ini_hash.select{ |k,v| v['url'] && !v['url'].end_with?('.pkg') }
       end
 
       def default_ini_path
