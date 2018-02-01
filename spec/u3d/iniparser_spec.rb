@@ -60,7 +60,7 @@ describe U3d do
           allow(IniFile).to receive(:load).and_wrap_original { |m, _args| m.call(broken_ini) }
 
           data = U3d::INIparser.load_ini('key', @cache, os: :linux, offline: true)
-          expect(data.keys).to eq (['Unity', 'iOS', 'WebGL'])
+          expect(data.keys).to eq %w[Unity iOS WebGL]
         end
       end
 
