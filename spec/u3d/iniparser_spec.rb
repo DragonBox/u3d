@@ -30,8 +30,6 @@ describe U3d do
       before(:each) do
         @version = 'key'
         @cache = { @version => 'url' }
-        name = "unity-#{@version}-osx.ini"
-        @path = File.expand_path(name, "#{ENV['HOME']}/.u3d/ini_files")
       end
 
       context 'when offline' do
@@ -81,6 +79,20 @@ describe U3d do
             expect(data['A']['test']).to eql('initesting')
           end
         end
+
+        it 'fakes the INI file for standalone versions of Linux' do
+          version = 'key'
+          installer_url = 'url/unity-editor-installer-2017.1.1f1.sh'
+          size = 1034
+          cache = { version => installer_url }
+
+          allow(File).to receive(:file?) { false }
+          allow(IniFile).to receive(:load)
+          expect(U3d::Utils).to receive(:get_url_content_length).with(installer_url) { size }
+          expect(U3d::INIparser).to receive(:create_linux_ini).with(version, size, installer_url)
+
+          U3d::INIparser.load_ini(version, cache, os: :linux, offline: false)
+        end
       end
     end
 
@@ -102,7 +114,7 @@ describe U3d do
         it 'writes the file' do
           path = %r{Library\/Application Support\/u3d\/ini_files\/unity-1.2.3f4-linux.ini}
 
-          allow(U3dCore::Helper).to receive(:operating_system) { :mac }
+          on_mac
 
           allow(File).to receive(:file?).with(path) { false }
           file = double('file')

@@ -48,7 +48,7 @@ module U3d
       UI.verbose "FetchCookie? #{@cookie}"
       return @cookie if @cookie
       cookie_str = ''
-      url = UNITY_LINUX_DOWNLOADS
+      url = 'https://forum.unity.com/forums/linux-editor.93/' # a page that triggers cookies
       uri = URI(url)
       Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
         request = Net::HTTP::Get.new uri
@@ -117,6 +117,7 @@ module U3d
     # @!group REGEX: expressions to interpret data
     #####################################################
     # Captures a version and its base url
+    LINUX_DOWNLOAD = %r{'(https?://[\w/\.-]+/[0-9a-f]{12}/)(./)?UnitySetup-(\d+\.\d+\.\d+\w\d+)'}
     MAC_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f]{12}/)MacEditorInstaller/[a-zA-Z0-9/\.]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
     WIN_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f]{12}/)Windows..EditorInstaller/[a-zA-Z0-9/\.]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
     LINUX_DOWNLOAD_DATED = %r{"(https?://[\w/\._-]+/unity\-editor\-installer\-(\d+\.\d+\.\d+\w\d+).*\.sh)"}
@@ -189,7 +190,6 @@ module U3d
           versions = {}
           results = data.scan(LINUX_DOWNLOAD_DATED)
           results.each do |capt|
-            save_package_size(capt[1], capt[0])
             versions[capt[1]] = capt[0]
           end
 
@@ -201,30 +201,21 @@ module U3d
             if capt && capt[1] && capt[2]
               ver = capt[2].delete('x')
               UI.important "Version #{ver} does not match standard Unity versions" unless ver =~ Utils::UNITY_VERSION_REGEX
-              save_package_size(ver, capt[1])
               versions[ver] = capt[1]
             else
+              capt = page_body.match(LINUX_DOWNLOAD)
               # newer version of unity on linux support ini files
               # http://beta.unity3d.com/download/3c89f8d277f5/unity-2017.3.0f1-linux.ini
-              UI.error("Could not retrieve a fitting file from #{url}")
+              if capt && capt[1] && capt[3]
+                ver = capt[3]
+                UI.verbose("Linux version #{ver}. Could not retrieve a fitting file from #{url}. Assuming ini file present")
+                versions[ver] = capt[1]
+              else
+                UI.important("Could not retrieve a fitting file from #{url}.")
+              end
             end
           end
           versions
-        end
-
-        def save_package_size(version, url)
-          uvd = UnityVersionDefinition.new(version, :linux, nil, offline: true)
-          if (size = uvd.size_in_bytes('Unity'))
-            UI.verbose "Package size for version #{version} already cached: #{size}"
-            return
-          end
-          UI.verbose "Finding out package size for version #{version}"
-          size = Utils.get_url_content_length(url)
-          if size
-            UnityVersionDefinition.create_fake(version, size, url)
-          else
-            UI.important "u3d tried to get the size of the installer for version #{version}, but wasn't able to"
-          end
         end
       end
     end
