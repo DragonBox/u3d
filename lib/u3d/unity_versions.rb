@@ -117,6 +117,7 @@ module U3d
     # @!group REGEX: expressions to interpret data
     #####################################################
     # Captures a version and its base url
+    LINUX_DOWNLOAD = %r{'(https?://[\w/\.-]+/[0-9a-f]{12}/)(./)?UnitySetup-(\d+\.\d+\.\d+\w\d+)'}
     MAC_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f]{12}/)MacEditorInstaller/[a-zA-Z0-9/\.]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
     WIN_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f]{12}/)Windows..EditorInstaller/[a-zA-Z0-9/\.]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
     LINUX_DOWNLOAD_DATED = %r{"(https?://[\w/\._-]+/unity\-editor\-installer\-(\d+\.\d+\.\d+\w\d+).*\.sh)"}
@@ -202,9 +203,16 @@ module U3d
               UI.important "Version #{ver} does not match standard Unity versions" unless ver =~ Utils::UNITY_VERSION_REGEX
               versions[ver] = capt[1]
             else
+              capt = page_body.match(LINUX_DOWNLOAD)
               # newer version of unity on linux support ini files
               # http://beta.unity3d.com/download/3c89f8d277f5/unity-2017.3.0f1-linux.ini
-              UI.error("Could not retrieve a fitting file from #{url}")
+              if capt && capt[1] && capt[3]
+                ver = capt[3]
+                UI.verbose("Linux version #{ver}. Could not retrieve a fitting file from #{url}. Assuming ini file present")
+                versions[ver] = capt[1]
+              else
+                UI.important("Could not retrieve a fitting file from #{url}.")
+              end
             end
           end
           versions
