@@ -64,8 +64,8 @@ describe U3d do
 
         it 'doesn\'t retrieves standard linux versions if their size are already cached' do
           with_forum_page(linux_archive)
-          # FIXME unused
-          #allow(U3d::INIparser).to receive(:load_ini).with('1.2.3f1', nil, os: :linux, offline: true) { fake_linux_ini_data(1005, 'something 1.2.3f1') }
+          # FIXME: unused
+          # allow(U3d::INIparser).to receive(:load_ini).with('1.2.3f1', nil, os: :linux, offline: true) { fake_linux_ini_data(1005, 'something 1.2.3f1') }
           allow(U3d::INIparser).to receive(:load_ini).with('1.3.5f1', nil, os: :linux, offline: true) { fake_linux_ini_data(1006, 'something 1.3.5f1') }
           allow(U3d::INIparser).to receive(:load_ini).with('2017.1.6f1', nil, os: :linux, offline: true) { fake_linux_ini_data(1007, 'something 2017.1.6f1') }
           expect(U3d::UnityVersionDefinition).to_not receive(:create_fake)
