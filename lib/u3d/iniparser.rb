@@ -46,18 +46,8 @@ module U3d
         Utils.ensure_dir(default_ini_path)
         ini_path = File.expand_path(ini_name, default_ini_path)
         unless File.file?(ini_path)
-          if os == 'linux'
-            UI.error "No INI file for version #{version}. Try discovering the available versions with 'u3d available -f'" unless offline
-            return nil
-          end
           raise "INI file does not exist at #{ini_path}" if offline
-          uri = URI(cached_versions[version] + ini_name)
-          File.open(ini_path, 'wb') do |f|
-            data = Net::HTTP.get(uri)
-            data.tr!("\"", '')
-            data.gsub!(/Note:.+\n/, '')
-            f.write(data)
-          end
+          download_ini(version, cached_versions, os, ini_name, ini_path)
         end
         begin
           result = IniFile.load(ini_path).to_h
@@ -86,6 +76,29 @@ url=#{url}
       end
 
       private
+
+      def download_ini(version, cached_versions, os, ini_name, ini_path)
+        # former urls for Linux pointed to unity-editor-installer.sh directlry
+        if os == 'linux' && cached_versions[version] =~ /.*.sh$/
+          UI.verbose "No INI on server. Faking one by finding out package size for version #{version}"
+          url = cached_versions[version]
+          size = Utils.get_url_content_length(url)
+          if size
+            create_linux_ini(version, size, url)
+          else
+            UI.important "u3d tried to get the size of the installer for version #{version}, but wasn't able to"
+          end
+          return
+        end
+        uri = URI(cached_versions[version] + ini_name)
+        UI.verbose("Searching for ini file at #{uri}")
+        File.open(ini_path, 'wb') do |f|
+          data = Net::HTTP.get(uri)
+          data.tr!("\"", '')
+          data.gsub!(/Note:.+\n/, '')
+          f.write(data)
+        end
+      end
 
       def default_ini_path
         case U3dCore::Helper.operating_system

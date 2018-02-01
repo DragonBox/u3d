@@ -189,7 +189,6 @@ module U3d
           versions = {}
           results = data.scan(LINUX_DOWNLOAD_DATED)
           results.each do |capt|
-            save_package_size(capt[1], capt[0])
             versions[capt[1]] = capt[0]
           end
 
@@ -201,7 +200,6 @@ module U3d
             if capt && capt[1] && capt[2]
               ver = capt[2].delete('x')
               UI.important "Version #{ver} does not match standard Unity versions" unless ver =~ Utils::UNITY_VERSION_REGEX
-              save_package_size(ver, capt[1])
               versions[ver] = capt[1]
             else
               # newer version of unity on linux support ini files
@@ -210,21 +208,6 @@ module U3d
             end
           end
           versions
-        end
-
-        def save_package_size(version, url)
-          uvd = UnityVersionDefinition.new(version, :linux, nil, offline: true)
-          if (size = uvd.size_in_bytes('Unity'))
-            UI.verbose "Package size for version #{version} already cached: #{size}"
-            return
-          end
-          UI.verbose "Finding out package size for version #{version}"
-          size = Utils.get_url_content_length(url)
-          if size
-            UnityVersionDefinition.create_fake(version, size, url)
-          else
-            UI.important "u3d tried to get the size of the installer for version #{version}, but wasn't able to"
-          end
         end
       end
     end

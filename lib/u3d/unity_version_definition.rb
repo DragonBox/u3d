@@ -58,9 +58,5 @@ module U3d
       return -1 unless @ini[package] && @ini[package]['size']
       @os == :win ? @ini[package]['size'] * 1024 : @ini[package]['size']
     end
-
-    def self.create_fake(version, size, url)
-      INIparser.create_linux_ini(version, size, url)
-    end
   end
 end
