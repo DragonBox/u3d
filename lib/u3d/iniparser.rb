@@ -102,7 +102,7 @@ url=#{url}
       end
 
       def filter_broken_linux(ini_hash)
-        ini_hash.select{ |k,v| v['url'] && !v['url'].end_with?('.pkg') }
+        ini_hash.select { |_k, v| v['url'] && !v['url'].end_with?('.pkg') }
       end
 
       def default_ini_path
