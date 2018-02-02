@@ -106,7 +106,7 @@ module U3d
         UI.user_error!("You cannot use the --operating_system and the --install options together") if options[:install] && options[:operating_system]
         os = valid_os_or_current(options[:operating_system])
 
-        packages = packages_with_unity_first(os, options)
+        packages = packages_with_unity_first(options)
 
         cache_versions = cache_versions(os, offline: !options[:download])
         version = interpret_latest(version, cache_versions)
@@ -286,11 +286,7 @@ module U3d
         iversion
       end
 
-      def packages_with_unity_first(os, options)
-        if os == :linux
-          UI.important 'Option -a | --all currently meaningless for Linux (only one package available)' if options[:all]
-          UI.important 'Option -p | --packages currently meaningless for Linux (only one package available)' if options[:packages]
-        end
+      def packages_with_unity_first(options)
         temp = options[:packages] || ['Unity']
         temp.insert(0, 'Unity') if temp.delete('Unity')
         temp
