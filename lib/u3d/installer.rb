@@ -212,12 +212,17 @@ module U3d
     def install(file_path, version, installation_path: nil, info: {})
       # rubocop:enable UnusedMethodArgument
       extension = File.extname(file_path)
-      raise "Installation of #{extension} files is not supported on Linux" if extension != '.sh'
-      path = installation_path || DEFAULT_LINUX_INSTALL
-      install_sh(
-        file_path,
-        installation_path: path
-      )
+
+      raise "Installation of #{extension} files is not supported on Linux" unless ['.sh', '.xz'].include? extension
+      if extension == '.sh'
+        path = installation_path || DEFAULT_LINUX_INSTALL
+        install_sh(file_path, installation_path: path)
+      elsif extension == '.xz'
+        new_path = File.join(DEFAULT_LINUX_INSTALL, format(UNITY_DIR_LINUX, version: version))
+        path = installation_path || new_path
+        install_xz(file_path, installation_path: path)
+      end
+
       # Forces sanitation for installation of 'weird' versions eg 5.6.1xf1Linux
       unity = installed.select { |u| u.version == version }.first
       if unity
@@ -240,7 +245,19 @@ module U3d
         U3dCore::CommandExecutor.execute(command: cmd, admin: true)
       end
     rescue StandardError => e
-      UI.error "Failed to install bash file at #{file}: #{e}"
+      UI.error "Failed to install sh file #{file} at #{installation_path}: #{e}"
+    else
+      UI.success 'Installation successful'
+    end
+
+    def install_xz(file, installation_path: nil)
+      raise 'Missing installation_path' unless installation_path
+
+      command = "cd #{installation_path.shellescape}; tar xf #{file.shellescape}"
+      command = "mkdir -p #{installation_path.shellescape}; #{command}" unless File.directory? installation_path
+      U3dCore::CommandExecutor.execute(command: command, admin: true)
+    rescue StandardError => e
+      UI.error "Failed to install xz file #{file} at #{installation_path}: #{e}"
     else
       UI.success 'Installation successful'
     end

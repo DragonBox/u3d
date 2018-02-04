@@ -189,6 +189,32 @@ module U3d
       @root_path || @path
     end
 
+    def packages
+      path = "#{root_path}/Editor/Data/"
+      pack = []
+      PlaybackEngineUtils.list_module_configs(path).each do |mpath|
+        pack << PlaybackEngineUtils.module_name(mpath)
+      end
+      NOT_PLAYBACKENGINE_PACKAGES.each do |module_name|
+        pack << module_name unless Dir[module_name_pattern(module_name)].empty?
+      end
+      pack
+    end
+
+    def module_name_pattern(module_name)
+      # FIXME: we are not yet sure where these modules will end up yet
+      case module_name
+      when 'Documentation'
+        return "#{root_path}/Editor/Data/Documentation/"
+      when 'StandardAssets'
+        return "#{root_path}/Editor/Standard Assets/"
+      when 'MonoDevelop'
+        return "#{root_path}/MonoDevelop/"
+      else
+        UI.crash! "No pattern is known for #{module_name} on Linux"
+      end
+    end
+
     def clean_install?
       !(root_path =~ UNITY_DIR_CHECK_LINUX).nil?
     end
