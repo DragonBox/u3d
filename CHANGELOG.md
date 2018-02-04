@@ -1,9 +1,35 @@
 # Change Log
 
+## [v1.0.16](https://github.com/DragonBox/u3d/tree/v1.0.16) (2018-02-04)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.15...v1.0.16)
+
+**Implemented enhancements:**
+
+- support install of .xz files [\#251](https://github.com/DragonBox/u3d/issues/251)
+- Linux ini partial support exists now [\#244](https://github.com/DragonBox/u3d/issues/244)
+
+**Fixed bugs:**
+
+- u3d/install & u3d/available no INI file error on Linux [\#242](https://github.com/DragonBox/u3d/issues/242)
+- u3d/prettify: Fix rule termination when there are special characters in the file name [\#246](https://github.com/DragonBox/u3d/pull/246) ([niezbop](https://github.com/niezbop))
+
+**Closed issues:**
+
+- u3d/available missing latest versions on Linux [\#241](https://github.com/DragonBox/u3d/issues/241)
+- u3d/install fails to install Linux dependencies inside docker [\#240](https://github.com/DragonBox/u3d/issues/240)
+
+**Merged pull requests:**
+
+- u3d/install linux xz format \(fixes \#251\) [\#252](https://github.com/DragonBox/u3d/pull/252) ([lacostej](https://github.com/lacostej))
+- u3d/available: support broken parts of Linux INI \(\#244\) [\#248](https://github.com/DragonBox/u3d/pull/248) ([lacostej](https://github.com/lacostej))
+- u3d/available: fix forums parsing and move ini faking/downloading at available time, to support package based Linux versions [\#247](https://github.com/DragonBox/u3d/pull/247) ([lacostej](https://github.com/lacostej))
+- u3d/prettify: Parse Android command invocation failure [\#245](https://github.com/DragonBox/u3d/pull/245) ([niezbop](https://github.com/niezbop))
+- Support linux forums pagination [\#243](https://github.com/DragonBox/u3d/pull/243) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.15](https://github.com/DragonBox/u3d/tree/v1.0.15) (2018-01-16)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.14...v1.0.15)
 
-**Merged pull requests:**
+**Fixed bugs:**
 
 - u3d/install: download beta for mac also needs to discard checking md5s on Windows packages [\#234](https://github.com/DragonBox/u3d/pull/234) ([lacostej](https://github.com/lacostej))
 
