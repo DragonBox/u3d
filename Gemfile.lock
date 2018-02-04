@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    u3d (1.0.15)
+    u3d (1.0.16)
       colored (>= 1.2, < 2.0.0)
       commander (>= 4.4.0, < 5.0.0)
       file-tail (>= 1.2.0)
@@ -24,7 +24,7 @@ GEM
     builder (3.2.3)
     coderay (1.1.1)
     colored (1.2)
-    commander (4.4.3)
+    commander (4.4.4)
       highline (~> 1.7.2)
     concurrent-ruby (1.0.5)
     coveralls (0.8.21)
