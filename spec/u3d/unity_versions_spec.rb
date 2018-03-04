@@ -31,6 +31,16 @@ describe U3d do
       { 'Unity' => { 'title' => 'Unity', 'size' => size, 'url' => url } }
     end
 
+    describe ".list_available integration tests" do
+      it 'retrieves the versions we expect' do
+        #expect(U3d::UnityVersions.list_available(os: :win).count).to be > 200
+        #expect(U3d::UnityVersions.list_available(os: :mac).count).to be > 200
+        ['2017.2.1f1', '2017.3.1f1', '2018.1.0b8'].each do |missing|
+          expect(U3d::UnityVersions.list_available(os: :linux).keys).to include(missing)
+        end
+      end
+    end
+
     describe '.list_available' do
       it 'retrieves windows versions' do
         allow(U3d::Utils).to receive(:get_ssl) { windows_archive }
