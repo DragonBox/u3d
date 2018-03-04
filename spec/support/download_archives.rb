@@ -52,6 +52,7 @@ def linux_archive_all
     <b>5.4.0b10</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-2017.1.6f1+20160316.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-2017.1.6f1+20160316.sh</a><br />
     <b>2017.1.0b3</b>:<a href="http://beta.unity3d.com/download/b515b8958382/public_download.html" target="_blank" class="externalLink">
     <b>2017.3.0f1</b>:<a href="http://beta.unity3d.com/download/3c89f8d277f5/public_download.html" target="_blank" class="externalLink">
+    <b>2017.2.1f1</b>:<a href="https://beta.unity3d.com/download/ce9f6a0436e1+/public_download.html" target="_blank" class="externalLink">
   )
 end
 
@@ -63,6 +64,35 @@ def linux_public_archive_standalone
     <a href='http://beta.unity3d.com/download/b515b8958382/./unity-editor_amd64-2017.1.0xb3Linux.deb'>Linux Editor Installer (.deb package)</a><br>
     <h3>Platform-Agnostic Self-Extracting Shell Script</h3>
     <a href='http://beta.unity3d.com/download/b515b8958382/./unity-editor-installer-2017.1.0xb3Linux.sh'>Linux Editor Installer (self-extracting shell script)</a><br>
+    </body></html>
+  )
+end
+
+def linux_public_archive_standalone_plus
+  %(
+    <html><head><meta http-equiv='content-type' content='text/html; charset=UTF-8'></head><body><h2>Unity 2017.2.1f1 Linux Editor downloads</h2>
+    <p>Welcome to the Linux Editor download repository.  Here, you will find the download links to experimental releases of the Linux Editor.</p>
+    <h3>Debian Package</h3>
+    <a href='https://beta.unity3d.com/download/ce9f6a0436e1+/./unity-editor_amd64-2017.2.1f1.deb'>Linux Editor Installer (.deb package)</a><br>
+    <h3>Platform-Agnostic Self-Extracting Shell Script</h3>
+    <a href='https://beta.unity3d.com/download/ce9f6a0436e1+/./unity-editor-installer-2017.2.1f1.sh'>Linux Editor Installer (self-extracting shell script)</a><br>
+    </body></html>
+  )
+end
+
+def linux_public_archive_standalone_plus_2
+  %(
+    <html><head><meta http-equiv='content-type' content='text/html; charset=UTF-8'></head><body><h2>Unity 2017.3.0p2 Linux Editor downloads</h2>
+    <p>Welcome to the Linux Editor download repository.  Here, you will find the download links to experimental releases of the Linux Editor.</p>
+    <h3>Unity Editor</h3>
+    <a href='http://beta.unity3d.com/download/7807bc63c3ab/./UnitySetup-2017.3.0p2'>Linux Download Assistant</a><br>
+    <h3>Additional Resources</h3>
+    This version of Unity Remote is for Android.<br>
+    <a href='http://beta.unity3d.com/download/7807bc63c3ab/./UnityRemote-Android-2017.3.0p2.apk'>Unity Android Remote</a><br>
+    This version of Unity Remote is for iOS.<br>
+    <a href='http://beta.unity3d.com/download/7807bc63c3ab/./UnityRemote-iOS-2017.3.0p2.zip'>Unity iOS Remote</a><br>
+    Cache Server for Unity.<br>
+    <a href='http://beta.unity3d.com/download/7807bc63c3ab/./CacheServer-2017.3.0p2.zip'>Unity Cache Server</a><br>
     </body></html>
   )
 end
