@@ -31,6 +31,16 @@ describe U3d do
       { 'Unity' => { 'title' => 'Unity', 'size' => size, 'url' => url } }
     end
 
+    describe ".list_available integration tests" do
+      xit 'retrieves the versions we expect' do
+        # expect(U3d::UnityVersions.list_available(os: :win).count).to be > 200
+        # expect(U3d::UnityVersions.list_available(os: :mac).count).to be > 200
+        ['2017.2.1f1', '2017.3.1f1', '2018.1.0b8'].each do |missing|
+          expect(U3d::UnityVersions.list_available(os: :linux).keys).to include(missing)
+        end
+      end
+    end
+
     describe '.list_available' do
       it 'retrieves windows versions' do
         allow(U3d::Utils).to receive(:get_ssl) { windows_archive }
@@ -66,14 +76,16 @@ describe U3d do
           with_forum_page(linux_archive_all)
           allow(@unity_forums).to receive(:page_content).with('http://beta.unity3d.com/download/b515b8958382/public_download.html') { linux_public_archive_standalone }
           allow(@unity_forums).to receive(:page_content).with('http://beta.unity3d.com/download/3c89f8d277f5/public_download.html') { linux_public_archive_assistant }
+          allow(@unity_forums).to receive(:page_content).with('https://beta.unity3d.com/download/ce9f6a0436e1+/public_download.html') { linux_public_archive_standalone_plus }
 
           allow(U3d::INIparser).to receive(:load_ini).with('1.2.3f1', nil, os: :linux, offline: true) { fake_linux_ini_data(1005, 'something 1.2.3f1') }
           allow(U3d::INIparser).to receive(:load_ini).with('1.3.5f1', nil, os: :linux, offline: true) {}
           allow(U3d::INIparser).to receive(:load_ini).with('2017.1.6f1', nil, os: :linux, offline: true) { fake_linux_ini_data(1007, 'something 1.2.3f1') }
           allow(U3d::INIparser).to receive(:load_ini).with('2017.1.0b3', nil, os: :linux, offline: true) {}
           allow(U3d::INIparser).to receive(:load_ini).with('2017.3.0f1', nil, os: :linux, offline: true) {}
+          allow(U3d::INIparser).to receive(:load_ini).with('2017.2.1f1', nil, os: :linux, offline: true) {}
 
-          expect(U3d::UnityVersions.list_available(os: :linux).keys).to eql ['1.2.3f1', '1.3.5f1', '2017.1.6f1', '2017.1.0b3', '2017.3.0f1']
+          expect(U3d::UnityVersions.list_available(os: :linux).keys).to eql ['1.2.3f1', '1.3.5f1', '2017.1.6f1', '2017.1.0b3', '2017.3.0f1', '2017.2.1f1']
         end
       end
     end
