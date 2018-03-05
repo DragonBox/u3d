@@ -1,5 +1,17 @@
 # Change Log
 
+## [v1.0.17](https://github.com/DragonBox/u3d/tree/v1.0.17) (2018-03-05)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.16...v1.0.17)
+
+**Closed issues:**
+
+- Latest versions not listed on linux [\#256](https://github.com/DragonBox/u3d/issues/256)
+- Unable to use U3D to install latest beta 2018.1.0b\[8|7\] [\#255](https://github.com/DragonBox/u3d/issues/255)
+
+**Merged pull requests:**
+
+- Detect missing 3 Linux versions \(fixes \#255 and \#256\) [\#257](https://github.com/DragonBox/u3d/pull/257) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.16](https://github.com/DragonBox/u3d/tree/v1.0.16) (2018-02-04)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.15...v1.0.16)
 
