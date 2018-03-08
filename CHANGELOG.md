@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.0.18](https://github.com/DragonBox/u3d/tree/v1.0.18) (2018-03-08)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.17...v1.0.18)
+
+**Closed issues:**
+
+- error: Net::ReadTimeout [\#258](https://github.com/DragonBox/u3d/issues/258)
+
+**Merged pull requests:**
+
+- u3d/\* allow to modify Net::HTTP read timeout \(all rubies\) and max retries \(ruby 2.5+\) default values. Change read time out to 300 sec \(fixes \#258\) [\#260](https://github.com/DragonBox/u3d/pull/260) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.17](https://github.com/DragonBox/u3d/tree/v1.0.17) (2018-03-05)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.16...v1.0.17)
 
