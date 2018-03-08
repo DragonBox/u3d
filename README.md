@@ -191,3 +191,11 @@ Your version of OpenSSL may be be outdated, make sure you are using the last one
  * __On Windows:__
 
 A fix to the issue stated above has been found on [StackOverflow](http://stackoverflow.com/questions/5720484/how-to-solve-certificate-verify-failed-on-windows). If you follow the steps described in this topic, you will most likely get rid of this issue.
+
+### Solve Connection failures
+
+If your network is flaky you might try to change the way u3d uses ruby's Net::HTTP trsnsport mechanism
+
+* set U3D_HTTP_READ_TIMEOUT (defaults 300 seconds) to change the http read timeout
+
+* U3D_HTTP_MAX_RETRIES (ruby 2.5 only, defaults 1). Ruby automatically retries once upon failures on idempotents methods. From ruby 2.5. you can change the number of time ruby might retry.
