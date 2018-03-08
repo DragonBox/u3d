@@ -58,7 +58,7 @@ module U3d
         uri = URI(url)
         begin
           use_ssl = /^https/.match(url)
-          Net::HTTP.start(uri.host, uri.port, use_ssl: use_ssl) do |http|
+          Net::HTTP.start(uri.host, uri.port, http_opts(use_ssl: use_ssl)) do |http|
             request = http_request_class http_method, uri
             request_headers.each do |k, v|
               request[k] = v
@@ -93,7 +93,7 @@ module U3d
           current = 0
           last_print_update = 0
           print_progress = UI.interactive? || U3dCore::Globals.verbose?
-          Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
+          Net::HTTP.start(uri.host, uri.port, http_opts(use_ssl: uri.scheme == 'https')) do |http|
             request = Net::HTTP::Get.new uri
             http.request request do |response|
               begin
@@ -129,7 +129,7 @@ module U3d
         UI.verbose "get_url_content_length #{url}"
         uri = URI(url)
         size = nil
-        Net::HTTP.start(uri.host, uri.port) do |http|
+        Net::HTTP.start(uri.host, uri.port, http_opts) do |http|
           response = http.request_head url
           size = Integer(response['Content-Length'])
         end
@@ -203,6 +203,26 @@ module U3d
 
       def windows_path(path)
         path.gsub(%r{\/(\d)}, '/\\\\\1').tr('/', '\\')
+      end
+
+      private
+
+      def http_max_retries
+        ENV['U3D_HTTP_MAX_RETRIES'].to_i if ENV['U3D_HTTP_MAX_RETRIES']
+      end
+
+      def http_read_timeout
+        return ENV['U3D_HTTP_READ_TIMEOUT'].to_i if ENV['U3D_HTTP_READ_TIMEOUT']
+        300
+      end
+
+      def http_opts(opt = {})
+        # the keys are #ca_file, #ca_path, cert, #cert_store, ciphers, #close_on_empty_response, key, #open_timeout,
+        # #read_timeout, #ssl_timeout, #ssl_version, use_ssl, #verify_callback, #verify_depth and verify_mode
+        opt[:max_retries] = http_max_retries if http_max_retries
+        opt[:read_timeout] = http_read_timeout if http_read_timeout
+        UI.verbose "Using http opts: #{opt}"
+        opt
       end
     end
   end
