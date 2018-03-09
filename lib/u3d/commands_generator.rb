@@ -189,6 +189,14 @@ More on that: https://forum.unity3d.com/threads/unity-on-linux-release-notes-and
         end
       end
 
+      command :licenses do |c|
+        c.syntax = "u3d licenses"
+        c.description = 'Prints Unity license information.'
+        c.action do |_args, _options|
+          Commands.licenses
+        end
+      end
+
       command :prettify do |c|
         c.syntax = 'u3d prettify <logfile>'
         c.summary = 'Prettify a saved Unity logfile'
