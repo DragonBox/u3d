@@ -50,6 +50,10 @@ The prettifyer is on by default but can be turned off to get Unity3d's raw outpu
 
 * `u3d dependencies`: [Linux] Install dependencies that Unity don't install by default on Linux.
 
+* `u3d licenses`: display information about your Unity licenses
+
+![u3d list](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_licenses.png)
+
 ## Installation
 
 ```shell
