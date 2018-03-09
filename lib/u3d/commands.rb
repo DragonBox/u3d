@@ -195,7 +195,7 @@ module U3d
         end
       end
 
-      def licenses(_args)
+      def licenses
         U3d::License.licenses.sort_by { |l| l['LicenseVersion'] }.each do |license|
           UI.message "#{license.path}: #{license['LicenseVersion']} #{license.number} #{license['UpdateDate']}"
         end
