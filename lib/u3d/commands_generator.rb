@@ -190,7 +190,7 @@ More on that: https://forum.unity3d.com/threads/unity-on-linux-release-notes-and
       end
 
       command :licenses do |c|
-        c.syntax = "u3d licenses>"
+        c.syntax = "u3d licenses"
         c.description = 'Prints Unity license information.'
         c.action do |args, _options|
           Commands.licenses(args: args)
