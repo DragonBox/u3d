@@ -12,7 +12,7 @@ fastlane add_plugin u3d
 
 ## About u3d
 
-Fastgame's u3d (a Unity3d CLI) integration
+Fastgame's u3d (a Unity CLI) integration
 
 **Note to author:** Add a more detailed description about this plugin here. If your plugin contains multiple actions, make sure to mention them here.
 

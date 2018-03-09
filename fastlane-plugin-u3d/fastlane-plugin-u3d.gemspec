@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.author        = %q{Jerome Lacoste}
   spec.email         = %q{jerome.lacoste@gmail.com}
 
-  spec.summary       = %q{Fastgame's u3d (a Unity3d CLI) integration}
+  spec.summary       = %q{Fastgame's u3d (a Unity CLI) integration}
   spec.homepage      = "https://github.com/DragonBox/u3d/tree/master/fastlane-plugin-u3d"
   spec.license       = "MIT"
 

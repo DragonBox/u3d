@@ -36,7 +36,7 @@ module Fastlane
       end
 
       def self.description
-        "Fastgame's u3d (a Unity3d CLI) integration"
+        "Fastgame's u3d (a Unity CLI) integration"
       end
 
       def self.authors

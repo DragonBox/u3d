@@ -52,7 +52,7 @@ module U3d
       unclean = []
       installer.installed.each { |unity| unclean << unity unless unity.clean_install? }
       return if unclean.empty?
-      UI.important("u3d can optionally standardize the existing Unity3d installation names and locations.")
+      UI.important("u3d can optionally standardize the existing Unity installation names and locations.")
       UI.important("Check the documentation for more information:")
       UI.important("** https://github.com/DragonBox/u3d/blob/master/README.md#default-installation-paths **")
       unclean.each { |unity| installer.sanitize_install(unity, dry_run: true) }
