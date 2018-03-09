@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.0.19](https://github.com/DragonBox/u3d/tree/v1.0.19) (2018-03-09)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.18...v1.0.19)
+
+**Implemented enhancements:**
+
+- u3d: standardize log and descriptions [\#263](https://github.com/DragonBox/u3d/pull/263) ([niezbop](https://github.com/niezbop))
+
+**Merged pull requests:**
+
+- u3d/licenses: add feature to display licenses [\#262](https://github.com/DragonBox/u3d/pull/262) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.18](https://github.com/DragonBox/u3d/tree/v1.0.18) (2018-03-08)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.17...v1.0.18)
 
