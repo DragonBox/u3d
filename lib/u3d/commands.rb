@@ -195,6 +195,12 @@ module U3d
         end
       end
 
+      def licenses(_args)
+        U3d::License.licenses.sort_by { |l| l['LicenseVersion'] }.each do |license|
+          UI.message "#{license.path}: #{license['LicenseVersion']} #{license.number} #{license['UpdateDate']}"
+        end
+      end
+
       def local_analyze(args: [])
         raise ArgumentError, 'No files given' if args.empty?
         raise ArgumentError, "File #{args[0]} does not exist" unless File.exist? args[0]
