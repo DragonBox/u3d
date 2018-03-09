@@ -71,7 +71,7 @@ module U3d
         run_args = extract_run_args
 
         c.syntax = 'u3d run [-u | --unity_version <version>] [-r | --raw_logs] [ -- <run_args>]'
-        c.summary = 'Run unity, and parses its output through u3d\'s log prettifier'
+        c.summary = 'Run Unity, and parse its output through u3d\'s log prettifier'
         c.description =  %(
 #{c.summary}
 The default prettifier rules file is packaged with u3d (#{U3d::LogAnalyzer::RULES_PATH}).
@@ -93,8 +93,8 @@ Fore more information about how the rules work, see https://github.com/DragonBox
       command :list do |c|
         c.syntax = 'u3d list [-p | --packages]'
         c.option '-p', '--packages', 'Lists installed packages as well'
-        c.example 'List currently installed Unity3d versions, as well as installed packages', 'u3d list -p'
-        c.description = 'List installed versions of Unity3d'
+        c.example 'List currently installed Unity versions, as well as installed packages', 'u3d list -p'
+        c.summary = 'List installed versions of Unity'
         c.action do |_args, options|
           Commands.list_installed(options: convert_options(options))
         end
@@ -114,7 +114,7 @@ Fore more information about how the rules work, see https://github.com/DragonBox
         c.example 'List all versions available for Linux platform', 'u3d available -o linux'
         c.example 'List packages available for Unity version 5.6.0f3', 'u3d available -u 5.6.0f3 -p'
         c.example 'List packages available for Unity version containing the 5.6 string', 'u3d available -u \'5.6\' -p'
-        c.description = 'List download-ready versions of Unity3d'
+        c.summary = 'List download-ready versions of Unity'
         c.action do |_args, options|
           options.default packages: false
           Commands.list_available(options: convert_options(options))
@@ -124,7 +124,7 @@ Fore more information about how the rules work, see https://github.com/DragonBox
       command :install do |c|
         oses = U3dCore::Helper.operating_systems
         c.syntax = 'u3d install [<version>] [ [-p | --packages <package1>,<package2> ...] | [-o | --operating_system <OS>] [-a | --all] ] [--[no-]download] [ [--[no-]install] [-i | --installation_path <path>] ]'
-        c.summary = "Download (and/or) install Unity3D editor packages."
+        c.summary = 'Download (and/or) install Unity editor packages'
         c.description = %(
 #{c.summary}
 This command allows you to either:
@@ -159,7 +159,7 @@ E.g. U3D_DOWNLOAD_PATH=/some/path/you/want u3d install ...
 
       command :uninstall do |c|
         c.syntax = 'u3d uninstall [<version>]'
-        c.description = "Uninstall the specified Unity3d version."
+        c.summary = 'Uninstall the specified Unity version'
         c.option '-k', '--keychain', 'Gain privileges right through the keychain. [OSX only]'
         c.example 'Uninstall Unity version 5.2.1f1', 'u3d uninstall 5.1.2f1'
         c.action do |args, options|
@@ -169,7 +169,7 @@ E.g. U3D_DOWNLOAD_PATH=/some/path/you/want u3d install ...
 
       command :dependencies do |c|
         c.syntax = 'u3d dependencies'
-        c.summary = 'Installs Unity dependencies. [Linux only]'
+        c.summary = 'Install Unity dependencies [Linux only]'
         c.description = %(
 #{c.summary}
 Regarding the package manager: if dpkg is installed, u3d uses apt-get else if rpm is installed yum is used. If none of them is insalled, fails.
@@ -183,7 +183,7 @@ More on that: https://forum.unity3d.com/threads/unity-on-linux-release-notes-and
 
       command :credentials do |c|
         c.syntax = "u3d credentials <#{Commands.credentials_actions.join(' | ')}>"
-        c.description = 'Manages keychain credentials so u3d remembers them. [OSX only]'
+        c.summary = 'Manage keychain credentials so u3d remembers them [OSX only]'
         c.action do |args, _options|
           Commands.credentials(args: args)
         end
@@ -191,7 +191,7 @@ More on that: https://forum.unity3d.com/threads/unity-on-linux-release-notes-and
 
       command :prettify do |c|
         c.syntax = 'u3d prettify <logfile>'
-        c.summary = 'Prettify a saved logfile'
+        c.summary = 'Prettify a saved Unity logfile'
         c.description = %(
           #{c.summary}
           The default prettifier rules file is packaged with u3d (#{U3d::LogAnalyzer::RULES_PATH}).

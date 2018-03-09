@@ -5,7 +5,7 @@
 [![Build Status](https://img.shields.io/circleci/project/DragonBox/u3d/master.svg?style=flat)](https://circleci.com/gh/DragonBox/u3d)
 [![Coverage Status](https://coveralls.io/repos/github/DragonBox/u3d/badge.svg?branch=master)](https://coveralls.io/github/DragonBox/u3d?branch=master)
 
-U3d is a set of tools to interact with Unity3D from command line. It is available on Linux, Macintosh and Windows.
+U3d is a set of tools to interact with Unity from command line. It is available on Linux, Macintosh and Windows.
 
 ---
 
@@ -17,38 +17,39 @@ U3d knows about your Unity project and behaves differently if invoked from withi
 
 Available commands are:
 
-* `u3d available`: List download-ready versions of Unity3d
+* `u3d available`: List download-ready versions of Unity
 
 ![u3d available](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_available.png)
 
-* `u3d install`: Download and/or install Unity3D packages
+* `u3d install`: Download (and/or) install Unity editor packages
 
 ![u3d install](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_install.png)
 
-* `u3d uninstall`: Uninstall Unity3D versions
+* `u3d uninstall`: Uninstall Unity versions
 
 ![u3d uninstall](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_uninstall.png)
 
-* `u3d list`: List installed versions of Unity3d
+* `u3d list`: List installed versions of Unity
 
 ![u3d list](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_list.png)
 
-* `u3d run`: Run Unity, and parses its output through u3d's log prettifier.
+* `u3d run`: Run Unity, and parses its output through u3d's log prettifier
 
 Here we start with the proper version of Unity:
 
 ![u3d run without arguments](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_run_current.png)
 
 Here we pass some arguments:
+
 ![u3d run with arguments](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_run.png)
 
-The prettifyer is on by default but can be turned off to get Unity3d's raw output.
+The prettifyer is on by default but can be turned off to get Unity's raw output.
 
 * `u3d prettify`: Prettify a saved editor logfile
 
   [Information on how `prettify` works](https://github.com/DragonBox/u3d/blob/master/LOG_RULES.md)
 
-* `u3d dependencies`: [Linux] Install dependencies that Unity don't install by default on Linux.
+* `u3d dependencies`: [Linux] Install dependencies that Unity don't install by default on Linux
 
 ## Installation
 
@@ -58,8 +59,8 @@ gem install u3d
 
 ## Unity versions numbering
 
-Unity3d uses the following version formatting: 0.0.0x0. The \'x\' can takes different values:
-  * 'f' are the main release candidates for Unity3d
+Unity uses the following version formatting: 0.0.0x0. The \'x\' can takes different values:
+  * 'f' are the main release candidates for Unity
   * 'p' are patches fixing those releases
   * 'b' are the beta releases
   * 'a' are the alpha releases (not currently discovered online)
@@ -86,7 +87,7 @@ When referencing to a version on the CLI, u3d sanitizes these weird versions. Fo
 
   u3d should be able to find the different unity installed under those locations. If the Unity installations are not in those locations, u3d might not find them automatically.
 
-## Sanitize / standardize Unity3d installation paths
+## Sanitize / standardize Unity installation paths
 
   If you have installed Unity in different locations, u3d might discover them and propose you to move them to its standard location. The procedure should be self described and easily revertible (manually). This sanitization operation is only proposed in interactive mode (i.e. if you are not using u3d unattended, e.g. in a build script on a CI server).
 
@@ -136,7 +137,7 @@ u3d install 5.6.0f3 --no-download
 u3d run -- -batchmode -quit -logFile `pwd`/editor.log -executeMethod "WWTK.SimpleBuild.PerformAndroidBuild"
 ```
 
-* Open the proper Unity3d for the current project, displaying the raw editor logs in the command line:
+* Open the proper Unity for the current project, displaying the raw editor logs in the command line:
 
 ```shell
 u3d run -r
