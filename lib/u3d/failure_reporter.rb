@@ -16,7 +16,7 @@ module U3d
         FileUtils.mkdir_p default_report_path
         report_file = File.join(
           default_report_path,
-          "#{failure_type}.#{DateTime.now.strftime('%Y%m%dT%H%M')}.failure.json"
+          "#{failure_type}.#{Date.now.strftime('%Y%m%dT%H%M')}.failure.json"
         )
 
         File.open(report_file, 'w') do |file|
