@@ -31,11 +31,7 @@ module U3d
   class Cache
     using ::CoreExtensions::OperatingSystem
 
-    # Path to the directory containing the cache for the different OS
-    DEFAULT_LINUX_PATH = File.join(ENV['HOME'], '.u3d').freeze
-    DEFAULT_MAC_PATH = File.join(ENV['HOME'], 'Library', 'Application Support', 'u3d').freeze
-    DEFAULT_WINDOWS_PATH = File.join(ENV['HOME'], 'AppData', 'Local', 'u3d').freeze
-    # Name of the file itself
+    # Name of the cache file
     DEFAULT_NAME = 'cache.json'.freeze
     # Maximum duration after which the cache is considered outdated
     # Currently set to 24h
@@ -73,14 +69,7 @@ module U3d
     end
 
     def self.default_os_path
-      case U3dCore::Helper.operating_system
-      when :linux
-        DEFAULT_LINUX_PATH
-      when :mac
-        DEFAULT_MAC_PATH
-      when :win
-        DEFAULT_WINDOWS_PATH
-      end
+      U3dCore::Helper.data_path
     end
 
     private #-------------------------------------------------------------------
