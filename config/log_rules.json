@@ -53,7 +53,7 @@
       },
       "log": {
         "active": true,
-        "start_pattern": "UnityEngine\\.Debug:Log\\(Object\\)",
+        "start_pattern": "UnityEngine\\.Debug:Log(?:Format)?\\((?:String, )?Object(?:\\[\\])?\\)",
         "fetch_first_line_not_matching": [
           "UnityEngine\\.",
           "^\\n"
@@ -66,7 +66,7 @@
       },
       "log_assertion": {
         "active": true,
-        "start_pattern": "UnityEngine\\.Debug:LogAssertion\\(Object\\)",
+        "start_pattern": "UnityEngine\\.Debug:LogAssertion(?:Format)?\\((?:String, )?Object(?:\\[\\])?\\)",
         "fetch_first_line_not_matching": [
           "UnityEngine\\.",
           "^\\n"
@@ -80,7 +80,7 @@
       },
       "log_warning": {
         "active": true,
-        "start_pattern": "UnityEngine\\.Debug:LogWarning\\(Object\\)",
+        "start_pattern": "UnityEngine\\.Debug:LogWarning(?:Format)?\\((?:String, )?Object(?:\\[\\])?\\)",
         "fetch_first_line_not_matching": [
           "UnityEngine\\.",
           "^\\n",
@@ -95,7 +95,7 @@
       },
       "log_error": {
         "active": true,
-        "start_pattern": "UnityEngine\\.Debug:LogError\\(Object\\)",
+        "start_pattern": "UnityEngine\\.Debug:LogError(?:Format)?\\((?:String, )?Object(?:\\[\\])?\\)",
         "fetch_first_line_not_matching": [
           "UnityEngine\\.",
           "^\\n",
