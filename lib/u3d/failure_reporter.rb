@@ -3,6 +3,8 @@ require 'fileutils'
 require 'json'
 
 module U3d
+  # Internal class to use when trying to improve the prettifier
+  # Opt-in with env variable U3D_REPORT_FAILURES
   class FailureReporter
     class << self
       def report(failure_type: "DEFAULT", failure_message: "", data: {})
