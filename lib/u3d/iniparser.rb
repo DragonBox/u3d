@@ -31,9 +31,6 @@ module U3d
     # @!group INI parameters to load and save ini files
     #####################################################
     INI_NAME = 'unity-%<version>s-%<os>s.ini'.freeze
-    INI_LINUX_PATH = File.join(ENV['HOME'], '.u3d', 'ini_files').freeze
-    INI_MAC_PATH = File.join(ENV['HOME'], 'Library', 'Application Support', 'u3d', 'ini_files').freeze
-    INI_WIN_PATH = File.join(ENV['HOME'], 'AppData', 'Local', 'u3d', 'ini_files').freeze
 
     class << self
       def load_ini(version, cached_versions, os: U3dCore::Helper.operating_system, offline: false)
@@ -106,14 +103,7 @@ url=#{url}
       end
 
       def default_ini_path
-        case U3dCore::Helper.operating_system
-        when :linux
-          INI_LINUX_PATH
-        when :mac
-          INI_MAC_PATH
-        when :win
-          INI_WIN_PATH
-        end
+        File.join(U3dCore::Helper.data_path, 'ini_files')
       end
     end
   end

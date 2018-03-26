@@ -26,6 +26,21 @@ require 'colored'
 
 module U3dCore
   module Helper
+    DEFAULT_LINUX_PATH = File.join(ENV['HOME'], '.u3d').freeze
+    DEFAULT_MAC_PATH = File.join(ENV['HOME'], 'Library', 'Application Support', 'u3d').freeze
+    DEFAULT_WINDOWS_PATH = File.join(ENV['HOME'], 'AppData', 'Local', 'u3d').freeze
+
+    def self.data_path
+      case operating_system
+      when :linux
+        DEFAULT_LINUX_PATH
+      when :mac
+        DEFAULT_MAC_PATH
+      when :win
+        DEFAULT_WINDOWS_PATH
+      end
+    end
+
     # Runs a given command using backticks (`)
     # and prints them out using the UI.command method
     def self.backticks(command, print: true)
