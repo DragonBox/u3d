@@ -21,6 +21,7 @@
 ## --- END LICENSE BLOCK ---
 
 require 'json'
+require 'u3d/failure_reporter'
 
 module U3d
   # Analyzes log by filtering output along a set of rules
@@ -197,6 +198,17 @@ module U3d
         # If it is still active during phase change, it means that something went wrong
         context = @lines_memory.map { |l| "> #{l}" }.join('')
         UI.error("[#{@active_phase}] Could not finish active rule '#{@active_rule}'. Aborting it. Context:\n#{context}")
+
+        U3d::FailureReporter.report(
+          failure_type: "PRETTIFIER",
+          failure_message: "Could not finish rule",
+          data: {
+            phase: @active_phase,
+            rule: @active_rule,
+            context: context.split("\n")
+          }
+        )
+
         @active_rule = nil
       end
       UI.verbose("--- Ending #{@active_phase} phase ---")
