@@ -24,7 +24,6 @@ module U3d
         File.open(report_file, 'w') do |file|
           file.write JSON.pretty_generate(report)
         end
-
       rescue StandardError => e
         UI.important "Unable to report a #{failure_type} failure. Please use --verbose to get more information about the failure"
         UI.verbose "Unable to report failure: #{e}"
