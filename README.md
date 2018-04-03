@@ -61,6 +61,17 @@ The prettifyer is on by default but can be turned off to get Unity's raw output.
 gem install u3d
 ```
 
+### Setup
+
+u3d requires some environment variables set up to run correctly. In particular processing log files requires your locales to be set to a UTF-8 locale. In your shell profile add the following lines:
+
+```
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+```
+
+You can find your shell profile at ~/.bashrc, ~/.bash_profile or ~/.zshrc depending on your system.
+
 ## Unity versions numbering
 
 Unity uses the following version formatting: 0.0.0x0. The \'x\' can takes different values:
