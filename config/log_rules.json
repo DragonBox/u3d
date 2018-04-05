@@ -297,6 +297,14 @@
     "comment": "Asset managing and packaging",
     "phase_start_pattern": "Packing sprites",
     "rules": {
+      "enlighten_failure": {
+        "active": true,
+        "start_pattern": "'(?<jobname>.+)' job failed with error code: (?<code>-?\\d+) \\('(?<message>.+)'\\)",
+        "start_message": false,
+        "end_pattern": "Filename: (?:.+/(?<file>\\w+\\.\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_message": "Enlighten job \"%{jobname}\" failed with status code %{code} %{file}(line %{line}): %{message}",
+        "type": "error"
+      },
       "pack_warning": {
         "active": true,
         "start_pattern": "WARNING: (?<message>.+)",
