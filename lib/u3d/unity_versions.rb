@@ -106,6 +106,8 @@ module U3d
     UNITY_LINUX_DOWNLOADS = 'https://forum.unity.com/threads/unity-on-linux-release-notes-and-known-issues.350256/'.freeze
     # URL for the main releases for Windows and Macintosh
     UNITY_DOWNLOADS = 'https://unity3d.com/get-unity/download/archive'.freeze
+    # URL for the LTS releases for Windows and Macintosh
+    UNITY_LTSES = 'https://unity3d.com/unity/qa/lts-releases'.freeze
     # URL for the patch releases for Windows and Macintosh
     UNITY_PATCHES = 'https://unity3d.com/unity/qa/patch-releases'.freeze
     # URL for the beta releases list, they need to be accessed after
@@ -238,6 +240,7 @@ module U3d
       end
 
       def fetch_all_channels
+        fetch_some('lts', UNITY_LTSES)
         fetch_some('stable', UNITY_DOWNLOADS)
         fetch_some('patch', UNITY_PATCHES)
         fetch_some('beta', UNITY_BETAS)
