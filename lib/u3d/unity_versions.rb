@@ -233,10 +233,8 @@ module U3d
       def fetch_some(type, url)
         UI.message "Loading Unity #{type} releases"
         current = UnityVersions.fetch_version(url, @pattern)
-        if current.count.nonzero?
-          UI.success "Found #{current.count} #{type} releases."
-          @versions.merge!(current)
-        end
+        UI.success "Found #{current.count} #{type} releases."
+        @versions.merge!(current)
       end
 
       def fetch_all_channels
