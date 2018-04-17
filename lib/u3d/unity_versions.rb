@@ -106,6 +106,8 @@ module U3d
     UNITY_LINUX_DOWNLOADS = 'https://forum.unity.com/threads/unity-on-linux-release-notes-and-known-issues.350256/'.freeze
     # URL for the main releases for Windows and Macintosh
     UNITY_DOWNLOADS = 'https://unity3d.com/get-unity/download/archive'.freeze
+    # URL for the LTS releases for Windows and Macintosh
+    UNITY_LTSES = 'https://unity3d.com/unity/qa/lts-releases'.freeze
     # URL for the patch releases for Windows and Macintosh
     UNITY_PATCHES = 'https://unity3d.com/unity/qa/patch-releases'.freeze
     # URL for the beta releases list, they need to be accessed after
@@ -220,23 +222,34 @@ module U3d
       end
     end
 
+    class VersionsFetcher
+      attr_accessor :versions
+
+      def initialize(pattern:)
+        @versions = {}
+        @pattern = pattern
+      end
+
+      def fetch_some(type, url)
+        UI.message "Loading Unity #{type} releases"
+        current = UnityVersions.fetch_version(url, @pattern)
+        UI.success "Found #{current.count} #{type} releases."
+        @versions.merge!(current)
+      end
+
+      def fetch_all_channels
+        fetch_some('lts', UNITY_LTSES)
+        fetch_some('stable', UNITY_DOWNLOADS)
+        fetch_some('patch', UNITY_PATCHES)
+        fetch_some('beta', UNITY_BETAS)
+        @versions
+      end
+    end
+
     class MacVersions
       class << self
         def list_available
-          versions = {}
-          UI.message 'Loading Unity releases'
-          current = UnityVersions.fetch_version(UNITY_DOWNLOADS, MAC_DOWNLOAD)
-          UI.success "Found #{current.count} releases." if current.count.nonzero?
-          versions = versions.merge(current)
-          UI.message 'Loading Unity patch releases'
-          current = UnityVersions.fetch_version_paged(UNITY_PATCHES, MAC_DOWNLOAD)
-          UI.success "Found #{current.count} patch releases." if current.count.nonzero?
-          versions = versions.merge(current)
-          UI.message 'Loading Unity beta releases'
-          current = UnityVersions.fetch_betas(UNITY_BETAS, MAC_DOWNLOAD)
-          UI.success "Found #{current.count} beta releases." if current.count.nonzero?
-          versions = versions.merge(current)
-          versions
+          VersionsFetcher.new(pattern: MAC_DOWNLOAD).fetch_all_channels
         end
       end
     end
@@ -244,20 +257,7 @@ module U3d
     class WindowsVersions
       class << self
         def list_available
-          versions = {}
-          UI.message 'Loading Unity releases'
-          current = UnityVersions.fetch_version(UNITY_DOWNLOADS, WIN_DOWNLOAD)
-          UI.success "Found #{current.count} releases." if current.count.nonzero?
-          versions = versions.merge(current)
-          UI.message 'Loading Unity patch releases'
-          current = UnityVersions.fetch_version_paged(UNITY_PATCHES, WIN_DOWNLOAD)
-          UI.success "Found #{current.count} patch releases." if current.count.nonzero?
-          versions = versions.merge(current)
-          UI.message 'Loading Unity beta releases'
-          current = UnityVersions.fetch_betas(UNITY_BETAS, WIN_DOWNLOAD)
-          UI.success "Found #{current.count} beta releases." if current.count.nonzero?
-          versions = versions.merge(current)
-          versions
+          VersionsFetcher.new(pattern: WIN_DOWNLOAD).fetch_all_channels
         end
       end
     end
