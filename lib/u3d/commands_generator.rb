@@ -212,6 +212,14 @@ More on that: https://forum.unity3d.com/threads/unity-on-linux-release-notes-and
         end
       end
 
+      command :console do |c|
+        c.syntax = 'u3d console'
+        c.summary = "Run an interactive console"
+        c.action do |_args, _options|
+          Commands.console
+        end
+      end
+
       default_command :run
 
       run!
