@@ -33,8 +33,18 @@ module U3d
     include Commander::Methods
     UI = U3dCore::UI
 
+    UNICODE_FILE = File.expand_path('../../assets/utf8.txt', __FILE__)
+
     def self.start
+      check_locale
       new.run
+    end
+
+    def self.check_locale
+      File.read(UNICODE_FILE).split("\n")
+    rescue ArgumentError => _e
+      UI.important "WARNING! Your Locale system appears to be incompatible with Unicode. Set you LOCALE appropriately"
+      UI.important "See https://github.com/DragonBox/u3d#setup"
     end
 
     def extract_run_args(args = ARGV)
