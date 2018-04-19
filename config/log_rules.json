@@ -125,6 +125,22 @@
         "end_message": "[LOG] %{file}(line %{line}): %{message}",
         "type": "error"
       },
+      "build_pipeline_message": {
+        "active": true,
+        "start_pattern": "UnityEditor\\.BuildPipeline:BuildPlayerInternalNoCheck",
+        "fetch_first_line_not_matching": [
+          "UnityEditor\\.",
+          "^\\n",
+          "^\\t",
+          "^  "
+        ],
+        "fetched_line_pattern": "(?<message>.*)\\n",
+        "fetched_line_message": false,
+        "start_message": false,
+        "end_pattern": "Filename: (?:.+/(?<file>\\w+\\.\\w+\\.\\w+))? Line: (?<line>-?\\d+)",
+        "end_message": "[LOG] %{file}(line %{line}): %{message}",
+        "type": "warning"
+      },
       "batchmode_exit": {
         "active": true,
         "start_pattern": "Exiting batchmode successfully now!",
