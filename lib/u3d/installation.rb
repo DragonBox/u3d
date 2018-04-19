@@ -109,6 +109,10 @@ module U3d
       plist['CFBundleVersion']
     end
 
+    def build_number
+      plist['UnityBuildNumber']
+    end
+
     def default_log_file
       "#{ENV['HOME']}/Library/Logs/Unity/Editor.log"
     end
@@ -163,6 +167,39 @@ module U3d
     end
   end
 
+  class LinuxInstallationHelper
+    STRINGS_FULL_VERSION_MATCHER = /^[0-9\.abfp]+_[0-9a-f]{12}/
+
+    def find_build_number(root)
+      known_rev_locations.each do |p|
+        rev = find_build_number_in("#{root}#{p}")
+        return rev if rev
+      end
+    end
+
+    private
+
+    def strings(path)
+      command = "strings #{path.shellescape}"
+      `#{command}`.split("\n")
+    end
+
+    # sorted by order of speed to fetch the strings data
+    def known_rev_locations
+      ['/Editor/BugReporter/unity.bugreporter',
+       '/Editor/Data/PlaybackEngines/WebGLSupport/BuildTools/lib/UnityNativeJs/UnityNative.js.mem',
+       '/Editor/Data/PlaybackEngines/LinuxStandaloneSupport/Variations/linux32_headless_nondevelopment_mono/LinuxPlayer',
+       '/Editor/Unity']
+    end
+
+    def find_build_number_in(path = nil)
+      return nil unless File.exist? path
+      str = strings(path)
+      lines = str.select { |l| l =~ STRINGS_FULL_VERSION_MATCHER }
+      lines.empty? ? nil : lines[0].split('_')[1]
+    end
+  end
+
   class LinuxInstallation < Installation
     def version
       # I don't find an easy way to extract the version on Linux
@@ -174,6 +211,10 @@ module U3d
         version = "#{m[1]}#{m[2]}"
       end
       version
+    end
+
+    def build_number
+      @build_number ||= LinuxInstallationHelper.new.find_build_number(root_path)
     end
 
     def default_log_file
@@ -220,12 +261,66 @@ module U3d
     end
   end
 
+  class WindowsInstallationHelper
+    def build_number(exe_path)
+      s = string_file_info("Unity Version", exe_path)
+      if s
+        a = s.split("_")
+        return a[1] if a.count > 1
+      end
+      nil
+    end
+
+    private
+
+    def string_file_info(info, path)
+      require "Win32API"
+      get_file_version_info_size = Win32API.new('version.dll', 'GetFileVersionInfoSize', 'PP', 'L')
+      get_file_version_info = Win32API.new('version.dll', 'GetFileVersionInfo', 'PIIP', 'I')
+      ver_query_value = Win32API.new('version.dll', 'VerQueryValue', 'PPPP', 'I')
+      rtl_move_memory = Win32API.new('kernel32.dll', 'RtlMoveMemory', 'PLL', 'I')
+
+      file = path.tr("/", "\\")
+
+      buf = [0].pack('L')
+      version_size = get_file_version_info_size.call(file + "\0", buf)
+      raise Exception if version_size.zero? # TODO: use GetLastError
+
+      version_info = 0.chr * version_size
+      version_ok = get_file_version_info.call(file, 0, version_size, version_info)
+      raise Exception if version_ok.zero? # TODO: use GetLastError
+
+      # hardcoding lang codepage
+      struct_path = "\\StringFileInfo\\040904b0\\#{info}"
+
+      addr = [0].pack('L')
+      size = [0].pack('L')
+      query_ok = ver_query_value.call(version_info, struct_path + "\0", addr, size)
+      raise Exception if query_ok.zero?
+
+      raddr = addr.unpack('L')[0]
+      rsize = size.unpack('L')[0]
+
+      info = Array.new(rsize, 0).pack('L*')
+      rtl_move_memory.call(info, raddr, info.length)
+      info.strip
+    rescue StandardError => e
+      UI.verbose("Failure to find '#{info}' under '#{path}': #{e}")
+      UI.verbose(e.backtrace)
+      nil
+    end
+  end
+
   class WindowsInstallation < Installation
     def version
       path = "#{root_path}/Editor/Data/"
       package = PlaybackEngineUtils.list_module_configs(path).first
       raise "Couldn't find a module under #{path}" unless package
       PlaybackEngineUtils.unity_version(package)
+    end
+
+    def build_number
+      @build_number ||= WindowsInstallationHelper.new.build_number(exe_path)
     end
 
     def default_log_file
