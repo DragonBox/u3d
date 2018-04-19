@@ -54,10 +54,10 @@ module U3d
         # sorted versions
         vcomparators = map.keys.map { |k| UnityVersionComparator.new(k) }
         sorted_keys = vcomparators.sort.map { |v| v.version.to_s }
-        sorted_keys.each do |k|
-          u = map[k]
-          version = "#{u.version.ljust(13)} [#{u.build_number}]".ljust(30)
-          UI.message "Version #{version}(#{u.root_path})"
+        sorted_keys.map { |k| map[k] }.each do |u|
+          version_format = "Version %-15{version} [%<build_number>s]  (%<root_path>s)"
+          h = { version: u.version, build_number: u.build_number, root_path: u.root_path }
+          UI.message version_format % h
           packages = u.packages
           next unless options[:packages] && packages && !packages.empty?
           UI.message 'Packages:'

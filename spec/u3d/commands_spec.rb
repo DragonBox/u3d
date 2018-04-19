@@ -40,11 +40,12 @@ describe U3d do
 
       context 'when one or more version are installed' do
         it 'logs installed version when there is only one' do
-          are_installed([fake_installation('1.2.3f4')])
+          installed = [fake_installation('1.2.3f4')]
+          are_installed(installed)
 
           expect(U3d::UI).to receive(:message).with(/1.2.3f4.*foo/)
 
-          U3d::Commands.list_installed
+          expect(U3d::Commands.list_installed).to eq installed
         end
 
         it 'logs installed packages as well when --packages option is specified' do
@@ -59,17 +60,15 @@ describe U3d do
         end
 
         it 'logs sorted versions when several are installed' do
-          are_installed([
-                          fake_installation('1.2.3f6'),
-                          fake_installation('1.2.3b2'),
-                          fake_installation('1.2.3f4')
-                        ])
-
+          i1 = fake_installation('1.2.3f6')
+          i2 = fake_installation('1.2.3b2')
+          i3 = fake_installation('1.2.3f4')
+          are_installed([i1, i2, i3])
           expect(U3d::UI).to receive(:message).with(/1.2.3b2.*foo/).ordered
           expect(U3d::UI).to receive(:message).with(/1.2.3f4.*foo/).ordered
           expect(U3d::UI).to receive(:message).with(/1.2.3f6.*foo/).ordered
 
-          U3d::Commands.list_installed
+          expect(U3d::Commands.list_installed).to eq [i2, i3, i1]
         end
       end
       # when we support a specific version number (e.g. to list the packages of that version)
