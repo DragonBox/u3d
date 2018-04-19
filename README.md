@@ -84,6 +84,16 @@ Some versions are known to have a different numbering, e.g. Linux 2017.1.0f3 is 
 
 When referencing to a version on the CLI, u3d sanitizes these weird versions. For example, if you ask u3d to launch unity 2017.1.0f3 on Linux, you can use `u3d -u 2017.1.0f3` and it will find "2017.1.0xf3Linux".
 
+### Unity build numbers
+
+Every Unity version has a build number in the form of a 12 characters hexadecimal (e.g. `bf5cca3e2788`). You might have noticed them: those build numbers are currently part of the download URLs that `u3d available` displays.
+
+Most of the time Unity users won't have to pay attention to build numbers. In a few scenarios, they become important.
+
+For example, sometimes Unity releases multiple builds with the same version but different build numbers, e.g. when releasing hot fixes. If you need a hotfix release, you might need to ensure that you are using it.
+
+Right now u3d has light support for build numbers. The build number can be found inside the Unity installation files and u3d will extract them and `u3d list` will display both the version and the build number. In the future u3d will have more features to help you managing installations of those special builds. Follow this [request for enhancement](https://github.com/DragonBox/u3d/issues/274) for more information.
+
 ## Default Installation paths
 
   The standard Unity installer has some quirks:
