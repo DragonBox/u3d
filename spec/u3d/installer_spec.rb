@@ -160,9 +160,9 @@ describe U3d do
       describe '.install' do
         it 'installs a file in standard installation path' do
           filepath = "file.sh"
-          allow(File).to receive(:directory?).with(U3d::DEFAULT_LINUX_INSTALL) { true }
+          allow(File).to receive(:directory?).with('/opt') { true }
           expect(U3dCore::CommandExecutor).to receive(:execute).with(command: 'chmod a+x file.sh') {}
-          expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "cd #{U3d::DEFAULT_LINUX_INSTALL}; file.sh", admin: true) {}
+          expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "cd /opt; file.sh", admin: true) {}
 
           installer = U3d::LinuxInstaller.new
           unity = double("UnityProject")

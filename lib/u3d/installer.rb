@@ -30,7 +30,7 @@ require 'pathname'
 
 module U3d
   DEFAULT_LINUX_INSTALL = '/opt/'.freeze
-  DEFAULT_MAC_INSTALL = '/'.freeze
+  DEFAULT_MAC_INSTALL = '/Applications/'.freeze
   DEFAULT_WINDOWS_INSTALL = 'C:/Program Files/'.freeze
   UNITY_DIR = "Unity_%<version>s".freeze
   UNITY_DIR_LONG = "Unity_%<version>s_%<build_number>s".freeze
@@ -103,6 +103,10 @@ module U3d
   end
 
   class MacInstaller < BaseInstaller
+    def install_directory
+      File.expand_path(ENV['U3D_INSTALL_PATH'] || DEFAULT_MAC_INSTALL)
+    end
+
     def sanitize_install(unity, long: false, dry_run: false)
       source_path = unity.root_path
       parent = File.expand_path('..', source_path)
@@ -124,23 +128,24 @@ module U3d
       # rubocop:enable UnusedMethodArgument
       extension = File.extname(file_path)
       raise "Installation of #{extension} files is not supported on Mac" if extension != '.pkg'
-      path = installation_path || DEFAULT_MAC_INSTALL
+      path = installation_path || install_directory
       install_pkg(
         file_path,
         version: version,
-        target_path: path
+        installation_path: path
       )
     end
 
-    def install_pkg(file_path, version: nil, target_path: nil)
-      target_path ||= DEFAULT_MAC_INSTALL
+    # FIXME: we don't support target_path anymore
+    def install_pkg(file_path, version: nil, installation_path: nil)
+      target_path = '/'
       command = "installer -pkg #{file_path.shellescape} -target #{target_path.shellescape}"
       unity = installed.find { |u| u.version == version }
-      temp_path = File.join(target_path, 'Applications', 'Unity')
+      temp_path = File.join(installation_path, 'Unity')
       if unity.nil?
         UI.verbose "No Unity install for version #{version} was found"
         U3dCore::CommandExecutor.execute(command: command, admin: true)
-        destination_path = File.join(target_path, 'Applications', format(UNITY_DIR, version: version))
+        destination_path = File.join(install_directory, format(UNITY_DIR, version: version))
         FileUtils.mv temp_path, destination_path
       else
         UI.verbose "Unity install for version #{version} found under #{unity.root_path}"
@@ -175,7 +180,7 @@ module U3d
     private
 
     def list_installed_paths
-      find = File.join(DEFAULT_MAC_INSTALL, 'Applications', 'Unity*', 'Unity.app')
+      find = File.join(install_directory, 'Unity*', 'Unity.app')
       paths = Dir[find]
       paths = paths.map { |u| Pathname.new(u).parent.to_s }
       UI.verbose "Found list_installed_paths: #{paths}"
@@ -203,6 +208,10 @@ module U3d
 
   # rubocop:disable ClassLength
   class LinuxInstaller < BaseInstaller
+    def install_directory
+      File.expand_path(ENV['U3D_INSTALL_PATH'] || DEFAULT_LINUX_INSTALL)
+    end
+
     def sanitize_install(unity, long: false, dry_run: false)
       source_path = File.expand_path(unity.root_path)
       parent = File.expand_path('..', source_path)
@@ -226,10 +235,10 @@ module U3d
 
       raise "Installation of #{extension} files is not supported on Linux" unless ['.sh', '.xz', '.pkg'].include? extension
       if extension == '.sh'
-        path = installation_path || DEFAULT_LINUX_INSTALL
+        path = installation_path || install_directory
         install_sh(file_path, installation_path: path)
       elsif extension == '.xz'
-        new_path = File.join(DEFAULT_LINUX_INSTALL, format(UNITY_DIR_LINUX, version: version))
+        new_path = File.join(install_directory, format(UNITY_DIR_LINUX, version: version))
         path = installation_path || new_path
         install_xz(file_path, installation_path: path)
       elsif extension == '.pkg'
@@ -338,7 +347,7 @@ module U3d
     end
 
     def list_installed_paths
-      find = File.join(DEFAULT_LINUX_INSTALL, 'unity-editor-*', 'Editor')
+      find = File.join(install_directory, 'unity-editor-*', 'Editor')
       paths = Dir[find]
       paths = paths.map { |u| Pathname.new(u).parent.to_s }
       UI.verbose "Found list_installed_paths: #{paths}"
@@ -356,6 +365,10 @@ module U3d
   # rubocop:enable ClassLength
 
   class WindowsInstaller < BaseInstaller
+    def install_directory
+      File.expand_path(ENV['U3D_INSTALL_PATH'] || DEFAULT_WINDOWS_INSTALL)
+    end
+
     def sanitize_install(unity, long: false, dry_run: false)
       source_path = File.expand_path(unity.root_path)
       parent = File.expand_path('..', source_path)
@@ -368,14 +381,14 @@ module U3d
     end
 
     def installed
-      find = File.join(DEFAULT_WINDOWS_INSTALL, 'Unity*', 'Editor', 'Uninstall.exe')
+      find = File.join(install_directory, 'Unity*', 'Editor', 'Uninstall.exe')
       Dir[find].map { |path| WindowsInstallation.new(root_path: File.expand_path('../..', path)) }
     end
 
     def install(file_path, version, installation_path: nil, info: {})
       extension = File.extname(file_path)
       raise "Installation of #{extension} files is not supported on Windows" unless %w[.exe .msi].include? extension
-      path = installation_path || File.join(DEFAULT_WINDOWS_INSTALL, format(UNITY_DIR, version: version))
+      path = installation_path || File.join(install_directory, format(UNITY_DIR, version: version))
       install_exe(
         file_path,
         installation_path: path,
@@ -384,7 +397,7 @@ module U3d
     end
 
     def install_exe(file_path, installation_path: nil, info: {})
-      installation_path ||= DEFAULT_WINDOWS_INSTALL
+      installation_path ||= install_directory
       final_path = U3dCore::Helper.windows_path(installation_path)
       Utils.ensure_dir(final_path)
       begin
