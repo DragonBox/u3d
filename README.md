@@ -35,6 +35,10 @@ Available commands are:
 
 * `u3d run`: Run Unity, and parses its output through u3d's log prettifier
 
+* `u3d console`: Run u3d in interactive mode, accessing its API
+
+![u3d console](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_console.png)
+
 Here we start with the proper version of Unity:
 
 ![u3d run without arguments](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_run_current.png)

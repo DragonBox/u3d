@@ -65,6 +65,25 @@ module U3d
         end
       end
 
+      def console
+        require 'irb'
+        ARGV.clear
+        IRB.setup(nil)
+        @irb = IRB::Irb.new(nil)
+        IRB.conf[:MAIN_CONTEXT] = @irb.context
+        IRB.conf[:PROMPT][:U3D] = IRB.conf[:PROMPT][:SIMPLE].dup
+        IRB.conf[:PROMPT][:U3D][:RETURN] = "%s\n"
+        @irb.context.prompt_mode = :U3D
+        @irb.context.workspace = IRB::WorkSpace.new(binding)
+        trap 'INT' do
+          @irb.signal_handle
+        end
+
+        UI.message('Welcome to u3d interactive!')
+
+        catch(:IRB_EXIT) { @irb.eval_input }
+      end
+
       def list_available(options: {})
         ver = options[:unity_version]
         os = valid_os_or_current(options[:operating_system])
