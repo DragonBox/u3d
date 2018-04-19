@@ -1,5 +1,34 @@
 # Change Log
 
+## [v1.0.20](https://github.com/DragonBox/u3d/tree/v1.0.20) (2018-04-19)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.19...v1.0.20)
+
+**Implemented enhancements:**
+
+- u3d/list: display full revision number \(prepares for \#274\) [\#280](https://github.com/DragonBox/u3d/pull/280) ([lacostej](https://github.com/lacostej))
+- u3d/prettify: catch build pipeline messages [\#279](https://github.com/DragonBox/u3d/pull/279) ([niezbop](https://github.com/niezbop))
+- u3d/prettify: fix exception rule start pattern [\#273](https://github.com/DragonBox/u3d/pull/273) ([niezbop](https://github.com/niezbop))
+- u3d/\*: failure reporter [\#267](https://github.com/DragonBox/u3d/pull/267) ([niezbop](https://github.com/niezbop))
+- Move duplicated data\_path out of U3d::Cache/U3d::INIparser to U3dCore::Helper [\#266](https://github.com/DragonBox/u3d/pull/266) ([niezbop](https://github.com/niezbop))
+
+**Fixed bugs:**
+
+- UnityEngine.Debug.Log\[Error|Warning|\]Format do not appear in u3d run output [\#269](https://github.com/DragonBox/u3d/issues/269)
+- u3d/prettify: Catch Enlighten jobs failure [\#272](https://github.com/DragonBox/u3d/pull/272) ([niezbop](https://github.com/niezbop))
+
+**Closed issues:**
+
+- u3d/log catch all BuildPipeline:BuildPlayerInternalNoCheck messages [\#278](https://github.com/DragonBox/u3d/issues/278)
+- New LTS releases not recognised [\#276](https://github.com/DragonBox/u3d/issues/276)
+- cache stopped building [\#275](https://github.com/DragonBox/u3d/issues/275)
+- incompatible character encodings: CP850 and UTF-8 [\#268](https://github.com/DragonBox/u3d/issues/268)
+
+**Merged pull requests:**
+
+- u3d/available support LTS \(\#276\) [\#277](https://github.com/DragonBox/u3d/pull/277) ([lacostej](https://github.com/lacostej))
+- Document locale unicode requirements \(fixes \#268\) [\#271](https://github.com/DragonBox/u3d/pull/271) ([lacostej](https://github.com/lacostej))
+- u3d/prettify: Fix UnityEngine.Debug.LogXXXFormat not being caught [\#270](https://github.com/DragonBox/u3d/pull/270) ([niezbop](https://github.com/niezbop))
+
 ## [v1.0.19](https://github.com/DragonBox/u3d/tree/v1.0.19) (2018-03-09)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.18...v1.0.19)
 
