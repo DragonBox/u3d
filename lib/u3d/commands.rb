@@ -65,6 +65,7 @@ module U3d
         end
       end
 
+      # rubocop:disable Style/FormatStringToken
       def console
         require 'irb'
         ARGV.clear
@@ -83,6 +84,7 @@ module U3d
 
         catch(:IRB_EXIT) { @irb.eval_input }
       end
+      # rubocop:enable Style/FormatStringToken
 
       def list_available(options: {})
         ver = options[:unity_version]
