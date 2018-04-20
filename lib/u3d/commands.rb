@@ -267,7 +267,7 @@ module U3d
           up = UnityProject.new(Dir.pwd)
           version = up.editor_version if up.exist?
         end
-        UI.user_error!('Please specify a Unity version to download') unless version
+        UI.user_error!('Please specify a Unity version') unless version
         version
       end
 
