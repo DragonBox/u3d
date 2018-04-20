@@ -21,10 +21,12 @@
 ## --- END LICENSE BLOCK ---
 
 require 'u3d/utils'
+require 'fileutils'
 
 module U3d
   UNITY_DIR_CHECK = /Unity_\d+\.\d+\.\d+[a-z]\d+/
   UNITY_DIR_CHECK_LINUX = /unity-editor-\d+\.\d+\.\d+[a-z]\d+\z/
+  U3D_DO_NOT_MOVE = ".u3d_do_not_move".freeze
 
   class Installation
     attr_reader :root_path
@@ -67,6 +69,14 @@ module U3d
       false
     end
 
+    def do_not_move?
+      File.exist?(@root_path) && File.exist?(do_not_move_file_path)
+    end
+
+    def do_not_move!
+      FileUtils.touch do_not_move_file_path
+    end
+
     def package_installed?(package)
       return true if (packages || []).include?(package)
 
@@ -77,6 +87,12 @@ module U3d
       return false unless aliases
 
       return !(aliases & packages).empty?
+    end
+
+    private
+
+    def do_not_move_file_path
+      File.join(@root_path, U3D_DO_NOT_MOVE)
     end
   end
 
@@ -152,7 +168,7 @@ module U3d
     end
 
     def clean_install?
-      !(root_path =~ UNITY_DIR_CHECK).nil?
+      do_not_move? || !(root_path =~ UNITY_DIR_CHECK).nil?
     end
 
     private
@@ -257,7 +273,7 @@ module U3d
     end
 
     def clean_install?
-      !(root_path =~ UNITY_DIR_CHECK_LINUX).nil?
+      do_not_move? || !(root_path =~ UNITY_DIR_CHECK_LINUX).nil?
     end
   end
 
@@ -372,7 +388,7 @@ module U3d
     end
 
     def clean_install?
-      !(root_path =~ UNITY_DIR_CHECK).nil?
+      do_not_move? || !(root_path =~ UNITY_DIR_CHECK).nil?
     end
   end
 end
