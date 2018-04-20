@@ -43,18 +43,12 @@ module U3d
 
     class << self
       def list_installed(options: {})
-        list = Installer.create.installed
+        list = installed_sorted_versions
         if list.empty?
           UI.important 'No Unity version installed'
           return
         end
-        # version -> installations
-        arraym = list.map { |a| [a.version, a] }
-        map = Hash[*arraym.flatten]
-        # sorted versions
-        vcomparators = map.keys.map { |k| UnityVersionComparator.new(k) }
-        sorted_keys = vcomparators.sort.map { |v| v.version.to_s }
-        sorted_keys.map { |k| map[k] }.each do |u|
+        list.each do |u|
           version_format = "Version %-15{version} [%<build_number>s]  (%<root_path>s)"
           h = { version: u.version, build_number: u.build_number, root_path: u.root_path }
           UI.message version_format % h
@@ -247,6 +241,18 @@ module U3d
       end
 
       private
+
+      def installed_sorted_versions
+        list = Installer.create.installed
+        return [] if list.empty?
+        # version -> installations
+        arraym = list.map { |a| [a.version, a] }
+        map = Hash[*arraym.flatten]
+        # sorted versions
+        vcomparators = map.keys.map { |k| UnityVersionComparator.new(k) }
+        sorted_keys = vcomparators.sort.map { |v| v.version.to_s }
+        sorted_keys.map { |k| map[k] }
+      end
 
       def cache_versions(os, offline: false, force_refresh: false)
         cache = Cache.new(force_os: os, offline: offline, force_refresh: force_refresh, central_cache: true)
