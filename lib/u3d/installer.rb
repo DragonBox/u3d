@@ -33,7 +33,9 @@ module U3d
   DEFAULT_MAC_INSTALL = '/'.freeze
   DEFAULT_WINDOWS_INSTALL = 'C:/Program Files/'.freeze
   UNITY_DIR = "Unity_%<version>s".freeze
+  UNITY_DIR_LONG = "Unity_%<version>s_%<build_number>s".freeze
   UNITY_DIR_LINUX = "unity-editor-%<version>s".freeze
+  UNITY_DIR_LINUX_LONG = "unity-editor-%<version>s_%<build_number>s".freeze
 
   class Installer
     def self.create
@@ -101,10 +103,11 @@ module U3d
   end
 
   class MacInstaller < BaseInstaller
-    def sanitize_install(unity, dry_run: false)
+    def sanitize_install(unity, long: false, dry_run: false)
       source_path = unity.root_path
       parent = File.expand_path('..', source_path)
-      dir_name = format(UNITY_DIR, version: unity.version)
+      dir_name = format(long ? UNITY_DIR_LONG : UNITY_DIR,
+                        version: unity.version, build_number: unity.build_number)
       new_path = File.join(parent, dir_name)
 
       moved = U3dCore::AdminTools.move_os_file(:mac, source_path, new_path, dry_run: dry_run)
@@ -199,10 +202,11 @@ module U3d
   end
 
   class LinuxInstaller < BaseInstaller
-    def sanitize_install(unity, dry_run: false)
+    def sanitize_install(unity, long: false, dry_run: false)
       source_path = File.expand_path(unity.root_path)
       parent = File.expand_path('..', source_path)
-      dir_name = format(UNITY_DIR_LINUX, version: unity.version)
+      dir_name = format(long ? UNITY_DIR_LINUX_LONG : UNITY_DIR_LINUX,
+                        version: unity.version, build_number: unity.build_number)
       new_path = File.join(parent, dir_name)
 
       moved = U3dCore::AdminTools.move_os_file(:linux, source_path, new_path, dry_run: dry_run)
@@ -298,10 +302,11 @@ module U3d
   end
 
   class WindowsInstaller < BaseInstaller
-    def sanitize_install(unity, dry_run: false)
+    def sanitize_install(unity, long: false, dry_run: false)
       source_path = File.expand_path(unity.root_path)
       parent = File.expand_path('..', source_path)
-      dir_name = format(UNITY_DIR, version: unity.version)
+      dir_name = format(long ? UNITY_DIR_LONG : UNITY_DIR,
+                        version: unity.version, build_number: unity.build_number)
       new_path = File.join(parent, dir_name)
 
       moved = U3dCore::AdminTools.move_os_file(:windows, source_path, new_path, dry_run: dry_run)

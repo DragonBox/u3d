@@ -34,6 +34,7 @@ require 'u3d/unity_runner'
 require 'u3d_core/command_executor'
 require 'u3d_core/credentials'
 require 'fileutils'
+require 'pry'
 
 module U3d
   # API for U3d, redirecting calls to class they concern
@@ -81,6 +82,26 @@ module U3d
         catch(:IRB_EXIT) { @irb.eval_input }
       end
       # rubocop:enable Style/FormatStringToken
+
+      def move(args: {}, options: {})
+        long_name = options[:long]
+        UI.user_error! "move only supports long version name for now" unless long_name
+
+        version = args[0]
+        UI.user_error! "Please specify a Unity version" unless version
+        unity = check_unity_presence(version: version)
+        if unity.nil?
+          UI.message "Specified version '#{version}' not found."
+          return
+        end
+        if unity.do_not_move?
+          UI.error "Specified version is specicically marked as _do not move_."
+          return
+        end
+        Installer.create.sanitize_install(unity, long: true, dry_run: options[:dry_run])
+
+        unity.do_not_move!(dry_run: options[:dry_run]) # this may fail because of admin rights
+      end
 
       def list_available(options: {})
         ver = options[:unity_version]
