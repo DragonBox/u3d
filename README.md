@@ -86,7 +86,7 @@ Unity uses the following version formatting: 0.0.0x0. The \'x\' can takes differ
 
 Some versions are known to have a different numbering, e.g. Linux 2017.1.0f3 is named 2017.1.0xf3Linux. Its `ProjectSettings/ProjectVersion.txt` will contain the Linux specific version.
 
-When referencing to a version on the CLI, u3d sanitizes these weird versions. For example, if you ask u3d to launch unity 2017.1.0f3 on Linux, you can use `u3d -u 2017.1.0f3` and it will find "2017.1.0xf3Linux".
+When referencing to a version on the CLI, u3d normalizes these weird versions. For example, if you ask u3d to launch unity 2017.1.0f3 on Linux, you can use `u3d -u 2017.1.0f3` and it will find "2017.1.0xf3Linux".
 
 ### Unity build numbers
 
