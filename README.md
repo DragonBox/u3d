@@ -118,7 +118,7 @@ Right now u3d has light support for build numbers. The build number can be found
 
 ## Sanitize / standardize Unity installation paths
 
-  If you have installed Unity in different locations, u3d might discover them and propose you to move them to its standard location. The procedure should be self described and easily revertible (manually). This sanitization operation is only proposed in interactive mode (i.e. if you are not using u3d unattended, e.g. in a build script on a CI server).
+  If you have installed Unity in different locations, u3d might discover them and propose you to move them to its standard location. The procedure should be self described and easily revertible (manually). This sanitization operation is only proposed in interactive mode (i.e. if you are not using u3d unattended, e.g. in a build script on a CI server) when running the `list` command.
 
 ![u3d sanitize](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_sanitize.png)
 
