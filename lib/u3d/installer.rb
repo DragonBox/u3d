@@ -76,10 +76,11 @@ module U3d
   end
 
   class CommonInstaller
+    # FIXME: move to a FileUtils.move_admin_file or similar
     def self.sanitize_install(source_path, new_path, command, dry_run: false)
       if source_path == new_path
         UI.important "sanitize_install does nothing if the path won't change (#{source_path})"
-        return
+        return false
       end
 
       if dry_run
@@ -89,8 +90,10 @@ module U3d
         U3dCore::CommandExecutor.execute(command: command, admin: true)
         UI.success "Successfully moved '#{source_path}' to '#{new_path}'"
       end
+      true
     rescue StandardError => e
       UI.error "Unable to move '#{source_path}' to '#{new_path}': #{e}"
+      false
     end
   end
 
@@ -98,10 +101,15 @@ module U3d
     def sanitize_install(unity, dry_run: false)
       source_path = unity.root_path
       parent = File.expand_path('..', source_path)
-      new_path = File.join(parent, format(UNITY_DIR, version: unity.version))
+      dir_name = format(UNITY_DIR, version: unity.version)
+      new_path = File.join(parent, dir_name)
 
+      moved = move_file(source_path, new_path, dry_run: dry_run)
+      unity.root_path = new_path if moved && !dry_run
+    end
+
+    def move_file(source_path, new_path, dry_run:)
       command = "mv #{source_path.shellescape} #{new_path.shellescape}"
-
       CommonInstaller.sanitize_install(source_path, new_path, command, dry_run: dry_run)
     end
 
@@ -196,10 +204,15 @@ module U3d
     def sanitize_install(unity, dry_run: false)
       source_path = File.expand_path(unity.root_path)
       parent = File.expand_path('..', source_path)
-      new_path = File.join(parent, format(UNITY_DIR_LINUX, version: unity.version))
+      dir_name = format(UNITY_DIR_LINUX, version: unity.version)
+      new_path = File.join(parent, dir_name)
 
+      moved = move_file(source_path, new_path, dry_run: dry_run)
+      unity.root_path = new_path if moved && !dry_run
+    end
+
+    def move_file(source_path, new_path, dry_run:)
       command = "mv #{source_path.shellescape} #{new_path.shellescape}"
-
       CommonInstaller.sanitize_install(source_path, new_path, command, dry_run: dry_run)
     end
 
@@ -295,13 +308,18 @@ module U3d
     def sanitize_install(unity, dry_run: false)
       source_path = File.expand_path(unity.root_path)
       parent = File.expand_path('..', source_path)
-      new_path = File.join(parent, format(UNITY_DIR, version: unity.version))
+      dir_name = format(UNITY_DIR, version: unity.version)
+      new_path = File.join(parent, dir_name)
 
+      moved = move_file(source_path, new_path, dry_run: dry_run)
+      unity.root_path = new_path if moved && !dry_run
+    end
+
+    def move_file(source_path, new_path, dry_run:)
       source_path.tr!('/', '\\')
       new_path.tr!('/', '\\')
 
       command = "move #{source_path.argescape} #{new_path.argescape}"
-
       CommonInstaller.sanitize_install(source_path, new_path, command, dry_run: dry_run)
     end
 

@@ -77,6 +77,7 @@ describe U3d do
           expect(U3d::UI).to receive(:important).with("Moving '/Applications/Unity' to '/Applications/Unity_5.6.0f1'...")
           expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "mv /Applications/Unity /Applications/Unity_5.6.0f1", admin: true)
           expect(U3d::UI).to receive(:success).with("Successfully moved '/Applications/Unity' to '/Applications/Unity_5.6.0f1'")
+          expect(unity).to receive(:root_path=).with('/Applications/Unity_5.6.0f1')
           U3d::MacInstaller.new.sanitize_install(unity)
         end
 
@@ -99,6 +100,7 @@ describe U3d do
           expect(U3d::UI).to receive(:important).with("Moving '/Applications/Unity 5.6.0f1' to '/Applications/Unity_5.6.0f1'...")
           expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "mv /Applications/Unity\\ 5.6.0f1 /Applications/Unity_5.6.0f1", admin: true)
           expect(U3d::UI).to receive(:success).with("Successfully moved '/Applications/Unity 5.6.0f1' to '/Applications/Unity_5.6.0f1'")
+          expect(unity).to receive(:root_path=).with('/Applications/Unity_5.6.0f1')
           U3d::MacInstaller.new.sanitize_install(unity)
         end
 
@@ -131,6 +133,7 @@ describe U3d do
           expect(U3d::UI).to receive(:important).with("Moving '/opt/unity-editor-2017.1.0xf3Linux' to '/opt/unity-editor-2017.1.0f3'...")
           expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "mv /opt/unity-editor-2017.1.0xf3Linux /opt/unity-editor-2017.1.0f3", admin: true)
           expect(U3d::UI).to receive(:success).with("Successfully moved '/opt/unity-editor-2017.1.0xf3Linux' to '/opt/unity-editor-2017.1.0f3'")
+          expect(unity).to receive(:root_path=).with('/opt/unity-editor-2017.1.0f3')
           U3d::LinuxInstaller.new.sanitize_install(unity)
         end
       end
@@ -178,6 +181,7 @@ describe U3d do
           expect(U3d::UI).to receive(:important).with("Moving 'C:\\Program\\ Files\\ \\(x86\\)\\Unity' to 'C:\\Program Files\\Unity_5.6.0f1'...")
           expect(U3dCore::CommandExecutor).to receive(:execute).with(command: "move C:\\Program Files (x86)\\Unity C:\\Program Files\\Unity_5.6.0f1", admin: true)
           expect(U3d::UI).to receive(:success).with("Successfully moved 'C:\\Program Files \\(x86\\)\\Unity' to 'C:\\Program Files\\Unity_5.6.0f1'")
+          expect(unity).to receive(:root_path=).with('C:\\Program Files\\Unity_5.6.0f1')
           U3d::MacInstaller.new.sanitize_install(unity)
         end
 
