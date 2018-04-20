@@ -31,7 +31,8 @@ describe U3d do
     # ---
     describe "#list_installed" do
       it 'logs a message when no version is installed' do
-        nothing_installed
+        installer = double_installer
+        expect(installer).to receive(:sanitize_installs)
 
         expect(U3d::UI).to receive(:important).with(/[nN]o.*install/) {}
 
@@ -41,7 +42,8 @@ describe U3d do
       context 'when one or more version are installed' do
         it 'logs installed version when there is only one' do
           installed = [fake_installation('1.2.3f4')]
-          are_installed(installed)
+          installer = are_installed(installed)
+          expect(installer).to receive(:sanitize_installs)
 
           expect(U3d::UI).to receive(:message).with(/1.2.3f4.*foo/)
 
@@ -49,7 +51,8 @@ describe U3d do
         end
 
         it 'logs installed packages as well when --packages option is specified' do
-          are_installed([fake_installation('1.2.3f4', packages: %w[packageA packageB])])
+          installer = are_installed([fake_installation('1.2.3f4', packages: %w[packageA packageB])])
+          expect(installer).to receive(:sanitize_installs)
 
           expect(U3d::UI).to receive(:message).with(/1.2.3f4.*foo/)
           expect(U3d::UI).to receive(:message).with(/Packages/)
@@ -63,7 +66,8 @@ describe U3d do
           i1 = fake_installation('1.2.3f6')
           i2 = fake_installation('1.2.3b2')
           i3 = fake_installation('1.2.3f4')
-          are_installed([i1, i2, i3])
+          installer = are_installed([i1, i2, i3])
+          expect(installer).to receive(:sanitize_installs)
           expect(U3d::UI).to receive(:message).with(/1.2.3b2.*foo/).ordered
           expect(U3d::UI).to receive(:message).with(/1.2.3f4.*foo/).ordered
           expect(U3d::UI).to receive(:message).with(/1.2.3f6.*foo/).ordered

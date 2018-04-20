@@ -36,28 +36,17 @@ module U3d
 
   class Installer
     def self.create
-      installer = if Helper.mac?
-                    MacInstaller.new
-                  elsif Helper.linux?
-                    LinuxInstaller.new
-                  else
-                    WindowsInstaller.new
-                  end
-      sanitize_installs(installer)
-      installer
+      if Helper.mac?
+        MacInstaller.new
+      elsif Helper.linux?
+        LinuxInstaller.new
+      else
+        WindowsInstaller.new
+      end
     end
 
     def self.sanitize_installs(installer)
-      return unless UI.interactive? || Helper.test?
-      unclean = []
-      installer.installed.each { |unity| unclean << unity unless unity.clean_install? }
-      return if unclean.empty?
-      UI.important("u3d can optionally standardize the existing Unity installation names and locations.")
-      UI.important("Check the documentation for more information:")
-      UI.important("** https://github.com/DragonBox/u3d/blob/master/README.md#default-installation-paths **")
-      unclean.each { |unity| installer.sanitize_install(unity, dry_run: true) }
-      return unless UI.confirm("#{unclean.count} Unity installation(s) will be moved. Proceed??")
-      unclean.each { |unity| installer.sanitize_install(unity) }
+      installer.sanitize_installs
     end
 
     def self.install_modules(files, version, installation_path: nil)
@@ -72,6 +61,21 @@ module U3d
     def self.uninstall(unity: nil)
       installer = Installer.create
       installer.uninstall(unity: unity)
+    end
+  end
+
+  class BaseInstaller
+    def sanitize_installs
+      return unless UI.interactive? || Helper.test?
+      unclean = []
+      installed.each { |unity| unclean << unity unless unity.clean_install? }
+      return if unclean.empty?
+      UI.important("u3d can optionally standardize the existing Unity installation names and locations.")
+      UI.important("Check the documentation for more information:")
+      UI.important("** https://github.com/DragonBox/u3d/blob/master/README.md#default-installation-paths **")
+      unclean.each { |unity| sanitize_install(unity, dry_run: true) }
+      return unless UI.confirm("#{unclean.count} Unity installation(s) will be moved. Proceed??")
+      unclean.each { |unity| sanitize_install(unity) }
     end
   end
 
@@ -94,7 +98,7 @@ module U3d
     end
   end
 
-  class MacInstaller
+  class MacInstaller < BaseInstaller
     def sanitize_install(unity, dry_run: false)
       source_path = unity.root_path
       parent = File.expand_path('..', source_path)
@@ -192,7 +196,7 @@ module U3d
     end
   end
 
-  class LinuxInstaller
+  class LinuxInstaller < BaseInstaller
     def sanitize_install(unity, dry_run: false)
       source_path = File.expand_path(unity.root_path)
       parent = File.expand_path('..', source_path)
@@ -291,7 +295,7 @@ module U3d
     end
   end
 
-  class WindowsInstaller
+  class WindowsInstaller < BaseInstaller
     def sanitize_install(unity, dry_run: false)
       source_path = File.expand_path(unity.root_path)
       parent = File.expand_path('..', source_path)

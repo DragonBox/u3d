@@ -43,7 +43,7 @@ module U3d
 
     class << self
       def list_installed(options: {})
-        list = installed_sorted_versions
+        list = installed_sanitized_sorted_versions
         if list.empty?
           UI.important 'No Unity version installed'
           return
@@ -242,8 +242,10 @@ module U3d
 
       private
 
-      def installed_sorted_versions
-        list = Installer.create.installed
+      def installed_sanitized_sorted_versions
+        installer = Installer.create
+        installer.sanitize_installs
+        list = installer.installed
         return [] if list.empty?
         # version -> installations
         arraym = list.map { |a| [a.version, a] }
