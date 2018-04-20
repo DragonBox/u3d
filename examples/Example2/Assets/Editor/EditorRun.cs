@@ -10,7 +10,14 @@ namespace U3d {
     static void Build() {
       Debug.Log("Building Example2");
 
-      BuildPlayer(EditorBuildSettings.scenes, "target/Example2.app", BuildTarget.StandaloneOSXIntel64, BuildOptions.None);
+      BuildTarget Target;
+#if UNITY_2017_3_OR_NEWER
+      Target = BuildTarget.StandaloneOSX;
+#else
+      Target = BuildTarget.StandaloneOSXIntel64;
+#endif      
+
+      BuildPlayer(EditorBuildSettings.scenes, "target/Example2.app", Target, BuildOptions.None);
     }
 
     private static void BuildPlayer(EditorBuildSettingsScene[] scenes, string target_dir, BuildTarget build_target, BuildOptions build_options) {
