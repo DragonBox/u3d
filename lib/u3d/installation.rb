@@ -175,6 +175,7 @@ module U3d
         rev = find_build_number_in("#{root}#{p}")
         return rev if rev
       end
+      nil
     end
 
     private
