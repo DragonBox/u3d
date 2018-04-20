@@ -33,6 +33,7 @@ describe U3d do
       it 'logs a message when no version is installed' do
         installer = double_installer
         expect(installer).to receive(:sanitize_installs)
+        expect(installer).to receive(:installed_sorted_by_versions) { [] }
 
         expect(U3d::UI).to receive(:important).with(/[nN]o.*install/) {}
 
@@ -41,18 +42,21 @@ describe U3d do
 
       context 'when one or more version are installed' do
         it 'logs installed version when there is only one' do
-          installed = [fake_installation('1.2.3f4')]
-          installer = are_installed(installed)
+          sorted_installed = [fake_installation('1.2.3f4')]
+          installer = double_installer
           expect(installer).to receive(:sanitize_installs)
+          expect(installer).to receive(:installed_sorted_by_versions) { sorted_installed }
 
           expect(U3d::UI).to receive(:message).with(/1.2.3f4.*foo/)
 
-          expect(U3d::Commands.list_installed).to eq installed
+          expect(U3d::Commands.list_installed).to eq sorted_installed
         end
 
         it 'logs installed packages as well when --packages option is specified' do
-          installer = are_installed([fake_installation('1.2.3f4', packages: %w[packageA packageB])])
+          sorted_installed = [fake_installation('1.2.3f4', packages: %w[packageA packageB])]
+          installer = double_installer
           expect(installer).to receive(:sanitize_installs)
+          expect(installer).to receive(:installed_sorted_by_versions) { sorted_installed }
 
           expect(U3d::UI).to receive(:message).with(/1.2.3f4.*foo/)
           expect(U3d::UI).to receive(:message).with(/Packages/)
@@ -66,13 +70,17 @@ describe U3d do
           i1 = fake_installation('1.2.3f6')
           i2 = fake_installation('1.2.3b2')
           i3 = fake_installation('1.2.3f4')
-          installer = are_installed([i1, i2, i3])
+
+          sorted_installed = [i2, i3, i1]
+          installer = double_installer
           expect(installer).to receive(:sanitize_installs)
+          expect(installer).to receive(:installed_sorted_by_versions) { sorted_installed }
+
           expect(U3d::UI).to receive(:message).with(/1.2.3b2.*foo/).ordered
           expect(U3d::UI).to receive(:message).with(/1.2.3f4.*foo/).ordered
           expect(U3d::UI).to receive(:message).with(/1.2.3f6.*foo/).ordered
 
-          expect(U3d::Commands.list_installed).to eq [i2, i3, i1]
+          expect(U3d::Commands.list_installed).to eq sorted_installed
         end
       end
       # when we support a specific version number (e.g. to list the packages of that version)

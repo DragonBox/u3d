@@ -71,6 +71,22 @@ describe U3d do
           end
         end
       end
+
+      describe ".installed_sorted_by_versions" do
+        it "sorts by version" do
+          i1 = fake_installation('1.2.3f6')
+          i2 = fake_installation('1.2.3b2')
+          i3 = fake_installation('1.2.3f4')
+
+          installed = [i1, i2, i3]
+          sorted_installed = [i2, i3, i1]
+
+          installer = DummyInstaller.new
+          allow(installer).to receive(:installed) { installed }
+
+          expect(installer.installed_sorted_by_versions).to eq(sorted_installed)
+        end
+      end
     end
 
     describe U3d::MacInstaller, unless: WINDOWS do
