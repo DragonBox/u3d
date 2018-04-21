@@ -22,6 +22,17 @@
 ## --- END LICENSE BLOCK ---
 module U3dCore
   class AdminTools
+    def self.move_os_file(os, source_path, new_path, dry_run:)
+      if os == :windows
+        source_path.tr!('/', '\\')
+        new_path.tr!('/', '\\')
+        command = "move #{source_path.argescape} #{new_path.argescape}"
+      else
+        command = "mv #{source_path.shellescape} #{new_path.shellescape}"
+      end
+      move_file(source_path, new_path, command, dry_run: dry_run)
+    end
+
     # move one path to a new path
     def self.move_file(source_path, new_path, command, dry_run: false)
       if source_path == new_path

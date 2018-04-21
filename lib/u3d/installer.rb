@@ -107,13 +107,8 @@ module U3d
       dir_name = format(UNITY_DIR, version: unity.version)
       new_path = File.join(parent, dir_name)
 
-      moved = move_file(source_path, new_path, dry_run: dry_run)
+      moved = U3dCore::AdminTools.move_os_file(:mac, source_path, new_path, dry_run: dry_run)
       unity.root_path = new_path if moved && !dry_run
-    end
-
-    def move_file(source_path, new_path, dry_run:)
-      command = "mv #{source_path.shellescape} #{new_path.shellescape}"
-      CommonInstaller.sanitize_install(source_path, new_path, command, dry_run: dry_run)
     end
 
     def installed
@@ -210,13 +205,8 @@ module U3d
       dir_name = format(UNITY_DIR_LINUX, version: unity.version)
       new_path = File.join(parent, dir_name)
 
-      moved = move_file(source_path, new_path, dry_run: dry_run)
+      moved = U3dCore::AdminTools.move_os_file(:linux, source_path, new_path, dry_run: dry_run)
       unity.root_path = new_path if moved && !dry_run
-    end
-
-    def move_file(source_path, new_path, dry_run:)
-      command = "mv #{source_path.shellescape} #{new_path.shellescape}"
-      CommonInstaller.sanitize_install(source_path, new_path, command, dry_run: dry_run)
     end
 
     def installed
@@ -314,16 +304,8 @@ module U3d
       dir_name = format(UNITY_DIR, version: unity.version)
       new_path = File.join(parent, dir_name)
 
-      moved = move_file(source_path, new_path, dry_run: dry_run)
+      moved = U3dCore::AdminTools.move_os_file(:windows, source_path, new_path, dry_run: dry_run)
       unity.root_path = new_path if moved && !dry_run
-    end
-
-    def move_file(source_path, new_path, dry_run:)
-      source_path.tr!('/', '\\')
-      new_path.tr!('/', '\\')
-
-      command = "move #{source_path.argescape} #{new_path.argescape}"
-      CommonInstaller.sanitize_install(source_path, new_path, command, dry_run: dry_run)
     end
 
     def installed
