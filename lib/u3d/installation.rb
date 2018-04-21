@@ -27,7 +27,7 @@ module U3d
   UNITY_DIR_CHECK_LINUX = /unity-editor-\d+\.\d+\.\d+[a-z]\d+\z/
 
   class Installation
-    attr_reader :root_path
+    attr_accessor :root_path
 
     NOT_PLAYBACKENGINE_PACKAGES = %w[Documentation StandardAssets MonoDevelop].freeze
     PACKAGE_ALIASES =
