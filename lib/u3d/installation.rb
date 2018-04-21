@@ -73,8 +73,12 @@ module U3d
       File.exist?(@root_path) && File.exist?(do_not_move_file_path)
     end
 
-    def do_not_move!
-      FileUtils.touch do_not_move_file_path
+    def do_not_move!(dry_run: false)
+      if dry_run
+        UI.message "Would create '#{do_not_move_file_path}'"
+      else
+        FileUtils.touch do_not_move_file_path
+      end
     end
 
     def package_installed?(package)
