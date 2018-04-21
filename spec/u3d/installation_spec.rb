@@ -37,6 +37,11 @@ describe U3d do
           expect(unity.path).to eq('/Applications/Unity_5.6.0f1/Unity.app')
         end
 
+        it "detects non clean install based on path name" do
+          unity = U3d::Installation.create(root_path: '/Applications/Unity/Unity.app')
+          expect(unity.clean_install?).to eq(false)
+        end
+
         it "creates a Mac installation" do
           unity = U3d::Installation.create(root_path: '/Applications/Unity_5.6.0f1')
 
@@ -44,6 +49,7 @@ describe U3d do
           expect(unity.path).to eq('/Applications/Unity_5.6.0f1/Unity.app')
           expect(unity.exe_path).to eq('/Applications/Unity_5.6.0f1/Unity.app/Contents/MacOS/Unity')
           expect(unity.clean_install?).to eq(true)
+          expect(unity.do_not_move?).to eq(false)
           expect(unity.root_path).to eq('/Applications/Unity_5.6.0f1')
         end
       end
@@ -58,11 +64,18 @@ describe U3d do
           expect(unity.path).to eq('/opt/unity-editor-5.6.0f1')
         end
 
+        it "detects non clean install based on path name" do
+          unity = U3d::Installation.create(root_path: '/opt/unity-editor')
+          expect(unity.clean_install?).to eq(false)
+        end
+
         it "creates a Linux installation" do
           unity = U3d::Installation.create(root_path: '/opt/unity-editor-5.6.0f1')
 
           expect(unity.class).to eq(U3d::LinuxInstallation)
           expect(unity.path).to eq('/opt/unity-editor-5.6.0f1')
+          expect(unity.clean_install?).to eq(true)
+          expect(unity.do_not_move?).to eq(false)
           expect(unity.root_path).to eq('/opt/unity-editor-5.6.0f1')
         end
       end
@@ -77,12 +90,52 @@ describe U3d do
           expect(unity.path).to eq('C:/Program Files/Unity_2017.1.0f3')
         end
 
+        it "detects non clean install based on path name" do
+          unity = U3d::Installation.create(root_path: 'C:/Program Files/Unity')
+          expect(unity.clean_install?).to eq(false)
+        end
+
         it "creates a Windows installation" do
           unity = U3d::Installation.create(root_path: 'C:/Program Files/Unity_2017.1.0f3')
 
           expect(unity.class).to eq(U3d::WindowsInstallation)
           expect(unity.path).to eq('C:/Program Files/Unity_2017.1.0f3')
+          expect(unity.clean_install?).to eq(true)
+          expect(unity.do_not_move?).to eq(false)
           expect(unity.root_path).to eq('C:/Program Files/Unity_2017.1.0f3')
+        end
+      end
+
+      context "Any installation" do
+        before(:each) do
+          on_mac
+        end
+
+        it "supports installations that can move" do
+          expect(File).to receive(:exist?).with('/Applications/Unity') { true }
+          expect(File).to receive(:exist?).with('/Applications/Unity/.u3d_do_not_move') { false }
+
+          unity = U3d::Installation.create(root_path: '/Applications/Unity')
+          expect(unity.send(:do_not_move_file_path)).to eq('/Applications/Unity/.u3d_do_not_move')
+          expect(unity.clean_install?).to eq(false)
+        end
+
+        it "supports installations that cannot move" do
+          expect(File).to receive(:exist?).with('/Applications/Unity') { true }
+          expect(File).to receive(:exist?).with('/Applications/Unity/.u3d_do_not_move') { true }
+
+          unity = U3d::Installation.create(root_path: '/Applications/Unity')
+          expect(unity.send(:do_not_move_file_path)).to eq('/Applications/Unity/.u3d_do_not_move')
+          expect(unity.clean_install?).to eq(true)
+        end
+
+        it "supports marking installations to not move" do
+          expect(File).to receive(:exist?).with('/Applications/Unity') { true }
+          expect(File).to receive(:exist?).with('/Applications/Unity/.u3d_do_not_move') { true }
+
+          unity = U3d::Installation.create(root_path: '/Applications/Unity')
+          expect(unity.send(:do_not_move_file_path)).to eq('/Applications/Unity/.u3d_do_not_move')
+          expect(unity.clean_install?).to eq(true)
         end
       end
     end

@@ -122,6 +122,8 @@ Right now u3d has light support for build numbers. The build number can be found
 
 ![u3d sanitize](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_sanitize.png)
 
+  If you wish a particular Unity installation to be ignored by the sanitization feature, create a `.u3d_do_not_move` file inside it.
+
 ## Security
 
 When you install Unity with this tool, you will have to grant it higher privileges so it can perform the installation. It means that under MacOS and Linux, you will be asked for your `sudo` password.
