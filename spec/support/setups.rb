@@ -52,13 +52,18 @@ def on_fake_os_not_linux
 end
 
 def are_installed(installations)
-  installer = double("Installer")
-  allow(U3d::Installer).to receive(:create) { installer }
-  allow(installer).to receive(:installed) { installations }
+  double_installer(installations)
 end
 
 def nothing_installed
-  are_installed []
+  double_installer
+end
+
+def double_installer(installations = [])
+  installer = double("Installer")
+  allow(U3d::Installer).to receive(:create) { installer }
+  allow(installer).to receive(:installed) { installations }
+  installer
 end
 
 def expect_privileges_check

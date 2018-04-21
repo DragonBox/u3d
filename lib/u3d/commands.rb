@@ -43,7 +43,9 @@ module U3d
 
     class << self
       def list_installed(options: {})
-        list = installed_sorted_versions
+        installer = Installer.create
+        installer.sanitize_installs
+        list = installer.installed_sorted_by_versions
         if list.empty?
           UI.important 'No Unity version installed'
           return
@@ -241,18 +243,6 @@ module U3d
       end
 
       private
-
-      def installed_sorted_versions
-        list = Installer.create.installed
-        return [] if list.empty?
-        # version -> installations
-        arraym = list.map { |a| [a.version, a] }
-        map = Hash[*arraym.flatten]
-        # sorted versions
-        vcomparators = map.keys.map { |k| UnityVersionComparator.new(k) }
-        sorted_keys = vcomparators.sort.map { |v| v.version.to_s }
-        sorted_keys.map { |k| map[k] }
-      end
 
       def cache_versions(os, offline: false, force_refresh: false)
         cache = Cache.new(force_os: os, offline: offline, force_refresh: force_refresh, central_cache: true)

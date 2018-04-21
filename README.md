@@ -86,7 +86,7 @@ Unity uses the following version formatting: 0.0.0x0. The \'x\' can takes differ
 
 Some versions are known to have a different numbering, e.g. Linux 2017.1.0f3 is named 2017.1.0xf3Linux. Its `ProjectSettings/ProjectVersion.txt` will contain the Linux specific version.
 
-When referencing to a version on the CLI, u3d sanitizes these weird versions. For example, if you ask u3d to launch unity 2017.1.0f3 on Linux, you can use `u3d -u 2017.1.0f3` and it will find "2017.1.0xf3Linux".
+When referencing to a version on the CLI, u3d normalizes these weird versions. For example, if you ask u3d to launch unity 2017.1.0f3 on Linux, you can use `u3d -u 2017.1.0f3` and it will find "2017.1.0xf3Linux".
 
 ### Unity build numbers
 
@@ -118,7 +118,7 @@ Right now u3d has light support for build numbers. The build number can be found
 
 ## Sanitize / standardize Unity installation paths
 
-  If you have installed Unity in different locations, u3d might discover them and propose you to move them to its standard location. The procedure should be self described and easily revertible (manually). This sanitization operation is only proposed in interactive mode (i.e. if you are not using u3d unattended, e.g. in a build script on a CI server).
+  If you have installed Unity in different locations, u3d might discover them and propose you to move them to its standard location. The procedure should be self described and easily revertible (manually). This sanitization operation is only proposed in interactive mode (i.e. if you are not using u3d unattended, e.g. in a build script on a CI server) when running the `list` command.
 
 ![u3d sanitize](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_sanitize.png)
 

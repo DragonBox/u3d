@@ -25,47 +25,66 @@ require 'support/installations'
 
 describe U3d do
   describe U3d::Installer do
-    describe ".create" do
-      context "Clean installs" do
-        it "allows to list the installed versions and doesn't ask for sanitization" do
-          allow(U3d::Helper).to receive(:mac?) { false }
-          allow(U3d::Helper).to receive(:linux?) { true }
-          allow(U3dCore::UI).to receive(:confirm).with(/2 Unity .* will be moved/) { 'y' }
+    describe U3d::BaseInstaller do
+      class DummyInstaller < U3d::BaseInstaller
+      end
+      describe ".sanitize_installs" do
+        context "Clean installs" do
+          it "allows to list the installed versions and doesn't ask for sanitization" do
+            allow(U3d::Helper).to receive(:mac?) { false }
+            allow(U3d::Helper).to receive(:linux?) { true }
+            allow(U3dCore::UI).to receive(:confirm).with(/2 Unity .* will be moved/) { 'y' }
 
-          installed = [linux_5_6_standard]
+            installed = [linux_5_6_standard]
 
-          installer = double("LinuxInstaller")
-          allow(U3d::LinuxInstaller).to receive(:new) { installer }
-          allow(installer).to receive(:installed) { installed }
+            installer = DummyInstaller.new
+            allow(installer).to receive(:new) { installer }
+            allow(installer).to receive(:installed) { installed }
 
-          expect(U3d::UI).to_not receive(:important)
-          expect(installer).to_not receive(:sanitize_install)
+            expect(U3d::UI).to_not receive(:important)
+            expect(installer).to_not receive(:sanitize_install)
 
-          U3d::Installer.create
+            installer.sanitize_installs
+          end
+        end
+
+        context "Unclean installs" do
+          it "allows to list the installed versions and ask for sanitization" do
+            allow(U3d::Helper).to receive(:mac?) { true }
+            allow(U3dCore::UI).to receive(:confirm).with(/2 Unity .* will be moved/) { 'y' }
+            installed = [macinstall_5_6_custom_with_space, macinstall_5_6_default]
+
+            installer = DummyInstaller.new
+            allow(installer).to receive(:installed) { installed }
+
+            expect(U3d::UI).to receive(:important).with(/u3d can optionally standardize/)
+            expect(U3d::UI).to receive(:important).with(/Check the documentation/)
+            expect(U3d::UI).to receive(:important).with(/github.com/)
+
+            expect(installer).to receive(:sanitize_install).with(installed[0], dry_run: true)
+            expect(installer).to receive(:sanitize_install).with(installed[1], dry_run: true)
+
+            expect(installer).to receive(:sanitize_install).with(installed[0])
+            expect(installer).to receive(:sanitize_install).with(installed[1])
+
+            installer.sanitize_installs
+          end
         end
       end
 
-      context "Unclean installs" do
-        it "allows to list the installed versions and ask for sanitization" do
-          allow(U3d::Helper).to receive(:mac?) { true }
-          allow(U3dCore::UI).to receive(:confirm).with(/2 Unity .* will be moved/) { 'y' }
-          installed = [macinstall_5_6_custom_with_space, macinstall_5_6_default]
+      describe ".installed_sorted_by_versions" do
+        it "sorts by version" do
+          i1 = fake_installation('1.2.3f6')
+          i2 = fake_installation('1.2.3b2')
+          i3 = fake_installation('1.2.3f4')
 
-          installer = double("MacInstaller")
-          allow(U3d::MacInstaller).to receive(:new) { installer }
+          installed = [i1, i2, i3]
+          sorted_installed = [i2, i3, i1]
+
+          installer = DummyInstaller.new
           allow(installer).to receive(:installed) { installed }
 
-          expect(U3d::UI).to receive(:important).with(/u3d can optionally standardize/)
-          expect(U3d::UI).to receive(:important).with(/Check the documentation/)
-          expect(U3d::UI).to receive(:important).with(/github.com/)
-
-          expect(installer).to receive(:sanitize_install).with(installed[0], dry_run: true)
-          expect(installer).to receive(:sanitize_install).with(installed[1], dry_run: true)
-
-          expect(installer).to receive(:sanitize_install).with(installed[0])
-          expect(installer).to receive(:sanitize_install).with(installed[1])
-
-          U3d::Installer.create
+          expect(installer.installed_sorted_by_versions).to eq(sorted_installed)
         end
       end
     end
