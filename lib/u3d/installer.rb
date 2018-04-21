@@ -21,6 +21,7 @@
 ## --- END LICENSE BLOCK ---
 
 require 'u3d/utils'
+require 'u3d_core/admin_tools'
 require 'u3d_core/core_ext/string'
 require 'u3d/installation'
 require 'fileutils'
@@ -91,25 +92,11 @@ module U3d
     end
   end
 
+  # deprecated
   class CommonInstaller
-    # FIXME: move to a FileUtils.move_admin_file or similar
     def self.sanitize_install(source_path, new_path, command, dry_run: false)
-      if source_path == new_path
-        UI.important "sanitize_install does nothing if the path won't change (#{source_path})"
-        return false
-      end
-
-      if dry_run
-        UI.message "'#{source_path}' would move to '#{new_path}'"
-      else
-        UI.important "Moving '#{source_path}' to '#{new_path}'..."
-        U3dCore::CommandExecutor.execute(command: command, admin: true)
-        UI.success "Successfully moved '#{source_path}' to '#{new_path}'"
-      end
-      true
-    rescue StandardError => e
-      UI.error "Unable to move '#{source_path}' to '#{new_path}': #{e}"
-      false
+      UI.deprecated("Use U3dCore::AdminTools.move_files")
+      U3dCore::AdminTools.move_file(source_path, new_path, command, dry_run: dry_run)
     end
   end
 
