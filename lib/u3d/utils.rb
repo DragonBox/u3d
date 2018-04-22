@@ -202,7 +202,8 @@ module U3d
       end
 
       def windows_path(path)
-        path.gsub(%r{\/(\d)}, '/\\\\\1').tr('/', '\\')
+        UI.deprecated("Use U3dCore::Helper.windows_path")
+        U3dCore::Helper.windows_path(path)
       end
 
       private

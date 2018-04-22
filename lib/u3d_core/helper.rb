@@ -41,6 +41,10 @@ module U3dCore
       end
     end
 
+    def windows_path(path)
+      path.gsub(%r{\/(\d)}, '/\\\\\1').tr('/', '\\')
+    end
+
     # Runs a given command using backticks (`)
     # and prints them out using the UI.command method
     def self.backticks(command, print: true)

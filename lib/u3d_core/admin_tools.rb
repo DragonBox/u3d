@@ -24,8 +24,8 @@ module U3dCore
   class AdminTools
     def self.move_os_file(os, source_path, new_path, dry_run:)
       if os == :windows
-        source_path.tr!('/', '\\')
-        new_path.tr!('/', '\\')
+        source_path = U3dCore::Helper.windows_path(source_path)
+        new_path = U3dCore::Helper.windows_path(new_path)
         command = "move #{source_path.argescape} #{new_path.argescape}"
       else
         command = "mv #{source_path.shellescape} #{new_path.shellescape}"
