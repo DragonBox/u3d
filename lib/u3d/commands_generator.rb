@@ -230,6 +230,24 @@ More on that: https://forum.unity3d.com/threads/unity-on-linux-release-notes-and
         end
       end
 
+      command :move do |c|
+        c.syntax = 'u3d move [--dry_run] --long <version>'
+        # c.option '-f', '--force', Array, 'Specifies which packages to download/install. Overriden by --all'
+        c.option '-l', '--long', "Rename the installation dir into its long name pattern, namely #{U3d::UNITY_DIR_LONG} on Windows/Mac and #{U3d::UNITY_DIR_LINUX_LONG} on Linux"
+        c.option '--dry_run', "show what would have happened"
+        c.summary = "Move an existing Unity install to an optionally specified new folder, marking it as non moveable later on"
+        c.description = %(
+          #{c.summary}
+          Sometimes you want to move Unity to a different folder/path and let u3d stop modifying trying to move it around.
+
+          The current command only supports 'long' installation dir names, containing not only the version but also the build number.
+          See https://github.com/DragonBox/u3d#unity-build-numbers for more information.
+                  )
+        c.action do |args, options|
+          Commands.move(args: args, options: convert_options(options))
+        end
+      end
+
       default_command :run
 
       run!
