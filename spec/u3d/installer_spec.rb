@@ -136,12 +136,12 @@ describe U3d do
       context 'when using a default install' do
         let(:unity) { linux_5_6_standard }
         it 'aborts sanitize install' do
-          expect(U3d::UI).to receive(:important).with("sanitize_install does nothing if the path won't change (/opt/unity-editor-5.6.0f1)")
+          expect(U3d::UI).to receive(:important).with("move_file does nothing if the path won't change (/opt/unity-editor-5.6.0f1)")
           U3d::LinuxInstaller.new.sanitize_install(unity)
         end
 
         it 'aborts sanitize install in dry_run as well' do
-          expect(U3d::UI).to receive(:important).with("sanitize_install does nothing if the path won't change (/opt/unity-editor-5.6.0f1)")
+          expect(U3d::UI).to receive(:important).with("move_file does nothing if the path won't change (/opt/unity-editor-5.6.0f1)")
           U3d::LinuxInstaller.new.sanitize_install(unity, dry_run: true)
         end
       end
