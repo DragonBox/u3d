@@ -116,27 +116,27 @@ module U3dCore
       end
 
       # rubocop:disable PredicateName
-      def has_admin_privileges?
+      def has_admin_privileges?(retry_count: 2)
         # rubocop:enable PredicateName
         if Helper.windows?
           begin
-            result = system('reg query HKU\\S-1-5-19', out: File::NULL, err: File::NULL)
+            result = system_no_output('reg query HKU\\S-1-5-19')
           rescue StandardError
             result = false
           end
         else
           credentials = U3dCore::Credentials.new(user: ENV['USER'])
           begin
-            result = system("sudo -k && echo #{credentials.password.shellescape} | sudo -S /usr/bin/whoami",
-                            out: File::NULL,
-                            err: File::NULL)
+            result = system_no_output("sudo -k && echo #{credentials.password.shellescape} | sudo -S /usr/bin/whoami")
           rescue StandardError
             result = false
           end
           credentials.forget_credentials unless result # FIXME: why?
         end
         # returns false if result is nil (command execution fail)
-        return (result ? true : false)
+        result = result ? true : false
+        result = has_admin_privileges?(retry_count: retry_count - 1) unless retry_count <= 0 || result
+        result
       end
 
       def grant_admin_privileges(command)
@@ -149,8 +149,12 @@ module U3dCore
         UI.verbose 'Admin privileges granted for command execution'
         command
       end
+
+      def system_no_output(command)
+        system(command, out: File::NULL, err: File::NULL)
+      end
     end
 
-    private_class_method :execute_command_low
+    private_class_method :execute_command_low, :system_no_output
   end
 end

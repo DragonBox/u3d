@@ -21,6 +21,8 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
+require 'support/setups'
+
 describe U3dCore do
   describe U3dCore::CommandExecutor do
     describe "which" do
@@ -90,6 +92,53 @@ describe U3dCore do
         command = "ruby -e '5.times{sleep 0.1; puts \"HI\"}'"
         output = U3dCore::CommandExecutor.execute(command: command, print_all: true)
         expect(output).to eq("HI\nHI\nHI\nHI\nHI")
+      end
+    end
+
+    describe "has_admin_privileges?" do
+      context "on windows" do
+        before(:each) do
+          allow(U3d::Helper).to receive(:windows?) { true }
+        end
+      end
+
+      context "outside windows" do
+        before(:each) do
+          allow(U3d::Helper).to receive(:windows?) { false }
+        end
+
+        def expect_recurse(retry_count, system_result)
+          credentials = double("Credentials")
+          expect(U3dCore::CommandExecutor).to receive(:has_admin_privileges?).with(retry_count: retry_count).once.ordered.and_call_original
+          expect(U3dCore::Credentials).to receive(:new).once.ordered { credentials }
+          expect(credentials).to receive(:password).once.ordered { "***" }
+          expect(U3dCore::CommandExecutor).to receive(:system_no_output).once.ordered.with(/sudo/) { system_result }
+          expect(credentials).to receive(:forget_credentials).once.ordered unless system_result
+        end
+
+        it "retries until its specified retry_count" do
+          expect_recurse(2, false)
+          expect_recurse(1, false)
+          expect_recurse(0, false)
+
+          r = U3dCore::CommandExecutor.has_admin_privileges?(retry_count: 2)
+          expect(r).to be false
+        end
+
+        it "doesn't retry with a 0 retry_count" do
+          expect_recurse(0, false)
+
+          r = U3dCore::CommandExecutor.has_admin_privileges?(retry_count: 0)
+          expect(r).to be false
+        end
+
+        it "stops retrying when it gets the right password" do
+          expect_recurse(2, false)
+          expect_recurse(1, true)
+
+          r = U3dCore::CommandExecutor.has_admin_privileges?(retry_count: 2)
+          expect(r).to be true
+        end
       end
     end
   end
