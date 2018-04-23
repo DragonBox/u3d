@@ -39,7 +39,7 @@ def on_windows
   allow(U3d::Helper).to receive(:mac?) { false }
   allow(U3d::Helper).to receive(:linux?) { false }
   allow(U3d::Helper).to receive(:windows?) { true }
-  allow(U3d::Helper).to receive(:operating_system) { :windows }
+  allow(U3d::Helper).to receive(:operating_system) { :win }
 end
 
 def on_fake_os
