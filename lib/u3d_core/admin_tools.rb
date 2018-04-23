@@ -33,6 +33,22 @@ module U3dCore
       move_file(source_path, new_path, command, dry_run: dry_run)
     end
 
+    def self.create_file(os, path, dry_run: false)
+      if dry_run
+        UI.message "'#{source_path}' would create file at '#{path}'"
+        return
+      end
+
+      if os == :windows
+        path = U3dCore::Helper.windows_path(path)
+        command = "fsutil file createnew #{path.argescape} 0"
+      else
+        command = "touch #{path.shellescape}"
+      end
+      U3dCore::CommandExecutor.execute(command: command, admin: true)
+      true
+    end
+
     # move one path to a new path
     def self.move_file(source_path, new_path, command, dry_run: false)
       if source_path == new_path
