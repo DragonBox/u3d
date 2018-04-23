@@ -104,14 +104,16 @@ describe U3dCore do
 
       context "outside windows" do
         before(:each) do
-          allow(U3d::UI).to receive(:interactive?) { true } # we are explicitly testing in fake interactive mode here
           allow(U3d::Helper).to receive(:windows?) { false }
         end
 
         def expect_recurse(retry_count, system_result)
+          # we are explicitly testing in fake interactive mode here
           expect(U3dCore::CommandExecutor).to receive(:has_admin_privileges?).with(retry_count: retry_count).once.ordered.and_call_original
+          expect(U3d::UI).to receive(:interactive?).once.ordered { true }
           expect(U3d::UI).to receive(:password).once.ordered { "***" }
           expect(U3dCore::CommandExecutor).to receive(:system_no_output).once.ordered.with(/sudo/) { system_result }
+          expect(U3d::UI).to receive(:interactive?).once.ordered { true } unless system_result
         end
 
         it "retries until its specified retry_count" do
