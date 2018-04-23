@@ -35,10 +35,6 @@ Available commands are:
 
 * `u3d run`: Run Unity, and parses its output through u3d's log prettifier
 
-* `u3d console`: Run u3d in interactive mode, accessing its API
-
-![u3d console](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_console.png)
-
 Here we start with the proper version of Unity:
 
 ![u3d run without arguments](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_run_current.png)
@@ -58,6 +54,10 @@ The prettifyer is on by default but can be turned off to get Unity's raw output.
 * `u3d licenses`: display information about your Unity licenses
 
 ![u3d list](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_licenses.png)
+
+* `u3d console`: Run u3d in interactive mode, accessing its API
+
+![u3d console](https://github.com/DragonBox/u3d/raw/master/docs/assets/u3d_console.png)
 
 ## Installation
 
