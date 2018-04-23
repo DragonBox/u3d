@@ -52,8 +52,9 @@ module U3d
           return
         end
         list.each do |u|
-          version_format = "Version %-15{version} [%<build_number>s]  (%<root_path>s)"
-          h = { version: u.version, build_number: u.build_number, root_path: u.root_path }
+          version_format = "Version %-15{version} [%<build_number>s] %<do_not_move>s(%<root_path>s)"
+          do_not_move = u.do_not_move? ? '!'.red.bold : ' '
+          h = { version: u.version, build_number: u.build_number, root_path: u.root_path, do_not_move: do_not_move }
           UI.message version_format % h
           packages = u.packages
           next unless options[:packages] && packages && !packages.empty?

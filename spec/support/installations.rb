@@ -98,12 +98,13 @@ def fake_linux(version)
   return unity
 end
 
-def fake_installation(version, packages: [])
+def fake_installation(version, packages: [], do_not_move: false)
   unity = double("Installation")
   allow(unity).to receive(:version) { version }
   allow(unity).to receive(:build_number) { 'build_number' }
   allow(unity).to receive(:root_path) { 'foo' }
   allow(unity).to receive(:packages) { packages }
+  allow(unity).to receive(:do_not_move?) { do_not_move }
   allow(unity).to receive(:package_installed?) { |arg| packages.include?(arg) }
   return unity
 end
