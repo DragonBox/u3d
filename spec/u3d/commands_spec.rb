@@ -90,7 +90,7 @@ describe U3d do
           expect(installer).to receive(:sanitize_installs)
           expect(installer).to receive(:installed_sorted_by_versions) { sorted_installed }
 
-          expect(U3d::UI).to receive(:message).with(/1.2.0f1.*!\(foo*/)
+          expect(U3d::UI).to receive(:message).with(/1.2.0f1.*!.*\(foo*/)
 
           expect(U3d::Commands.list_installed).to eq sorted_installed
         end
