@@ -82,6 +82,18 @@ describe U3d do
 
           expect(U3d::Commands.list_installed).to eq sorted_installed
         end
+
+        it 'logs versions with do not move information' do
+          i1 = fake_installation('1.2.0f1', do_not_move: true)
+          sorted_installed = [i1]
+          installer = double_installer
+          expect(installer).to receive(:sanitize_installs)
+          expect(installer).to receive(:installed_sorted_by_versions) { sorted_installed }
+
+          expect(U3d::UI).to receive(:message).with(/1.2.0f1.*!\(foo*/)
+
+          expect(U3d::Commands.list_installed).to eq sorted_installed
+        end
       end
       # when we support a specific version number (e.g. to list the packages of that version)
       #   request a non existing version number -> fail
