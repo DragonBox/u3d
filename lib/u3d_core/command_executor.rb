@@ -144,6 +144,7 @@ module U3dCore
         if Helper.windows?
           raise CredentialsError, "The command \'#{command}\' must be run in administrative shell" unless has_admin_privileges?
         else
+          raise CredentialsError, "The command \'#{command}\' must be run with admin privileges" unless has_admin_privileges?
           command = "sudo -k && echo #{cred.password.shellescape} | sudo -S bash -c \"#{command}\""
         end
         UI.verbose 'Admin privileges granted for command execution'
