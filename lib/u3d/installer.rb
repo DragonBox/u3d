@@ -309,7 +309,7 @@ module U3d
                         version: unity.version, build_number: unity.build_number)
       new_path = File.join(parent, dir_name)
 
-      moved = U3dCore::AdminTools.move_os_file(:windows, source_path, new_path, dry_run: dry_run)
+      moved = U3dCore::AdminTools.move_os_file(:win, source_path, new_path, dry_run: dry_run)
       unity.root_path = new_path if moved && !dry_run
     end
 

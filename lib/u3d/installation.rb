@@ -21,6 +21,7 @@
 ## --- END LICENSE BLOCK ---
 
 require 'u3d/utils'
+require 'u3d_core/admin_tools'
 require 'fileutils'
 
 module U3d
@@ -77,7 +78,11 @@ module U3d
       if dry_run
         UI.message "Would create '#{do_not_move_file_path}'"
       else
-        FileUtils.touch do_not_move_file_path
+        begin
+          FileUtils.touch do_not_move_file_path
+        rescue Errno::EACCES => _e
+          U3dCore::AdminTools.create_file(Helper.operating_system, do_not_move_file_path)
+        end
       end
     end
 

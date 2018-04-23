@@ -23,7 +23,7 @@
 module U3dCore
   class AdminTools
     def self.move_os_file(os, source_path, new_path, dry_run:)
-      if os == :windows
+      if os == :win
         source_path = U3dCore::Helper.windows_path(source_path)
         new_path = U3dCore::Helper.windows_path(new_path)
         command = "move #{source_path.argescape} #{new_path.argescape}"
@@ -31,6 +31,22 @@ module U3dCore
         command = "mv #{source_path.shellescape} #{new_path.shellescape}"
       end
       move_file(source_path, new_path, command, dry_run: dry_run)
+    end
+
+    def self.create_file(os, path, dry_run: false)
+      if dry_run
+        UI.message "'#{source_path}' would create file at '#{path}'"
+        return
+      end
+
+      if os == :win
+        path = U3dCore::Helper.windows_path(path)
+        command = "fsutil file createnew #{path.argescape} 0"
+      else
+        command = "touch #{path.shellescape}"
+      end
+      U3dCore::CommandExecutor.execute(command: command, admin: true)
+      true
     end
 
     # move one path to a new path

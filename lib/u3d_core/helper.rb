@@ -41,7 +41,7 @@ module U3dCore
       end
     end
 
-    def windows_path(path)
+    def self.windows_path(path)
       path.gsub(%r{\/(\d)}, '/\\\\\1').tr('/', '\\')
     end
 
