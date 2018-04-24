@@ -201,6 +201,7 @@ module U3d
     end
   end
 
+  # rubocop:disable ClassLength
   class LinuxInstaller < BaseInstaller
     def sanitize_install(unity, long: false, dry_run: false)
       source_path = File.expand_path(unity.root_path)
@@ -218,12 +219,12 @@ module U3d
       paths.map { |path| LinuxInstallation.new(root_path: path) }
     end
 
-    # rubocop:disable UnusedMethodArgument
+    # rubocop:disable UnusedMethodArgument, PerceivedComplexity
     def install(file_path, version, installation_path: nil, info: {})
-      # rubocop:enable UnusedMethodArgument
+      # rubocop:enable UnusedMethodArgument, PerceivedComplexity
       extension = File.extname(file_path)
 
-      raise "Installation of #{extension} files is not supported on Linux" unless ['.sh', '.xz'].include? extension
+      raise "Installation of #{extension} files is not supported on Linux" unless ['.sh', '.xz', '.pkg'].include? extension
       if extension == '.sh'
         path = installation_path || DEFAULT_LINUX_INSTALL
         install_sh(file_path, installation_path: path)
@@ -231,6 +232,10 @@ module U3d
         new_path = File.join(DEFAULT_LINUX_INSTALL, format(UNITY_DIR_LINUX, version: version))
         path = installation_path || new_path
         install_xz(file_path, installation_path: path)
+      elsif extension == '.pkg'
+        new_path = File.join(DEFAULT_LINUX_INSTALL, format(UNITY_DIR_LINUX, version: version))
+        path = installation_path || new_path
+        install_pkg(file_path, installation_path: path)
       end
 
       # Forces sanitation for installation of 'weird' versions eg 5.6.1xf1Linux
@@ -272,6 +277,33 @@ module U3d
       UI.success 'Installation successful'
     end
 
+    def install_pkg(file, installation_path: nil)
+      raise 'Missing installation_path' unless installation_path
+      raise 'Only able to install pkg on top of existing Unity installs' unless File.exist? installation_path
+      raise 'Missing 7z' if `which 7z`.empty?
+
+      Dir.mktmpdir do |tmp_dir|
+        UI.verbose "Working in tmp dir #{tmp_dir}"
+
+        command = "7z -aos -o#{tmp_dir.shellescape} e #{file.shellescape}"
+        U3dCore::CommandExecutor.execute(command: command)
+
+        target_location = pkg_install_path(installation_path, "#{tmp_dir}/PackageInfo")
+
+        # raise "Path for #{target_location} already exists" if path File.exist? target_location
+
+        command = "cd #{target_location.shellescape}; gzip -dc #{tmp_dir}/Payload | cpio -i '*' -"
+        command = "mkdir -p #{target_location.shellescape}; #{command}" # unless File.directory? installation_path
+
+        U3dCore::CommandExecutor.execute(command: command, admin: true)
+      end
+    rescue StandardError => e
+      UI.verbose(e.backtrace.join("\n"))
+      UI.error "Failed to install pkg file #{file} at #{installation_path}: #{e}"
+    else
+      UI.success 'Installation successful'
+    end
+
     def uninstall(unity: nil)
       UI.verbose("Uninstalling Unity at '#{unity.root_path}'...")
       command = "rm -r #{unity.root_path}"
@@ -283,6 +315,27 @@ module U3d
     end
 
     private
+
+    def pkg_install_path(unity_root_path, pinfo_path)
+      raise "PackageInfo not found under #{pinfo_path}" unless File.exist? pinfo_path
+      pinfo = File.read(pinfo_path)
+      require 'rexml/document'
+      d = REXML::Document.new(pinfo)
+      identifier = d.root.attributes['identifier']
+
+      case identifier
+      when 'com.unity3d.Documentation'
+        "#{unity_root_path}/Editor/Data/"
+      when 'com.unity3d.StandardAssets'
+        "#{unity_root_path}/Editor/Standard Assets/"
+      when 'com.unity3d.ExampleProject'
+        unity_root_path
+      else
+        install_location = d.root.attributes['install-location']
+        raise "Not sure how to install this module with identifier #{identifier} install-location: #{install_location}" unless install_location.start_with? '/Applications/Unity/'
+        install_location.gsub(%(\/Applications\/Unity), "#{unity_root_path}/Editor/Data")
+      end
+    end
 
     def list_installed_paths
       find = File.join(DEFAULT_LINUX_INSTALL, 'unity-editor-*', 'Editor')
@@ -300,6 +353,7 @@ module U3d
       paths
     end
   end
+  # rubocop:enable ClassLength
 
   class WindowsInstaller < BaseInstaller
     def sanitize_install(unity, long: false, dry_run: false)
