@@ -139,6 +139,44 @@ describe U3dCore do
           r = U3dCore::CommandExecutor.has_admin_privileges?(retry_count: 2)
           expect(r).to be true
         end
+
+        it "doesn't ask for password when user is root" do
+          with_env_values('USER' => 'root') do
+            expect(U3dCore::CommandExecutor.has_admin_privileges?).to be true
+          end
+        end
+
+        it "doesn't wrap a command when user is root" do
+          with_env_values('USER' => 'root') do
+            expect(U3dCore::CommandExecutor.grant_admin_privileges('pwd')).to eq 'pwd'
+          end
+        end
+
+        it "asks for password when user is not root" do
+          credentials = double("Credentials")
+          expect(U3dCore::Credentials).to receive(:new).once.ordered { credentials }
+          expect(credentials).to receive(:password).once.ordered { 'abc' }
+          expect(credentials).to receive(:forget_credentials).once.ordered {}
+          with_env_values('USER' => 'not root') do
+            expect(U3dCore::CommandExecutor.has_admin_privileges?(retry_count: 0)).to be false
+          end
+        end
+
+        it "wraps a command when user is not root" do
+          module U3dCore
+            class CommandExecutor
+              def self.has_admin_privileges?
+                true
+              end
+            end
+          end
+          credentials = double("Credentials")
+          expect(U3dCore::Credentials).to receive(:new).once.ordered { credentials }
+          expect(credentials).to receive(:password).once.ordered { 'abc' }
+          with_env_values('USER' => 'not root') do
+            expect(U3dCore::CommandExecutor.grant_admin_privileges('pwd')).to eq 'sudo -k && echo abc | sudo -S bash -c "pwd"'
+          end
+        end
       end
     end
   end
