@@ -52,7 +52,7 @@ module U3dCore
     # move one path to a new path
     def self.move_file(source_path, new_path, command, dry_run: false)
       if source_path == new_path
-        UI.important "move_file does nothing if the path won't change (#{source_path})"
+        UI.verbose "move_file does nothing if the path won't change (#{source_path})"
         return false
       end
 
