@@ -156,6 +156,7 @@ describe U3dCore do
           credentials = double("Credentials")
           expect(U3dCore::Credentials).to receive(:new).once.ordered { credentials }
           expect(credentials).to receive(:password).once.ordered { 'abc' }
+          expect(U3dCore::CommandExecutor).to receive(:system_no_output).once.ordered.and_return(false)
           expect(credentials).to receive(:forget_credentials).once.ordered {}
           with_env_values('USER' => 'not root') do
             expect(U3dCore::CommandExecutor.has_admin_privileges?(retry_count: 0)).to be false
