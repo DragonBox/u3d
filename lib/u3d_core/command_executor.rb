@@ -115,9 +115,9 @@ module U3dCore
         return output.join("\n")
       end
 
-      # rubocop:disable PredicateName
+      # rubocop:disable PredicateName,PerceivedComplexity
       def has_admin_privileges?(retry_count: 2)
-        # rubocop:enable PredicateName
+        # rubocop:enable PredicateName,PerceivedComplexity
         if Helper.windows?
           begin
             result = system_no_output('reg query HKU\\S-1-5-19')
@@ -125,13 +125,18 @@ module U3dCore
             result = false
           end
         else
-          credentials = U3dCore::Credentials.new(user: ENV['USER'])
-          begin
-            result = system_no_output("sudo -k && echo #{credentials.password.shellescape} | sudo -S /usr/bin/whoami")
-          rescue StandardError
-            result = false
+          env_username = ENV['USER']
+          if env_username == "root"
+            result = true
+          else
+            credentials = U3dCore::Credentials.new(user: env_username)
+            begin
+              result = system_no_output("sudo -k && echo #{credentials.password.shellescape} | sudo -S /usr/bin/whoami")
+            rescue StandardError
+              result = false
+            end
+            credentials.forget_credentials unless result # FIXME: why?
           end
-          credentials.forget_credentials unless result # FIXME: why?
         end
         # returns false if result is nil (command execution fail)
         result = result ? true : false
@@ -140,12 +145,15 @@ module U3dCore
       end
 
       def grant_admin_privileges(command)
-        cred = U3dCore::Credentials.new(user: ENV['USER'])
         if Helper.windows?
           raise CredentialsError, "The command \'#{command}\' must be run in administrative shell" unless has_admin_privileges?
         else
-          raise CredentialsError, "The command \'#{command}\' must be run with admin privileges" unless has_admin_privileges?
-          command = "sudo -k && echo #{cred.password.shellescape} | sudo -S bash -c \"#{command}\""
+          env_username = ENV['USER']
+          unless env_username == "root"
+            cred = U3dCore::Credentials.new(user: env_username)
+            raise CredentialsError, "The command \'#{command}\' must be run with admin privileges" unless has_admin_privileges?
+            command = "sudo -k && echo #{cred.password.shellescape} | sudo -S bash -c \"#{command}\""
+          end
         end
         UI.verbose 'Admin privileges granted for command execution'
         command
