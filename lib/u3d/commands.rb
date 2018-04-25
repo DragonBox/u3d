@@ -34,7 +34,6 @@ require 'u3d/unity_runner'
 require 'u3d_core/command_executor'
 require 'u3d_core/credentials'
 require 'fileutils'
-require 'pry'
 
 module U3d
   # API for U3d, redirecting calls to class they concern
