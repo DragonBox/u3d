@@ -394,14 +394,14 @@ module U3d
           if /msiexec/ =~ command
             command.sub!(/{FILENAME}/, '"' + U3dCore::Helper.windows_path(file_path) + '"')
           else
-            command.sub!(/{FILENAME}/, file_path)
+            command.sub!(/{FILENAME}/, file_path.argescape)
           end
           command.sub!(/{INSTDIR}/, final_path)
           command.sub!(/{DOCDIR}/, final_path)
           command.sub!(/{MODULEDIR}/, final_path)
           command.sub!(%r{\/D=}, '/S /D=') unless %r{\/S} =~ command
         end
-        command ||= file_path.to_s
+        command ||= file_path.argescape
         U3dCore::CommandExecutor.execute(command: command, admin: true)
       rescue StandardError => e
         UI.error "Failed to install package at #{file_path}: #{e}"
