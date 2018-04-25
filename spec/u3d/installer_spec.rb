@@ -27,6 +27,9 @@ describe U3d do
   describe U3d::Installer do
     describe U3d::BaseInstaller do
       class DummyInstaller < U3d::BaseInstaller
+        def initialize
+          super(platform: :dummy)
+        end
       end
       describe ".sanitize_installs" do
         context "Clean installs" do
@@ -85,6 +88,29 @@ describe U3d do
           allow(installer).to receive(:installed) { installed }
 
           expect(installer.installed_sorted_by_versions).to eq(sorted_installed)
+        end
+      end
+
+      context '.install_directory' do
+        before(:each) do
+          U3d::BaseInstaller::DEFAULT_PLATFORM_INSTALL_PATH[:dummy] = '/Somewhere'.freeze
+        end
+        it 'returns the default installation when INSTALL_PATH is not set' do
+          with_env_values('U3D_INSTALL_PATH' => nil) do
+            expect(DummyInstaller.new.install_directory(default_only: true)).to eq '/Somewhere'
+          end
+        end
+
+        it 'returns the default installation when INSTALL_PATH is set but default_only is asked' do
+          with_env_values('U3D_INSTALL_PATH' => '/Applications/Unity') do
+            expect(DummyInstaller.new.install_directory(default_only: true)).to eq '/Somewhere'
+          end
+        end
+
+        it 'returns the overriden installation when INSTALL_PATH is set' do
+          with_env_values('U3D_INSTALL_PATH' => '/Applications/Unity') do
+            expect(DummyInstaller.new.install_directory(default_only: false)).to eq '/Applications/Unity'
+          end
         end
       end
     end

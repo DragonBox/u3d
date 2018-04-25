@@ -32,6 +32,7 @@ module U3d
   DEFAULT_LINUX_INSTALL = '/opt/'.freeze
   DEFAULT_MAC_INSTALL = '/Applications/'.freeze
   DEFAULT_WINDOWS_INSTALL = 'C:/Program Files/'.freeze
+
   UNITY_DIR = "Unity_%<version>s".freeze
   UNITY_DIR_LONG = "Unity_%<version>s_%<build_number>s".freeze
   UNITY_DIR_LINUX = "unity-editor-%<version>s".freeze
@@ -68,6 +69,21 @@ module U3d
   end
 
   class BaseInstaller
+    DEFAULT_PLATFORM_INSTALL_PATH = {
+      linux: DEFAULT_LINUX_INSTALL,
+      win: DEFAULT_WINDOWS_INSTALL,
+      mac: DEFAULT_MAC_INSTALL
+    }
+
+    def initialize(platform: nil) # nil for bacward compatibility. Is really required
+      @platform = platform
+    end
+
+    def install_directory(default_only: false)
+      path = default_only ? DEFAULT_PLATFORM_INSTALL_PATH[@platform] : ENV['U3D_INSTALL_PATH'] || DEFAULT_PLATFORM_INSTALL_PATH[@platform]
+      File.expand_path(path)
+    end
+
     def sanitize_installs
       return unless UI.interactive? || Helper.test?
       unclean = []
@@ -103,8 +119,8 @@ module U3d
   end
 
   class MacInstaller < BaseInstaller
-    def install_directory
-      File.expand_path(ENV['U3D_INSTALL_PATH'] || DEFAULT_MAC_INSTALL)
+    def initialize
+      super(platform: :mac)
     end
 
     def sanitize_install(unity, long: false, dry_run: false)
@@ -208,8 +224,8 @@ module U3d
 
   # rubocop:disable ClassLength
   class LinuxInstaller < BaseInstaller
-    def install_directory
-      File.expand_path(ENV['U3D_INSTALL_PATH'] || DEFAULT_LINUX_INSTALL)
+    def initialize
+      super(platform: :linux)
     end
 
     def sanitize_install(unity, long: false, dry_run: false)
@@ -242,7 +258,7 @@ module U3d
         path = installation_path || new_path
         install_xz(file_path, installation_path: path)
       elsif extension == '.pkg'
-        new_path = File.join(DEFAULT_LINUX_INSTALL, format(UNITY_DIR_LINUX, version: version))
+        new_path = File.join(install_directory, format(UNITY_DIR_LINUX, version: version))
         path = installation_path || new_path
         install_pkg(file_path, installation_path: path)
       end
@@ -365,8 +381,8 @@ module U3d
   # rubocop:enable ClassLength
 
   class WindowsInstaller < BaseInstaller
-    def install_directory
-      File.expand_path(ENV['U3D_INSTALL_PATH'] || DEFAULT_WINDOWS_INSTALL)
+    def initialize
+      super(platform: :win)
     end
 
     def sanitize_install(unity, long: false, dry_run: false)
