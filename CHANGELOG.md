@@ -1,5 +1,46 @@
 # Change Log
 
+## [v1.0.21](https://github.com/DragonBox/u3d/tree/v1.0.21) (2018-04-27)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.20...v1.0.21)
+
+**Implemented enhancements:**
+
+- u3d/install: do not ask for password when user is root on Linux [\#303](https://github.com/DragonBox/u3d/issues/303)
+- u3d/prettify: report failures to parse logs automatically [\#146](https://github.com/DragonBox/u3d/issues/146)
+- u3d/install do not ask for root password [\#304](https://github.com/DragonBox/u3d/pull/304) ([lacostej](https://github.com/lacostej))
+- u3d/\* automatically retry admin privilege elevation \#236 [\#297](https://github.com/DragonBox/u3d/pull/297) ([lacostej](https://github.com/lacostej))
+- u3d/sanitize: support dot\_not\_move [\#293](https://github.com/DragonBox/u3d/pull/293) ([lacostej](https://github.com/lacostej))
+- u3d/ui: adjust a message that is use for more than just downloading unity [\#292](https://github.com/DragonBox/u3d/pull/292) ([lacostej](https://github.com/lacostej))
+- u3d/sanitize: ensure Installation instance's root\_path is updated post move [\#291](https://github.com/DragonBox/u3d/pull/291) ([lacostej](https://github.com/lacostej))
+- u3d/move command, renaming install dirs. Support long version names. Fixes \#274 [\#289](https://github.com/DragonBox/u3d/pull/289) ([lacostej](https://github.com/lacostej))
+- u3d/console: an interactive version of u3d \(Fixes \#265\) [\#283](https://github.com/DragonBox/u3d/pull/283) ([lacostej](https://github.com/lacostej))
+
+**Fixed bugs:**
+
+- Unity Installations fail on Windows with space in path [\#302](https://github.com/DragonBox/u3d/issues/302)
+- u3d/internals: grant\_admin wasn't using has\_admin\_privileges? to get the privileges on non windows platforms [\#301](https://github.com/DragonBox/u3d/pull/301) ([lacostej](https://github.com/lacostej))
+
+**Closed issues:**
+
+- Include build number when renaming hotfix releases of Unity [\#274](https://github.com/DragonBox/u3d/issues/274)
+- u3d should ask again for password if wrong password is given in interactive mode [\#236](https://github.com/DragonBox/u3d/issues/236)
+- u3d: non UTF-8 environments can cause issues. [\#147](https://github.com/DragonBox/u3d/issues/147)
+
+**Merged pull requests:**
+
+- u3d/console: remove require on pry [\#307](https://github.com/DragonBox/u3d/pull/307) ([lacostej](https://github.com/lacostej))
+- Allow spaces in installation paths on Windows \#302 [\#306](https://github.com/DragonBox/u3d/pull/306) ([lacostej](https://github.com/lacostej))
+- u3d/install: support full pkg for Linux [\#305](https://github.com/DragonBox/u3d/pull/305) ([lacostej](https://github.com/lacostej))
+- u3d/internals: fallback on admin move of creating u3d\_do\_not\_move if needed [\#300](https://github.com/DragonBox/u3d/pull/300) ([lacostej](https://github.com/lacostej))
+- u3d/list: identify versions that can't be moved with a ! [\#298](https://github.com/DragonBox/u3d/pull/298) ([lacostej](https://github.com/lacostej))
+- u3d/internals: move windows\_path from U3d::Utils to U3dCore::Helper and reuse it in AdminTools [\#296](https://github.com/DragonBox/u3d/pull/296) ([lacostej](https://github.com/lacostej))
+- u3d/internals: extract the move\_file into U3dCore::AdminTools [\#295](https://github.com/DragonBox/u3d/pull/295) ([lacostej](https://github.com/lacostej))
+- u3d/sanitize: sanitize on list only + cleanups and refactors [\#294](https://github.com/DragonBox/u3d/pull/294) ([lacostej](https://github.com/lacostej))
+- u3d/list: properly identify the build number [\#288](https://github.com/DragonBox/u3d/pull/288) ([lacostej](https://github.com/lacostej))
+- u3d/examples: support Unity 2017.3+, identified while investigating \#3 [\#286](https://github.com/DragonBox/u3d/pull/286) ([lacostej](https://github.com/lacostej))
+- u3d/\* Detect incorrect locale \(Fixes \#147\) [\#285](https://github.com/DragonBox/u3d/pull/285) ([lacostej](https://github.com/lacostej))
+- u3d/list: introduce format and make sure the list\_installed return an array of versions [\#284](https://github.com/DragonBox/u3d/pull/284) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.20](https://github.com/DragonBox/u3d/tree/v1.0.20) (2018-04-19)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.19...v1.0.20)
 
