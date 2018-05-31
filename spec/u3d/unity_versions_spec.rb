@@ -54,7 +54,7 @@ describe U3d do
       it 'retrieves mac versions' do
         expect(U3d::Utils).to receive(:get_ssl) { "" } # lts
         expect(U3d::Utils).to receive(:get_ssl) { macosx_archive }
-        expect(U3d::Utils).to receive(:get_ssl).at_least(3).times { "" }
+        expect(U3d::Utils).to receive(:get_ssl).at_least(2).times { "" }
         expect(U3d::UnityVersions.list_available(os: :mac).count).to eql 3
       end
 
