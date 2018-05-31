@@ -230,18 +230,22 @@ module U3d
         @pattern = pattern
       end
 
-      def fetch_some(type, url)
+      def fetch_some(type, url, paged)
         UI.message "Loading Unity #{type} releases"
-        current = UnityVersions.fetch_version(url, @pattern)
+        current = if paged
+                    UnityVersions.fetch_version_paged(url, @pattern)
+                  else
+                    UnityVersions.fetch_version(url, @pattern)
+                  end
         UI.success "Found #{current.count} #{type} releases."
         @versions.merge!(current)
       end
 
       def fetch_all_channels
-        fetch_some('lts', UNITY_LTSES)
-        fetch_some('stable', UNITY_DOWNLOADS)
-        fetch_some('patch', UNITY_PATCHES)
-        fetch_some('beta', UNITY_BETAS)
+        fetch_some('lts', UNITY_LTSES, true)
+        fetch_some('stable', UNITY_DOWNLOADS, false)
+        fetch_some('patch', UNITY_PATCHES, true)
+        fetch_some('beta', UNITY_BETAS, true)
         @versions
       end
     end
