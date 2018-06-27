@@ -1,5 +1,21 @@
 # Change Log
 
+## [v1.1.0](https://github.com/DragonBox/u3d/tree/v1.1.0) (2018-06-27)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.21...v1.1.0)
+
+**Implemented enhancements:**
+
+- Document parallel Unity runs [\#317](https://github.com/DragonBox/u3d/pull/317) ([niezbop](https://github.com/niezbop))
+
+**Closed issues:**
+
+- \[OSX\] \[Request?\] Not possible to run concurrent projects [\#316](https://github.com/DragonBox/u3d/issues/316)
+- u3d available is not exhaustive [\#312](https://github.com/DragonBox/u3d/issues/312)
+
+**Merged pull requests:**
+
+- u3d/available: proper fetching of paginated archives \(fixes \#312\) [\#313](https://github.com/DragonBox/u3d/pull/313) ([lacostej](https://github.com/lacostej))
+
 ## [v1.0.21](https://github.com/DragonBox/u3d/tree/v1.0.21) (2018-04-27)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.20...v1.0.21)
 
@@ -28,6 +44,7 @@
 
 **Merged pull requests:**
 
+- Preparing release for 1.0.21 [\#308](https://github.com/DragonBox/u3d/pull/308) ([lacostej](https://github.com/lacostej))
 - u3d/console: remove require on pry [\#307](https://github.com/DragonBox/u3d/pull/307) ([lacostej](https://github.com/lacostej))
 - Allow spaces in installation paths on Windows \#302 [\#306](https://github.com/DragonBox/u3d/pull/306) ([lacostej](https://github.com/lacostej))
 - u3d/install: support full pkg for Linux [\#305](https://github.com/DragonBox/u3d/pull/305) ([lacostej](https://github.com/lacostej))
