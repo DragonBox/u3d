@@ -182,11 +182,13 @@ You can get further information on how to use U3d by running `u3d --help` (or `u
 
 ### Run several Unity instances in parallel
 
-The only thing you have to watch for while trying to run multiple instances of Unity in parallel is the fact that they will share the same log file by default (the `Editor.log`). Therefore you will have to specify it using the [command line arguments](https://docs.unity3d.com/Manual/CommandLineArguments.html), you can do so with u3d the following way:
+The only thing you have to watch for while trying to run multiple instances of Unity in parallel is the fact that they will share the same log file by default (the `Editor.log`). Therefore you will have to specify it using the [command line arguments](https://docs.unity3d.com/Manual/CommandLineArguments.html), you can do so with u3d the following way from each of your project root folder:
 
 ```shell
 u3d run -- -logFile /path/to/your/logfile
 ```
+
+__NOTE__: You still won't be able to overcome the fact that Unity cannot launch the same project twice. This only applies to running multiple Unity instances for different projects.
 
 ### Reuse u3d install on a CI environment
 
