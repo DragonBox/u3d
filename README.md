@@ -13,7 +13,7 @@ U3d is a set of tools to interact with Unity from command line. It is available 
 
 U3d provides help for running and installing unity from CLI.
 
-U3d knows about your Unity project and behaves differently if invoked from within a Unity project directory. For example, it can run or download the version required by your project without you having to specify it.
+U3d knows about your Unity project and behaves differently if invoked from within a Unity project directory. For example, it can run or download the version required by your project without you having to specify it. It also makes it easy to run several Unity instances in parallel.
 
 Available commands are:
 
@@ -179,6 +179,14 @@ u3d run -r
 You can get further information on how to use U3d by running `u3d --help` (or `u3d -h`).
 
 ## How-tos
+
+### Run several Unity instances in parallel
+
+The only thing you have to watch for while trying to run multiple instances of Unity in parallel is the fact that they will share the same log file by default (the `Editor.log`). Therefore you will have to specify it using the [command line arguments](https://docs.unity3d.com/Manual/CommandLineArguments.html), you can do so with u3d the following way:
+
+```shell
+u3d run -- -logFile /path/to/your/logfile
+```
 
 ### Reuse u3d install on a CI environment
 
