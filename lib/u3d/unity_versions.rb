@@ -255,7 +255,7 @@ module U3d
     class MacVersions
       class << self
         def list_available
-          VersionsFetcher.new(pattern: MAC_DOWNLOAD).fetch_all_channels
+          VersionsFetcher.new(pattern: [MAC_DOWNLOAD, MAC_DOWNLOAD_2018_2]).fetch_all_channels
         end
       end
     end
