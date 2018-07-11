@@ -204,7 +204,7 @@ module U3d
         end
 
         if up.exist? && args_pp.nil?
-          extra_run_args = ['-projectpath', up.path]
+          extra_run_args = ['-projectPath', up.path]
           run_args = [extra_run_args, run_args].flatten
         end
 
