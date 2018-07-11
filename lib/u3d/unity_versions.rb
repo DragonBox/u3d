@@ -228,15 +228,19 @@ module U3d
 
       def initialize(pattern:)
         @versions = {}
-        @pattern = pattern
+        @patterns = pattern.is_a?(Array) ? pattern : [pattern]
       end
 
       def fetch_some(type, url)
         UI.message "Loading Unity #{type} releases"
-        current = UnityVersions.fetch_version_paged(url, @pattern)
-        current = UnityVersions.fetch_version(url, @pattern) if current.empty?
-        UI.success "Found #{current.count} #{type} releases."
-        @versions.merge!(current)
+        total = {}
+        @patterns.each do |pattern|
+          current = UnityVersions.fetch_version_paged(url, pattern)
+          current = UnityVersions.fetch_version(url, pattern) if current.empty?
+          total.merge!(current)
+        end
+        UI.success "Found #{total.count} #{type} releases."
+        @versions.merge!(total)
       end
 
       def fetch_all_channels
