@@ -945,7 +945,7 @@ describe U3d do
           are_installed([unity])
           in_a_project(version: unity.version, path: projectpath)
 
-          expect(runner).to receive(:run).with(unity, ['-projectpath', projectpath], raw_logs: nil)
+          expect(runner).to receive(:run).with(unity, ['-projectPath', projectpath], raw_logs: nil)
 
           U3d::Commands.run(
             options: {},
@@ -960,7 +960,7 @@ describe U3d do
           are_installed([unity])
           in_a_project(version: unity.version, path: projectpath)
 
-          expect(runner).to receive(:run).with(unity, ['-projectpath', projectpath, "somearg"], raw_logs: nil)
+          expect(runner).to receive(:run).with(unity, ['-projectPath', projectpath, "somearg"], raw_logs: nil)
 
           U3d::Commands.run(
             options: {},
@@ -976,7 +976,7 @@ describe U3d do
           are_installed([project_unity, other_unity])
           in_a_project(version: project_unity.version, path: projectpath1)
 
-          expect(runner).to receive(:run).with(other_unity, ['-projectpath', projectpath1, "somearg"], raw_logs: nil)
+          expect(runner).to receive(:run).with(other_unity, ['-projectPath', projectpath1, "somearg"], raw_logs: nil)
 
           U3d::Commands.run(
             options: { unity_version: other_unity.version },
@@ -992,11 +992,11 @@ describe U3d do
           are_installed([project_unity])
           in_a_project(version: project_unity.version, path: current_projectpath)
 
-          expect(runner).to receive(:run).with(project_unity, ['-projectpath', other_projectpath, "somearg"], raw_logs: nil)
+          expect(runner).to receive(:run).with(project_unity, ['-projectPath', other_projectpath, "somearg"], raw_logs: nil)
 
           U3d::Commands.run(
             options: {},
-            run_args: ['-projectpath', other_projectpath, 'somearg']
+            run_args: ['-projectPath', other_projectpath, 'somearg']
           )
         end
       end
@@ -1031,11 +1031,11 @@ describe U3d do
 
           are_installed([unity])
 
-          expect(runner).to receive(:run).with(unity, ['-projectpath', projectpath], raw_logs: nil)
+          expect(runner).to receive(:run).with(unity, ['-projectPath', projectpath], raw_logs: nil)
 
           U3d::Commands.run(
             options: { unity_version: unity.version },
-            run_args: ["-projectpath", projectpath]
+            run_args: ["-projectPath", projectpath]
           )
         end
         it "runs with the specified unity, project version and raw_logs" do
@@ -1044,11 +1044,11 @@ describe U3d do
 
           are_installed([unity])
 
-          expect(runner).to receive(:run).with(unity, ['-projectpath', projectpath], raw_logs: 'raaaww')
+          expect(runner).to receive(:run).with(unity, ['-projectPath', projectpath], raw_logs: 'raaaww')
 
           U3d::Commands.run(
             options: { unity_version: unity.version, raw_logs: 'raaaww' },
-            run_args: ["-projectpath", projectpath]
+            run_args: ["-projectPath", projectpath]
           )
         end
       end
