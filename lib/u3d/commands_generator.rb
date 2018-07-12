@@ -119,6 +119,7 @@ Fore more information about how the rules work, see https://github.com/DragonBox
         c.option '-o', '--operating_system STRING', String, "Checks for availability on specific OS [#{oses.join(', ')}]"
         c.option '-u', '--unity_version STRING', String, 'Checks if specified version is available. Can be a regular expression'
         c.option '-p', '--packages', 'Lists available packages as well'
+        c.option '--no_central', 'Do not use the central version'
         c.example 'List all versions available, forcing a refresh of the available packages from Unity servers', 'u3d available -f'
         c.example 'List stable versions available', 'u3d available -r stable -p'
         c.example 'List all versions available for Linux platform', 'u3d available -o linux'
@@ -127,6 +128,7 @@ Fore more information about how the rules work, see https://github.com/DragonBox
         c.summary = 'List download-ready versions of Unity'
         c.action do |_args, options|
           options.default packages: false
+          options.default no_central: false
           Commands.list_available(options: convert_options(options))
         end
       end

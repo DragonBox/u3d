@@ -107,8 +107,9 @@ module U3d
         ver = options[:unity_version]
         os = valid_os_or_current(options[:operating_system])
         rl = options[:release_level]
+        central = !options[:no_central]
 
-        cache_versions = cache_versions(os, force_refresh: options[:force])
+        cache_versions = cache_versions(os, force_refresh: options[:force], central_cache: central)
 
         if ver
           cache_versions = cache_versions.extract(*cache_versions.keys.select { |k| Regexp.new(ver).match(k) })
@@ -265,8 +266,8 @@ module U3d
 
       private
 
-      def cache_versions(os, offline: false, force_refresh: false)
-        cache = Cache.new(force_os: os, offline: offline, force_refresh: force_refresh, central_cache: true)
+      def cache_versions(os, offline: false, force_refresh: false, central_cache: true)
+        cache = Cache.new(force_os: os, offline: offline, force_refresh: force_refresh, central_cache: central_cache)
         cache_os = cache[os.id2name] || {}
         cache_versions = cache_os['versions'] || {}
         cache_versions
