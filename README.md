@@ -76,6 +76,12 @@ export LANG=en_US.UTF-8
 
 You can find your shell profile at ~/.bashrc, ~/.bash_profile or ~/.zshrc depending on your system.
 
+## Central cache
+
+Because fetching all the versions online can be rather long, especially on slow connections, u3d uses a [central cache](https://dragonbox.github.io/unities/v1/versions.json) which performs the fetching automatically and makes retrieving all the versions much faster.
+
+__NOTE__: If you do not want to use the central cache for some reason, you can still perform the version fetching manually by running `u3d available --no-central` which will cache locally the versions that you retrieved so that you can use them later (in `u3d install` for example).
+
 ## Unity versions numbering
 
 Unity uses the following version formatting: 0.0.0x0. The \'x\' can takes different values:

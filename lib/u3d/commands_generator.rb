@@ -126,6 +126,11 @@ Fore more information about how the rules work, see https://github.com/DragonBox
         c.example 'List packages available for Unity version 5.6.0f3', 'u3d available -u 5.6.0f3 -p'
         c.example 'List packages available for Unity version containing the 5.6 string', 'u3d available -u \'5.6\' -p'
         c.summary = 'List download-ready versions of Unity'
+        c.description = %(
+#{c.summary}
+This command interprets the information that are available on Unity's website and forums to fetch all the version that are available for download.
+It relies on a centralized cache (https://dragonbox.github.io/unities/v1/versions.json) that performs the fetching automatically so that you don't have to do it locally. If you do not want to use this central cache and wish to perform the fetching yourself, you can use the --no-central option.
+        )
         c.action do |_args, options|
           options.default packages: false
           options.default central: true
