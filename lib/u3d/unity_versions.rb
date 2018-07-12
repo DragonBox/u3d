@@ -121,6 +121,7 @@ module U3d
     # Captures a version and its base url
     LINUX_DOWNLOAD = %r{'(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)(./)?UnitySetup-(\d+\.\d+\.\d+\w\d+)'}
     MAC_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)MacEditorInstaller/[a-zA-Z0-9/\.\+]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
+    MAC_DOWNLOAD_2018_2 = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)UnityDownloadAssistant-[a-zA-Z0-9/\.\+]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
     WIN_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)Windows..EditorInstaller/[a-zA-Z0-9/\.\+]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
     LINUX_DOWNLOAD_DATED = %r{"(https?://[\w/\._-]+/unity\-editor\-installer\-(\d+\.\d+\.\d+\w\d+).*\.sh)"}
     LINUX_DOWNLOAD_RECENT_PAGE = %r{"(https?://beta\.unity3d\.com/download/[a-zA-Z0-9/\.\+]+/public_download\.html)"}
@@ -227,15 +228,19 @@ module U3d
 
       def initialize(pattern:)
         @versions = {}
-        @pattern = pattern
+        @patterns = pattern.is_a?(Array) ? pattern : [pattern]
       end
 
       def fetch_some(type, url)
         UI.message "Loading Unity #{type} releases"
-        current = UnityVersions.fetch_version_paged(url, @pattern)
-        current = UnityVersions.fetch_version(url, @pattern) if current.empty?
-        UI.success "Found #{current.count} #{type} releases."
-        @versions.merge!(current)
+        total = {}
+        @patterns.each do |pattern|
+          current = UnityVersions.fetch_version_paged(url, pattern)
+          current = UnityVersions.fetch_version(url, pattern) if current.empty?
+          total.merge!(current)
+        end
+        UI.success "Found #{total.count} #{type} releases."
+        @versions.merge!(total)
       end
 
       def fetch_all_channels
@@ -250,7 +255,7 @@ module U3d
     class MacVersions
       class << self
         def list_available
-          VersionsFetcher.new(pattern: MAC_DOWNLOAD).fetch_all_channels
+          VersionsFetcher.new(pattern: [MAC_DOWNLOAD, MAC_DOWNLOAD_2018_2]).fetch_all_channels
         end
       end
     end
