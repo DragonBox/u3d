@@ -1,5 +1,19 @@
 # Change Log
 
+## [v1.1.1](https://github.com/DragonBox/u3d/tree/v1.1.1) (2018-07-12)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.0...v1.1.1)
+
+**Fixed bugs:**
+
+- Unity 2018.2.x is not listed as available [\#321](https://github.com/DragonBox/u3d/issues/321)
+- u3d/versions: Accept new pattern for mac above 2018.2+ [\#322](https://github.com/DragonBox/u3d/pull/322) ([niezbop](https://github.com/niezbop))
+- u3d/runner: Fix -projectPath argument [\#320](https://github.com/DragonBox/u3d/pull/320) ([niezbop](https://github.com/niezbop))
+
+**Closed issues:**
+
+- Inconsistency regarding -projectpath / -projectPath argument [\#319](https://github.com/DragonBox/u3d/issues/319)
+- Betas not fetched anymore [\#314](https://github.com/DragonBox/u3d/issues/314)
+
 ## [v1.1.0](https://github.com/DragonBox/u3d/tree/v1.1.0) (2018-06-27)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.21...v1.1.0)
 
@@ -44,7 +58,6 @@
 
 **Merged pull requests:**
 
-- Preparing release for 1.0.21 [\#308](https://github.com/DragonBox/u3d/pull/308) ([lacostej](https://github.com/lacostej))
 - u3d/console: remove require on pry [\#307](https://github.com/DragonBox/u3d/pull/307) ([lacostej](https://github.com/lacostej))
 - Allow spaces in installation paths on Windows \#302 [\#306](https://github.com/DragonBox/u3d/pull/306) ([lacostej](https://github.com/lacostej))
 - u3d/install: support full pkg for Linux [\#305](https://github.com/DragonBox/u3d/pull/305) ([lacostej](https://github.com/lacostej))
