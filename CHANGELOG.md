@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.1.2](https://github.com/DragonBox/u3d/tree/v1.1.2) (2018-07-12)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.1...v1.1.2)
+
+**Implemented enhancements:**
+
+- u3d/available: Add option to not use the central cache [\#324](https://github.com/DragonBox/u3d/pull/324) ([niezbop](https://github.com/niezbop))
+
 ## [v1.1.1](https://github.com/DragonBox/u3d/tree/v1.1.1) (2018-07-12)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.0...v1.1.1)
 
