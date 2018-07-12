@@ -107,8 +107,9 @@ module U3d
         ver = options[:unity_version]
         os = valid_os_or_current(options[:operating_system])
         rl = options[:release_level]
+        central = options.fetch(:central, true)
 
-        cache_versions = cache_versions(os, force_refresh: options[:force], central_cache: options[:central])
+        cache_versions = cache_versions(os, force_refresh: options[:force], central_cache: central)
 
         if ver
           cache_versions = cache_versions.extract(*cache_versions.keys.select { |k| Regexp.new(ver).match(k) })
