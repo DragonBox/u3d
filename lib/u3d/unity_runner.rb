@@ -85,7 +85,7 @@ module U3d
       end
 
       def find_projectpath_in_args(args)
-        find_arg_in_args('-projectpath', args)
+        find_arg_in_args('-projectPath', args)
       end
 
       def find_arg_in_args(arg_to_find, args)

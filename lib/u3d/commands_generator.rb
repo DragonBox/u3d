@@ -91,7 +91,7 @@ E.g. U3D_RULES_PATH=my_rules.json u3d -- ...
 
 Fore more information about how the rules work, see https://github.com/DragonBox/u3d/blob/master/LOG_RULES.md
         )
-        c.option '-u', '--unity_version STRING', String, 'Version of Unity to run with. If not specified, it runs with the version of the project (either specified as -projectpath or current)'
+        c.option '-u', '--unity_version STRING', String, 'Version of Unity to run with. If not specified, it runs with the version of the project (either specified as -projectPath or current)'
         c.option '-r', '--raw_logs', 'Raw Unity output, not filtered by u3d\'s log prettifier'
         c.action do |args, options|
           UI.user_error! "Run doesn't take arguments. Did you forget '--' or did you mistake your command? (#{args})" if args.count > 0
