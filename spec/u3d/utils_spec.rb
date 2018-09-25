@@ -58,7 +58,7 @@ describe U3d do
     describe '.strings' do
       it 'finds printable characters in strings' do
         path = 'spec/data/u3d_console.png'
-        expect(U3d::Utils.strings(path).to_a.include? 'iTXtXML:com.adobe.xmp').to be true
+        expect(U3d::Utils.strings(path).to_a.include?('iTXtXML:com.adobe.xmp')).to be true
       end
     end
   end
