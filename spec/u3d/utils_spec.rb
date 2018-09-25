@@ -54,5 +54,12 @@ describe U3d do
         expect(U3d::Utils.parse_unity_version('1.2.3f4')).to eql(%w[1 2 3 f 4])
       end
     end
+
+    describe '.strings' do
+      it 'finds printable characters in strings' do
+        path = 'spec/data/u3d_console.png'
+        expect(U3d::Utils.strings(path).to_a.include? 'iTXtXML:com.adobe.xmp').to be true
+      end
+    end
   end
 end

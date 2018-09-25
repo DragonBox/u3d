@@ -209,33 +209,13 @@ module U3d
       if `which strings` != ''
         bintutils_strings(path)
       else
-        own_strings(path).to_a
+        Utils.strings(path).to_a
       end
     end
 
     def binutils_strings(path)
       command = "strings #{path.shellescape}"
       `#{command}`.split("\n")
-    end
-
-    # unoptimized ruby way to implement binutils strings
-    def own_strings(path)
-      min = 4
-      Enumerator.new do |y|
-        File.open(path, "rb") do |f|
-          s = ""
-          f.each_char do |c|
-            if c.ord > 31 # is there a cleaner way to do this check?
-              s += c
-              next
-            else
-              y.yield s if s.length >= min
-              s = ""
-            end
-          end
-          y.yield s if s.length >= min
-        end
-      end
     end
 
     # sorted by order of speed to fetch the strings data

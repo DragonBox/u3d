@@ -206,6 +206,26 @@ module U3d
         U3dCore::Helper.windows_path(path)
       end
 
+      # Ruby implementation of binutils strings
+      def strings(path)
+        min = 4
+        Enumerator.new do |y|
+          File.open(path, "rb") do |f|
+            s = ""
+            f.each_char do |c|
+              if c =~ /[[:print:]]/ # is there a cleaner way to do this check?
+                s += c
+                next
+              else
+                y.yield s if s.length >= min
+                s = ""
+              end
+            end
+            y.yield s if s.length >= min
+          end
+        end
+      end
+
       private
 
       def http_max_retries
