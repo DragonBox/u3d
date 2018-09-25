@@ -228,9 +228,7 @@ module U3d
               s += c
               next
             else
-              if s.length >= min
-                y.yield s
-              end
+              y.yield s if s.length >= min
               s = ""
             end
           end
