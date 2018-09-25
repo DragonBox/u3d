@@ -220,6 +220,7 @@ module U3d
 
     # unoptimized ruby way to implement binutils strings
     def own_strings(path)
+      min = 4
       Enumerator.new do |y|
         File.open(path, "rb") do |f|
           s = ""
