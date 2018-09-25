@@ -103,7 +103,7 @@ task :prepare_git_pr, [:pr_branch] do |_t, args|
 end
 
 desc 'Prepare a release: check repo status, generate changelog, create PR'
-task pre_release: 'ensure_git_clean' do
+task pre_release: 'bump' do
   require 'u3d/version'
   nextversion = U3d::VERSION
 
@@ -133,7 +133,7 @@ task pre_release: 'ensure_git_clean' do
   sh "git branch -D #{pr_branch}"
 end
 
-desc 'Bump the version number to the version entered interactively; pushes a commit to master'
+desc 'Bump the version number to the version entered interactively'
 task bump: 'ensure_git_clean' do
   nextversion = UI.input "Next version will be:"
   UI.user_error! "Bump version stopped by user" unless UI.confirm("Next version will be #{nextversion}. Confirm?")
@@ -142,7 +142,6 @@ task bump: 'ensure_git_clean' do
   sh 'rspec'
   sh 'git add .github_changelog_generator lib/u3d/version.rb Gemfile.lock'
   sh "git commit -m 'Bump version to #{nextversion}'"
-  sh 'git push'
 end
 
 desc 'Update the changelog, no commit made'

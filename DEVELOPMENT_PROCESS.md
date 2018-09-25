@@ -1,14 +1,12 @@
 = Notes for dev team
 
-* prepare a version
+* prepare a version (includes bump version)
 
 `rake pre_release`
 
 * make a release
 
 `rake release`
-
-`rake bump`
 
 = release of the fastlane plugin
 
