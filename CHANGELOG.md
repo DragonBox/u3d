@@ -1,5 +1,20 @@
 # Change Log
 
+## [v1.1.3](https://github.com/DragonBox/u3d/tree/v1.1.3) (2018-10-16)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.2...v1.1.3)
+
+**Implemented enhancements:**
+
+- install/linux: fallback on ruby strings implementation \(fixes \#326\) [\#327](https://github.com/DragonBox/u3d/pull/327) ([lacostej](https://github.com/lacostej))
+
+**Closed issues:**
+
+- installation.rb:210:in ``': No such file or directory - strings \(Errno::ENOENT\) [\#326](https://github.com/DragonBox/u3d/issues/326)
+
+**Merged pull requests:**
+
+- Bump dependencies to remove dependency on rubyzip 1.2.1 [\#328](https://github.com/DragonBox/u3d/pull/328) ([lacostej](https://github.com/lacostej))
+
 ## [v1.1.2](https://github.com/DragonBox/u3d/tree/v1.1.2) (2018-07-12)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.1...v1.1.2)
 
