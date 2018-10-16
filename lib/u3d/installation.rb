@@ -206,6 +206,14 @@ module U3d
     private
 
     def strings(path)
+      if `which strings` != ''
+        bintutils_strings(path)
+      else
+        Utils.strings(path).to_a
+      end
+    end
+
+    def binutils_strings(path)
       command = "strings #{path.shellescape}"
       `#{command}`.split("\n")
     end
