@@ -125,6 +125,12 @@ module U3d
 
     MAC_WIN_SHADERS = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)builtin_shaders-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
 
+    MAC_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)MacEditorInstaller/[a-zA-Z0-9/\.\+]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
+    MAC_DOWNLOAD_2018_2 = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)UnityDownloadAssistant-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
+
+    WIN_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)Windows..EditorInstaller/[a-zA-Z0-9/\.\+]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
+    WIN_BETA_DOWNLOAD_2018_3 = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)Windows..EditorInstaller/UnitySetup64.exe"}
+
     LINUX_DOWNLOAD_DATED = %r{"(https?://[\w/\._-]+/unity\-editor\-installer\-(\d+\.\d+\.\d+\w\d+).*\.sh)"}
     LINUX_DOWNLOAD_RECENT_PAGE = %r{"(https?://beta\.unity3d\.com/download/[a-zA-Z0-9/\.\+]+/public_download\.html)"}
     LINUX_DOWNLOAD_RECENT_FILE = %r{'(https?://beta\.unity3d\.com/download/[a-zA-Z0-9/\.\+]+/unity\-editor\-installer\-(\d+\.\d+\.\d+(?:x)?\w\d+).*\.sh)'}
