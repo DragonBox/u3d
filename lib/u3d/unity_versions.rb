@@ -144,13 +144,15 @@ module U3d
       def list_available(os: nil)
         os ||= U3dCore::Helper.operating_system
 
+        additional_pages = ENV['U3D_ADDITIONAL_PAGES'].split(',') || []
+
         case os
         when :linux
           return U3d::UnityVersions::LinuxVersions.list_available
         when :mac
-          return U3d::UnityVersions::MacVersions.list_available
+          return U3d::UnityVersions::MacVersions.list_available(additional_pages: additional_pages)
         when :win
-          return U3d::UnityVersions::WindowsVersions.list_available
+          return U3d::UnityVersions::WindowsVersions.list_available(additional_pages: additional_pages)
         else
           raise ArgumentError, "Operating system #{os} not supported"
         end
@@ -280,21 +282,24 @@ module U3d
         @versions
       end
 
-      def fetch_all_channels
+      def fetch_all_channels(additional_pages: [])
         fetch_some('lts', UNITY_LTSES)
         fetch_some('stable', UNITY_DOWNLOADS)
         fetch_some('patch', UNITY_PATCHES)
         # This does not work any longer
         # fetch_some('beta', UNITY_BETAS)
+        additional_pages.each do |page|
+          fetch_some('custom', page)
+        end
         @versions
       end
     end
 
     class MacVersions
       class << self
-        def list_available
+        def list_available(additional_pages: [])
           versions_fetcher = VersionsFetcher.new(pattern: [MAC_WIN_SHADERS])
-          versions_fetcher.fetch_all_channels
+          versions_fetcher.fetch_all_channels(additional_pages: additional_pages)
           versions_fetcher.fetch_json('darwin')
         end
       end
@@ -302,9 +307,9 @@ module U3d
 
     class WindowsVersions
       class << self
-        def list_available
+        def list_available(additional_pages: [])
           versions_fetcher = VersionsFetcher.new(pattern: MAC_WIN_SHADERS)
-          versions_fetcher.fetch_all_channels
+          versions_fetcher.fetch_all_channels(additional_pages: additional_pages)
           versions_fetcher.fetch_json('win32')
         end
       end
