@@ -148,6 +148,7 @@ module U3d
 
         case os
         when :linux
+          UI.important 'Additional download pages are not yet support on Linux' unless additional_pages.empty?
           return U3d::UnityVersions::LinuxVersions.list_available
         when :mac
           return U3d::UnityVersions::MacVersions.list_available(additional_pages: additional_pages)
