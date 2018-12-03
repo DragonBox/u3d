@@ -145,7 +145,8 @@ module U3d
       def list_available(os: nil)
         os ||= U3dCore::Helper.operating_system
 
-        additional_pages = ENV['U3D_ADDITIONAL_PAGES'].split(',') || []
+        additional_pages_env = ENV['U3D_ADDITIONAL_PAGES']
+        additional_pages = additional_pages_env ? additional_pages_env.split(',') : []
 
         case os
         when :linux
