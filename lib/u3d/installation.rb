@@ -312,7 +312,7 @@ module U3d
                      File.expand_path('..', full_exe_path)
                    else
                      File.expand_path(target_directory)
-      end
+                   end
 
       lnk_name = "Unity_#{unity_version}.lnk"
       lnk_path = File.join(lnk_parent, lnk_name)
