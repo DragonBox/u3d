@@ -276,7 +276,8 @@ module U3d
         fetch_some('lts', UNITY_LTSES)
         fetch_some('stable', UNITY_DOWNLOADS)
         fetch_some('patch', UNITY_PATCHES)
-        fetch_some('beta', UNITY_BETAS)
+        # This does not work any longer
+        # fetch_some('beta', UNITY_BETAS)
         @versions
       end
     end
