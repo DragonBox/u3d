@@ -317,6 +317,11 @@ module U3d
       lnk_name = "Unity_#{unity_version}.lnk"
       lnk_path = File.join(lnk_parent, lnk_name)
 
+      if File.exist? lnk_path
+        UI.message "Shortcut already exists at #{lnk_path}"
+        return Win32::Shortcut.open(lnk_path)
+      end
+
       Win32::Shortcut.new(lnk_path) do |shortcut|
         shortcut.description = "Shortcut to Unity.exe for Unity #{unity_version}. Automatically created by u3d."
         shortcut.path = full_exe_path
