@@ -304,14 +304,14 @@ module U3d
       end
       nil
     end
-    
+
     def create_shortcut(path_to_unity_exe, unity_version, target_directory)
       require 'win32-shortcut'
       full_exe_path = File.expand_path(path_to_unity_exe)
-      lnk_parent = if target_directory.nil? then
-        File.expand_path('..', full_exe_path)
-      else
-        File.expand_path(target_directory)
+      lnk_parent = if target_directory.nil?
+                     File.expand_path('..', full_exe_path)
+                   else
+                     File.expand_path(target_directory)
       end
 
       lnk_name = "Unity_#{unity_version}.lnk"

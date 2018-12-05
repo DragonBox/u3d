@@ -66,7 +66,7 @@ module U3d
         installer = Installer.create
         installer.sanitize_installs
         list = installer.installed_sorted_by_versions
-        
+
         if list.empty?
           UI.important 'No Unity version installed'
           return
