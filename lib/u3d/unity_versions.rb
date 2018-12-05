@@ -167,9 +167,7 @@ module U3d
       def fetch_from_json(url, pattern)
         require 'json'
         data = Utils.get_ssl(url)
-        JSON.parse(data).values.flatten.select do |build|
-          pattern =~ build['downloadUrl']
-        end.map do |build|
+        JSON.parse(data).values.flatten.select { |b| pattern =~ b['downloadUrl'] }.map do |build|
           [build['version'], pattern.match(build['downloadUrl'])[1]]
         end.to_h
       end
