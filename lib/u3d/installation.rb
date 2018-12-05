@@ -304,6 +304,24 @@ module U3d
       end
       nil
     end
+    
+    def create_shortcut(path_to_unity_exe, unity_version, target_directory)
+      require 'win32-shortcut'
+      full_exe_path = File.expand_path(path_to_unity_exe)
+      lnk_parent = if target_directory.nil? then
+        File.expand_path('..', full_exe_path)
+      else
+        File.expand_path(target_directory)
+      end
+
+      lnk_name = "Unity_#{unity_version}.lnk"
+      lnk_path = File.join(lnk_parent, lnk_name)
+
+      Win32::Shortcut.new(lnk_path) do |shortcut|
+        shortcut.description = "Shortcut to Unity.exe for Unity #{unity_version}. Automatically created by u3d."
+        shortcut.path = full_exe_path
+      end
+    end
 
     private
 
@@ -407,6 +425,10 @@ module U3d
 
     def clean_install?
       do_not_move? || !(root_path =~ UNITY_DIR_CHECK).nil?
+    end
+
+    def create_shortcut(target_directory)
+      WindowsInstallationHelper.new.create_shortcut(exe_path, version, target_directory)
     end
   end
 end

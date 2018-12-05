@@ -62,6 +62,28 @@ module U3d
         end
       end
 
+      def create_shortcuts(options: {})
+        installer = Installer.create
+        installer.sanitize_installs
+        list = installer.installed_sorted_by_versions
+        
+        if list.empty?
+          UI.important 'No Unity version installed'
+          return
+        end
+
+        ver = options[:unity_version]
+        unless ver.nil?
+          UI.user_error! "Version #{ver} is not installed!" unless list.any? { |u| u.version == ver }
+          list = [ver]
+        end
+
+        list.each do |u|
+          s = u.create_shortcut(options[:target_directory])
+          UI.success "Created shortcut for #{s.path} at #{s.file}"
+        end
+      end
+
       # rubocop:disable Style/FormatStringToken
       def console
         require 'irb'
