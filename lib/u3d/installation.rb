@@ -322,10 +322,11 @@ module U3d
         return Win32::Shortcut.open(lnk_path)
       end
 
-      Win32::Shortcut.new(lnk_path) do |shortcut|
-        shortcut.description = "Shortcut to Unity.exe for Unity #{unity_version}. Automatically created by u3d."
-        shortcut.path = full_exe_path
+      shortcut = Win32::Shortcut.new(lnk_path) do |s|
+        s.description = "Shortcut to Unity.exe for Unity #{unity_version}. Automatically created by u3d."
+        s.path = full_exe_path
       end
+      shortcut.tap { |s| UI.success "Created shortcut for #{s.path} at #{s.file}" }
     end
 
     private

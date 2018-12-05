@@ -79,8 +79,7 @@ module U3d
         end
 
         list.each do |u|
-          s = u.create_shortcut(options[:target_directory])
-          UI.success "Created shortcut for #{s.path} at #{s.file}"
+          u.create_shortcut(options[:target_directory])
         end
       end
 
