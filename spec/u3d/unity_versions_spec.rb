@@ -92,7 +92,7 @@ describe U3d do
           allow(U3d::INIparser).to receive(:load_ini).with('2017.3.0f1', nil, os: :linux, offline: true) {}
           allow(U3d::INIparser).to receive(:load_ini).with('2017.2.1f1', nil, os: :linux, offline: true) {}
 
-          expect(U3d::UnityVersions.list_available(os: :linux).keys).to eql ['1.2.3f1', '1.3.5f1', '2017.1.6f1', '2017.1.0b3', '2017.3.0f1', '2017.2.1f1']
+          expect(U3d::UnityVersions.list_available(os: :linux).keys).to eql ['1.2.3f1', '1.3.5f1', '2017.1.6f1', '2018.3.0f2', '2017.1.0b3', '2017.3.0f1', '2017.2.1f1']
         end
       end
     end

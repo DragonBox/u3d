@@ -53,6 +53,7 @@ def linux_archive_all
     <b>2017.1.0b3</b>:<a href="http://beta.unity3d.com/download/b515b8958382/public_download.html" target="_blank" class="externalLink">
     <b>2017.3.0f1</b>:<a href="http://beta.unity3d.com/download/3c89f8d277f5/public_download.html" target="_blank" class="externalLink">
     <b>2017.2.1f1</b>:<a href="https://beta.unity3d.com/download/ce9f6a0436e1+/public_download.html" target="_blank" class="externalLink">
+    <b>2018.3.0f2</b>:<a href='https://beta.unity3d.com/download/6e9a27477296/UnitySetup-2018.3.0f2' target="_blank" class="externalLink">
   )
 end
 
