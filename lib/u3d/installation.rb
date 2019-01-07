@@ -207,7 +207,7 @@ module U3d
 
     def strings(path)
       if `which strings` != ''
-        bintutils_strings(path)
+        binutils_strings(path)
       else
         Utils.strings(path).to_a
       end
