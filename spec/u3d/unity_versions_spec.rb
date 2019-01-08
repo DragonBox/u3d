@@ -44,18 +44,46 @@ describe U3d do
       end
     end
 
+    describe '.fetch_version' do
+      it 'reads versions for windows' do
+        expect(U3d::Utils).to receive(:get_ssl) { windows_archive }
+        expect(U3d::UnityVersions.fetch_version("foo", U3d::UnityVersions::WIN_DOWNLOAD).count).to eql 3
+      end
+
+      it 'reads versions for mac' do
+        expect(U3d::Utils).to receive(:get_ssl) { macosx_archive }
+        expect(U3d::UnityVersions.fetch_version("foo", U3d::UnityVersions::MAC_DOWNLOAD).count).to eql 3
+      end
+    end
+
+    # TODO: test U3d::UnityVersions.fetch_version_paged
+    xdescribe '.fetch_version_paged' do
+    end
+
+    describe '.fetch_from_json' do
+      it 'reads versions for windows' do
+        expect(U3d::Utils).to receive(:get_ssl) { latest_windows_archive }
+        expect(U3d::UnityVersions.fetch_from_json("foo", U3d::UnityVersions::UNITY_LATEST_JSON).count).to eql 2
+      end
+
+      it 'reads versions for mac' do
+        expect(U3d::Utils).to receive(:get_ssl) { latest_macosx_archive }
+        expect(U3d::UnityVersions.fetch_from_json("foo", U3d::UnityVersions::UNITY_LATEST_JSON).count).to eql 2
+      end
+    end
+
     describe '.list_available' do
       it 'retrieves windows versions' do
-        expect(U3d::Utils).to receive(:get_ssl) { "" } # lts
-        expect(U3d::Utils).to receive(:get_ssl) { windows_archive }
-        expect(U3d::Utils).to receive(:get_ssl).at_least(2).times { "" }
-        expect(U3d::UnityVersions.list_available(os: :win).count).to eql 3
+        expect(U3d::UnityVersions).to receive(:fetch_version_paged).at_least(3).times { {} }
+        expect(U3d::UnityVersions).to receive(:fetch_version).at_least(3).times { {} }
+        expect(U3d::UnityVersions).to receive(:fetch_from_json).at_least(:once) { {} }
+        expect(U3d::UnityVersions.list_available(os: :win).count).to eql 0
       end
       it 'retrieves mac versions' do
-        expect(U3d::Utils).to receive(:get_ssl) { "" } # lts
-        expect(U3d::Utils).to receive(:get_ssl) { macosx_archive }
-        expect(U3d::Utils).to receive(:get_ssl).at_least(2).times { "" }
-        expect(U3d::UnityVersions.list_available(os: :mac).count).to eql 3
+        expect(U3d::UnityVersions).to receive(:fetch_version_paged).at_least(6).times { {} }
+        expect(U3d::UnityVersions).to receive(:fetch_version).at_least(6).times { {} }
+        expect(U3d::UnityVersions).to receive(:fetch_from_json).at_least(:once) { {} }
+        expect(U3d::UnityVersions.list_available(os: :mac).count).to eql 0
       end
 
       context "Linux support" do

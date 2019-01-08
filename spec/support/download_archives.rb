@@ -37,6 +37,64 @@ def macosx_archive
   )
 end
 
+def latest_windows_archive
+  %(
+{
+  "official": [
+    {
+      "version": "2017.1.5f1",
+      "lts": false,
+      "downloadUrl": "https://download.unity3d.com/download_unity/9758a36cfaa6/Windows64EditorInstaller/UnitySetup64-2017.1.5f1.exe",
+      "downloadSize": 534723584,
+      "installedSize": 1779680256,
+      "checksum": "8937731134e0109620af32f6f52ce1c6",
+      "modules": []
+    }
+  ],
+  "beta": [
+    {
+      "version": "2018.3.0b12",
+      "lts": false,
+      "downloadUrl": "https://beta.unity3d.com/download/77f6238a7ced/Windows64EditorInstaller/UnitySetup64-2018.3.0b12.exe",
+      "downloadSize": 583775232,
+      "installedSize": 2028078080,
+      "checksum": "4238474477c552cce34072c8061c5dcd",
+      "modules": []
+    }
+  ]
+}
+  )
+end
+
+def latest_macosx_archive
+  %(
+{
+  "official": [
+    {
+      "version": "2017.1.5f1",
+      "lts": false,
+      "downloadUrl": "https://download.unity3d.com/download_unity/9758a36cfaa6/MacEditorInstaller/Unity-2017.1.5f1.pkg",
+      "downloadSize": 886532131,
+      "installedSize": 2365775000,
+      "checksum": "1de0b7d9f705dbd0eab65cbf2cc693ee",
+      "modules": []
+    }
+  ],
+  "beta": [
+    {
+      "version": "2018.3.0b12",
+      "lts": false,
+      "downloadUrl": "https://beta.unity3d.com/download/77f6238a7ced/MacEditorInstaller/Unity-2018.3.0b12.pkg",
+      "downloadSize": 1059403789,
+      "installedSize": 2683800000,
+      "checksum": "5a171c942fdcba9a6eb45d8ad1400778",
+      "modules": []
+    }
+  ]
+}
+  )
+end
+
 def linux_archive_old
   %(
     <b>5.4.0b10</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f1+20160316.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f1+20160316.sh</a><br />

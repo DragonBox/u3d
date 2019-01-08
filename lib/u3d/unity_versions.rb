@@ -114,6 +114,8 @@ module U3d
     UNITY_BETAS = 'https://unity3d.com/unity/beta/archive'.freeze
     # URL for a specific beta, takes into parameter a version string (%s)
     UNITY_BETA_URL = 'https://unity3d.com/unity/beta/unity%<version>s'.freeze
+    # URL for latest releases listing (since Unity 2017.1.5f1), takes into parameter os (windows => win32, mac => darwin)
+    UNITY_LATEST_JSON_URL = 'https://public-cdn.cloud.unity3d.com/hub/prod/releases-%<os>s.json'.freeze
 
     #####################################################
     # @!group REGEX: expressions to interpret data
@@ -129,6 +131,8 @@ module U3d
     # Captures a beta version in html page
     UNITY_BETAVERSION_REGEX = %r{\/unity\/beta\/unity(\d+\.\d+\.\d+\w\d+)"}
     UNITY_EXTRA_DOWNLOAD_REGEX = %r{"(https?:\/\/[\w\/.-]+\.unity3d\.com\/(\w+))\/[a-zA-Z\/.-]+\/download.html"}
+    # For the latest releases fetched from json
+    UNITY_LATEST_JSON = %r{(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)}
 
     class << self
       def list_available(os: nil)
@@ -158,6 +162,14 @@ module U3d
         U3d::Utils.get_ssl(url).scan(/\?page=\d+/).map do |page|
           fetch_version("#{url}#{page}", pattern)
         end.reduce({}, :merge)
+      end
+
+      def fetch_from_json(url, pattern)
+        require 'json'
+        data = Utils.get_ssl(url)
+        JSON.parse(data).values.flatten.select { |b| pattern =~ b['downloadUrl'] }.map do |build|
+          [build['version'], pattern.match(build['downloadUrl'])[1]]
+        end.to_h
       end
 
       def fetch_betas(url, pattern)
@@ -247,11 +259,27 @@ module U3d
         @versions.merge!(total)
       end
 
+      def fetch_json(os)
+        UI.message 'Loading Unity latest releases'
+        url = format(UNITY_LATEST_JSON_URL, os: os)
+        latest = UnityVersions.fetch_from_json(url, UNITY_LATEST_JSON)
+
+        UI.success "Found #{latest.count} latest releases."
+
+        @versions.merge!(latest) do |key, oldval, newval|
+          UI.important "Unity version #{key} already fetched, replacing #{oldval} with #{newval}" if newval != oldval
+          newval
+        end
+
+        @versions
+      end
+
       def fetch_all_channels
         fetch_some('lts', UNITY_LTSES)
         fetch_some('stable', UNITY_DOWNLOADS)
         fetch_some('patch', UNITY_PATCHES)
-        fetch_some('beta', UNITY_BETAS)
+        # This does not work any longer
+        # fetch_some('beta', UNITY_BETAS)
         @versions
       end
     end
@@ -259,7 +287,9 @@ module U3d
     class MacVersions
       class << self
         def list_available
-          VersionsFetcher.new(pattern: [MAC_DOWNLOAD, MAC_DOWNLOAD_2018_2]).fetch_all_channels
+          versions_fetcher = VersionsFetcher.new(pattern: [MAC_DOWNLOAD, MAC_DOWNLOAD_2018_2])
+          versions_fetcher.fetch_all_channels
+          versions_fetcher.fetch_json('darwin')
         end
       end
     end
@@ -267,7 +297,9 @@ module U3d
     class WindowsVersions
       class << self
         def list_available
-          VersionsFetcher.new(pattern: WIN_DOWNLOAD).fetch_all_channels
+          versions_fetcher = VersionsFetcher.new(pattern: WIN_DOWNLOAD)
+          versions_fetcher.fetch_all_channels
+          versions_fetcher.fetch_json('win32')
         end
       end
     end
