@@ -119,7 +119,7 @@ module U3d
     # @!group REGEX: expressions to interpret data
     #####################################################
     # Captures a version and its base url
-    LINUX_DOWNLOAD = %r{'(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)(./)?UnitySetup-(\d+\.\d+\.\d+\w\d+)'}
+    LINUX_DOWNLOAD = %r{['"](https?:\/\/[\w/\.-]+/[0-9a-f\+]{12,13}\/)(.\/)?UnitySetup-(\d+\.\d+\.\d+\w\d+)['"]}
     MAC_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)MacEditorInstaller/[a-zA-Z0-9/\.\+]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
     MAC_DOWNLOAD_2018_2 = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)UnityDownloadAssistant-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
     WIN_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)Windows..EditorInstaller/[a-zA-Z0-9/\.\+]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
@@ -191,13 +191,16 @@ module U3d
 
         def list_available_from_page(unity_forums, data)
           versions = {}
-          results = data.scan(LINUX_DOWNLOAD_DATED)
-          results.each do |capt|
+
+          data.scan(LINUX_DOWNLOAD_DATED) do |capt|
             versions[capt[1]] = capt[0]
           end
 
-          results = data.scan(LINUX_DOWNLOAD_RECENT_PAGE)
-          results.each do |page|
+          data.scan(LINUX_DOWNLOAD) do |capt|
+            versions[capt[2]] = capt[0]
+          end
+
+          data.scan(LINUX_DOWNLOAD_RECENT_PAGE) do |page|
             url = page[0]
             page_body = unity_forums.page_content(url)
             capt = page_body.match(LINUX_DOWNLOAD_RECENT_FILE)
@@ -218,6 +221,7 @@ module U3d
               end
             end
           end
+
           versions
         end
       end
