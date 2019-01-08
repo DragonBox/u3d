@@ -1,5 +1,27 @@
 # Change Log
 
+## [v1.1.3](https://github.com/DragonBox/u3d/tree/v1.1.3) (2019-01-08)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.2...v1.1.3)
+
+**Implemented enhancements:**
+
+- install/linux: fallback on ruby strings implementation \(fixes \#326\) [\#327](https://github.com/DragonBox/u3d/pull/327) ([lacostej](https://github.com/lacostej))
+
+**Fixed bugs:**
+
+- u3d/unity\_versions: fix missing latest versions [\#335](https://github.com/DragonBox/u3d/pull/335) ([niezbop](https://github.com/niezbop))
+
+**Closed issues:**
+
+- Last version not available using `u3d available` [\#337](https://github.com/DragonBox/u3d/issues/337)
+- No Beta versions visible with u3d available [\#330](https://github.com/DragonBox/u3d/issues/330)
+- installation.rb:210:in ``': No such file or directory - strings \(Errno::ENOENT\) [\#326](https://github.com/DragonBox/u3d/issues/326)
+
+**Merged pull requests:**
+
+- u3d/available: Make Linux 2018.3.0f2 available on linux \#337 [\#338](https://github.com/DragonBox/u3d/pull/338) ([rawstacktech](https://github.com/rawstacktech))
+- Bump dependencies to remove dependency on rubyzip 1.2.1 [\#328](https://github.com/DragonBox/u3d/pull/328) ([lacostej](https://github.com/lacostej))
+
 ## [v1.1.2](https://github.com/DragonBox/u3d/tree/v1.1.2) (2018-07-12)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.1...v1.1.2)
 
