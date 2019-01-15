@@ -27,7 +27,7 @@ module U3d
   class Asset
     class << self
       def glob(pattern)
-        Dir.glob(pattern).map { |path| Asset.new(path) }
+        Dir.glob(pattern).reject { |path| File.extname(path) == '.meta' || !File.file?(path) }.map { |path| Asset.new(path) }
       end
     end
 
