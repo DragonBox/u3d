@@ -42,11 +42,17 @@ module U3d
     end
 
     def guid_references
-      @guid_references ||= `grep -rl #{@guid} Assets/`.split("\n").reject { |f| f == @meta_path }.map { |path| Asset.new(path) }
+      @guid_references ||= U3dCore::CommandExecutor.execute(
+        command: "grep -rl #{@guid} Assets/",
+        print_command: false
+      ).split("\n").reject { |f| f == @meta_path }.map { |path| Asset.new(path) }
     end
 
     def name_references
-      @name_references ||= `grep -rl #{File.basename(@path, extension)} Assets/ --include=*.cs`.split("\n").reject { |f| f == @meta_path }.map { |path| Asset.new(path) }
+      @name_references ||= U3dCore::CommandExecutor.execute(
+        command: "grep -rl #{File.basename(@path, extension)} Assets/ --include=*.cs",
+        print_command: false
+      ).split("\n").map { |path| Asset.new(path) }
     end
 
     def extension
