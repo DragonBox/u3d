@@ -40,12 +40,12 @@ module U3d
       @guid = YAML.safe_load(File.read(@meta_path))['guid']
     end
 
-    def users
-      @users ||= `grep -rl #{@guid} Assets/`.split("\n").reject { |f| f == @meta_path }.map { |path| Asset.new(path) }
+    def guid_references
+      @guid_references ||= `grep -rl #{@guid} Assets/`.split("\n").reject { |f| f == @meta_path }.map { |path| Asset.new(path) }
     end
 
-    def name_reference_users
-      @nr_users ||= `grep -rl #{File.basename(@path, extension)} Assets/ --include=*.cs`.split("\n").reject { |f| f == @meta_path }.map { |path| Asset.new(path) }
+    def name_references
+      @name_references ||= `grep -rl #{File.basename(@path, extension)} Assets/ --include=*.cs`.split("\n").reject { |f| f == @meta_path }.map { |path| Asset.new(path) }
     end
 
     def extension
