@@ -37,8 +37,8 @@ module U3d
       raise ArgumentError, "No file at #{path}" unless File.exist?(path)
       @path = path
       @meta_path = path + ".meta"
-      @meta = File.read(@meta_path)
-      @guid = YAML.safe_load(@meta)['guid']
+      @meta = YAML.safe_load(File.read(@meta_path))
+      @guid = @meta['guid']
     end
 
     def guid_references
