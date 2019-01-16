@@ -26,31 +26,33 @@ module U3d
   # U3d::Asset provides you with a way to easily manipulate an search for assets in Unity Projects
   class Asset
     class << self
-      def glob(pattern)
-        Dir.glob(pattern).reject { |path| File.extname(path) == '.meta' || !File.file?(path) }.map { |path| Asset.new(path) }
+      def glob(pattern, unity_project_path = Dir.pwd)
+        unity_project = U3d::UnityProject.new(unity_project_path)
+        Dir.glob(pattern).reject { |path| File.extname(path) == '.meta' || !File.file?(path) }.map { |path| Asset.new(path, unity_project) }
       end
     end
 
     attr_reader :path, :meta_path, :meta, :guid
 
-    def initialize(path)
+    def initialize(path, unity_project = nil)
       raise ArgumentError, "No file at #{path}" unless File.exist?(path)
       @path = path
       @meta_path = path + ".meta"
       @meta = YAML.safe_load(File.read(@meta_path))
       @guid = @meta['guid']
+      @unity_project = unity_project
     end
 
     def guid_references
       @guid_references ||= U3dCore::CommandExecutor.execute(
-        command: "grep -rl #{@guid} Assets/",
+        command: "grep -rl #{@guid} #{grep_reference_root}",
         print_command: false
       ).split("\n").reject { |f| f == @meta_path }.map { |path| Asset.new(path) }
     end
 
     def name_references
       @name_references ||= U3dCore::CommandExecutor.execute(
-        command: "grep -rl #{File.basename(@path, extension)} Assets/ --include=*.cs",
+        command: "grep -rl #{File.basename(@path, extension)} #{grep_reference_root} --include=*.cs",
         print_command: false
       ).split("\n").map { |path| Asset.new(path) }
     end
@@ -74,6 +76,12 @@ module U3d
 
     def inspect
       to_s
+    end
+
+    private
+
+    def grep_reference_root
+      @unity_project && @unity_project.exist? ? 'Assets/' : '.'
     end
   end
 end
