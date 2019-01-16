@@ -34,7 +34,7 @@ module U3d
     attr_accessor :path, :meta_path, :meta, :guid
 
     def initialize(path)
-      raise "No file at #{path}" unless File.exist?(path)
+      raise ArgumentError, "No file at #{path}" unless File.exist?(path)
       @path = path
       @meta_path = path + ".meta"
       @meta = File.read(@meta_path)
