@@ -31,7 +31,7 @@ module U3d
       end
     end
 
-    attr_accessor :path, :meta_path, :meta, :guid
+    attr_reader :path, :meta_path, :meta, :guid
 
     def initialize(path)
       raise ArgumentError, "No file at #{path}" unless File.exist?(path)
