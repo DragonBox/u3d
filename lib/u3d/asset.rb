@@ -31,13 +31,14 @@ module U3d
       end
     end
 
-    attr_accessor :path, :meta_path, :guid
+    attr_accessor :path, :meta_path, :meta, :guid
 
     def initialize(path)
       raise "No file at #{path}" unless File.exist?(path)
       @path = path
       @meta_path = path + ".meta"
-      @guid = YAML.safe_load(File.read(@meta_path))['guid']
+      @meta = File.read(@meta_path)
+      @guid = YAML.safe_load(@meta)['guid']
     end
 
     def guid_references
