@@ -285,7 +285,7 @@ module U3d
       Dir.mktmpdir do |tmp_dir|
         UI.verbose "Working in tmp dir #{tmp_dir}"
 
-        command = "7z -aos -o#{tmp_dir.shellescape} e #{file.shellescape}"
+        command = "7z -aos -t* -o#{tmp_dir.shellescape} e #{file.shellescape}"
         U3dCore::CommandExecutor.execute(command: command)
 
         target_location = pkg_install_path(installation_path, "#{tmp_dir}/PackageInfo")
