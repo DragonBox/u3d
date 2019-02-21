@@ -332,12 +332,11 @@ describe U3d do
         end
 
         #   request a non existing version number -> fail
-        #   QUESTION: Raises an error instead of logging?
-        it 'logs an error when specifying a non existing version' do
+        it 'crashes error when specifying a non existing version' do
           on_fake_os
           with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
 
-          expect(U3dCore::UI).to receive(:error) {}
+          expect(U3dCore::UI).to receive(:crash!).with(/No version 'not.a.version'/)
 
           U3d::Commands.install(
             args: ['not.a.version'],
@@ -622,12 +621,12 @@ describe U3d do
           end
         end
 
-        #   request a non existing version number -> do nothing
-        it 'does not log an error when specifying a non existing version' do
+        #   request a non existing version number -> crashes
+        it 'crashes when specifying a non existing version' do
           on_fake_os
           with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
 
-          expect(U3dCore::UI).to receive(:error).with(/No version 'not.a.version'/)
+          expect(U3dCore::UI).to receive(:crash!).with(/No version 'not.a.version'/)
 
           U3d::Commands.install(
             args: ['not.a.version'],
@@ -674,7 +673,7 @@ describe U3d do
         #   reinstall a discovered version -> skipped, no credentials asked
         it 'does not ask for credentials and does nothing when version is already present' do
           on_linux
-          with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
+          with_fake_cache('linux' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
           are_installed([fake_linux('1.2.3f4')])
           expect_no_privileges_check
           expect_no_install
