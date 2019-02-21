@@ -151,7 +151,7 @@ module U3d
         cache_versions = cache_versions(os, offline: !options[:download])
         version = interpret_latest(version, cache_versions)
         unless cache_versions[version]
-          UI.error "No version '#{version}' was found in cache. Either it doesn't exist or u3d doesn't know about it yet. Try refreshing with 'u3d available -f'"
+          UI.crash! "No version '#{version}' was found in cache. Either it doesn't exist or u3d doesn't know about it yet. Try refreshing with 'u3d available -f'"
           return
         end
 
