@@ -25,6 +25,7 @@ require 'u3d_core'
 require 'u3d/utils'
 require 'u3d/version'
 
+require 'u3d/asset'
 require 'u3d/cache'
 require 'u3d/commands'
 require 'u3d/commands_generator'

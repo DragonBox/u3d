@@ -31,12 +31,20 @@ module U3d
     end
 
     def exist?
-      Dir.exist?("#{@path}/Assets") && Dir.exist?("#{@path}/ProjectSettings")
+      Dir.exist?(assets_path) && Dir.exist?(project_settings_path)
+    end
+
+    def assets_path
+      File.join(@path, 'Assets')
+    end
+
+    def project_settings_path
+      File.join(@path, 'ProjectSettings')
     end
 
     def editor_version
       require 'yaml'
-      project_version = "#{@path}/ProjectSettings/ProjectVersion.txt"
+      project_version = File.join(project_settings_path, 'ProjectVersion.txt')
       return nil unless File.exist? project_version
       yaml = YAML.safe_load(File.read(project_version))
       version = yaml['m_EditorVersion']
