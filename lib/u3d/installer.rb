@@ -89,7 +89,7 @@ module U3d
       map = Hash[*arraym.flatten]
       # sorted versions
       vcomparators = map.keys.map { |k| UnityVersionComparator.new(k) }
-      sorted_keys = vcomparators.sort.map { |v| v.version.to_s }
+      sorted_keys = vcomparators.sort.map { |v| v.version.unity_version }
       sorted_keys.map { |k| map[k] }
     end
   end

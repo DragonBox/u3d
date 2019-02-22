@@ -77,9 +77,10 @@ describe U3d do
           i1 = fake_installation('1.2.3f6')
           i2 = fake_installation('1.2.3b2')
           i3 = fake_installation('1.2.3f4')
+          i4 = fake_installation('1.2.3f5-MLTP8.1')
 
-          installed = [i1, i2, i3]
-          sorted_installed = [i2, i3, i1]
+          installed = [i1, i2, i3, i4]
+          sorted_installed = [i2, i3, i4, i1]
 
           installer = DummyInstaller.new
           allow(installer).to receive(:installed) { installed }

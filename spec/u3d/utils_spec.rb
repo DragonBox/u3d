@@ -53,6 +53,10 @@ describe U3d do
       it 'returns the version as an array' do
         expect(U3d::Utils.parse_unity_version('1.2.3f4')).to eql(%w[1 2 3 f 4])
       end
+
+      it 'parses MagicLeap versions' do
+        expect(U3d::Utils.parse_unity_version('2018.1.9f1-MLTP8.1')).to eql(%w[2018 1 9 f 1])
+      end
     end
 
     describe '.strings' do

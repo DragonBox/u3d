@@ -28,12 +28,15 @@ describe U3d do
       it 'parses versions' do
         expect(U3d::UnityVersionNumber.new('5.6.0f1').parts).to eq [5, 6, 0, 'f', 1]
       end
+      it 'parses MLP versions' do
+        expect(U3d::UnityVersionNumber.new('2018.1.9f1-MLTP8.1').parts).to eq [2018, 1, 9, 'f', 1]
+      end
     end
   end
 
   describe U3d::UnityVersionComparator do
     describe '#initialize' do
-      it 'parses versions' do
+      it 'sorts versions' do
         a = ['5.6.0f1', '4.7.0f1', '5.3.1f1', '5.6.0a4', '5.6.0b7', '5.6.0p2', '5.6.1a4', '5.6.1f3']
         b = a.map { |e| U3d::UnityVersionComparator.new(e) }.sort
         expect(b[0].version.to_s).to eq '4.7.0f1'
