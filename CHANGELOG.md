@@ -1,5 +1,26 @@
 # Change Log
 
+## [v1.1.4](https://github.com/DragonBox/u3d/tree/v1.1.4) (2019-02-23)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.3...v1.1.4)
+
+**Implemented enhancements:**
+
+- u3d/asset: add feature that enables easy inspection of asset in a Unity project [\#341](https://github.com/DragonBox/u3d/pull/341) ([niezbop](https://github.com/niezbop))
+
+**Closed issues:**
+
+- u3d returns code=0 if failed [\#343](https://github.com/DragonBox/u3d/issues/343)
+- `user\_error!': package 'Mac' doesn't exist [\#340](https://github.com/DragonBox/u3d/issues/340)
+- list fails when version does not follow standard format, e.g. MagicLeap versions [\#331](https://github.com/DragonBox/u3d/issues/331)
+- Bug: Failed to install pkg file [\#310](https://github.com/DragonBox/u3d/issues/310)
+
+**Merged pull requests:**
+
+- u3d/list: support Magic Leap Versions parsing and sorting \(fixes \#331\) [\#346](https://github.com/DragonBox/u3d/pull/346) ([lacostej](https://github.com/lacostej))
+- Update to latest hub to label PRs and remove the hardcoding of the user's repo [\#345](https://github.com/DragonBox/u3d/pull/345) ([lacostej](https://github.com/lacostej))
+- u3d/install exit 1 when version not found. Fixes \#343 [\#344](https://github.com/DragonBox/u3d/pull/344) ([lacostej](https://github.com/lacostej))
+- Add `-t\*` flag for 7z when unpacking packages [\#342](https://github.com/DragonBox/u3d/pull/342) ([rawstacktech](https://github.com/rawstacktech))
+
 ## [v1.1.3](https://github.com/DragonBox/u3d/tree/v1.1.3) (2019-01-08)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.2...v1.1.3)
 
