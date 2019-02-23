@@ -87,6 +87,32 @@ def run_command(command, error_message = nil)
   output
 end
 
+###
+### see https://github.com/github/hub/issues/2055
+def ensure_hub!
+  require 'English'
+  `which hub`
+  raise "Missing hub command. This script requires the hub command. Get it from https://hub.github.com" unless $CHILD_STATUS.exitstatus.zero?
+end
+
+def hub_config
+  require 'YAML'
+  File.open(File.expand_path("~/.config/hub"), 'r:bom|utf-8') { |f| Psych.safe_load(f.read) }
+end
+
+def hub_user(server)
+  hub_config[server][0]['user']
+end
+
+def hub_fork_remote_name
+  server = 'github.com'
+
+  user = hub_user(server)
+
+  `git remote -v`.split("\n").map(&:split).select { |a| a[2] == '(push)' && a[1] =~ /#{server}.#{user}/ }.first[0]
+end
+###
+
 task :ensure_git_clean do
   branch = run_command('git rev-parse --abbrev-ref HEAD', "Couldn't get current git branch").strip
   UI.user_error!("You are not on 'master' but on '#{branch}'") unless branch == "master"
@@ -126,9 +152,11 @@ task pre_release: 'ensure_git_clean' do
   msg = "Preparing release for #{nextversion}"
   sh 'git add CHANGELOG.md'
   sh "git commit -m '#{msg}'"
-  sh "git push lacostej" # FIXME: hardcoded
-  # FIXME: check hub present
-  sh "hub pull-request -m '#{msg}'" # requires hub pre-release " -l nochangelog"
+
+  ensure_hub!
+  hub_remote = hub_fork_remote_name
+  sh "git push #{hub_remote}"
+  sh "hub pull-request -m '#{msg}' -l nochangelog"
   sh 'git checkout master'
   sh "git branch -D #{pr_branch}"
 end
