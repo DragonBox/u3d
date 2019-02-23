@@ -84,7 +84,7 @@ module U3d
     def installed_sorted_by_versions
       list = installed
       return [] if list.empty?
-      list.sort { |a,b|  UnityVersionComparator.new(a.version) <=> UnityVersionComparator.new(b.version) }
+      list.sort { |a, b| UnityVersionComparator.new(a.version) <=> UnityVersionComparator.new(b.version) }
     end
   end
 
