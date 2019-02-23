@@ -84,13 +84,7 @@ module U3d
     def installed_sorted_by_versions
       list = installed
       return [] if list.empty?
-      # version -> installations
-      arraym = list.map { |a| [a.version, a] }
-      map = Hash[*arraym.flatten]
-      # sorted versions
-      vcomparators = map.keys.map { |k| UnityVersionComparator.new(k) }
-      sorted_keys = vcomparators.sort.map { |v| v.version.to_s }
-      sorted_keys.map { |k| map[k] }
+      list.sort { |a, b| UnityVersionComparator.new(a.version) <=> UnityVersionComparator.new(b.version) }
     end
   end
 

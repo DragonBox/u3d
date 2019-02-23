@@ -24,10 +24,12 @@ require 'u3d/utils'
 
 module U3d
   class UnityVersionNumber
+    attr_reader :unity_version
     attr_reader :parts
 
     def initialize(version)
-      parsed = Utils.parse_unity_version(version)
+      @unity_version = version
+      parsed = Utils.parse_unity_version(@unity_version)
       parsed.each_with_index do |val, index|
         next if val.nil? || (index == 3)
         parsed[index] = val.to_i
