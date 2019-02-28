@@ -96,8 +96,11 @@ def ensure_hub!
 end
 
 def hub_config
-  require 'YAML'
-  File.open(File.expand_path("~/.config/hub"), 'r:bom|utf-8') { |f| Psych.safe_load(f.read) }
+  @hub_config ||=
+    begin
+      require 'YAML'
+      File.open(File.expand_path("~/.config/hub"), 'r:bom|utf-8') { |f| Psych.safe_load(f.read) }
+    end
 end
 
 def hub_user(server)
@@ -110,6 +113,15 @@ def hub_fork_remote_name
   user = hub_user(server)
 
   `git remote -v`.split("\n").map(&:split).select { |a| a[2] == '(push)' && a[1] =~ /#{server}.#{user}/ }.first[0]
+end
+
+def github_team
+  %w[lacostej niezbop]
+end
+
+def github_reviewers
+  server = 'github.com'
+  github_team - [hub_user(server)]
 end
 ###
 
@@ -156,7 +168,7 @@ task pre_release: 'ensure_git_clean' do
   ensure_hub!
   hub_remote = hub_fork_remote_name
   sh "git push #{hub_remote}"
-  sh "hub pull-request -m '#{msg}' -l nochangelog"
+  sh "hub pull-request -m '#{msg}' -r '#{github_reviewers.join(',')}' -l nochangelog"
   sh 'git checkout master'
   sh "git branch -D #{pr_branch}"
 end
