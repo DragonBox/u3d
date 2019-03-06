@@ -1,6 +1,18 @@
 # Change Log
 
-## [v1.1.4](https://github.com/DragonBox/u3d/tree/v1.1.4) (2019-02-23)
+## [v1.1.5](https://github.com/DragonBox/u3d/tree/v1.1.5) (2019-03-06)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.4...v1.1.5)
+
+**Fixed bugs:**
+
+- u3d available not listing all versions on macOS [\#349](https://github.com/DragonBox/u3d/issues/349)
+
+**Merged pull requests:**
+
+- list/available: find Mac or Windows version based on the unity\_shader package. Fixes \#349 [\#350](https://github.com/DragonBox/u3d/pull/350) ([lacostej](https://github.com/lacostej))
+- build: automatically set reviewer on pre\_release PR [\#348](https://github.com/DragonBox/u3d/pull/348) ([lacostej](https://github.com/lacostej))
+
+## [v1.1.4](https://github.com/DragonBox/u3d/tree/v1.1.4) (2019-02-28)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.3...v1.1.4)
 
 **Implemented enhancements:**
