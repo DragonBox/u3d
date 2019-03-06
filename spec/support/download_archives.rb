@@ -21,19 +21,14 @@
 ## --- END LICENSE BLOCK ---
 
 # Various fake download archives
-def windows_archive
+def macosx_windows_archive
   %(
-    <li><a href="http://download.unity3d.com/download_unity/d3101c3b8468/Windows64EditorInstaller/UnitySetup64-1.2.3f1.exe">Éditeur 64 bits</a></li>
-    <li><a href="http://download.unity3d.com/download_unity/d3101c3b8468/Windows64EditorInstaller/UnitySetup64-1.3.5f1.exe">Éditeur 64 bits</a></li>
-    <li><a href="http://download.unity3d.com/download_unity/d3101c3b8468/Windows64EditorInstaller/UnitySetup64-2017.1.6f1.exe">Éditeur 64 bits</a></li>
-  )
-end
-
-def macosx_archive
-  %(
-    <li><a href="http://download.unity3d.com/download_unity/d3101c3b8468/MacEditorInstaller/Unity-1.2.3f1.pkg">Éditeur Unity</a></li>
-    <li><a href="http://download.unity3d.com/download_unity/d3101c3b8468/MacEditorInstaller/Unity-1.3.5f1.pkg">Éditeur Unity</a></li>
-    <li><a href="http://download.unity3d.com/download_unity/d3101c3b8468/MacEditorInstaller/Unity-2017.1.6f1.pkg">Éditeur Unity</a></li>
+    <li><a href="https://download.unity3d.com/download_unity/builtin_shaders-4.7.2.zip">Shaders</a></li>
+    <li><a href="https://download.unity3d.com/download_unity/builtin_shaders-4.7.2.zip">Shaders</a></li>
+    <li><a href="https://download.unity3d.com/download_unity/6bac21139588/builtin_shaders-5.6.6f2.zip">Shaders</a></li>
+    <li><a href="https://download.unity3d.com/download_unity/6bac21139588/builtin_shaders-5.6.6f2.zip">Shaders</a></li>
+    <li><a href="https://netstorage.unity3d.com/unity/9e14d22a41bb/builtin_shaders-2018.3.7f1.zip"></a></li>
+    <li><a href="https://netstorage.unity3d.com/unity/9e14d22a41bb/builtin_shaders-2018.3.7f1.zip"></a></li>
   )
 end
 

@@ -122,9 +122,9 @@ module U3d
     #####################################################
     # Captures a version and its base url
     LINUX_DOWNLOAD = %r{['"](https?:\/\/[\w/\.-]+/[0-9a-f\+]{12,13}\/)(.\/)?UnitySetup-(\d+\.\d+\.\d+\w\d+)['"]}
-    MAC_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)MacEditorInstaller/[a-zA-Z0-9/\.\+]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
-    MAC_DOWNLOAD_2018_2 = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)UnityDownloadAssistant-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
-    WIN_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)Windows..EditorInstaller/[a-zA-Z0-9/\.\+]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
+
+    MAC_WIN_SHADERS = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)builtin_shaders-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
+
     LINUX_DOWNLOAD_DATED = %r{"(https?://[\w/\._-]+/unity\-editor\-installer\-(\d+\.\d+\.\d+\w\d+).*\.sh)"}
     LINUX_DOWNLOAD_RECENT_PAGE = %r{"(https?://beta\.unity3d\.com/download/[a-zA-Z0-9/\.\+]+/public_download\.html)"}
     LINUX_DOWNLOAD_RECENT_FILE = %r{'(https?://beta\.unity3d\.com/download/[a-zA-Z0-9/\.\+]+/unity\-editor\-installer\-(\d+\.\d+\.\d+(?:x)?\w\d+).*\.sh)'}
@@ -287,7 +287,7 @@ module U3d
     class MacVersions
       class << self
         def list_available
-          versions_fetcher = VersionsFetcher.new(pattern: [MAC_DOWNLOAD, MAC_DOWNLOAD_2018_2])
+          versions_fetcher = VersionsFetcher.new(pattern: [MAC_WIN_SHADERS])
           versions_fetcher.fetch_all_channels
           versions_fetcher.fetch_json('darwin')
         end
@@ -297,7 +297,7 @@ module U3d
     class WindowsVersions
       class << self
         def list_available
-          versions_fetcher = VersionsFetcher.new(pattern: WIN_DOWNLOAD)
+          versions_fetcher = VersionsFetcher.new(pattern: MAC_WIN_SHADERS)
           versions_fetcher.fetch_all_channels
           versions_fetcher.fetch_json('win32')
         end

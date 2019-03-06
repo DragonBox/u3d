@@ -45,14 +45,9 @@ describe U3d do
     end
 
     describe '.fetch_version' do
-      it 'reads versions for windows' do
-        expect(U3d::Utils).to receive(:get_ssl) { windows_archive }
-        expect(U3d::UnityVersions.fetch_version("foo", U3d::UnityVersions::WIN_DOWNLOAD).count).to eql 3
-      end
-
-      it 'reads versions for mac' do
-        expect(U3d::Utils).to receive(:get_ssl) { macosx_archive }
-        expect(U3d::UnityVersions.fetch_version("foo", U3d::UnityVersions::MAC_DOWNLOAD).count).to eql 3
+      it 'reads versions for windows and mac' do
+        expect(U3d::Utils).to receive(:get_ssl) { macosx_windows_archive }
+        expect(U3d::UnityVersions.fetch_version("foo", U3d::UnityVersions::MAC_WIN_SHADERS).count).to eql 2
       end
     end
 
@@ -80,8 +75,8 @@ describe U3d do
         expect(U3d::UnityVersions.list_available(os: :win).count).to eql 0
       end
       it 'retrieves mac versions' do
-        expect(U3d::UnityVersions).to receive(:fetch_version_paged).at_least(6).times { {} }
-        expect(U3d::UnityVersions).to receive(:fetch_version).at_least(6).times { {} }
+        expect(U3d::UnityVersions).to receive(:fetch_version_paged).at_least(3).times { {} }
+        expect(U3d::UnityVersions).to receive(:fetch_version).at_least(3).times { {} }
         expect(U3d::UnityVersions).to receive(:fetch_from_json).at_least(:once) { {} }
         expect(U3d::UnityVersions.list_available(os: :mac).count).to eql 0
       end
