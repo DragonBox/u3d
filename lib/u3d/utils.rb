@@ -191,6 +191,7 @@ module U3d
         result = getdir.call(0, CSIDL_LOCAL_APPDATA, 0, 0, windir)
         raise "Unable to get Local Appdata directory, returned with value #{result}" unless result.zero?
         windir.rstrip!
+        windir = windir.encode("UTF-8", Encoding.find('filesystem'))
         windir = File.expand_path(windir.rstrip)
 
         return windir if Dir.exist? windir
