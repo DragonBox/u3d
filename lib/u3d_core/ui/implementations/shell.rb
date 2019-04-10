@@ -25,13 +25,18 @@ module U3dCore
   # Shell is the terminal output of things
   # For documentation for each of the methods open `interface.rb`
   class Shell < Interface
+    # test_log_buffer: by default, don't show any logs when running tests
+    def initialize(test_log_buffer: nil)
+      @test_log_buffer = test_log_buffer
+    end
+
     def log
       return @log if @log
 
       $stdout.sync = true
 
       @log ||= if Helper.test?
-                 Logger.new(nil) # don't show any logs when running tests
+                 Logger.new(@test_log_buffer)
                else
                  Logger.new(EPipeIgnorerLogDevice.new($stdout))
                end

@@ -27,6 +27,8 @@ module U3dCore
       def current
         @current ||= Shell.new
       end
+
+      attr_writer :current
     end
 
     # rubocop:disable Style/MethodMissing

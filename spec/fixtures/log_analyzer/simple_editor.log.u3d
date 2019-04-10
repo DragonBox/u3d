@@ -1,0 +1,23 @@
+[INIT] Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,defer=y,address=0.0.0.0:56915
+[LICENSE] Next update check after 2016-06-01 at 17:18:41
+[INIT] Batchmode arguments:
+[INIT] /Applications/Unity_5.6.1f1/Unity.app/Contents/MacOS/Unity
+[INIT] -executeMethod
+[INIT] U3d.EditorRun.Build
+[INIT] -quit
+[INIT] -batchmode
+[INIT] /Users/lacostej/Code/WWTK/FastGame/examples/Example2
+[INIT] [...]
+[INIT] Loading GUID <-> Path mappings...0.000079 seconds
+[INIT] Loading Asset Database...0.032529 seconds
+[INIT] Engine Initialization (version 5.6.1f1)
+[GENERAL] [LOG] SimpleBuildSetup.cs(line 15): Forcing SerializationMode.ForceText and Visible Meta Files
+[GENERAL] [LOG] SimpleBuildSetup.cs(line 15): Forcing SerializationMode.ForceText and Visible Meta Files
+[GENERAL] [LOG] EditorRun.cs(line 11): Building Example2
+[33m[ASSET] Warning: BC6H/BC7 texture format is not supported, decompressing texture[0m
+[GENERAL] [LOG] PostprocessBuildPlayer.cs(line 50): executing: /Users/lacostej/Code/WWTK/FastGame/examples/Example2/Assets/Editor/PostprocessBuildPlayer_log.sh /Users/lacostej/Code/WWTK/FastGame/examples/Example2/target/Example2.app StandaloneOSXIntel64
+[GENERAL] [LOG] PostprocessBuildPlayer.cs(line 81): /Users/lacostej/Code/WWTK/FastGame/examples/Example2/Assets/Editor/PostprocessBuildPlayer_log.sh
+[COMPILER] Starting compile: Library/ScriptAssemblies/Assembly-CSharp-Editor.dll, for buildtarget 27 
+[COMPILER] Finished compilation for Library/ScriptAssemblies/Assembly-CSharp-Editor.dll
+[GENERAL] [LOG] SimpleBuildSetup.cs(line 15): Forcing SerializationMode.ForceText and Visible Meta Files
+[32m[GENERAL] Exiting batchmode successfully now![0m
