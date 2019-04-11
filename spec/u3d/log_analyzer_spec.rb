@@ -49,6 +49,8 @@ end
 
 rules_data_file = File.expand_path('../../data/rules_data.json', __FILE__)
 
+log_analyzer_fixtures = Dir.glob(File.join(File.expand_path('../../fixtures/log_analyzer', __FILE__), "*.log"))
+
 describe U3d do
   describe U3d::LogAnalyzer do
     describe '.load_rules custom' do
@@ -69,13 +71,26 @@ describe U3d do
         expect(phases.keys).to eq %w[LICENSE INIT COMPILER ASSET]
       end
 
-      it "parses a simple file" do
-        log = File.expand_path('../../fixtures/simple_editor.log', __FILE__)
-        analyzer = U3d::LogAnalyzer.new
-        File.open(log, 'r') do |f|
-          f.readlines.each { |l| analyzer.parse_line l }
+      describe '.load_rules default' do
+        log_analyzer_fixtures.each do |log|
+          it "parses #{log} as expected" do
+            expected_output_file = "#{log}.u3d"
+            raise "missing expectation in #{expected_output_file}" unless File.exist?(expected_output_file)
+
+            log_buffer = StringIO.new
+            U3dCore::UI.current = U3dCore::Shell.new(test_log_buffer: log_buffer)
+
+            analyzer = U3d::LogAnalyzer.new
+            File.open(log, 'r') do |f|
+              f.readlines.each { |l| analyzer.parse_line l }
+            end
+            expected_output = File.read expected_output_file
+
+            expect(log_buffer.string).to eq(expected_output)
+
+            U3dCore::UI.current = nil
+          end
         end
-        # FIXME: we're not really testing anything here
       end
     end
   end
