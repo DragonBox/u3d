@@ -232,7 +232,7 @@ module U3d
       begin
         message = string % params.merge(@context)
       rescue KeyError => e
-        UI.error("[U3D] Rule #{@active_rule} captures were incomplete: #{e.message}")
+        UI.error("[U3D] Rule '#{@active_rule}' captures were incomplete: #{e.message}")
       end
       message
     end
