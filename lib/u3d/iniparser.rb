@@ -89,10 +89,12 @@ url=#{url}
         end
         uri = URI(cached_versions[version] + ini_name)
         UI.verbose("Searching for ini file at #{uri}")
+
+        data = Net::HTTP.get(uri)
+        data.tr!("\"", '')
+        data.gsub!(/Note:.+\n/, '')
+
         File.open(ini_path, 'wb') do |f|
-          data = Net::HTTP.get(uri)
-          data.tr!("\"", '')
-          data.gsub!(/Note:.+\n/, '')
           f.write(data)
         end
       end

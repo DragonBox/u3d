@@ -75,6 +75,16 @@ describe U3d do
           U3d::INIparser.load_ini('key', @cache, os: platform_os, offline: false)
         end
 
+        it 'doesn\'t write the INI file from the web if it fails to download it' do
+          allow(File).to receive(:file?) { false }
+          allow(Net::HTTP).to receive(:get).with(anything).and_raise("network error")
+          expect(File).not_to receive(:open)
+          expect(IniFile).not_to receive(:load)
+          expect do
+            U3d::INIparser.load_ini('key', @cache, os: platform_os, offline: false)
+          end.to raise_error("network error")
+        end
+
         it 'parses and loads the INI data already existing without download' do
           Tempfile.create(['temp', '.ini']) do |f|
             ini_string = "[A]\ntest=initesting\n[B]\ntest=secondsection"
