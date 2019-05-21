@@ -47,6 +47,7 @@ describe U3d do
             f.write(ini_string)
             f.rewind
             allow(File).to receive(:file?) { true }
+            allow(File).to receive(:size) { ini_string.length }
             allow(IniFile).to receive(:load).and_wrap_original { |m, _args| m.call(f.path) }
             data = U3d::INIparser.load_ini('key', @cache, os: platform_os, offline: true)
             expect(data['A']).not_to be_nil
@@ -57,6 +58,7 @@ describe U3d do
         it 'loads and filters broken Linux INI' do
           broken_ini = 'spec/fixtures/unity-2017.3.0f1-linux.ini'
           allow(File).to receive(:file?) { true }
+          allow(File).to receive(:size) { 1 }
           allow(IniFile).to receive(:load).and_wrap_original { |m, _args| m.call(broken_ini) }
 
           data = U3d::INIparser.load_ini('key', @cache, os: :linux, offline: true)
@@ -85,12 +87,21 @@ describe U3d do
           end.to raise_error("network error")
         end
 
+        it 'gets the INI file from the web if it is empty' do
+          allow(File).to receive(:file?) { true }
+          allow(File).to receive(:size) { 0 }
+          allow(IniFile).to receive(:load)
+          expect(Net::HTTP).to receive(:get) { '' }
+          U3d::INIparser.load_ini('key', @cache, os: platform_os, offline: false)
+        end
+
         it 'parses and loads the INI data already existing without download' do
           Tempfile.create(['temp', '.ini']) do |f|
             ini_string = "[A]\ntest=initesting\n[B]\ntest=secondsection"
             f.write(ini_string)
             f.rewind
             allow(File).to receive(:file?) { true }
+            allow(File).to receive(:size) { 1 }
             allow(IniFile).to receive(:load).and_wrap_original { |m, _args| m.call(f.path) }
             expect(Net::HTTP).not_to receive(:get)
             data = U3d::INIparser.load_ini('key', @cache, os: platform_os, offline: false)
@@ -123,6 +134,7 @@ describe U3d do
           on_linux
 
           allow(File).to receive(:file?).with(path) { true }
+          allow(File).to receive(:size) { 1 }
           expect(File).to_not receive(:open)
 
           U3d::INIparser.create_linux_ini('1.2.3f4', 12_345, 'http://example.com/')
@@ -136,6 +148,23 @@ describe U3d do
           on_mac
 
           allow(File).to receive(:file?).with(path) { false }
+          file = double('file')
+          allow(File).to receive(:open).with(path, 'wb').and_yield file
+
+          expect(file).to receive(:write).with(%r{\[Unity\](.*\n)+title=Unity\nsize=12345\nurl=http:\/\/example.com})
+
+          U3d::INIparser.create_linux_ini('1.2.3f4', 12_345, 'http://example.com/')
+        end
+      end
+
+      context 'empty ini file' do
+        it 'writes the file' do
+          path = %r{Library\/Application Support\/u3d\/ini_files\/unity-1.2.3f4-linux.ini}
+
+          on_mac
+
+          allow(File).to receive(:file?).with(path) { true }
+          allow(File).to receive(:size) { 0 }
           file = double('file')
           allow(File).to receive(:open).with(path, 'wb').and_yield file
 

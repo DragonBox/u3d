@@ -42,7 +42,7 @@ module U3d
         ini_name = format(INI_NAME, version: version, os: os)
         Utils.ensure_dir(default_ini_path)
         ini_path = File.expand_path(ini_name, default_ini_path)
-        unless File.file?(ini_path)
+        unless File.file?(ini_path) && File.size(ini_path) > 0
           raise "INI file does not exist at #{ini_path}" if offline
           download_ini(version, cached_versions, os, ini_name, ini_path)
         end
@@ -58,7 +58,7 @@ module U3d
         ini_name = format(INI_NAME, version: version, os: 'linux')
         Utils.ensure_dir(default_ini_path)
         ini_path = File.expand_path(ini_name, default_ini_path)
-        return if File.file? ini_path
+        return if File.file?(ini_path) && File.size(ini_path) > 0
         data = %([Unity]
 ; -- NOTE --
 ; This is not an official Unity file
