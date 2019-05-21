@@ -59,8 +59,7 @@ module U3d
         Utils.ensure_dir(default_ini_path)
         ini_path = File.expand_path(ini_name, default_ini_path)
         return if File.file? ini_path
-        File.open(ini_path, 'wb') do |f|
-          f.write %([Unity]
+        data = %([Unity]
 ; -- NOTE --
 ; This is not an official Unity file
 ; This has been created by u3d
@@ -69,7 +68,7 @@ title=Unity
 size=#{size}
 url=#{url}
 )
-        end
+        write_ini_file(ini_path, data)
       end
 
       private
@@ -94,6 +93,10 @@ url=#{url}
         data.tr!("\"", '')
         data.gsub!(/Note:.+\n/, '')
 
+        write_ini_file(ini_path, data)
+      end
+
+      def write_ini_file(ini_path, data)
         File.open(ini_path, 'wb') do |f|
           f.write(data)
         end
