@@ -90,6 +90,35 @@ def latest_macosx_archive
   )
 end
 
+def latest_linux_archive
+  %(
+    {
+      "official": [
+        {
+          "version": "2017.4.29f1",
+          "lts": true,
+          "downloadUrl": "https://download.unity3d.com/download_unity/06508aa14ca1/LinuxEditorInstaller/Unity.tar.xz",
+          "downloadSize": 676983480,
+          "installedSize": 2790574080,
+          "checksum": "05e8bbe78c84fe7bda272753364a5bc3",
+          "modules": []
+        }
+      ],
+      "beta": [
+        {
+          "version": "2019.2.0b7",
+          "lts": false,
+          "downloadUrl": "https://beta.unity3d.com/download/87c9ecb96495/LinuxEditorInstaller/Unity.tar.xz",
+          "downloadSize": 974682112,
+          "installedSize": 3383275520,
+          "checksum": "4bcd2eff7ab0e3894513c89e7fce51cc",
+          "modules": []
+        }
+      ]
+    }
+      )
+end
+
 def linux_archive_old
   %(
     <b>5.4.0b10</b>: <a href="http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f1+20160316.sh" target="_blank" class="externalLink">http://download.unity3d.com/download_unity/linux/unity-editor-installer-1.2.3f1+20160316.sh</a><br />

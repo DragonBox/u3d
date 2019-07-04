@@ -98,8 +98,9 @@ describe U3d do
           allow(U3d::Utils).to receive(:get_url_content_length).with(/download.un.*1.2.3f1/) { 1005 }
           allow(U3d::Utils).to receive(:get_url_content_length).with(/download.un.*1.3.5f1/) { 1006 }
           allow(U3d::Utils).to receive(:get_url_content_length).with(/download.un.*2017.1.6f1/) { 1007 }
+          expect(U3d::Utils).to receive(:get_ssl) { latest_linux_archive }
 
-          expect(U3d::UnityVersions.list_available(os: :linux).keys).to eql ['1.2.3f1', '1.3.5f1', '2017.1.6f1']
+          expect(U3d::UnityVersions.list_available(os: :linux).keys).to eql ['1.2.3f1', '1.3.5f1', '2017.1.6f1', '2017.4.29f1', '2019.2.0b7']
         end
 
         it 'retrieves nested and packaged linux versions' do
@@ -114,8 +115,9 @@ describe U3d do
           allow(U3d::INIparser).to receive(:load_ini).with('2017.1.0b3', nil, os: :linux, offline: true) {}
           allow(U3d::INIparser).to receive(:load_ini).with('2017.3.0f1', nil, os: :linux, offline: true) {}
           allow(U3d::INIparser).to receive(:load_ini).with('2017.2.1f1', nil, os: :linux, offline: true) {}
+          expect(U3d::Utils).to receive(:get_ssl) { latest_linux_archive }
 
-          expect(U3d::UnityVersions.list_available(os: :linux).keys).to eql ['1.2.3f1', '1.3.5f1', '2017.1.6f1', '2018.3.0f2', '2017.1.0b3', '2017.3.0f1', '2017.2.1f1']
+          expect(U3d::UnityVersions.list_available(os: :linux).keys).to eql ['1.2.3f1', '1.3.5f1', '2017.1.6f1', '2018.3.0f2', '2017.1.0b3', '2017.3.0f1', '2017.2.1f1', '2017.4.29f1', '2019.2.0b7']
         end
       end
     end
