@@ -42,7 +42,7 @@ module U3d
         ini_name = format(INI_NAME, version: version, os: os)
         Utils.ensure_dir(default_ini_path)
         ini_path = File.expand_path(ini_name, default_ini_path)
-        unless File.file?(ini_path)
+        unless File.file?(ini_path) && File.size(ini_path) > 0
           raise "INI file does not exist at #{ini_path}" if offline
           download_ini(version, cached_versions, os, ini_name, ini_path)
         end
@@ -58,9 +58,8 @@ module U3d
         ini_name = format(INI_NAME, version: version, os: 'linux')
         Utils.ensure_dir(default_ini_path)
         ini_path = File.expand_path(ini_name, default_ini_path)
-        return if File.file? ini_path
-        File.open(ini_path, 'wb') do |f|
-          f.write %([Unity]
+        return if File.file?(ini_path) && File.size(ini_path) > 0
+        data = %([Unity]
 ; -- NOTE --
 ; This is not an official Unity file
 ; This has been created by u3d
@@ -69,7 +68,7 @@ title=Unity
 size=#{size}
 url=#{url}
 )
-        end
+        write_ini_file(ini_path, data)
       end
 
       private
@@ -89,10 +88,16 @@ url=#{url}
         end
         uri = URI(cached_versions[version] + ini_name)
         UI.verbose("Searching for ini file at #{uri}")
+
+        data = Net::HTTP.get(uri)
+        data.tr!("\"", '')
+        data.gsub!(/Note:.+\n/, '')
+
+        write_ini_file(ini_path, data)
+      end
+
+      def write_ini_file(ini_path, data)
         File.open(ini_path, 'wb') do |f|
-          data = Net::HTTP.get(uri)
-          data.tr!("\"", '')
-          data.gsub!(/Note:.+\n/, '')
           f.write(data)
         end
       end
