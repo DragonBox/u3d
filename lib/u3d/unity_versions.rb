@@ -124,6 +124,7 @@ module U3d
     LINUX_DOWNLOAD = %r{['"](https?:\/\/[\w/\.-]+/[0-9a-f\+]{12,13}\/)(.\/)?UnitySetup-(\d+\.\d+\.\d+\w\d+)['"]}
 
     MAC_WIN_SHADERS = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)builtin_shaders-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
+    LINUX_INSTALLER = %r{(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)LinuxEditorInstaller/Unity.tar.xz}
 
     LINUX_DOWNLOAD_DATED = %r{"(https?://[\w/\._-]+/unity\-editor\-installer\-(\d+\.\d+\.\d+\w\d+).*\.sh)"}
     LINUX_DOWNLOAD_RECENT_PAGE = %r{"(https?://beta\.unity3d\.com/download/[a-zA-Z0-9/\.\+]+/public_download\.html)"}
@@ -191,6 +192,10 @@ module U3d
           versions = @unity_forums.pagination_urls(UNITY_LINUX_DOWNLOADS).map do |page_url|
             list_available_from_page(@unity_forums, unity_forums.page_content(page_url))
           end.reduce({}, :merge)
+
+          versions_fetcher = VersionsFetcher.new(pattern: LINUX_INSTALLER)
+          versions.merge!(versions_fetcher.fetch_json('linux'))
+
           if versions.count.zero?
             UI.important 'Found no releases'
           else
