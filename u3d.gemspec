@@ -30,6 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'inifile', '>= 3.0.0', '< 4.0.0' # Parses INI files
   spec.add_dependency 'plist', '>= 3.1.0', '< 4.0.0' # Generate the Xcode config plist file
   spec.add_dependency 'security', '= 0.1.3' # macOS Keychain manager, a dead project, no updates expected
+  spec.add_dependency 'win32-shortcut', '>= 0.3.0'
   # Development only
   spec.add_development_dependency "bundler", "~> 1.13"
   spec.add_development_dependency "coveralls"

@@ -110,6 +110,18 @@ Fore more information about how the rules work, see https://github.com/DragonBox
         end
       end
 
+      command :shortcuts do |c|
+        c.syntax = 'u3d shortcuts [-u | --unity_version <version>] [-t | --target <folder>]'
+        c.option '-u', '--unity_version STRING', String, 'Creates a shortcut for this version of Unity only.'
+        c.option '-d', '--directory STRING', String, 'Specifies which directory to create the shortcuts in'
+        c.example 'Create a shortcut for all installed versions on the Desktop', 'u3d shortcuts -d ~/Desktop'
+        c.example 'Create a shortcut for Unity 5.6.0f3', 'u3d shortcuts -u 5.6.0f3'
+        c.summary = 'Create shortcuts for installed versions of Unity'
+        c.action do |_args, options|
+          Commands.create_shortcuts(options: convert_options(options))
+        end
+      end
+
       command :available do |c|
         oses = U3dCore::Helper.operating_systems
         c.syntax = 'u3d available [-r | --release_level <level>] [-o | --operating_system <OS>] [-u | --unity_version <version>] [-p | --packages] [-f | --force]'
