@@ -360,9 +360,11 @@ module U3d
     end
 
     def debian_installed_paths
-      find = File.join(DEFAULT_LINUX_INSTALL, 'Unity', 'Editor')
-      paths = Dir[find]
-      paths = paths.map { |u| Pathname.new(u).parent.to_s }
+      paths = find_installations_with_path(
+        DEFAULT_LINUX_INSTALL,
+        'Unity',
+        'Editor'
+      ) { |u| Pathname.new(u).parent.to_s }
       UI.verbose "Found debian_installed_paths: #{paths}"
       paths
     end

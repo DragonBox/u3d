@@ -180,8 +180,8 @@ describe U3d do
           u1 = linux_5_6_standard
           u2 = linux_5_6_debian
           u3 = linux_2017_1_weird
-          allow(Dir).to receive(:[]).with('/opt/unity-editor-*/Editor') { ["#{u1.root_path}/Editor", "#{u3.root_path}/Editor"] }
-          allow(Dir).to receive(:[]).with('/opt/Unity/Editor') { ["#{u2.root_path}/Editor"] }
+          allow(Dir).to receive(:glob).with('/opt/unity-editor-*/Editor') { ["#{u1.root_path}/Editor", "#{u3.root_path}/Editor"] }
+          allow(Dir).to receive(:glob).with('/opt/Unity/Editor') { ["#{u2.root_path}/Editor"] }
 
           allow(U3d::LinuxInstallation).to receive(:new).with(root_path: u1.root_path) { u1 }
           allow(U3d::LinuxInstallation).to receive(:new).with(root_path: u2.root_path) { u2 }
