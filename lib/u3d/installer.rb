@@ -188,7 +188,8 @@ module U3d
         DEFAULT_MAC_INSTALL,
         'Applications',
         'Unity*',
-        'Unity.app') { |u| Pathname.new(u).parent.to_s }
+        'Unity.app'
+      ) { |u| Pathname.new(u).parent.to_s }
       UI.verbose "Found list_installed_paths: #{paths}"
       paths
     end
@@ -352,7 +353,8 @@ module U3d
       paths = find_installations_with_path(
         DEFAULT_LINUX_INSTALL,
         'unity-editor-*',
-        'Editor') { |u| Pathname.new(u).parent.to_s }
+        'Editor'
+      ) { |u| Pathname.new(u).parent.to_s }
       UI.verbose "Found list_installed_paths: #{paths}"
       paths
     end
@@ -384,7 +386,8 @@ module U3d
         DEFAULT_MAC_INSTALL,
         'Unity*',
         'Editor',
-        'Uninstall.exe') { |path| WindowsInstallation.new(root_path: File.expand_path('../..', path)) }
+        'Uninstall.exe'
+      ) { |path| WindowsInstallation.new(root_path: File.expand_path('../..', path)) }
     end
 
     def install(file_path, version, installation_path: nil, info: {})
