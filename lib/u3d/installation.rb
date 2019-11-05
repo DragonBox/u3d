@@ -430,7 +430,7 @@ module U3d
     end
 
     private
-    
+
     def helper
       @helper ||= WindowsInstallationHelper.new(exe_path)
     end
