@@ -91,7 +91,7 @@ module U3d
 
     def extra_installation_paths
       return [] if ENV['U3D_EXTRA_PATHS'].nil?
-      ENV['U3D_EXTRA_PATHS'].strip.split(';')
+      ENV['U3D_EXTRA_PATHS'].strip.split(File::PATH_SEPARATOR)
     end
 
     def find_installations_with_path(default_path, *postfix)
