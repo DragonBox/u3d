@@ -364,7 +364,7 @@ module U3d
 
   class WindowsInstallation < Installation
     def version
-      version = @helper.version
+      version = helper.version
       return version unless version.nil?
 
       path = "#{root_path}/Editor/Data/"
@@ -374,7 +374,7 @@ module U3d
     end
 
     def build_number
-      @helper.build_number
+      helper.build_number
     end
 
     def default_log_file
