@@ -296,8 +296,21 @@ module U3d
   end
 
   class WindowsInstallationHelper
-    def build_number(exe_path)
-      s = string_file_info("Unity Version", exe_path)
+    def initialize(exe_path)
+      @exe_path = exe_path
+    end
+
+    def version
+      s = unity_version_info
+      if s
+        a = s.split("_")
+        return a[0] unless a.empty?
+      end
+      nil
+    end
+
+    def build_number
+      s = unity_version_info
       if s
         a = s.split("_")
         return a[1] if a.count > 1
@@ -306,6 +319,10 @@ module U3d
     end
 
     private
+
+    def unity_version_info
+      @uvf ||= string_file_info('Unity Version', @exe_path)
+    end
 
     def string_file_info(info, path)
       require "Win32API"
@@ -347,6 +364,9 @@ module U3d
 
   class WindowsInstallation < Installation
     def version
+      version = helper.version
+      return version unless version.nil?
+
       path = "#{root_path}/Editor/Data/"
       package = PlaybackEngineUtils.list_module_configs(path).first
       raise "Couldn't find a module under #{path}" unless package
@@ -354,7 +374,7 @@ module U3d
     end
 
     def build_number
-      @build_number ||= WindowsInstallationHelper.new.build_number(exe_path)
+      helper.build_number
     end
 
     def default_log_file
@@ -407,6 +427,12 @@ module U3d
 
     def clean_install?
       do_not_move? || !(root_path =~ UNITY_DIR_CHECK).nil?
+    end
+
+    private
+
+    def helper
+      @helper ||= WindowsInstallationHelper.new(exe_path)
     end
   end
 end
