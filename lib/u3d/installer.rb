@@ -86,6 +86,21 @@ module U3d
       return [] if list.empty?
       list.sort { |a, b| UnityVersionComparator.new(a.version) <=> UnityVersionComparator.new(b.version) }
     end
+
+    protected
+
+    def extra_installation_paths
+      return [] if ENV['U3D_EXTRA_PATHS'].nil?
+      ENV['U3D_EXTRA_PATHS'].strip.split(File::PATH_SEPARATOR)
+    end
+
+    def find_installations_with_path(default_root_path: '', postfix: [])
+      ([default_root_path] | extra_installation_paths).map do |path|
+        UI.verbose "Looking for installed Unity version under #{path}"
+        pattern = File.join([path] + postfix)
+        Dir.glob(pattern).map { |found_path| yield found_path }
+      end.flatten
+    end
   end
 
   # deprecated
@@ -169,9 +184,14 @@ module U3d
     private
 
     def list_installed_paths
-      find = File.join(DEFAULT_MAC_INSTALL, 'Applications', 'Unity*', 'Unity.app')
-      paths = Dir[find]
-      paths = paths.map { |u| Pathname.new(u).parent.to_s }
+      paths = find_installations_with_path(
+        default_root_path: DEFAULT_MAC_INSTALL,
+        postfix: %w[
+          Applications
+          Unity*
+          Unity.app
+        ]
+      ) { |u| Pathname.new(u).parent.to_s }
       UI.verbose "Found list_installed_paths: #{paths}"
       paths
     end
@@ -332,17 +352,25 @@ module U3d
     end
 
     def list_installed_paths
-      find = File.join(DEFAULT_LINUX_INSTALL, 'unity-editor-*', 'Editor')
-      paths = Dir[find]
-      paths = paths.map { |u| Pathname.new(u).parent.to_s }
+      paths = find_installations_with_path(
+        default_root_path: DEFAULT_LINUX_INSTALL,
+        postfix: %w[
+          unity-editor-*
+          Editor
+        ]
+      ) { |u| Pathname.new(u).parent.to_s }
       UI.verbose "Found list_installed_paths: #{paths}"
       paths
     end
 
     def debian_installed_paths
-      find = File.join(DEFAULT_LINUX_INSTALL, 'Unity', 'Editor')
-      paths = Dir[find]
-      paths = paths.map { |u| Pathname.new(u).parent.to_s }
+      paths = find_installations_with_path(
+        default_root_path: DEFAULT_LINUX_INSTALL,
+        postfix: %w[
+          Unity
+          Editor
+        ]
+      ) { |u| Pathname.new(u).parent.to_s }
       UI.verbose "Found debian_installed_paths: #{paths}"
       paths
     end
@@ -362,8 +390,14 @@ module U3d
     end
 
     def installed
-      find = File.join(DEFAULT_WINDOWS_INSTALL, 'Unity*', 'Editor', 'Uninstall.exe')
-      Dir[find].map { |path| WindowsInstallation.new(root_path: File.expand_path('../..', path)) }
+      find_installations_with_path(
+        default_root_path: DEFAULT_WINDOWS_INSTALL,
+        postfix: %w[
+          Unity*
+          Editor
+          Uninstall.exe
+        ]
+      ) { |path| WindowsInstallation.new(root_path: File.expand_path('../..', path)) }
     end
 
     def install(file_path, version, installation_path: nil, info: {})
