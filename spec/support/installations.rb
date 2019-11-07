@@ -31,6 +31,16 @@ def macinstall_5_6_default
   return unity
 end
 
+def macinstall_5_6_custom_location
+  unity = double("MacInstallation")
+  # allow(unity).to receive(:path) { '/Applications/Unity/Unity.app' }
+  allow(unity).to receive(:version) { '5.6.0f1' }
+  allow(unity).to receive(:build_number) { 'bf5cca3e2788' }
+  allow(unity).to receive(:clean_install?) { false }
+  allow(unity).to receive(:root_path) { '/tmp/Applications/Unity' }
+  return unity
+end
+
 def macinstall_5_6_custom_with_space
   unity = double("MacInstallation")
   # allow(unity).to receive(:path) { '/Applications/Unity 5.6.0f1/Unity.app' }
@@ -86,6 +96,15 @@ def windows_2017_1_64bits_renamed
   allow(unity).to receive(:version) { '2017.1.0f3' }
   allow(unity).to receive(:build_number) { '472613c02cf7' }
   allow(unity).to receive(:root_path) { 'C:/Program Files/Unity_2017.1.0f3' }
+  return unity
+end
+
+def windows_2017_1_64bits_custom_location
+  unity = double("WindowsInstallation")
+  # allow(unity).to receive(:path) { 'C:/Program Files/Unity_2017.1.0f3' }
+  allow(unity).to receive(:version) { '2017.1.0f3' }
+  allow(unity).to receive(:build_number) { '472613c02cf7' }
+  allow(unity).to receive(:root_path) { 'E:/Program Files/Unity_2017.1.0f3' }
   return unity
 end
 

@@ -91,6 +91,59 @@ describe U3d do
     end
 
     describe U3d::MacInstaller, unless: WINDOWS do
+      describe '.list' do
+        it 'finds installs in default locations' do
+          unity = macinstall_5_6_default
+          installer = U3d::MacInstaller.new
+
+          allow(Dir).to receive(:glob).with('/Applications/Unity*/Unity.app') { ["#{unity.root_path}/Unity.app"] }
+          allow(U3d::MacInstallation).to receive(:new).with(root_path: unity.root_path) { unity }
+          allow(installer).to receive(:spotlight_installed_paths) { [] }
+
+          expect(installer.installed).to eql [unity]
+        end
+
+        it 'does not find installs in custom locations without U3D_EXTRA_PATHS' do
+          unity = macinstall_5_6_custom_location
+          installer = U3d::MacInstaller.new
+
+          allow(Dir).to receive(:glob).with('/Applications/Unity*/Unity.app') { [] }
+          allow(Dir).to receive(:glob).with('/tmp/Applications/Unity*/Unity.app') { ["#{unity.root_path}/Unity.app"] }
+          allow(U3d::MacInstallation).to receive(:new).with(root_path: unity.root_path) { unity }
+          allow(installer).to receive(:spotlight_installed_paths) { [] }
+
+          expect(installer.installed).to eql []
+        end
+
+        it 'finds installs in custom locations with U3D_EXTRA_PATHS' do
+          unity = macinstall_5_6_custom_location
+          installer = U3d::MacInstaller.new
+
+          allow(ENV).to receive(:[]).with('U3D_EXTRA_PATHS') { '/tmp' }
+          allow(Dir).to receive(:glob).with('/Applications/Unity*/Unity.app') { [] }
+          allow(Dir).to receive(:glob).with('/tmp/Applications/Unity*/Unity.app') { ["#{unity.root_path}/Unity.app"] }
+          allow(U3d::MacInstallation).to receive(:new).with(root_path: unity.root_path) { unity }
+          allow(installer).to receive(:spotlight_installed_paths) { [] }
+
+          expect(installer.installed).to eql [unity]
+        end
+
+        it 'finds both custom and default installs' do
+          unity_default = macinstall_5_6_default
+          unity_custom = macinstall_5_6_custom_location
+          installer = U3d::MacInstaller.new
+
+          allow(ENV).to receive(:[]).with('U3D_EXTRA_PATHS') { '/tmp' }
+          allow(Dir).to receive(:glob).with('/Applications/Unity*/Unity.app') { ["#{unity_default.root_path}/Unity.app"] }
+          allow(Dir).to receive(:glob).with('/tmp/Applications/Unity*/Unity.app') { ["#{unity_custom.root_path}/Unity.app"] }
+          allow(U3d::MacInstallation).to receive(:new).with(root_path: unity_default.root_path) { unity_default }
+          allow(U3d::MacInstallation).to receive(:new).with(root_path: unity_custom.root_path) { unity_custom }
+          allow(installer).to receive(:spotlight_installed_paths) { [] }
+
+          expect(installer.installed).to eql [unity_default, unity_custom]
+        end
+      end
+
       context 'when using a default install' do
         let(:unity) { macinstall_5_6_default }
         it 'sanitizes install' do
