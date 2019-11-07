@@ -94,8 +94,8 @@ module U3d
       ENV['U3D_EXTRA_PATHS'].strip.split(File::PATH_SEPARATOR)
     end
 
-    def find_installations_with_path(default_path, *postfix)
-      ([default_path] | extra_installation_paths).map do |path|
+    def find_installations_with_path(default_root_path: '', postfix: [])
+      ([default_root_path] | extra_installation_paths).map do |path|
         UI.verbose "Looking for installed Unity version under #{path}"
         pattern = File.join([path] + postfix)
         Dir.glob(pattern).map { |found_path| yield found_path }
@@ -185,10 +185,12 @@ module U3d
 
     def list_installed_paths
       paths = find_installations_with_path(
-        DEFAULT_MAC_INSTALL,
-        'Applications',
-        'Unity*',
-        'Unity.app'
+        default_root_path: DEFAULT_MAC_INSTALL,
+        postfix: %w[
+          Applications
+          Unity*
+          Unity.app
+        ]
       ) { |u| Pathname.new(u).parent.to_s }
       UI.verbose "Found list_installed_paths: #{paths}"
       paths
@@ -351,9 +353,11 @@ module U3d
 
     def list_installed_paths
       paths = find_installations_with_path(
-        DEFAULT_LINUX_INSTALL,
-        'unity-editor-*',
-        'Editor'
+        default_root_path: DEFAULT_LINUX_INSTALL,
+        postfix: %w[
+          unity-editor-*
+          Editor
+        ]
       ) { |u| Pathname.new(u).parent.to_s }
       UI.verbose "Found list_installed_paths: #{paths}"
       paths
@@ -361,9 +365,11 @@ module U3d
 
     def debian_installed_paths
       paths = find_installations_with_path(
-        DEFAULT_LINUX_INSTALL,
-        'Unity',
-        'Editor'
+        default_root_path: DEFAULT_LINUX_INSTALL,
+        postfix: %w[
+          Unity
+          Editor
+        ]
       ) { |u| Pathname.new(u).parent.to_s }
       UI.verbose "Found debian_installed_paths: #{paths}"
       paths
@@ -385,10 +391,12 @@ module U3d
 
     def installed
       find_installations_with_path(
-        DEFAULT_MAC_INSTALL,
-        'Unity*',
-        'Editor',
-        'Uninstall.exe'
+        default_root_path: DEFAULT_MAC_INSTALL,
+        postfix: %w[
+          Unity*
+          Editor
+          Uninstall.exe
+        ]
       ) { |path| WindowsInstallation.new(root_path: File.expand_path('../..', path)) }
     end
 
