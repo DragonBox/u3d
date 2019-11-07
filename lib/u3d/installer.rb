@@ -391,7 +391,7 @@ module U3d
 
     def installed
       find_installations_with_path(
-        default_root_path: DEFAULT_MAC_INSTALL,
+        default_root_path: DEFAULT_WINDOWS_INSTALL,
         postfix: %w[
           Unity*
           Editor
