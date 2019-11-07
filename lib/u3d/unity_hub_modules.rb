@@ -26,9 +26,9 @@ require 'u3d/utils'
 require 'u3d_core/helper'
 
 module U3d
-  module JsonModules
+  module UnityHubModules
     class << self
-      JSON_MODULES_NAME = '%<version>s-%<os>s-modules.json'.freeze
+      HUB_MODULES_NAME = '%<version>s-%<os>s-modules.json'.freeze
 
       def load_modules(version, os: U3dCore::Helper.operating_system, download: true, force: false)
         path = modules_path(version, os)
@@ -69,12 +69,12 @@ module U3d
       end
 
       def modules_path(version, os)
-        file_name = format(JSON_MODULES_NAME, version: version, os: os)
+        file_name = format(HUB_MODULES_NAME, version: version, os: os)
         File.join(default_modules_path, file_name)
       end
 
       def default_modules_path
-        File.join(U3dCore::Helper.data_path, 'json_modules')
+        File.join(U3dCore::Helper.data_path, 'unity_hub_modules')
       end
 
       def write_modules(build, os)

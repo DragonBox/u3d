@@ -128,15 +128,18 @@ module U3d
           v = cache_versions[k]
           UI.message "Version #{k}: " + v.to_s.cyan.underline
           next unless options[:packages]
+          packages = []
           inif = nil
           begin
             inif = U3d::INIparser.load_ini(k, cache_versions, os: os)
           rescue StandardError => e
-            UI.error "Could not load packages for this version (#{e})"
+            UI.error "Could not load INI packages for this version (#{e})"
           else
-            UI.message 'Packages:'
-            inif.each_key { |pack| UI.message " - #{pack}" }
+            packages << inif.keys
           end
+
+          packages |= UnityHubModules.load_modules(version).map { |mod| mod['name'] }
+          inif.each_key { |pack| UI.message " - #{pack}" }
         end
       end
 
