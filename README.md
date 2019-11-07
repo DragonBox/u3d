@@ -186,6 +186,14 @@ You can get further information on how to use U3d by running `u3d --help` (or `u
 
 ## How-tos
 
+### Install in a custom location
+
+`u3d install` accepts an argument `--installation_path` which can install unity and its additional components to the location you want.
+
+However, there is a pitfall to that: you need to tell u3d where to look for the versions you installed in custom location. Doing so is quite easy, you just have to set the `U3D_EXTRA_PATHS`, to a list of paths that you want u3d to look for versions.
+
+_NOTE:_ The list of paths `U3D_EXTRA_PATHS` is formatted as your standard `PATH`, ie `U3D_EXTRA_PATHS=/path/to/something:/another/path` on Unix systems, and `U3D_EXTRA_PATHS=C:\Path\To\Something;E:\Another\Path` on Windows.
+
 ### Run several Unity instances in parallel
 
 The only thing you have to watch for while trying to run multiple instances of Unity in parallel is the fact that they will share the same log file by default (the `Editor.log`). Therefore you will have to specify it using the [command line arguments](https://docs.unity3d.com/Manual/CommandLineArguments.html), you can do so with u3d the following way from each of your project root folder:
