@@ -30,10 +30,10 @@ module U3d
     class << self
       JSON_MODULES_NAME = '%<version>s-%<os>s-modules.json'.freeze
 
-      def load_modules(version, os: U3dCore::Helper.operating_system, download: true)
+      def load_modules(version, os: U3dCore::Helper.operating_system, download: true, force: false)
         path = modules_path(version, os)
         
-        unless File.file?(path) && File.size(path) > 0
+        if force || !(File.file?(path) && File.size(path) > 0)
           return [] unless download
           versions = download_modules(os: os)
 
