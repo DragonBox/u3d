@@ -135,11 +135,12 @@ module U3d
           rescue StandardError => e
             UI.error "Could not load INI packages for this version (#{e})"
           else
-            packages << inif.keys
+            packages |= inif.keys.map(&:downcase)
           end
 
-          packages |= UnityHubModules.load_modules(version).map { |mod| mod['name'] }
-          inif.each_key { |pack| UI.message " - #{pack}" }
+          packages |= UnityHubModules.load_modules(k, os: os, download: false).map { |mod| mod['id'] }
+          UI.message 'Packages:'
+          packages.each { |package| UI.message " - #{package.capitalize}" }
         end
       end
 
