@@ -124,23 +124,16 @@ module U3d
         end
         sorted_keys = vcomparators.sort.map { |v| v.version.to_s }
 
+        show_packages = options[:packages]
+        packages = UnityModule.load_modules(sorted_keys, cache_versions, os: os) if show_packages
+
         sorted_keys.each do |k|
           v = cache_versions[k]
           UI.message "Version #{k}: " + v.to_s.cyan.underline
-          next unless options[:packages]
-          packages = []
-          inif = nil
-          begin
-            inif = U3d::INIModulesParser.load_ini(k, cache_versions, os: os)
-          rescue StandardError => e
-            UI.error "Could not load INI packages for this version (#{e})"
-          else
-            packages |= inif.keys.map(&:downcase)
-          end
-
-          packages |= HubModulesParser.load_modules(k, os: os, offline: true).map { |mod| mod['id'] }
+          next unless show_packages
+          version_packages = packages[k]
           UI.message 'Packages:'
-          packages.each { |package| UI.message " - #{package.capitalize}" }
+          version_packages.each { |package| UI.message " - #{package.id.capitalize}" }
         end
       end
 
