@@ -28,8 +28,8 @@ module U3d
     attr_reader :installed_size, :download_size, :checksum
 
     def initialize(
-      id:, name:, description:, url:,
-      installed_size:, download_size:, checksum:
+      id:, name: nil, description: nil, url: nil,
+      installed_size: nil, download_size: nil, checksum: nil
     )
       @id = id
       @name = name
@@ -40,12 +40,12 @@ module U3d
       @checksum = checksum
     end
 
-    def download_size_bytes(_os)
-      size_in_bytes(download_size)
+    def download_size_bytes(os)
+      size_in_bytes(download_size, os)
     end
 
-    def installed_size_bytes(_os)
-      size_in_bytes(installed_size)
+    def installed_size_bytes(os)
+      size_in_bytes(installed_size, os)
     end
 
     class << self

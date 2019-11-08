@@ -22,7 +22,9 @@
 
 require 'u3d/downloader'
 require 'u3d/download_validator'
+require 'u3d/unity_module'
 require 'u3d/unity_version_definition'
+require 'support/setups'
 
 describe U3d do
   describe U3d::DownloadValidator do
@@ -108,13 +110,13 @@ describe U3d do
 
         context 'when no ini file is present' do
           it 'returns true' do
-            definition = mock_version_definition(ini: nil)
+            definition = mock_version_definition(packages: [])
             result = @validator.validate('somepackage', 'somefile', definition)
             expect(result).to be true
           end
 
           it 'logs an important message' do
-            definition = mock_version_definition(ini: nil)
+            definition = mock_version_definition(packages: [])
             expect(U3dCore::UI).to receive(:important).with(/assum.*correct/)
             @validator.validate('somepackage', 'somefile', definition)
           end
@@ -122,32 +124,31 @@ describe U3d do
 
         context 'when an ini file is present' do
           before(:all) do
-            @package = 'somepackage'
-            @ini = { @package => { 'size' => 123_456 } }
+            @package = U3d::UnityModule.new(id: 'somepackage', download_size: 123_456)
           end
 
           it 'reads the size of the file' do
-            definition = mock_version_definition(ini: @ini)
+            definition = mock_version_definition(packages: [@package])
             expect(File).to receive(:size).with('somefile') { 123_456 }
-            @validator.validate(@package, 'somefile', definition)
+            @validator.validate(@package.id, 'somefile', definition)
           end
 
           context 'when the sizes match' do
             it 'returns true' do
-              definition = mock_version_definition(ini: @ini)
+              definition = mock_version_definition(packages: [@package])
               allow(@validator).to receive(:size_validation) { true }
               allow(File).to receive(:size) { 123_456 }
-              result = @validator.validate(@package, 'somefile', definition)
+              result = @validator.validate(@package.id, 'somefile', definition)
               expect(result).to be true
             end
           end
 
           context 'when the sizes do not match' do
             it 'returns false' do
-              definition = mock_version_definition(ini: @ini)
+              definition = mock_version_definition(packages: [@package])
               allow(@validator).to receive(:size_validation) { false }
               allow(File).to receive(:size) { 123_456 }
-              result = @validator.validate(@package, 'somefile', definition)
+              result = @validator.validate(@package.id, 'somefile', definition)
               expect(result).to be false
             end
           end
@@ -163,69 +164,67 @@ describe U3d do
 
         context 'when the ini file does not contain md5 (package is external)' do
           before(:all) do
-            @package = 'somepackage'
-            @ini = { @package => { 'size' => 123_456, 'md5' => nil } }
+            @package = U3d::UnityModule.new(id: 'somepackage', download_size: 123_456, checksum: nil)
           end
 
           it 'skips validation' do
-            definition = mock_version_definition(ini: @ini)
+            definition = mock_version_definition(packages: [@package])
             expect(@validator).to_not receive(:size_validation)
             expect(@validator).to_not receive(:hash_validation)
 
-            @validator.validate(@package, 'somefile', definition)
+            @validator.validate(@package.id, 'somefile', definition)
           end
 
           it 'returns true' do
-            definition = mock_version_definition(ini: @ini)
-            result = @validator.validate(@package, 'somefile', definition)
+            definition = mock_version_definition(packages: [@package])
+            result = @validator.validate(@package.id, 'somefile', definition)
             expect(result).to be true
           end
 
           it 'logs a verbose message' do
-            definition = mock_version_definition(ini: @ini)
+            definition = mock_version_definition(packages: [@package])
             expect(U3dCore::UI).to receive(:verbose).with(/[Vv]alidation.*skip/)
-            @validator.validate(@package, 'somefile', definition)
+            @validator.validate(@package.id, 'somefile', definition)
           end
         end
 
         context 'when there is an ini file' do
           before(:all) do
-            @package = 'somepackage'
-            @ini = { @package => { 'size' => 123_456, 'md5' => 'somehash' } }
+            @package = U3d::UnityModule.new(id: 'somepackage', download_size: 123_456, checksum: 'somehash')
           end
 
           context 'when sizes do not match' do
             it 'returns false' do
-              definition = mock_version_definition(ini: @ini)
+              definition = mock_version_definition(packages: [@package])
               allow(@validator).to receive(:size_validation) { false }
               allow(@validator).to receive(:hash_validation) { true }
               allow(File).to receive(:size) { 123_456 }
               allow(U3d::Utils).to receive(:hashfile) { 'somehash' }
-              result = @validator.validate(@package, 'somefile', definition)
+              result = @validator.validate(@package.id, 'somefile', definition)
               expect(result).to be false
             end
           end
 
           context 'when hashes do not match' do
             it 'returns false' do
-              definition = mock_version_definition(ini: @ini)
+              definition = mock_version_definition(packages: [@package])
               allow(@validator).to receive(:size_validation) { true }
               allow(@validator).to receive(:hash_validation) { false }
               allow(File).to receive(:size) { 123_456 }
               allow(U3d::Utils).to receive(:hashfile) { 'somehash' }
-              result = @validator.validate(@package, 'somefile', definition)
+              result = @validator.validate(@package.id, 'somefile', definition)
               expect(result).to be false
             end
           end
 
           context 'when hashes and sizes match' do
             it 'returns true' do
-              definition = mock_version_definition(ini: @ini)
+              definition = mock_version_definition(packages: [@package])
               allow(@validator).to receive(:size_validation) { true }
               allow(@validator).to receive(:hash_validation) { true }
               allow(File).to receive(:size) { 123_456 }
               allow(U3d::Utils).to receive(:hashfile) { 'somehash' }
-              result = @validator.validate(@package, 'somefile', definition)
+              result = @validator.validate(@package.id, 'somefile', definition)
               expect(result).to be true
             end
           end
@@ -241,69 +240,67 @@ describe U3d do
 
         context 'when the ini file does not contain md5 (package is external)' do
           before(:all) do
-            @package = 'somepackage'
-            @ini = { @package => { 'size' => 123_456, 'md5' => nil } }
+            @package = U3d::UnityModule.new(id: 'somepackage', download_size: 123_456, checksum: nil)
           end
 
           it 'skips validation' do
-            definition = mock_version_definition(ini: @ini)
+            definition = mock_version_definition(packages: [@package])
             expect(@validator).to_not receive(:size_validation)
             expect(@validator).to_not receive(:hash_validation)
 
-            @validator.validate(@package, 'somefile', definition)
+            @validator.validate(@package.id, 'somefile', definition)
           end
 
           it 'returns true' do
-            definition = mock_version_definition(ini: @ini)
-            result = @validator.validate(@package, 'somefile', definition)
+            definition = mock_version_definition(packages: [@package])
+            result = @validator.validate(@package.id, 'somefile', definition)
             expect(result).to be true
           end
 
           it 'logs a verbose message' do
-            definition = mock_version_definition(ini: @ini)
+            definition = mock_version_definition(packages: [@package])
             expect(U3dCore::UI).to receive(:verbose).with(/[Vv]alidation.*skip/)
-            @validator.validate(@package, 'somefile', definition)
+            @validator.validate(@package.id, 'somefile', definition)
           end
         end
 
         context 'when there is an ini file' do
           before(:all) do
-            @package = 'somepackage'
-            @ini = { @package => { 'size' => 123_456, 'md5' => 'somehash' } }
+            @package = U3d::UnityModule.new(id: 'somepackage', download_size: 123_456, checksum: 'somehash')
           end
 
           context 'when sizes do not match' do
             it 'returns false' do
-              definition = mock_version_definition(ini: @ini)
+              definition = mock_version_definition(packages: [@package])
               allow(@validator).to receive(:size_validation) { false }
               allow(@validator).to receive(:hash_validation) { true }
               allow(File).to receive(:size) { 123_456 }
               allow(U3d::Utils).to receive(:hashfile) { 'somehash' }
-              result = @validator.validate(@package, 'somefile', definition)
+              result = @validator.validate(@package.id, 'somefile', definition)
               expect(result).to be false
             end
           end
 
           context 'when hashes do not match' do
             it 'returns false' do
-              definition = mock_version_definition(ini: @ini)
+              definition = mock_version_definition(packages: [@package])
               allow(@validator).to receive(:size_validation) { true }
               allow(@validator).to receive(:hash_validation) { false }
               allow(File).to receive(:size) { 123_456 }
               allow(U3d::Utils).to receive(:hashfile) { 'somehash' }
-              result = @validator.validate(@package, 'somefile', definition)
+              result = @validator.validate(@package.id, 'somefile', definition)
               expect(result).to be false
             end
           end
 
           context 'when hashes and sizes match' do
             it 'returns true' do
-              definition = mock_version_definition(ini: @ini)
+              definition = mock_version_definition(packages: [@package])
               allow(@validator).to receive(:size_validation) { true }
               allow(@validator).to receive(:hash_validation) { true }
               allow(File).to receive(:size) { 123_456 }
               allow(U3d::Utils).to receive(:hashfile) { 'somehash' }
-              result = @validator.validate(@package, 'somefile', definition)
+              result = @validator.validate(@package.id, 'somefile', definition)
               expect(result).to be true
             end
           end

@@ -101,10 +101,8 @@ def with_fake_cache(cache)
 end
 
 def expected_definition(version, os, url, packages: [])
-  allow(U3d::INIModulesParser).to receive(:load_ini).with(version, anything, anything) do
-    ini = {}
-    packages.each { |pack| ini[pack] = {} }
-    ini
+  allow(U3d::UnityModule).to receive(:load_modules).with(version, anything, anything) do
+    packages
   end
   if url
     definition = U3d::UnityVersionDefinition.new(version, os, version => url)
@@ -116,8 +114,14 @@ def expected_definition(version, os, url, packages: [])
   definition
 end
 
-def mock_version_definition(version: '0.0.0x0', os: :fakeos, ini: nil)
-  allow(U3d::INIModulesParser).to receive(:load_ini).with(version, anything, anything) { ini }
+def mock_unity_modules(module_params: [])
+  modules = module_params.map { |params| double(U3d::UnityModule, params) }
+  allow(U3d::UnityModule).to receive(:load_modules) { modules }
+  modules
+end
+
+def mock_version_definition(version: '0.0.0x0', os: :fakeos, packages: [])
+  allow(U3d::UnityModule).to receive(:load_modules).with(version, anything, anything) { packages }
   definition = U3d::UnityVersionDefinition.new(version, os, nil)
   definition
 end

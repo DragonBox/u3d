@@ -372,7 +372,7 @@ module U3d
             end
             return false if packages.empty?
           else
-            unless packages.include?('Unity')
+            unless packages.map(&:downcase).include?('unity')
               UI.error 'Please install Unity before any of its packages'
               return false
             end

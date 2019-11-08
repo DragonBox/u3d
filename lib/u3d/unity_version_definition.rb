@@ -27,6 +27,12 @@ module U3d
     attr_accessor :version, :os, :url
     attr_reader :packages
 
+    private
+
+    attr_writer :packages
+
+    public
+
     def initialize(version, os, cached_versions, offline: false)
       @version = version
       @os = os
