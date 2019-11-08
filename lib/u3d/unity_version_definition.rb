@@ -20,7 +20,7 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
-require 'u3d/iniparser'
+require 'u3d/ini_modules_parser'
 
 module U3d
   class UnityVersionDefinition
@@ -32,7 +32,7 @@ module U3d
       # Cache is assumed to be correct
       @url = cached_versions ? cached_versions[version] : nil
       begin
-        @ini = INIparser.load_ini(version, cached_versions, os: os, offline: offline)
+        @ini = INIModulesParser.load_ini(version, cached_versions, os: os, offline: offline)
       rescue StandardError => e
         # FIXME: weird that we catch this here
         UI.error "Could not load INI file for version #{@version} on #{@os}: #{e}"

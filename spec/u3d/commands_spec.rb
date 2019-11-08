@@ -243,7 +243,7 @@ describe U3d do
           on_fake_os
           with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
 
-          expect(U3d::INIparser).to receive(:load_ini).with(
+          expect(U3d::INIModulesParser).to receive(:load_ini).with(
             '1.2.3f4',
             { '1.2.3f4' => 'fakeurl' },
             os: :fakeos
@@ -259,7 +259,7 @@ describe U3d do
       end
 
       #   make sure this works properly on Linux support with our fake INI file
-      #   NOTE: Should be tested in INIparser
+      #   NOTE: Should be tested in INIModulesParser
     end
 
     # ---

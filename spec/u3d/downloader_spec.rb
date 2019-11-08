@@ -34,7 +34,7 @@ describe U3d do
 
       context 'when downloading for Linux' do
         before(:each) do
-          allow(U3d::INIparser).to receive(:load_ini) { {} }
+          allow(U3d::INIModulesParser).to receive(:load_ini) { {} }
           @definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, nil)
         end
 
@@ -70,7 +70,7 @@ describe U3d do
 
       context 'when downloading for Mac' do
         before(:each) do
-          allow(U3d::INIparser).to receive(:load_ini) { {} }
+          allow(U3d::INIModulesParser).to receive(:load_ini) { {} }
           @definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, nil)
         end
 
@@ -96,7 +96,7 @@ describe U3d do
 
       context 'when downloading for Windows' do
         before(:each) do
-          allow(U3d::INIparser).to receive(:load_ini) { {} }
+          allow(U3d::INIModulesParser).to receive(:load_ini) { {} }
           @definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, nil)
         end
 
@@ -129,7 +129,7 @@ describe U3d do
 
       context 'when downloading for Linux' do
         before(:each) do
-          allow(U3d::INIparser).to receive(:load_ini) { {} }
+          allow(U3d::INIModulesParser).to receive(:load_ini) { {} }
           @definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, nil)
         end
 
@@ -213,7 +213,7 @@ describe U3d do
 
       context 'when downloading for Mac' do
         before(:each) do
-          allow(U3d::INIparser).to receive(:load_ini) { {} }
+          allow(U3d::INIModulesParser).to receive(:load_ini) { {} }
           @definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, nil)
         end
 
@@ -297,7 +297,7 @@ describe U3d do
 
       context 'when downloading for Windows' do
         before(:each) do
-          allow(U3d::INIparser).to receive(:load_ini) { {} }
+          allow(U3d::INIModulesParser).to receive(:load_ini) { {} }
           @definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, nil)
         end
 
@@ -391,7 +391,7 @@ describe U3d do
           with_env_values('U3D_DOWNLOAD_PATH' => nil) do
             expect(U3d::Utils).to receive(:final_url).with(@url).and_return(@url)
             expect(U3d::Utils).to receive(:ensure_dir) {}
-            allow(U3d::INIparser).to receive(:load_ini) { { 'Unity' => { 'url' => @url } } }
+            allow(U3d::INIModulesParser).to receive(:load_ini) { { 'Unity' => { 'url' => @url } } }
 
             definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, nil)
 
@@ -408,7 +408,7 @@ describe U3d do
           with_env_values('U3D_DOWNLOAD_PATH' => '/foo') do
             expect(U3d::Utils).to receive(:final_url).with(@url).and_return(@url)
             expect(U3d::Utils).to receive(:ensure_dir) {}
-            allow(U3d::INIparser).to receive(:load_ini) { { 'Unity' => { 'url' => @url } } }
+            allow(U3d::INIModulesParser).to receive(:load_ini) { { 'Unity' => { 'url' => @url } } }
 
             definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, nil)
 
@@ -425,7 +425,7 @@ describe U3d do
       describe '.url_for' do
         it 'returns the correct url for the Unity installer' do
           expect(U3d::Utils).to receive(:final_url).with(@url).and_return(@url)
-          allow(U3d::INIparser).to receive(:load_ini) { { 'Unity' => { 'url' => @url } } }
+          allow(U3d::INIModulesParser).to receive(:load_ini) { { 'Unity' => { 'url' => @url } } }
 
           definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, '1.2.3f4' => @url)
           expect(
@@ -451,7 +451,7 @@ describe U3d do
         it 'returns the correct default destination for the specified package' do
           with_env_values('U3D_DOWNLOAD_PATH' => nil) do
             expect(U3d::Utils).to receive(:ensure_dir) {}
-            allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
+            allow(U3d::INIModulesParser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
 
             definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, '1.2.3f4' => @url)
 
@@ -467,7 +467,7 @@ describe U3d do
         it 'returns the custom destination for the specified package when the environment variable is specified' do
           with_env_values('U3D_DOWNLOAD_PATH' => '/foo') do
             expect(U3d::Utils).to receive(:ensure_dir) {}
-            allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
+            allow(U3d::INIModulesParser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
 
             definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, '1.2.3f4' => @url)
 
@@ -483,7 +483,7 @@ describe U3d do
 
       describe '.url_for' do
         it 'returns the correct url for the specified package' do
-          allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
+          allow(U3d::INIModulesParser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
 
           definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, '1.2.3f4' => @url)
           expect(
@@ -508,7 +508,7 @@ describe U3d do
         it 'returns the correct default destination the specified package' do
           with_env_values('U3D_DOWNLOAD_PATH' => nil) do
             expect(U3d::Utils).to receive(:ensure_dir) {}
-            allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
+            allow(U3d::INIModulesParser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
 
             definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, '1.2.3f4' => @url)
 
@@ -524,7 +524,7 @@ describe U3d do
         it 'returns the custom destination for the specified package when the environment variable is specified' do
           with_env_values('U3D_DOWNLOAD_PATH' => '/foo') do
             expect(U3d::Utils).to receive(:ensure_dir) {}
-            allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
+            allow(U3d::INIModulesParser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
 
             definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, '1.2.3f4' => @url)
 
@@ -540,7 +540,7 @@ describe U3d do
 
       describe '.url_for' do
         it 'returns the correct url for the specified package' do
-          allow(U3d::INIparser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
+          allow(U3d::INIModulesParser).to receive(:load_ini) { { 'package' => { 'url' => @path } } }
 
           definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, '1.2.3f4' => @url)
           expect(

@@ -26,7 +26,7 @@ require 'u3d/utils'
 require 'u3d_core/helper'
 
 module U3d
-  module UnityHubModules
+  module HubModulesParser
     class << self
       HUB_MODULES_NAME = '%<version>s-%<os>s-modules.json'.freeze
 

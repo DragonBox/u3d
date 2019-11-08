@@ -131,14 +131,14 @@ module U3d
           packages = []
           inif = nil
           begin
-            inif = U3d::INIparser.load_ini(k, cache_versions, os: os)
+            inif = U3d::INIModulesParser.load_ini(k, cache_versions, os: os)
           rescue StandardError => e
             UI.error "Could not load INI packages for this version (#{e})"
           else
             packages |= inif.keys.map(&:downcase)
           end
 
-          packages |= UnityHubModules.load_modules(k, os: os, download: false).map { |mod| mod['id'] }
+          packages |= HubModulesParser.load_modules(k, os: os, download: false).map { |mod| mod['id'] }
           UI.message 'Packages:'
           packages.each { |package| UI.message " - #{package.capitalize}" }
         end

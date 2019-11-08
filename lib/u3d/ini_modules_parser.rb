@@ -25,8 +25,23 @@ require 'u3d/utils'
 require 'u3d_core/helper'
 
 module U3d
+  # Backwards compatibility
+  module INIParser
+    class << self
+      def method_missing(method_name, *arguments, &block)
+        UI.deprecated 'INIParser is obsolete, Use INIModulesParser instead'
+        INIModulesParser.send(method_name, *arguments, &block)
+      end
+
+      def respond_to?(method_name, include_private = false)
+        UI.deprecated 'INIParser is obsolete, Use INIModulesParser instead'
+        INIModulesParser.respond_to?(method_name, *arguments, &block)
+      end
+    end
+  end
+
   # Load and parse INI files
-  module INIparser
+  module INIModulesParser
     #####################################################
     # @!group INI parameters to load and save ini files
     #####################################################
