@@ -51,7 +51,7 @@ module U3d
 
   class LinuxValidator < DownloadValidator
     def validate(package, file, definition)
-      return size_validation(expected: definition[package]['size'], actual: File.size(file)) if definition.ini && definition[package]['size']
+      return size_validation(expected: definition[package].download_size_bytes, actual: File.size(file)) if definition.packages && definition[package].download_size_bytes
       UI.important "No file validation available, #{file} is assumed to be correct"
       true
     end
@@ -59,25 +59,25 @@ module U3d
 
   class MacValidator < DownloadValidator
     def validate(package, file, definition)
-      if definition[package]['size'] % 1000 && definition[package]['md5'].nil?
-        UI.verbose "File '#{definition[package]['title']}' seems external. Validation skipped"
+      if definition[package].download_size_bytes % 1000 && definition[package].checksum.nil?
+        UI.verbose "File '#{definition[package].name}' seems external. Validation skipped"
         return true
       end
-      size_validation(expected: definition[package]['size'], actual: File.size(file)) &&
-        hash_validation(expected: definition[package]['md5'], actual: Utils.hashfile(file))
+      size_validation(expected: definition[package].download_size_bytes, actual: File.size(file)) &&
+        hash_validation(expected: definition[package].checksum, actual: Utils.hashfile(file))
     end
   end
 
   class WindowsValidator < DownloadValidator
     def validate(package, file, definition)
       # External packages have no md5 and a false size value
-      if definition[package]['size'] % 1000 && definition[package]['md5'].nil?
-        UI.verbose "File '#{definition[package]['title']}' seems external. Validation skipped"
+      if definition[package].download_size_bytes % 1000 && definition[package].checksum.nil?
+        UI.verbose "File '#{definition[package].name}' seems external. Validation skipped"
         return true
       end
       rounded_size = (File.size(file).to_f / 1024).floor
-      size_validation(expected: definition[package]['size'], actual: rounded_size) &&
-        hash_validation(expected: definition[package]['md5'], actual: Utils.hashfile(file))
+      size_validation(expected: definition[package].download_size_bytes, actual: rounded_size) &&
+        hash_validation(expected: definition[package].checksum, actual: Utils.hashfile(file))
     end
   end
 end

@@ -156,13 +156,8 @@ module U3d
       end
 
       def url_for(package, definition)
-        url = definition[package]['url']
-        if url
-          if url =~ /^http/
-            Utils.final_url(url)
-          else
-            definition.url + url
-          end
+        if package.url
+          Utils.final_url(package.url)
         else
           definition.url
         end
