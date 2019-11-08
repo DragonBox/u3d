@@ -138,7 +138,7 @@ module U3d
             packages |= inif.keys.map(&:downcase)
           end
 
-          packages |= HubModulesParser.load_modules(k, os: os, download: false).map { |mod| mod['id'] }
+          packages |= HubModulesParser.load_modules(k, os: os, offline: true).map { |mod| mod['id'] }
           UI.message 'Packages:'
           packages.each { |package| UI.message " - #{package.capitalize}" }
         end

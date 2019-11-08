@@ -30,11 +30,11 @@ module U3d
     class << self
       HUB_MODULES_NAME = '%<version>s-%<os>s-modules.json'.freeze
 
-      def load_modules(version, os: U3dCore::Helper.operating_system, download: true, force: false)
+      def load_modules(version, os: U3dCore::Helper.operating_system, offline: false)
         path = modules_path(version, os)
         
-        if force || !(File.file?(path) && File.size(path) > 0)
-          return [] unless download
+        unless File.file?(path) && File.size(path) > 0
+          return [] if offline # Should not raise, not all versions have hub modules
           versions = download_modules(os: os)
 
           unless versions.include? version
