@@ -32,7 +32,7 @@ module U3d
       @os = os
       # Cache is assumed to be correct
       @url = cached_versions ? cached_versions[version] : nil
-      @packages = UnityModule.load_modules(version, os, cached_versions)
+      @packages = UnityModule.load_modules(version, cached_versions, os: os, offline: offline)
     end
 
     def available_packages
@@ -45,17 +45,16 @@ module U3d
 
     def [](package)
       return nil unless available_package? package
-      @packages.find {|pack| pack.id == package.downcase }
+      @packages.find { |pack| pack.id == package.downcase }
     end
 
     def ini
       UI.deprecated 'UnityVersionDefinition no longer exposes the raw ini data'
-      nil
+      return nil
     end
 
-    def ini=(value)
+    def ini=(_value)
       UI.deprecated 'UnityVersionDefinition no longer exposes the raw ini data'
-      nil
     end
   end
 end

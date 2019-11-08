@@ -30,12 +30,21 @@ module U3d
     class << self
       def method_missing(method_name, *arguments, &block)
         UI.deprecated 'INIParser is obsolete, Use INIModulesParser instead'
-        INIModulesParser.send(method_name, *arguments, &block)
+        if INIModulesParser.respond_to?(method_name)
+          INIModulesParser.send(method_name, *arguments, &block)
+        else
+          super
+        end
       end
 
       def respond_to?(method_name, include_private = false)
         UI.deprecated 'INIParser is obsolete, Use INIModulesParser instead'
-        INIModulesParser.respond_to?(method_name, *arguments, &block)
+        INIModulesParser.respond_to?(method_name, include_private)
+      end
+
+      def respond_to_missing?(method_name, include_private = false)
+        UI.deprecated 'INIParser is obsolete, Use INIModulesParser instead'
+        INIModulesParser.respond_to_missing?(method_name, include_private)
       end
     end
   end

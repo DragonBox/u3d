@@ -29,7 +29,8 @@ module U3d
 
     def initialize(
       id:, name:, description:, url:,
-      installed_size:, download_size:, checksum:)
+      installed_size:, download_size:, checksum:
+    )
       @id = id
       @name = name
       @description = description
@@ -39,17 +40,17 @@ module U3d
       @checksum = checksum
     end
 
-    def download_size_bytes(os)
+    def download_size_bytes(_os)
       size_in_bytes(download_size)
     end
 
-    def installed_size_bytes(os)
+    def installed_size_bytes(_os)
       size_in_bytes(installed_size)
     end
 
     class << self
       def load_modules(version, cached_versions, os: U3dCore::Helper.operating_system, offline: false)
-        if version.kind_of? Array
+        if version.is_a? Array
           UI.verbose "Loading modules for several versions: #{version}"
           load_versions_modules(version, cached_versions, os, offline)
         else
@@ -63,42 +64,40 @@ module U3d
       # Optimized version of load_version_modules that only makes one HTTP call
       def load_versions_modules(versions, cached_versions, os, offline)
         ini_modules = versions
-          .map { |version| [version, INIModulesParser.load_ini(version, cached_versions, os: os, offline: offline)] }
-          .map do |version, ini_data|
-            url_root = cached_versions[version]
-            modules = ini_data.map {|k,v| module_from_ini_data(k,v,url_root) }
-            [version, modules]
-          end.to_h
+                      .map { |version| [version, INIModulesParser.load_ini(version, cached_versions, os: os, offline: offline)] }
+                      .map do |version, ini_data|
+          url_root = cached_versions[version]
+          modules = ini_data.map { |k, v| module_from_ini_data(k, v, url_root) }
+          [version, modules]
+        end.to_h
 
         HubModulesParser.download_modules(os: os) unless offline
         hub_modules = versions
-          .map { |version| [version, HubModulesParser.load_modules(version, os: os, offline: true) ]}
-          .map do |version, json_data|
-            modules = json_data.map { |data| module_from_json_data(data) }
-            [version, modules]
-          end.to_h
+                      .map { |version| [version, HubModulesParser.load_modules(version, os: os, offline: true)] }
+                      .map do |version, json_data|
+          modules = json_data.map { |data| module_from_json_data(data) }
+          [version, modules]
+        end.to_h
 
-        return ini_modules.merge(hub_modules) do |version, ini_version_modules, json_version_modules|
-          (ini_version_modules + json_version_modules).uniq { |mod| mod.id }
+        return ini_modules.merge(hub_modules) do |_version, ini_version_modules, json_version_modules|
+          (ini_version_modules + json_version_modules).uniq(&:id)
         end
       end
 
       def load_version_modules(version, cached_versions, os, offline)
         ini_data = INIModulesParser.load_ini(version, cached_versions, os: os, offline: offline)
         url_root = cached_versions[version]
-        ini_modules = ini_data.map {|k,v| module_from_ini_data(k,v,url_root) }
+        ini_modules = ini_data.map { |k, v| module_from_ini_data(k, v, url_root) }
 
         json_data = HubModulesParser.load_modules(version, os: os, offline: offline)
         json_modules = json_data.map { |data| module_from_json_data(data) }
 
-        return (ini_modules + json_modules).uniq { |mod| mod.id }
+        return (ini_modules + json_modules).uniq(&:id)
       end
 
       def module_from_ini_data(module_key, entries, url_root)
         url = entries['url']
-        unless /^http/  =~ url
-          url = url_root + url
-        end
+        url = url_root + url unless /^http/ =~ url
 
         UnityModule.new(
           id: module_key.downcase,
@@ -107,9 +106,10 @@ module U3d
           url: url,
           download_size: entries['size'],
           installed_size: entries['installedsize'],
-          checksum: entries['md5'])
+          checksum: entries['md5']
+        )
       end
-      
+
       def module_from_json_data(entries)
         UnityModule.new(
           id: entries['id'],
@@ -118,7 +118,8 @@ module U3d
           url: entries['downloadUrl'],
           download_size: entries['downloadSize'],
           installed_size: entries['installedSize'],
-          checksum: entries['checksum'])
+          checksum: entries['checksum']
+        )
       end
     end
 

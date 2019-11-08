@@ -32,7 +32,7 @@ module U3d
 
       def load_modules(version, os: U3dCore::Helper.operating_system, offline: false)
         path = modules_path(version, os)
-        
+
         unless File.file?(path) && File.size(path) > 0
           return [] if offline # Should not raise, not all versions have hub modules
           versions = download_modules(os: os)
@@ -57,13 +57,13 @@ module U3d
 
       def json_os(os)
         platform_versions = case os
-        when :win
-          UnityVersions::WindowsVersions
-        when :linux
-          UnityVersions::LinuxVersions
-        when :mac
-          UnityVersions::MacVersions
-        end
+                            when :win
+                              UnityVersions::WindowsVersions
+                            when :linux
+                              UnityVersions::LinuxVersions
+                            when :mac
+                              UnityVersions::MacVersions
+                            end
 
         return platform_versions::JSON_OS
       end
