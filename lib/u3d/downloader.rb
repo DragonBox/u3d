@@ -118,7 +118,7 @@ module U3d
         UI.header "Downloading #{package} version #{definition.version}"
         UI.message 'Downloading from ' + url.to_s.cyan.underline
         UI.message 'Download will be found at ' + path
-        download_package(path, url, size: definition.size_in_bytes(package))
+        download_package(path, url, size: definition[package].download_size_bytes)
 
         if validator.validate(package, path, definition)
           UI.success "Successfully downloaded #{package}."

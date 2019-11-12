@@ -26,10 +26,13 @@ module U3d
     attr_reader :id, :name, :description, :url
     # Validation attributes
     attr_reader :installed_size, :download_size, :checksum
+    # Internal attributes
+    attr_reader :os
 
     def initialize(
       id:, name: nil, description: nil, url: nil,
-      installed_size: nil, download_size: nil, checksum: nil
+      installed_size: nil, download_size: nil, checksum: nil,
+      os: U3dCore::Helper.operating_system
     )
       @id = id.downcase
       @name = name
@@ -38,14 +41,15 @@ module U3d
       @installed_size = installed_size
       @download_size = download_size
       @checksum = checksum
+      @os = os
     end
 
-    def download_size_bytes(os)
-      size_in_bytes(download_size, os)
+    def download_size_bytes
+      size_in_bytes(download_size)
     end
 
-    def installed_size_bytes(os)
-      size_in_bytes(installed_size, os)
+    def installed_size_bytes
+      size_in_bytes(installed_size)
     end
 
     class << self
@@ -67,7 +71,7 @@ module U3d
                       .map { |version| [version, INIModulesParser.load_ini(version, cached_versions, os: os, offline: offline)] }
                       .map do |version, ini_data|
           url_root = cached_versions[version]
-          modules = ini_data.map { |k, v| module_from_ini_data(k, v, url_root) }
+          modules = ini_data.map { |k, v| module_from_ini_data(k, v, url_root, os) }
           [version, modules]
         end.to_h
 
@@ -75,7 +79,7 @@ module U3d
         hub_modules = versions
                       .map { |version| [version, HubModulesParser.load_modules(version, os: os, offline: true)] }
                       .map do |version, json_data|
-          modules = json_data.map { |data| module_from_json_data(data) }
+          modules = json_data.map { |data| module_from_json_data(data, os) }
           [version, modules]
         end.to_h
 
@@ -87,15 +91,15 @@ module U3d
       def load_version_modules(version, cached_versions, os, offline)
         ini_data = INIModulesParser.load_ini(version, cached_versions, os: os, offline: offline)
         url_root = cached_versions[version]
-        ini_modules = ini_data.map { |k, v| module_from_ini_data(k, v, url_root) }
+        ini_modules = ini_data.map { |k, v| module_from_ini_data(k, v, url_root, os) }
 
         json_data = HubModulesParser.load_modules(version, os: os, offline: offline)
-        json_modules = json_data.map { |data| module_from_json_data(data) }
+        json_modules = json_data.map { |data| module_from_json_data(data, os) }
 
         return (ini_modules + json_modules).uniq(&:id)
       end
 
-      def module_from_ini_data(module_key, entries, url_root)
+      def module_from_ini_data(module_key, entries, url_root, os)
         url = entries['url']
         url = url_root + url unless /^http/ =~ url
 
@@ -106,11 +110,12 @@ module U3d
           url: url,
           download_size: entries['size'],
           installed_size: entries['installedsize'],
-          checksum: entries['md5']
+          checksum: entries['md5'],
+          os: os
         )
       end
 
-      def module_from_json_data(entries)
+      def module_from_json_data(entries, os)
         UnityModule.new(
           id: entries['id'],
           name: entries['name'],
@@ -118,15 +123,16 @@ module U3d
           url: entries['downloadUrl'],
           download_size: entries['downloadSize'],
           installed_size: entries['installedSize'],
-          checksum: entries['checksum']
+          checksum: entries['checksum'],
+          os: os
         )
       end
     end
 
     private
 
-    def size_in_bytes(size, os)
-      os == :win ? size * 1024 : size
+    def size_in_bytes(size)
+      @os == :win ? size * 1024 : size
     end
   end
 end
