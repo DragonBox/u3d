@@ -31,7 +31,7 @@ module U3d
       id:, name: nil, description: nil, url: nil,
       installed_size: nil, download_size: nil, checksum: nil
     )
-      @id = id
+      @id = id.downcase
       @name = name
       @description = description
       @url = url
