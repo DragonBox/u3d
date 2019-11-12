@@ -27,6 +27,7 @@ require 'u3d/installation'
 require 'fileutils'
 require 'file-tail'
 require 'pathname'
+require 'zip'
 
 module U3d
   DEFAULT_LINUX_INSTALL = '/opt/'.freeze
@@ -91,11 +92,7 @@ module U3d
 
     def install_po(file_path, version, info: nil)
       unity = installed.find { |u| u.version == version }
-      root_path = if info && info.destination
-                    info.destination.gsub(/{UNITY_PATH}/, unity.root_path)
-                  else
-                    unity.root_path
-                  end
+      root_path = package_destination(info, unity.root_path)
 
       target_path = File.join(root_path, File.basename(file_path))
       Utils.ensure_dir(File.dirname(target_path))
@@ -104,6 +101,40 @@ module U3d
       FileUtils.cp(file_path, target_path)
 
       UI.success "Successfully installed language file #{File.basename(file_path)}"
+    end
+
+    def install_zip(file_path, version, info: nil)
+      unity = installed.find { |u| u.version == version }
+      root_path = package_destination(info, unity.root_path)
+
+      UI.verbose("Unzipping #{file_path} to #{root_path}")
+      Utils.ensure_permitted(File.dirname(root_path))
+      Utils.ensure_dir(root_path)
+
+      Zip::File.open(file_path) do |zip_file|
+        zip_file.each do |entry|
+          target_path = File.join(root_path, entry.name)
+          Utils.ensure_dir(File.dirname(target_path))
+          zip_file.extract(entry, target_path) unless File.exist?(target_path)
+        end
+      end
+
+      if info && info.rename_from && info.rename_to
+        rename_from = info.rename_from.gsub(/{UNITY_PATH}/, unity.root_path)
+        rename_to = info.rename_to.gsub(/{UNITY_PATH}/, unity.root_path)
+        UI.verbose("Renaming from #{rename_from} to #{rename_to}")
+        FileUtils.mv(rename_to, rename_to)
+      end
+
+      UI.success "Successfully unizpped #{File.basename(file_path)} at #{root_path}"
+    end
+
+    def package_destination(info, unity_root_path)
+      if info && info.destination
+        info.destination.gsub(/{UNITY_PATH}/, unity_root_path)
+      else
+        unity_root_path
+      end
     end
 
     def extra_installation_paths
@@ -148,20 +179,14 @@ module U3d
     def install(file_path, version, installation_path: nil, info: nil)
       # rubocop:enable UnusedMethodArgument
       extension = File.extname(file_path)
-      raise "Installation of #{extension} files is not supported on Mac" unless %w[.po .pkg].include? extension
+      raise "Installation of #{extension} files is not supported on Mac" unless %w[.zip .po .pkg].include? extension
       path = installation_path || DEFAULT_MAC_INSTALL
       if extension == '.po'
-        install_po(
-          file_path,
-          version,
-          info: info
-        )
+        install_po(file_path, version, info: info)
+      elsif extension == '.zip'
+        install_zip(file_path, version, info: info)
       else
-        install_pkg(
-          file_path,
-          version: version,
-          target_path: path
-        )
+        install_pkg(file_path, version: version, target_path: path)
       end
     end
 
@@ -262,7 +287,7 @@ module U3d
       # rubocop:enable UnusedMethodArgument, PerceivedComplexity
       extension = File.extname(file_path)
 
-      raise "Installation of #{extension} files is not supported on Linux" unless ['.po', '.sh', '.xz', '.pkg'].include? extension
+      raise "Installation of #{extension} files is not supported on Linux" unless ['.zip', '.po', '.sh', '.xz', '.pkg'].include? extension
       if extension == '.sh'
         path = installation_path || DEFAULT_LINUX_INSTALL
         install_sh(file_path, installation_path: path)
@@ -276,6 +301,8 @@ module U3d
         install_pkg(file_path, installation_path: path)
       elsif extension == '.po'
         install_po(file_path, version, info: info)
+      elsif extension == '.zip'
+        install_zip(file_path, version, info: info)
       end
 
       # Forces sanitation for installation of 'weird' versions eg 5.6.1xf1Linux
@@ -428,20 +455,14 @@ module U3d
 
     def install(file_path, version, installation_path: nil, info: nil)
       extension = File.extname(file_path)
-      raise "Installation of #{extension} files is not supported on Windows" unless %w[.po .exe .msi].include? extension
+      raise "Installation of #{extension} files is not supported on Windows" unless %w[.po .zip .exe .msi].include? extension
       path = installation_path || File.join(DEFAULT_WINDOWS_INSTALL, format(UNITY_DIR, version: version))
       if extension == '.po'
-        install_po(
-          file_path,
-          version,
-          info: info
-        )
+        install_po(file_path, version, info: info)
+      elsif extension == '.zip'
+        install_zip(file_path, version, info: info)
       else
-        install_exe(
-          file_path,
-          installation_path: path,
-          info: info
-        )
+        install_exe(file_path, installation_path: path, info: info)
       end
     end
 

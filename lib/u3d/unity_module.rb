@@ -27,13 +27,13 @@ module U3d
     # Validation attributes
     attr_reader :installed_size, :download_size, :checksum
     # Internal attributes
-    attr_reader :os, :destination
+    attr_reader :os, :destination, :rename_from, :rename_to
 
     # rubocop:disable Metrics/ParameterLists
     def initialize(
       id:, name: nil, description: nil, url: nil,
       installed_size: nil, download_size: nil, checksum: nil,
-      os: U3dCore::Helper.operating_system, destination: nil
+      os: U3dCore::Helper.operating_system, destination: nil, rename_from: nil, rename_to: nil
     )
       @id = id.downcase
       @name = name
@@ -44,6 +44,8 @@ module U3d
       @checksum = checksum
       @os = os
       @destination = destination
+      @rename_from = rename_from
+      @rename_to = rename_to
     end
     # rubocop:enable Metrics/ParameterLists
 
@@ -128,6 +130,8 @@ module U3d
           installed_size: entries['installedSize'],
           checksum: entries['checksum'],
           destination: entries['destination'],
+          rename_from: entries['renameFrom'],
+          rename_to: entries['renameTo'],
           os: os
         )
       end

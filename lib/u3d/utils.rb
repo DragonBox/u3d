@@ -151,6 +151,12 @@ module U3d
         FileUtils.mkpath(dir) unless File.directory?(dir)
       end
 
+      def ensure_permitted(dir)
+        return if U3dCore::Helper.operating_system == :win
+        command = "chmod a+w #{dir}"
+        U3dCore::CommandExecutor.execute(command: command, admin: true)
+      end
+
       # if total is nil (unknown, falls back to print_progress_nosize)
       def print_progress(current, total, started_at)
         if total.nil?
