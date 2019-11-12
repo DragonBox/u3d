@@ -89,6 +89,23 @@ module U3d
 
     protected
 
+    def install_po(file_path, version, info: nil)
+      unity = installed.find { |u| u.version == version }
+      root_path = if info && info.destination
+                    info.destination.gsub(/{UNITY_PATH}/, unity.root_path)
+                  else
+                    unity.root_path
+                  end
+
+      target_path = File.join(root_path, File.basename(file_path))
+      Utils.ensure_dir(File.dirname(target_path))
+
+      UI.verbose "Copying #{file_path} to #{target_path}"
+      FileUtils.cp(file_path, target_path)
+
+      UI.success "Successfully installed language file #{File.basename(file_path)}"
+    end
+
     def extra_installation_paths
       return [] if ENV['U3D_EXTRA_PATHS'].nil?
       ENV['U3D_EXTRA_PATHS'].strip.split(File::PATH_SEPARATOR)
@@ -128,17 +145,24 @@ module U3d
       paths.map { |path| MacInstallation.new(root_path: path) }
     end
 
-    # rubocop:disable UnusedMethodArgument
-    def install(file_path, version, installation_path: nil, info: {})
+    def install(file_path, version, installation_path: nil, info: nil)
       # rubocop:enable UnusedMethodArgument
       extension = File.extname(file_path)
-      raise "Installation of #{extension} files is not supported on Mac" if extension != '.pkg'
+      raise "Installation of #{extension} files is not supported on Mac" unless %w[.po .pkg].include? extension
       path = installation_path || DEFAULT_MAC_INSTALL
-      install_pkg(
-        file_path,
-        version: version,
-        target_path: path
-      )
+      if extension == '.po'
+        install_po(
+          file_path,
+          version,
+          info: info
+        )
+      else
+        install_pkg(
+          file_path,
+          version: version,
+          target_path: path
+        )
+      end
     end
 
     def install_pkg(file_path, version: nil, target_path: nil)
@@ -233,12 +257,12 @@ module U3d
       paths.map { |path| LinuxInstallation.new(root_path: path) }
     end
 
-    # rubocop:disable UnusedMethodArgument, PerceivedComplexity
-    def install(file_path, version, installation_path: nil, info: {})
+    # rubocop:disable PerceivedComplexity
+    def install(file_path, version, installation_path: nil, info: nil)
       # rubocop:enable UnusedMethodArgument, PerceivedComplexity
       extension = File.extname(file_path)
 
-      raise "Installation of #{extension} files is not supported on Linux" unless ['.sh', '.xz', '.pkg'].include? extension
+      raise "Installation of #{extension} files is not supported on Linux" unless ['.po', '.sh', '.xz', '.pkg'].include? extension
       if extension == '.sh'
         path = installation_path || DEFAULT_LINUX_INSTALL
         install_sh(file_path, installation_path: path)
@@ -250,6 +274,8 @@ module U3d
         new_path = File.join(DEFAULT_LINUX_INSTALL, format(UNITY_DIR_LINUX, version: version))
         path = installation_path || new_path
         install_pkg(file_path, installation_path: path)
+      elsif extension == '.po'
+        install_po(file_path, version, info: info)
       end
 
       # Forces sanitation for installation of 'weird' versions eg 5.6.1xf1Linux
@@ -400,18 +426,26 @@ module U3d
       ) { |path| WindowsInstallation.new(root_path: File.expand_path('../..', path)) }
     end
 
-    def install(file_path, version, installation_path: nil, info: {})
+    def install(file_path, version, installation_path: nil, info: nil)
       extension = File.extname(file_path)
-      raise "Installation of #{extension} files is not supported on Windows" unless %w[.exe .msi].include? extension
+      raise "Installation of #{extension} files is not supported on Windows" unless %w[.po .exe .msi].include? extension
       path = installation_path || File.join(DEFAULT_WINDOWS_INSTALL, format(UNITY_DIR, version: version))
-      install_exe(
-        file_path,
-        installation_path: path,
-        info: info
-      )
+      if extension == '.po'
+        install_po(
+          file_path,
+          version,
+          info: info
+        )
+      else
+        install_exe(
+          file_path,
+          installation_path: path,
+          info: info
+        )
+      end
     end
 
-    def install_exe(file_path, installation_path: nil, info: {})
+    def install_exe(file_path, installation_path: nil, info: nil)
       installation_path ||= DEFAULT_WINDOWS_INSTALL
       final_path = U3dCore::Helper.windows_path(installation_path)
       Utils.ensure_dir(final_path)

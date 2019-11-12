@@ -27,12 +27,13 @@ module U3d
     # Validation attributes
     attr_reader :installed_size, :download_size, :checksum
     # Internal attributes
-    attr_reader :os
+    attr_reader :os, :destination
 
+    # rubocop:disable Metrics/ParameterLists
     def initialize(
       id:, name: nil, description: nil, url: nil,
       installed_size: nil, download_size: nil, checksum: nil,
-      os: U3dCore::Helper.operating_system
+      os: U3dCore::Helper.operating_system, destination: nil
     )
       @id = id.downcase
       @name = name
@@ -42,7 +43,9 @@ module U3d
       @download_size = download_size
       @checksum = checksum
       @os = os
+      @destination = destination
     end
+    # rubocop:enable Metrics/ParameterLists
 
     def download_size_bytes
       size_in_bytes(download_size)
@@ -124,6 +127,7 @@ module U3d
           download_size: entries['downloadSize'],
           installed_size: entries['installedSize'],
           checksum: entries['checksum'],
+          destination: entries['destination'],
           os: os
         )
       end

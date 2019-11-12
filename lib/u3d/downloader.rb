@@ -152,13 +152,13 @@ module U3d
         dir = File.join(Downloader.download_directory, definition.version)
         Utils.ensure_dir(dir)
 
-        file_name = if language_match = UNITY_LANGUAGE_FILE_REGEX.match(final_url)
-          language_match[1] + '.po' # Unity uses PO (Portable object files) for localization
-        elsif module_match = UNITY_MODULE_FILE_REGEX.match(final_url)
-          module_match[1]
-        else
-          raise "Unable to download file at #{final_url}. Please report it to the u3d issues on Github: https://github.com/DragonBox/u3d/issues/new"
-        end
+        file_name = if (language_match = UNITY_LANGUAGE_FILE_REGEX.match(final_url))
+                      language_match[1] + '.po' # Unity uses PO (Portable object files) for localization
+                    elsif (module_match = UNITY_MODULE_FILE_REGEX.match(final_url))
+                      module_match[1]
+                    else
+                      raise "Unable to download file at #{final_url}. Please report it to the u3d issues on Github: https://github.com/DragonBox/u3d/issues/new"
+                    end
 
         destination = File.expand_path(file_name, dir)
 
