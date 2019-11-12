@@ -55,7 +55,7 @@ module U3d
     def self.install_modules(files, version, installation_path: nil)
       installer = Installer.create
       files.each do |name, file, info|
-        UI.header "Installing #{info['title']} (#{name})"
+        UI.header "Installing #{info.name} (#{name})"
         UI.message 'Installing with ' + file
         installer.install(file, version, installation_path: installation_path, info: info)
       end

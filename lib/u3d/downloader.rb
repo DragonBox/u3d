@@ -101,11 +101,12 @@ module U3d
 
       def get_package(downloader, validator, package, definition, files)
         path, url = downloader.destination_and_url_for(package, definition)
+        package_info = definition[package]
         if File.file?(path)
           UI.verbose "Installer file for #{package} seems to be present at #{path}"
           if validator.validate(package, path, definition)
             UI.message "#{package.capitalize} is already downloaded"
-            files << [package, path, definition[package]]
+            files << [package, path, package_info]
             return
           else
             extension = File.extname(path)
@@ -115,14 +116,14 @@ module U3d
           end
         end
 
-        UI.header "Downloading #{package} version #{definition.version}"
+        UI.header "Downloading #{package_info.name} version #{definition.version}"
         UI.message 'Downloading from ' + url.to_s.cyan.underline
         UI.message 'Download will be found at ' + path
-        download_package(path, url, size: definition[package].download_size_bytes)
+        download_package(path, url, size: package_info.download_size_bytes)
 
         if validator.validate(package, path, definition)
           UI.success "Successfully downloaded #{package}."
-          files << [package, path, definition[package]]
+          files << [package, path, package_info]
         else
           UI.error "Failed to download #{package}"
         end
