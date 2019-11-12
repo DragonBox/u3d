@@ -30,6 +30,8 @@ module U3d
     DOWNLOAD_DIRECTORY = 'Unity_Packages'.freeze
     # Path to the directory for the package downloading
     DOWNLOAD_PATH = "#{ENV['HOME']}/Downloads".freeze
+    # Regex to get the name of a localization asset
+    UNITY_LANGUAGE_FILE_REGEX = %r{\/\d+/[0-9\.]+\/(\w+)$}
     # Regex to get the name of a package out of its file name
     UNITY_MODULE_FILE_REGEX = %r{\/([\w\-_\.\+]+\.(?:pkg|exe|zip|sh|deb|msi|xz))[^\/]*$}
 
@@ -149,7 +151,14 @@ module U3d
 
         dir = File.join(Downloader.download_directory, definition.version)
         Utils.ensure_dir(dir)
-        file_name = UNITY_MODULE_FILE_REGEX.match(final_url)[1]
+
+        file_name = if language_match = UNITY_LANGUAGE_FILE_REGEX.match(final_url)
+          language_match[1] + '.po' # Unity uses PO (Portable object files) for localization
+        elsif module_match = UNITY_MODULE_FILE_REGEX.match(final_url)
+          module_match[1]
+        else
+          raise "Unable to download file at #{final_url}. Please report it to the u3d issues on Github: https://github.com/DragonBox/u3d/issues/new"
+        end
 
         destination = File.expand_path(file_name, dir)
 
