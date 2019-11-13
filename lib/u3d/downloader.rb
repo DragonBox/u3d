@@ -105,9 +105,9 @@ module U3d
         path, url = downloader.destination_and_url_for(package, definition)
         package_info = definition[package]
         if File.file?(path)
-          UI.verbose "Installer file for #{package} seems to be present at #{path}"
+          UI.verbose "Installer file for #{package_info.name} seems to be present at #{path}"
           if validator.validate(package, path, definition)
-            UI.message "#{package.capitalize} is already downloaded"
+            UI.message "#{package_info.name} is already downloaded"
             files << [package, path, package_info]
             return
           else
