@@ -109,7 +109,7 @@ module U3d
         url = url_root + url unless /^http/ =~ url
 
         UnityModule.new(
-          id: module_key.downcase,
+          id: module_key,
           name: entries['title'],
           description: entries['description'],
           url: url,
