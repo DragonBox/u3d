@@ -124,6 +124,7 @@ module U3d
       if info && info.rename_from && info.rename_to
         rename_from = info.rename_from.gsub(/{UNITY_PATH}/, unity.root_path)
         rename_to = info.rename_to.gsub(/{UNITY_PATH}/, unity.root_path)
+        Utils.ensure_dir(rename_to)
         UI.verbose("Renaming from #{rename_from} to #{rename_to}")
         if File.file? rename_from
           FileUtils.mv(rename_from, rename_to)
