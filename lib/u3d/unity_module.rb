@@ -27,13 +27,13 @@ module U3d
     # Validation attributes
     attr_reader :installed_size, :download_size, :checksum
     # Internal attributes
-    attr_reader :os, :command, :destination, :rename_from, :rename_to
+    attr_reader :os, :depends_on, :command, :destination, :rename_from, :rename_to
 
     # rubocop:disable Metrics/ParameterLists
     def initialize(
       id:, name: nil, description: nil, url: nil,
       installed_size: nil, download_size: nil, checksum: nil,
-      os: nil, command: nil, destination: nil, rename_from: nil, rename_to: nil
+      os: nil, depends_on: nil, command: nil, destination: nil, rename_from: nil, rename_to: nil
     )
       @id = id.downcase
       @name = name
@@ -43,12 +43,20 @@ module U3d
       @download_size = download_size
       @checksum = checksum
       @os = os
+      @depends_on = depends_on
       @command = command
       @destination = destination
       @rename_from = rename_from
       @rename_to = rename_to
     end
     # rubocop:enable Metrics/ParameterLists
+
+    def depends_on?(other)
+      return true if other.id == 'unity'
+      return false unless depends_on
+
+      other.id == depends_on || other.name == depends_on
+    end
 
     class << self
       def load_modules(version, cached_versions, os: U3dCore::Helper.operating_system, offline: false)
@@ -110,6 +118,7 @@ module U3d
           installed_size: entries['installedsize'],
           checksum: entries['md5'],
           command: entries['cmd'],
+          depends_on: entries['sync'],
           os: os
         )
       end
@@ -127,6 +136,7 @@ module U3d
           rename_from: entries['renameFrom'],
           rename_to: entries['renameTo'],
           command: entries['cmd'],
+          depends_on: entries['sync'],
           os: os
         )
       end
