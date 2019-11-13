@@ -47,7 +47,7 @@ module U3d
       end
 
       def download_modules(os: U3dCore::Helper.operating_system)
-        url = UnityVersions.json_path_for(json_os(os))
+        url = UnityVersions.json_url_for(json_os(os))
         builds = UnityVersions.fetch_json(url, UnityVersions::UNITY_LATEST_JSON)
         builds.each { |build| write_modules(build, os) }
         return builds.map { |build| build['versions'] }

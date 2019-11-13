@@ -165,7 +165,7 @@ module U3d
         end.reduce({}, :merge)
       end
 
-      def json_path_for(os)
+      def json_url_for(os)
         format(UNITY_LATEST_JSON_URL, os: os)
       end
 
@@ -276,7 +276,7 @@ module U3d
 
       def fetch_json(os)
         UI.message 'Loading Unity latest releases'
-        url = UnityVersions.json_path_for(os)
+        url = UnityVersions.json_url_for(os)
         latest = UnityVersions.fetch_from_json(url, UNITY_LATEST_JSON)
 
         UI.success "Found #{latest.count} latest releases."
