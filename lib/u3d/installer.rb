@@ -479,8 +479,8 @@ module U3d
       Utils.ensure_dir(final_path)
       begin
         command = nil
-        if info['cmd']
-          command = info['cmd']
+        if info.command
+          command = info.command
           if /msiexec/ =~ command
             command.sub!(/{FILENAME}/, '"' + U3dCore::Helper.windows_path(file_path) + '"')
           else
@@ -496,7 +496,7 @@ module U3d
       rescue StandardError => e
         UI.error "Failed to install package at #{file_path}: #{e}"
       else
-        UI.success "Successfully installed #{info['title']}"
+        UI.success "Successfully installed #{info.name}"
       end
     end
 
