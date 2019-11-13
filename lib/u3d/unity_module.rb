@@ -49,14 +49,6 @@ module U3d
     end
     # rubocop:enable Metrics/ParameterLists
 
-    def download_size_bytes
-      size_in_bytes(download_size)
-    end
-
-    def installed_size_bytes
-      size_in_bytes(installed_size)
-    end
-
     class << self
       def load_modules(version, cached_versions, os: U3dCore::Helper.operating_system, offline: false)
         if version.is_a? Array
@@ -135,12 +127,6 @@ module U3d
           os: os
         )
       end
-    end
-
-    private
-
-    def size_in_bytes(size)
-      @os == :win ? size * 1024 : size
     end
   end
 end

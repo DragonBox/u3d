@@ -51,7 +51,7 @@ module U3d
 
   class LinuxValidator < DownloadValidator
     def validate(package, file, definition)
-      return size_validation(expected: definition[package].download_size_bytes, actual: File.size(file)) if definition[package] && definition[package].download_size_bytes
+      return size_validation(expected: definition[package].download_size, actual: File.size(file)) if definition[package] && definition[package].download_size
       UI.important "No file validation available, #{file} is assumed to be correct"
       true
     end
@@ -59,11 +59,11 @@ module U3d
 
   class MacValidator < DownloadValidator
     def validate(package, file, definition)
-      if definition[package].download_size_bytes % 1000 && definition[package].checksum.nil?
+      if definition[package].download_size % 1000 && definition[package].checksum.nil?
         UI.verbose "File '#{definition[package].name}' seems external. Validation skipped"
         return true
       end
-      size_validation(expected: definition[package].download_size_bytes, actual: File.size(file)) &&
+      size_validation(expected: definition[package].download_size, actual: File.size(file)) &&
         hash_validation(expected: definition[package].checksum, actual: Utils.hashfile(file))
     end
   end
@@ -71,12 +71,12 @@ module U3d
   class WindowsValidator < DownloadValidator
     def validate(package, file, definition)
       # External packages have no md5 and a false size value
-      if definition[package].download_size_bytes % 1000 && definition[package].checksum.nil?
+      if definition[package].download_size % 1000 && definition[package].checksum.nil?
         UI.verbose "File '#{definition[package].name}' seems external. Validation skipped"
         return true
       end
       rounded_size = (File.size(file).to_f / 1024).floor
-      size_validation(expected: definition[package].download_size_bytes, actual: rounded_size) &&
+      size_validation(expected: definition[package].download_size, actual: rounded_size) &&
         hash_validation(expected: definition[package].checksum, actual: Utils.hashfile(file))
     end
   end
