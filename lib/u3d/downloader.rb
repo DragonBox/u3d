@@ -31,7 +31,7 @@ module U3d
     # Path to the directory for the package downloading
     DOWNLOAD_PATH = "#{ENV['HOME']}/Downloads".freeze
     # Regex to get the name of a localization asset
-    UNITY_LANGUAGE_FILE_REGEX = %r{\/\d+/[0-9\.]+\/(\w+)$}
+    UNITY_LANGUAGE_FILE_REGEX = %r{\/\d+/[0-9\.]+\/([\w-]+)$}
     # Regex to get the name of a package out of its file name
     UNITY_MODULE_FILE_REGEX = %r{\/([\w\-_\.\+]+\.(?:pkg|exe|zip|sh|deb|msi|xz))[^\/]*$}
 
