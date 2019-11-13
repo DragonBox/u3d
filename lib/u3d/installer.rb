@@ -108,8 +108,10 @@ module U3d
       root_path = package_destination(info, unity.root_path)
 
       UI.verbose("Unzipping #{file_path} to #{root_path}")
-      Utils.ensure_permitted(File.dirname(root_path))
-      Utils.ensure_dir(root_path)
+      unless File.directory?(root_path)
+        Utils.ensure_permitted(File.dirname(root_path))
+        Utils.ensure_dir(root_path)
+      end
 
       Zip::File.open(file_path) do |zip_file|
         zip_file.each do |entry|
