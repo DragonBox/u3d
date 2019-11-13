@@ -33,7 +33,7 @@ module U3d
     def initialize(
       id:, name: nil, description: nil, url: nil,
       installed_size: nil, download_size: nil, checksum: nil,
-      os: U3dCore::Helper.operating_system, destination: nil, rename_from: nil, rename_to: nil
+      os: nil, destination: nil, rename_from: nil, rename_to: nil
     )
       @id = id.downcase
       @name = name
