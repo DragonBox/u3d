@@ -151,7 +151,7 @@ module U3d
         FileUtils.mkpath(dir) unless File.directory?(dir)
       end
 
-      def ensure_permitted(dir)
+      def ensure_directory_writeable(dir)
         return if U3dCore::Helper.operating_system == :win
         command = "chmod a+w #{dir}"
         U3dCore::CommandExecutor.execute(command: command, admin: true)

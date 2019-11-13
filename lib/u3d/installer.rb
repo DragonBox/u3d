@@ -109,7 +109,7 @@ module U3d
 
       UI.verbose("Unzipping #{file_path} to #{root_path}")
       unless File.directory?(root_path)
-        Utils.ensure_permitted(File.dirname(root_path))
+        Utils.ensure_directory_writeable(File.dirname(root_path))
         Utils.ensure_dir(root_path)
       end
 
