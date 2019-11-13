@@ -521,7 +521,7 @@ describe U3d do
             files = double('files')
             expect(U3d::Downloader).to receive(:download_modules).with(
               definition,
-              packages: %w[unity webgl android]
+              packages: %w[unity android webgl]
             ) { files }
             expect(U3d::Installer).to receive(:install_modules).with(
               files,
@@ -832,7 +832,7 @@ describe U3d do
             files = double('files')
             expect(U3d::Downloader).to receive(:local_files).with(
               definition,
-              packages: %w[unity webgl android]
+              packages: %w[unity android webgl]
             ) { files }
             expect(U3d::Installer).to receive(:install_modules).with(
               files,

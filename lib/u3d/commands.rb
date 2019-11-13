@@ -389,7 +389,7 @@ module U3d
           elsif package_b.depends_on?(package_a) # a must come first
             -1
           else
-            0
+            a <=> b # Resort to alphabetical sorting
           end
         end
       end
