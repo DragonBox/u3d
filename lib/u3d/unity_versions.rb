@@ -126,6 +126,13 @@ module U3d
     MAC_WIN_SHADERS = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)builtin_shaders-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
     LINUX_INSTALLER = %r{(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)LinuxEditorInstaller/Unity.tar.xz}
 
+    MAC_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)MacEditorInstaller/[a-zA-Z0-9/\.\+]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
+    MAC_DOWNLOAD_2018_2 = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)UnityDownloadAssistant-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
+
+    WIN_DOWNLOAD = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)Windows..EditorInstaller/[a-zA-Z0-9/\.\+]+-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
+    # NOTE: the version info is no longer contained in the url for the newest Unity beta versions
+    # As a workaround, we work with the Android package
+    WIN_BETA_DOWNLOAD_2018_3 = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)TargetSupportInstaller/UnitySetup-Android-Support-for-Editor-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
     LINUX_DOWNLOAD_DATED = %r{"(https?://[\w/\._-]+/unity\-editor\-installer\-(\d+\.\d+\.\d+\w\d+).*\.sh)"}
     LINUX_DOWNLOAD_RECENT_PAGE = %r{"(https?://beta\.unity3d\.com/download/[a-zA-Z0-9/\.\+]+/public_download\.html)"}
     LINUX_DOWNLOAD_RECENT_FILE = %r{'(https?://beta\.unity3d\.com/download/[a-zA-Z0-9/\.\+]+/unity\-editor\-installer\-(\d+\.\d+\.\d+(?:x)?\w\d+).*\.sh)'}
@@ -139,13 +146,17 @@ module U3d
       def list_available(os: nil)
         os ||= U3dCore::Helper.operating_system
 
+        additional_pages_env = ENV['U3D_ADDITIONAL_PAGES']
+        additional_pages = additional_pages_env ? additional_pages_env.split(',') : []
+
         case os
         when :linux
+          UI.important 'Additional download pages are not yet support on Linux' unless additional_pages.empty?
           return U3d::UnityVersions::LinuxVersions.list_available
         when :mac
-          return U3d::UnityVersions::MacVersions.list_available
+          return U3d::UnityVersions::MacVersions.list_available(additional_pages: additional_pages)
         when :win
-          return U3d::UnityVersions::WindowsVersions.list_available
+          return U3d::UnityVersions::WindowsVersions.list_available(additional_pages: additional_pages)
         else
           raise ArgumentError, "Operating system #{os} not supported"
         end
@@ -279,21 +290,24 @@ module U3d
         @versions
       end
 
-      def fetch_all_channels
+      def fetch_all_channels(additional_pages: [])
         fetch_some('lts', UNITY_LTSES)
         fetch_some('stable', UNITY_DOWNLOADS)
         fetch_some('patch', UNITY_PATCHES)
         # This does not work any longer
         # fetch_some('beta', UNITY_BETAS)
+        additional_pages.each do |page|
+          fetch_some('custom', page)
+        end
         @versions
       end
     end
 
     class MacVersions
       class << self
-        def list_available
+        def list_available(additional_pages: [])
           versions_fetcher = VersionsFetcher.new(pattern: [MAC_WIN_SHADERS])
-          versions_fetcher.fetch_all_channels
+          versions_fetcher.fetch_all_channels(additional_pages: additional_pages)
           versions_fetcher.fetch_json('darwin')
         end
       end
@@ -301,9 +315,9 @@ module U3d
 
     class WindowsVersions
       class << self
-        def list_available
+        def list_available(additional_pages: [])
           versions_fetcher = VersionsFetcher.new(pattern: MAC_WIN_SHADERS)
-          versions_fetcher.fetch_all_channels
+          versions_fetcher.fetch_all_channels(additional_pages: additional_pages)
           versions_fetcher.fetch_json('win32')
         end
       end
