@@ -155,7 +155,12 @@ module U3d
         if U3dCore::Helper.operating_system == :win
           yield
         else
-          owner, access = U3dCore::CommandExecutor.execute(command: "stat -f \"%Su,%A\" #{dir}", admin: false).strip.split(',')
+          stat_command = if U3dCore::Helper.operating_system == :linux
+                           "stat -c \"%U,%a\" #{dir}"
+                         elsif U3dCore::Helper.operating_system == :mac
+                           "stat -f \"%Su,%A\" #{dir}"
+                         end
+          owner, access = U3dCore::CommandExecutor.execute(command: stat_command, admin: false).strip.split(',')
           current_user = U3dCore::CommandExecutor.execute(command: 'whoami', admin: false)
           U3dCore::CommandExecutor.execute(command: "chown #{current_user}: #{dir}", admin: true)
           U3dCore::CommandExecutor.execute(command: "chmod u+w #{dir}", admin: true)
