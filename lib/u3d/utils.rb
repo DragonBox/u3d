@@ -151,10 +151,21 @@ module U3d
         FileUtils.mkpath(dir) unless File.directory?(dir)
       end
 
-      def ensure_directory_writeable(dir)
-        return if U3dCore::Helper.operating_system == :win
-        command = "chmod a+w #{dir}"
-        U3dCore::CommandExecutor.execute(command: command, admin: true)
+      def get_write_access(dir)
+        if U3dCore::Helper.operating_system == :win
+          yield
+        else
+          owner, access = U3dCore::CommandExecutor.execute(command: "stat -f \"%Su,%A\" #{dir}", admin: false).strip.split(',')
+          current_user = U3dCore::CommandExecutor.execute(command: 'whoami', admin: false)
+          U3dCore::CommandExecutor.execute(command: "chown #{current_user}: #{dir}", admin: true)
+          U3dCore::CommandExecutor.execute(command: "chmod u+w #{dir}", admin: true)
+          begin
+            yield
+          ensure
+            U3dCore::CommandExecutor.execute(command: "chown #{owner}: #{dir}", admin: true)
+            U3dCore::CommandExecutor.execute(command: "chmod #{access} #{dir}", admin: true)
+          end
+        end
       end
 
       # if total is nil (unknown, falls back to print_progress_nosize)
