@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.2.1](https://github.com/DragonBox/u3d/tree/v1.2.1) (2019-11-15)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.2.0...v1.2.1)
+
+**Implemented enhancements:**
+
+- u3d 1.2.0 not compatible with fastlane [\#379](https://github.com/DragonBox/u3d/issues/379)
+- Lower dependency on rubyzip to 1.3.0 for fastlane compatibility [\#380](https://github.com/DragonBox/u3d/pull/380) ([niezbop](https://github.com/niezbop))
+
 ## [v1.2.0](https://github.com/DragonBox/u3d/tree/v1.2.0) (2019-11-15)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.5...v1.2.0)
 
