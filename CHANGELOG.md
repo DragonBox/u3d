@@ -1,5 +1,39 @@
 # Change Log
 
+## [v1.2.0](https://github.com/DragonBox/u3d/tree/v1.2.0) (2019-11-15)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.5...v1.2.0)
+
+**Implemented enhancements:**
+
+- 2019.x Android package: Install SDK & NDK Tools [\#359](https://github.com/DragonBox/u3d/issues/359)
+- u3d/installer: Enable the download/installation of modules from Unity Hub [\#375](https://github.com/DragonBox/u3d/pull/375) ([niezbop](https://github.com/niezbop))
+
+**Fixed bugs:**
+
+- installation\_path parameter problems [\#371](https://github.com/DragonBox/u3d/issues/371)
+- u3d list command does not work in non-standard path [\#370](https://github.com/DragonBox/u3d/issues/370)
+- New linux versions are not visible in u3d [\#369](https://github.com/DragonBox/u3d/issues/369)
+- I can't execute commands if I have an alpha version installed [\#354](https://github.com/DragonBox/u3d/issues/354)
+- Cannot start u3d within a working directory which path contains special characters. [\#352](https://github.com/DragonBox/u3d/issues/352)
+- u3d/installation: fix the version retrieving for Windows on Unity 2019.2.x and onwards [\#374](https://github.com/DragonBox/u3d/pull/374) ([niezbop](https://github.com/niezbop))
+- u3d/installer: support custom install paths through U3D\_EXTRA\_PATHS [\#373](https://github.com/DragonBox/u3d/pull/373) ([niezbop](https://github.com/niezbop))
+- Use the VersionsFetcher with Unity's json on Linux as well [\#364](https://github.com/DragonBox/u3d/pull/364) ([niezbop](https://github.com/niezbop))
+
+**Closed issues:**
+
+- unity 2019.2.x on windows [\#367](https://github.com/DragonBox/u3d/issues/367)
+- When using prettifier, have an option to write the raw log to file in case we need it [\#365](https://github.com/DragonBox/u3d/issues/365)
+- u3d can't list all available versions for Linux [\#360](https://github.com/DragonBox/u3d/issues/360)
+- Empty ini files prevent Unity installation [\#356](https://github.com/DragonBox/u3d/issues/356)
+
+**Merged pull requests:**
+
+- Bump ruby dependencies in examples to get rid of CVEs [\#372](https://github.com/DragonBox/u3d/pull/372) ([lacostej](https://github.com/lacostej))
+- Prevent empty ini files from being created and ignore them \(fixes \#356\) [\#361](https://github.com/DragonBox/u3d/pull/361) ([lacostej](https://github.com/lacostej))
+- u3d/internals: add a quote around active rule name with loggin parsing failures [\#358](https://github.com/DragonBox/u3d/pull/358) ([lacostej](https://github.com/lacostej))
+- u3d/internals: prepare for adding a test suite for the prettifier. Supports \#119 [\#355](https://github.com/DragonBox/u3d/pull/355) ([lacostej](https://github.com/lacostej))
+- u3d/internals: support accentuated characters in Windows Local App Data path. Fixes \#352 [\#353](https://github.com/DragonBox/u3d/pull/353) ([lacostej](https://github.com/lacostej))
+
 ## [v1.1.5](https://github.com/DragonBox/u3d/tree/v1.1.5) (2019-03-06)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.4...v1.1.5)
 
