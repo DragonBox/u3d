@@ -2,13 +2,13 @@
 
 * prepare a version
 
+`rake bump`
+
 `rake pre_release`
 
 * make a release
 
 `rake release`
-
-`rake bump`
 
 = release of the fastlane plugin
 
