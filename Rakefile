@@ -187,6 +187,7 @@ end
 
 desc 'Update the changelog, no commit made'
 task :changelog do
+  UI.user_error!('No CHANGELOG_GITHUB_TOKEN in the environment') unless ENV.has_key? 'CHANGELOG_GITHUB_TOKEN'
   puts "Updating changelog #{ENV['CHANGELOG_GITHUB_TOKEN']}"
   sh "github_changelog_generator" if ENV['CHANGELOG_GITHUB_TOKEN']
 end
