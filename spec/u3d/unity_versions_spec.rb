@@ -109,12 +109,12 @@ describe U3d do
           allow(@unity_forums).to receive(:page_content).with('http://beta.unity3d.com/download/3c89f8d277f5/public_download.html') { linux_public_archive_assistant }
           allow(@unity_forums).to receive(:page_content).with('https://beta.unity3d.com/download/ce9f6a0436e1+/public_download.html') { linux_public_archive_standalone_plus }
 
-          allow(U3d::INIparser).to receive(:load_ini).with('1.2.3f1', nil, os: :linux, offline: true) { fake_linux_ini_data(1005, 'something 1.2.3f1') }
-          allow(U3d::INIparser).to receive(:load_ini).with('1.3.5f1', nil, os: :linux, offline: true) {}
-          allow(U3d::INIparser).to receive(:load_ini).with('2017.1.6f1', nil, os: :linux, offline: true) { fake_linux_ini_data(1007, 'something 1.2.3f1') }
-          allow(U3d::INIparser).to receive(:load_ini).with('2017.1.0b3', nil, os: :linux, offline: true) {}
-          allow(U3d::INIparser).to receive(:load_ini).with('2017.3.0f1', nil, os: :linux, offline: true) {}
-          allow(U3d::INIparser).to receive(:load_ini).with('2017.2.1f1', nil, os: :linux, offline: true) {}
+          allow(U3d::INIModulesParser).to receive(:load_ini).with('1.2.3f1', nil, os: :linux, offline: true) { fake_linux_ini_data(1005, 'something 1.2.3f1') }
+          allow(U3d::INIModulesParser).to receive(:load_ini).with('1.3.5f1', nil, os: :linux, offline: true) {}
+          allow(U3d::INIModulesParser).to receive(:load_ini).with('2017.1.6f1', nil, os: :linux, offline: true) { fake_linux_ini_data(1007, 'something 1.2.3f1') }
+          allow(U3d::INIModulesParser).to receive(:load_ini).with('2017.1.0b3', nil, os: :linux, offline: true) {}
+          allow(U3d::INIModulesParser).to receive(:load_ini).with('2017.3.0f1', nil, os: :linux, offline: true) {}
+          allow(U3d::INIModulesParser).to receive(:load_ini).with('2017.2.1f1', nil, os: :linux, offline: true) {}
           expect(U3d::Utils).to receive(:get_ssl) { latest_linux_archive }
 
           expect(U3d::UnityVersions.list_available(os: :linux).keys).to eql ['1.2.3f1', '1.3.5f1', '2017.1.6f1', '2018.3.0f2', '2017.1.0b3', '2017.3.0f1', '2017.2.1f1', '2017.4.29f1', '2019.2.0b7']

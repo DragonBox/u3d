@@ -124,19 +124,16 @@ module U3d
         end
         sorted_keys = vcomparators.sort.map { |v| v.version.to_s }
 
+        show_packages = options[:packages]
+        packages = UnityModule.load_modules(sorted_keys, cache_versions, os: os) if show_packages
+
         sorted_keys.each do |k|
           v = cache_versions[k]
           UI.message "Version #{k}: " + v.to_s.cyan.underline
-          next unless options[:packages]
-          inif = nil
-          begin
-            inif = U3d::INIparser.load_ini(k, cache_versions, os: os)
-          rescue StandardError => e
-            UI.error "Could not load packages for this version (#{e})"
-          else
-            UI.message 'Packages:'
-            inif.each_key { |pack| UI.message " - #{pack}" }
-          end
+          next unless show_packages
+          version_packages = packages[k]
+          UI.message 'Packages:'
+          version_packages.each { |package| UI.message " - #{package.id.capitalize}" }
         end
       end
 
@@ -145,8 +142,6 @@ module U3d
 
         UI.user_error!("You cannot use the --operating_system and the --install options together") if options[:install] && options[:operating_system]
         os = valid_os_or_current(options[:operating_system])
-
-        packages = packages_with_unity_first(options)
 
         cache_versions = cache_versions(os, offline: !options[:download])
         version = interpret_latest(version, cache_versions)
@@ -157,7 +152,13 @@ module U3d
 
         definition = UnityVersionDefinition.new(version, os, cache_versions)
         unity = check_unity_presence(version: version)
-        return unless enforce_setup_coherence(packages, options, unity, definition)
+        packages = options[:packages] || ['Unity']
+
+        begin
+          packages = enforce_setup_coherence(packages, options, unity, definition)
+        rescue InstallationSetupError
+          return
+        end
 
         verify_package_names(definition, packages)
 
@@ -332,12 +333,6 @@ module U3d
         iversion
       end
 
-      def packages_with_unity_first(options)
-        temp = options[:packages] || ['Unity']
-        temp.insert(0, 'Unity') if temp.delete('Unity')
-        temp
-      end
-
       def check_unity_presence(version: nil)
         # idea: we could support matching 5.3.6p3 if passed 5.3.6
         installed = Installer.create.installed
@@ -357,6 +352,7 @@ module U3d
           packages.clear
           packages.concat(definition.available_packages)
         end
+        packages = sort_packages(packages, definition)
         if options[:install]
           if unity
             UI.important "Unity #{unity.version} is already installed"
@@ -369,21 +365,63 @@ module U3d
               # FIXME: Move me to the WindowsInstaller
               options[:installation_path] ||= unity.root_path if definition.os == :win
             end
-            packages.select { |pack| unity.package_installed?(pack) }.each do |pack|
-              packages.delete pack
-              UI.important "Ignoring #{pack} module, it is already installed"
-            end
-            return false if packages.empty?
+            # FIXME: unity.package_installed? is not reliable
+            packages = detect_installed_packages(packages, unity)
+            packages = detect_missing_dependencies(packages, unity, definition)
+            raise InstallationSetupError if packages.empty?
           else
-            unless packages.include?('Unity')
+            unless packages.map(&:downcase).include?('unity')
               UI.error 'Please install Unity before any of its packages'
-              return false
+              raise InstallationSetupError
             end
           end
         end
-        true
+        packages
       end
       # rubocop:enable Metrics/BlockNesting
+
+      def sort_packages(packages, definition)
+        packages.sort do |a, b|
+          package_a = definition[a]
+          package_b = definition[b]
+          if package_a.depends_on?(package_b) # b must come first
+            1
+          elsif package_b.depends_on?(package_a) # a must come first
+            -1
+          else
+            a <=> b # Resort to alphabetical sorting
+          end
+        end
+      end
+
+      def detect_installed_packages(packages, unity)
+        result = packages
+        packages.select { |pack| unity.package_installed?(pack) }.each do |pack|
+          result.delete pack
+          UI.important "Ignoring #{pack} module, it is already installed"
+        end
+        result
+      end
+
+      def detect_missing_dependencies(packages, unity, definition)
+        result = packages
+        packages.reject { |package| can_install?(package, unity, definition, packages) }.each do |pack|
+          # See FIXME for package_installed?
+          # result.delete pack
+          package = definition[pack]
+          UI.important "#{package.name} depends on #{package.depends_on}, but it's neither installed nor being installed."
+        end
+        result
+      end
+
+      def can_install?(package_name, unity, definition, installing)
+        package = definition[package_name]
+        return true unless package.depends_on
+        return true if unity.package_installed?(package.depends_on)
+        installing.map { |other| definition[other] }.any? do |other|
+          other.id == package.depends_on || other.name == package.depends_on
+        end
+      end
 
       def get_administrative_privileges(options)
         U3dCore::Globals.use_keychain = true if options[:keychain] && Helper.mac?
@@ -393,4 +431,7 @@ module U3d
     end
   end
   # rubocop:enable ClassLength
+end
+
+class InstallationSetupError < StandardError
 end

@@ -30,6 +30,8 @@ module U3d
     DOWNLOAD_DIRECTORY = 'Unity_Packages'.freeze
     # Path to the directory for the package downloading
     DOWNLOAD_PATH = "#{ENV['HOME']}/Downloads".freeze
+    # Regex to get the name of a localization asset
+    UNITY_LANGUAGE_FILE_REGEX = %r{\/\d+/[0-9\.]+\/([\w-]+)$}
     # Regex to get the name of a package out of its file name
     UNITY_MODULE_FILE_REGEX = %r{\/([\w\-_\.\+]+\.(?:pkg|exe|zip|sh|deb|msi|xz))[^\/]*$}
 
@@ -101,11 +103,12 @@ module U3d
 
       def get_package(downloader, validator, package, definition, files)
         path, url = downloader.destination_and_url_for(package, definition)
+        package_info = definition[package]
         if File.file?(path)
-          UI.verbose "Installer file for #{package} seems to be present at #{path}"
+          UI.verbose "Installer file for #{package_info.name} seems to be present at #{path}"
           if validator.validate(package, path, definition)
-            UI.message "#{package.capitalize} is already downloaded"
-            files << [package, path, definition[package]]
+            UI.message "#{package_info.name} is already downloaded"
+            files << [package, path, package_info]
             return
           else
             extension = File.extname(path)
@@ -115,14 +118,14 @@ module U3d
           end
         end
 
-        UI.header "Downloading #{package} version #{definition.version}"
+        UI.header "Downloading #{package_info.name} version #{definition.version}"
         UI.message 'Downloading from ' + url.to_s.cyan.underline
         UI.message 'Download will be found at ' + path
-        download_package(path, url, size: definition.size_in_bytes(package))
+        download_package(path, url, size: package_info.download_size)
 
         if validator.validate(package, path, definition)
           UI.success "Successfully downloaded #{package}."
-          files << [package, path, definition[package]]
+          files << [package, path, package_info]
         else
           UI.error "Failed to download #{package}"
         end
@@ -148,7 +151,14 @@ module U3d
 
         dir = File.join(Downloader.download_directory, definition.version)
         Utils.ensure_dir(dir)
-        file_name = UNITY_MODULE_FILE_REGEX.match(final_url)[1]
+
+        file_name = if (language_match = UNITY_LANGUAGE_FILE_REGEX.match(final_url))
+                      language_match[1] + '.po' # Unity uses PO (Portable object files) for localization
+                    elsif (module_match = UNITY_MODULE_FILE_REGEX.match(final_url))
+                      module_match[1]
+                    else
+                      raise "Unable to download file at #{final_url}. Please report it to the u3d issues on Github: https://github.com/DragonBox/u3d/issues/new"
+                    end
 
         destination = File.expand_path(file_name, dir)
 
@@ -156,7 +166,7 @@ module U3d
       end
 
       def url_for(package, definition)
-        url = definition[package]['url']
+        url = definition[package].url
         if url
           if url =~ /^http/
             Utils.final_url(url)

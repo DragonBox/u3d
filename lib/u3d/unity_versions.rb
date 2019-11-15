@@ -165,10 +165,18 @@ module U3d
         end.reduce({}, :merge)
       end
 
-      def fetch_from_json(url, pattern)
+      def json_url_for(os)
+        format(UNITY_LATEST_JSON_URL, os: os)
+      end
+
+      def fetch_json(url, pattern)
         require 'json'
         data = Utils.get_ssl(url)
-        JSON.parse(data).values.flatten.select { |b| pattern =~ b['downloadUrl'] }.map do |build|
+        JSON.parse(data).values.flatten.select { |b| pattern =~ b['downloadUrl'] }
+      end
+
+      def fetch_from_json(url, pattern)
+        fetch_json(url, pattern).map do |build|
           [build['version'], pattern.match(build['downloadUrl'])[1]]
         end.to_h
       end
@@ -183,6 +191,8 @@ module U3d
     end
 
     class LinuxVersions
+      JSON_OS = 'linux'.freeze
+
       @unity_forums = U3d::UnityForums.new
       class << self
         attr_accessor :unity_forums
@@ -266,7 +276,7 @@ module U3d
 
       def fetch_json(os)
         UI.message 'Loading Unity latest releases'
-        url = format(UNITY_LATEST_JSON_URL, os: os)
+        url = UnityVersions.json_url_for(os)
         latest = UnityVersions.fetch_from_json(url, UNITY_LATEST_JSON)
 
         UI.success "Found #{latest.count} latest releases."
@@ -290,21 +300,25 @@ module U3d
     end
 
     class MacVersions
+      JSON_OS = 'darwin'.freeze
+
       class << self
         def list_available
           versions_fetcher = VersionsFetcher.new(pattern: [MAC_WIN_SHADERS])
           versions_fetcher.fetch_all_channels
-          versions_fetcher.fetch_json('darwin')
+          versions_fetcher.fetch_json(JSON_OS)
         end
       end
     end
 
     class WindowsVersions
+      JSON_OS = 'win32'.freeze
+
       class << self
         def list_available
           versions_fetcher = VersionsFetcher.new(pattern: MAC_WIN_SHADERS)
           versions_fetcher.fetch_all_channels
-          versions_fetcher.fetch_json('win32')
+          versions_fetcher.fetch_json(JSON_OS)
         end
       end
     end

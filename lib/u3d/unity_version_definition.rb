@@ -20,43 +20,47 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
-require 'u3d/iniparser'
+require 'u3d/ini_modules_parser'
 
 module U3d
   class UnityVersionDefinition
-    attr_accessor :version, :os, :url, :ini
+    attr_accessor :version, :os, :url
+    attr_reader :packages
+
+    private
+
+    attr_writer :packages
+
+    public
 
     def initialize(version, os, cached_versions, offline: false)
       @version = version
       @os = os
       # Cache is assumed to be correct
       @url = cached_versions ? cached_versions[version] : nil
-      begin
-        @ini = INIparser.load_ini(version, cached_versions, os: os, offline: offline)
-      rescue StandardError => e
-        # FIXME: weird that we catch this here
-        UI.error "Could not load INI file for version #{@version} on #{@os}: #{e}"
-        @ini = nil
-      end
+      @packages = UnityModule.load_modules(version, cached_versions, os: os, offline: offline)
     end
 
     def available_packages
-      @ini.keys
+      @packages.map(&:id)
     end
 
-    def available_package?(p)
-      available_packages.include? p
+    def available_package?(package)
+      available_packages.include? package.downcase
     end
 
-    def [](key)
-      return nil unless @ini
-      @ini[key]
+    def [](package)
+      return nil unless available_package? package
+      @packages.find { |pack| pack.id == package.downcase }
     end
 
-    def size_in_bytes(package)
-      return nil unless @ini
-      return -1 unless @ini[package] && @ini[package]['size']
-      @os == :win ? @ini[package]['size'] * 1024 : @ini[package]['size']
+    def ini
+      UI.deprecated 'UnityVersionDefinition no longer exposes the raw ini data'
+      return nil
+    end
+
+    def ini=(_value)
+      UI.deprecated 'UnityVersionDefinition no longer exposes the raw ini data'
     end
   end
 end

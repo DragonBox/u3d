@@ -151,6 +151,28 @@ module U3d
         FileUtils.mkpath(dir) unless File.directory?(dir)
       end
 
+      def get_write_access(dir)
+        if U3dCore::Helper.operating_system == :win
+          yield
+        else
+          stat_command = if U3dCore::Helper.operating_system == :linux
+                           "stat -c \"%U,%a\" #{dir}"
+                         elsif U3dCore::Helper.operating_system == :mac
+                           "stat -f \"%Su,%A\" #{dir}"
+                         end
+          owner, access = U3dCore::CommandExecutor.execute(command: stat_command, admin: false).strip.split(',')
+          current_user = U3dCore::CommandExecutor.execute(command: 'whoami', admin: false)
+          U3dCore::CommandExecutor.execute(command: "chown #{current_user}: #{dir}", admin: true)
+          U3dCore::CommandExecutor.execute(command: "chmod u+w #{dir}", admin: true)
+          begin
+            yield
+          ensure
+            U3dCore::CommandExecutor.execute(command: "chown #{owner}: #{dir}", admin: true)
+            U3dCore::CommandExecutor.execute(command: "chmod #{access} #{dir}", admin: true)
+          end
+        end
+      end
+
       # if total is nil (unknown, falls back to print_progress_nosize)
       def print_progress(current, total, started_at)
         if total.nil?
