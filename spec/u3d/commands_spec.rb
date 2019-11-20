@@ -332,7 +332,6 @@ describe U3d do
         it 'crashes error when specifying a non existing version' do
           on_fake_os
           with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
-
           expect(U3dCore::UI).to receive(:crash!).with(/No version 'not.a.version'/)
 
           U3d::Commands.install(
@@ -341,6 +340,33 @@ describe U3d do
               install: false,
               download: true,
               packages: ['Unity']
+            }
+          )
+        end
+
+        #   request a non existing package -> fail
+        it 'crashes error when specifying a non existing package' do
+          on_fake_os
+          with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
+          allow(U3d::Helper).to receive(:data_path) { 'whatever' }
+
+          definition = expected_definition(
+            '1.2.3f4',
+            :fakeos,
+            'fakeurl',
+            packages: [
+              U3d::UnityModule.new(id: 'unity')
+            ]
+          )
+
+          expect(U3dCore::UI).to receive(:user_error!).with(/'not.a.package'/)
+
+          U3d::Commands.install(
+            args: ['1.2.3f4'],
+            options: {
+              install: false,
+              download: true,
+              packages: ['not.a.package']
             }
           )
         end

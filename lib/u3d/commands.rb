@@ -152,15 +152,24 @@ module U3d
 
         definition = UnityVersionDefinition.new(version, os, cache_versions)
         unity = check_unity_presence(version: version)
-        packages = options[:packages] || ['Unity']
+
+        packages = options[:packages]
+
+        unless packages.nil?
+          begin
+            verify_package_names(definition, packages)
+          rescue StandardError
+            return
+          end
+        else
+          packages = ['Unity']
+        end
 
         begin
           packages = enforce_setup_coherence(packages, options, unity, definition)
         rescue InstallationSetupError
           return
         end
-
-        verify_package_names(definition, packages)
 
         get_administrative_privileges(options) if options[:install]
 
@@ -275,8 +284,10 @@ module U3d
       end
 
       def verify_package_names(definition, packages)
-        packages.each do |package|
-          UI.user_error! "package '#{package}' doesn't exist" unless definition.available_package? package
+        invalid_packages = packages.select { |package| !definition.available_package? package }
+        unless invalid_packages.empty?
+          UI.user_error!("Package(s) '#{invalid_packages.join(',')}' are not known. Use #{definition.available_packages.join(',')}")
+          raise StandardError
         end
       end
 
