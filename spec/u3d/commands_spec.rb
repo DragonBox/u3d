@@ -667,7 +667,7 @@ describe U3d do
         #   TODO: Implement me
       end
 
-      describe 'platforms without modules' do
+      context 'platforms without modules' do
         #   install a non discovered version -> installed
         it 'installs Unity when version is not yet present' do
           on_linux
