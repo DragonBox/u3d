@@ -359,16 +359,16 @@ describe U3d do
             ]
           )
 
-          expect(U3dCore::UI).to receive(:user_error!).with(/'not.a.package'/)
-
-          U3d::Commands.install(
-            args: ['1.2.3f4'],
-            options: {
-              install: false,
-              download: true,
-              packages: ['not.a.package']
-            }
-          )
+          expect{
+            U3d::Commands.install(
+              args: ['1.2.3f4'],
+              options: {
+                install: false,
+                download: true,
+                packages: ['not.a.package']
+              }
+            )
+          }.to raise_error ArgumentError, /'not.a.package'/
         end
         #   support downloading the not current platform -> not yet supported
         #   TODO: Implement me

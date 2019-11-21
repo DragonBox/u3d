@@ -153,17 +153,7 @@ module U3d
         definition = UnityVersionDefinition.new(version, os, cache_versions)
         unity = check_unity_presence(version: version)
 
-        packages = options[:packages]
-
-        unless packages.nil?
-          begin
-            verify_package_names(definition, packages)
-          rescue StandardError
-            return
-          end
-        else
-          packages = ['Unity']
-        end
+        packages = verify_package_names(options[:packages], definition) || ['Unity']
 
         begin
           packages = enforce_setup_coherence(packages, options, unity, definition)
@@ -283,12 +273,14 @@ module U3d
         cache_versions
       end
 
-      def verify_package_names(definition, packages)
-        invalid_packages = packages.select { |package| !definition.available_package? package }
-        unless invalid_packages.empty?
-          UI.user_error!("Package(s) '#{invalid_packages.join(',')}' are not known. Use #{definition.available_packages.join(',')}")
-          raise StandardError
+      def verify_package_names(packages, definition)
+        unless packages.nil?
+          invalid_packages = packages.select { |package| !definition.available_package? package }
+          unless invalid_packages.empty?
+            raise ArgumentError, "Package(s) '#{invalid_packages.join(',')}' are not known. Use #{definition.available_packages.join(',')}"
+          end
         end
+        packages
       end
 
       def specified_or_current_project_version(version)
