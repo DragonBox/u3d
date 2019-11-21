@@ -154,7 +154,7 @@ module U3d
     def find_installations_with_path(default_root_path: '', postfix: [])
       ([default_root_path] | extra_installation_paths).map do |path|
         UI.verbose "Looking for installed Unity version under #{path}"
-        pattern = File.join([path] + postfix)
+        pattern = File.join([path.gsub(File::SEPARATOR, "/")] + postfix)
         Dir.glob(pattern).map { |found_path| yield found_path }
       end.flatten
     end
