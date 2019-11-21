@@ -275,10 +275,8 @@ module U3d
 
       def verify_package_names(packages, definition)
         unless packages.nil?
-          invalid_packages = packages.select { |package| !definition.available_package? package }
-          unless invalid_packages.empty?
-            raise ArgumentError, "Package(s) '#{invalid_packages.join(',')}' are not known. Use #{definition.available_packages.join(',')}"
-          end
+          invalid_packages = packages.reject { |package| definition.available_package? package }
+          raise ArgumentError, "Package(s) '#{invalid_packages.join(',')}' are not known. Use #{definition.available_packages.join(',')}" unless invalid_packages.empty?
         end
         packages
       end

@@ -350,7 +350,7 @@ describe U3d do
           with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
           allow(U3d::Helper).to receive(:data_path) { 'whatever' }
 
-          definition = expected_definition(
+          expected_definition(
             '1.2.3f4',
             :fakeos,
             'fakeurl',
@@ -359,7 +359,7 @@ describe U3d do
             ]
           )
 
-          expect{
+          expect do
             U3d::Commands.install(
               args: ['1.2.3f4'],
               options: {
@@ -368,7 +368,7 @@ describe U3d do
                 packages: ['not.a.package']
               }
             )
-          }.to raise_error ArgumentError, /'not.a.package'/
+          end.to raise_error ArgumentError, /'not.a.package'/
         end
         #   support downloading the not current platform -> not yet supported
         #   TODO: Implement me
