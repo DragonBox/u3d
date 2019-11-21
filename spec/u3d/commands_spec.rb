@@ -332,7 +332,6 @@ describe U3d do
         it 'crashes error when specifying a non existing version' do
           on_fake_os
           with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
-
           expect(U3dCore::UI).to receive(:crash!).with(/No version 'not.a.version'/)
 
           U3d::Commands.install(
@@ -343,6 +342,33 @@ describe U3d do
               packages: ['Unity']
             }
           )
+        end
+
+        #   request a non existing package -> fail
+        it 'crashes error when specifying a non existing package' do
+          on_fake_os
+          with_fake_cache('fakeos' => { 'versions' => { '1.2.3f4' => 'fakeurl' } })
+          allow(U3d::Helper).to receive(:data_path) { 'whatever' }
+
+          expected_definition(
+            '1.2.3f4',
+            :fakeos,
+            'fakeurl',
+            packages: [
+              U3d::UnityModule.new(id: 'unity')
+            ]
+          )
+
+          expect do
+            U3d::Commands.install(
+              args: ['1.2.3f4'],
+              options: {
+                install: false,
+                download: true,
+                packages: ['not.a.package']
+              }
+            )
+          end.to raise_error ArgumentError, /'not.a.package'/
         end
         #   support downloading the not current platform -> not yet supported
         #   TODO: Implement me
@@ -667,7 +693,7 @@ describe U3d do
         #   TODO: Implement me
       end
 
-      describe 'platforms without modules' do
+      context 'platforms without modules' do
         #   install a non discovered version -> installed
         it 'installs Unity when version is not yet present' do
           on_linux
