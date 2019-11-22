@@ -29,5 +29,17 @@ describe U3dCore do
         expect(U3dCore::Helper.windows_path('/path/to/file')).to eql "\\path\\to\\file"
       end
     end
+    describe 'experiments' do
+      it 'expands paths...' do
+        if U3dCore::Helper.windows?
+          path = File.expand_path "C:\\Program Files\\"
+          puts path
+          `dir C:\\`
+          puts File.exist? path
+        else
+          puts "Not the platform you are looking for"
+        end
+      end
+    end
   end
 end
