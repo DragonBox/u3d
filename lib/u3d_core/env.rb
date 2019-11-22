@@ -1,5 +1,6 @@
 ## --- BEGIN LICENSE BLOCK ---
-# Copyright (c) 2016-present WeWantToKnow AS
+# Original work Copyright (c) 2015-present the fastlane authors
+# Modified work Copyright 2019-present WeWantToKnow AS
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,15 +21,12 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
-require 'u3d_core/core_ext/string'
-require 'u3d_core/globals'
-require 'u3d_core/helper'
-require 'u3d_core/credentials'
-require 'u3d_core/ui/ui'
-require 'u3d_core/command_executor'
-require 'u3d_core/command_runner'
-require 'u3d_core/env'
-require 'u3d_core/update_checker/changelog'
-require 'u3d_core/update_checker/update_checker'
-require 'colored'
-require 'commander'
+module U3dCore
+  class Env
+    def self.truthy?(env)
+      return false unless ENV[env]
+      return false if ["no", "false", "off", "0"].include?(ENV[env].to_s)
+      return true
+    end
+  end
+end

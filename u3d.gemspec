@@ -31,8 +31,9 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'plist', '>= 3.1.0', '< 4.0.0' # Generate the Xcode config plist file
   spec.add_dependency 'rubyzip', '>= 1.0.0' # Installation of .zip files
   spec.add_dependency 'security', '= 0.1.3' # macOS Keychain manager, a dead project, no updates expected
+  spec.add_dependency 'excon'
   # Development only
-  spec.add_development_dependency "bundler", "~> 1.13"
+  spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "coveralls"
   spec.add_development_dependency "github_changelog_generator"
   spec.add_development_dependency "pry-byebug"

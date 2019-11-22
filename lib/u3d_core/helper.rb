@@ -73,6 +73,10 @@ module U3dCore
       return false
     end
 
+    # returns true if fastlane was installed via Homebrew
+    def self.homebrew?
+      ENV["FASTLANE_INSTALLED_VIA_HOMEBREW"].to_s == "true"
+    end
     # @return [boolean] true if building in a known CI environment
     def self.ci?
       # Check for Jenkins, Travis CI, ... environment variables
