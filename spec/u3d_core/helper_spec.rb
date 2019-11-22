@@ -34,7 +34,7 @@ describe U3dCore do
         if U3dCore::Helper.windows?
           path = File.expand_path "C:\\Program Files\\"
           puts path
-          `dir C:\\`
+          puts `dir C:\\`
           puts File.exist? path
         else
           puts "Not the platform you are looking for"
