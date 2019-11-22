@@ -90,20 +90,25 @@ describe U3d do
       end
 
       describe ".extra_installation_paths" do
-        it "converts paths to ruby paths" do
-          installer = DummyInstaller.new
-          env_var = if U3dCore::Helper.windows?
-                      "C:\\Program Files\\Unity;D:\\"
-                    else
-                      "/Applications/here:/Applications/else"
-                    end
-          expected_paths = if U3dCore::Helper.windows?
-                             ["C:/Program Files/Unity", "D:/"]
-                           else
-                             ["/Applications/here", "/Applications/else"]
-                           end
-          with_env_values('U3D_EXTRA_PATHS' => env_var) do
-            expect(installer.send(:extra_installation_paths)).to eql(expected_paths)
+        describe "converts paths to ruby paths" do
+          def expect_extra_installation_paths(env_var, expected_paths)
+            installer = DummyInstaller.new
+            with_env_values('U3D_EXTRA_PATHS' => env_var) do
+              expect(installer.send(:extra_installation_paths)).to eql(expected_paths)
+            end
+          end
+          it "works on Windows", if: WINDOWS do
+            expect_extra_installation_paths(
+              "C:\\Program Files\\Unity;D:\\",
+              ["C:/Program Files/Unity", "D:/"]
+            )
+          end
+
+          it "works on Unix", unless: WINDOWS do
+            expect_extra_installation_paths(
+              "/Applications/here:/Applications/else",
+              ["/Applications/here", "/Applications/else"]
+            )
           end
         end
       end
