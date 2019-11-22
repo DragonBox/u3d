@@ -88,6 +88,30 @@ describe U3d do
           expect(installer.installed_sorted_by_versions).to eq(sorted_installed)
         end
       end
+
+      describe ".extra_installation_paths" do
+        describe "converts paths to ruby paths" do
+          def expect_extra_installation_paths(env_var, expected_paths)
+            installer = DummyInstaller.new
+            with_env_values('U3D_EXTRA_PATHS' => env_var) do
+              expect(installer.send(:extra_installation_paths)).to eql(expected_paths)
+            end
+          end
+          it "works on Windows", if: WINDOWS do
+            expect_extra_installation_paths(
+              "C:\\Program Files\\Unity;D:\\",
+              ["C:/Program Files/Unity", "D:/"]
+            )
+          end
+
+          it "works on Unix", unless: WINDOWS do
+            expect_extra_installation_paths(
+              "/Applications/here:/Applications/else",
+              ["/Applications/here", "/Applications/else"]
+            )
+          end
+        end
+      end
     end
 
     describe U3d::MacInstaller, unless: WINDOWS do
