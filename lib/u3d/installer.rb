@@ -146,15 +146,18 @@ module U3d
       end
     end
 
+    # extra installation paths are stored in U3D_EXTRA_PATHS environment variable,
+    # following a standard PATH variable format.
+    # Returns an array of ruby style paths
     def extra_installation_paths
       return [] if ENV['U3D_EXTRA_PATHS'].nil?
-      ENV['U3D_EXTRA_PATHS'].strip.split(File::PATH_SEPARATOR)
+      ENV['U3D_EXTRA_PATHS'].strip.split(File::PATH_SEPARATOR).map { |p| File.expand_path p }
     end
 
     def find_installations_with_path(default_root_path: '', postfix: [])
       ([default_root_path] | extra_installation_paths).map do |path|
         UI.verbose "Looking for installed Unity version under #{path}"
-        pattern = File.join([path.gsub(File::SEPARATOR, "/")] + postfix)
+        pattern = File.join([path] + postfix)
         Dir.glob(pattern).map { |found_path| yield found_path }
       end.flatten
     end
