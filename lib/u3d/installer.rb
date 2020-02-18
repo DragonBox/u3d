@@ -191,12 +191,14 @@ module U3d
     def install(file_path, version, installation_path: nil, info: nil)
       # rubocop:enable UnusedMethodArgument
       extension = File.extname(file_path)
-      raise "Installation of #{extension} files is not supported on Mac" unless %w[.zip .po .pkg].include? extension
+      raise "Installation of #{extension} files is not supported on Mac" unless %w[.zip .po .pkg .dmg].include? extension
       path = installation_path || DEFAULT_MAC_INSTALL
       if extension == '.po'
         install_po(file_path, version, info: info)
       elsif extension == '.zip'
         install_zip(file_path, version, info: info)
+      elsif extension == '.dmg'
+        UI.important "Skipping installation of #{file_path} for now"
       else
         install_pkg(file_path, version: version, target_path: path)
       end
