@@ -51,7 +51,8 @@ module U3d
 
   def self.const_missing(const_name)
     deprecated = {
-      PlaybackEngineUtils: IvyPlaybackEngineUtils
+      PlaybackEngineUtils: IvyPlaybackEngineUtils,
+      INIParser: INIModulesParser
     }
     super unless deprecated.keys.include? const_name
     replacement = deprecated[const_name]
