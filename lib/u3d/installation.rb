@@ -127,21 +127,35 @@ module U3d
     end
   end
 
-  # FIXME deprecated
+  # FIXME: deprecated
   class PlaybackEngineUtils < IvyPlaybackEngineUtils
   end
 
   class ModulePlaybackEngineUtils
     def self.list_module_configs(playbackengine_parent_path)
-      # FIXME this is Mac specific
-      Dir.glob("#{playbackengine_parent_path}/PlaybackEngines/*/modules.asset") | 
+      # FIXME: this is Mac specific
+      Dir.glob("#{playbackengine_parent_path}/PlaybackEngines/*/modules.asset") |
         Dir.glob("#{playbackengine_parent_path}/Unity.app/Contents/PlaybackEngines/*/modules.asset")
     end
 
     def self.module_name(config_path)
       File.basename(File.dirname(config_path)).gsub("Support", "")
     end
-  end  
+  end
+
+  class InstallationUtils
+    def self.read_version_from_unity_builtin_extra(file)
+      File.open(file, "rb") do |f|
+        f.seek(20)
+        s = ""
+        while (c = f.read(1))
+          break if c == "\x00"
+          s += c
+        end
+        s
+      end
+    end
+  end
 
   class MacInstallation < Installation
     require 'plist'
@@ -256,15 +270,8 @@ module U3d
 
   class LinuxInstallation < Installation
     def version
-      # I don't find an easy way to extract the version on Linux
-      path = "#{root_path}/Editor/Data/"
-      package = IvyPlaybackEngineUtils.list_module_configs(path).first
-      raise "Couldn't find a module under #{path}" unless package
-      version = IvyPlaybackEngineUtils.unity_version(package) # FIXME
-      if (m = version.match(/^(.*)x(.*)Linux$/))
-        version = "#{m[1]}#{m[2]}"
-      end
-      version
+      path = "#{root_path}/Editor/Data/Resources/unity_builtin_extra"
+      InstallationUtils.read_version_from_unity_builtin_extra(path)
     end
 
     def build_number
