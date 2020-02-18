@@ -127,13 +127,9 @@ module U3d
     end
   end
 
-  # FIXME: deprecated
-  class PlaybackEngineUtils < IvyPlaybackEngineUtils
-  end
-
   class ModulePlaybackEngineUtils
     def self.list_module_configs(playbackengine_parent_path)
-      # FIXME: this is Mac specific
+      # this should work on all platforms, non existing paths being ignored...
       Dir.glob("#{playbackengine_parent_path}/PlaybackEngines/*/modules.asset") |
         Dir.glob("#{playbackengine_parent_path}/Unity.app/Contents/PlaybackEngines/*/modules.asset")
     end
