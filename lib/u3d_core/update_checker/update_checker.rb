@@ -21,12 +21,12 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
-#require 'excon'
-#require 'digest'
+# require 'excon'
+# require 'digest'
 
 require_relative 'changelog'
-#require_relative '../analytics/app_identifier_guesser'
-#require_relative '../helper'
+# require_relative '../analytics/app_identifier_guesser'
+# require_relative '../helper'
 require_relative '../ui/ui'
 
 module U3dCore
@@ -41,7 +41,9 @@ module U3dCore
       Thread.new do
         begin
           server_results[gem_name] = fetch_latest(gem_name)
-        rescue
+          # rubocop:disable Lint/HandleExceptions
+        rescue StandardError
+          # rubocop:enable Lint/HandleExceptions
           # we don't want to show a stack trace if something goes wrong
         end
       end
@@ -57,7 +59,7 @@ module U3dCore
 
     def self.update_available?(gem_name, current_version)
       latest = server_results[gem_name]
-      return (latest and Gem::Version.new(latest) > Gem::Version.new(current_version))
+      return (latest && (Gem::Version.new(latest) > Gem::Version.new(current_version)))
     end
 
     # wait a abit for results when commands run real quick
@@ -67,9 +69,7 @@ module U3dCore
 
     def self.show_update_status(gem_name, current_version)
       wait_for_results unless update_available?(gem_name, current_version)
-      if update_available?(gem_name, current_version)
-        show_update_message(gem_name, current_version)
-      end
+      show_update_message(gem_name, current_version) if update_available?(gem_name, current_version)
     end
 
     # Show a message to the user to update to a new version of u3d
@@ -85,7 +85,7 @@ module U3dCore
         puts("# An update for #{gem_name} is available. You are on #{current_version}.")
       end
       puts("# You should use the latest version.")
-      puts("# Please update using `#{self.update_command(gem_name: gem_name)}`.")
+      puts("# Please update using `#{update_command(gem_name: gem_name)}`.")
 
       # this could be fetched from the gem
       puts("# To see what's new, open https://github.com/DragonBox/#{gem_name}/releases.") if U3dCore::Env.truthy?("U3D_HIDE_CHANGELOG")
@@ -105,9 +105,9 @@ module U3dCore
     def self.update_command(gem_name: "u3d")
       if Helper.bundler?
         "bundle update #{gem_name.downcase}"
-      #elsif Helper.homebrew?
+      # elsif Helper.homebrew?
       #  "fastlane update_fastlane"
-      #elsif Helper.mac_app?
+      # elsif Helper.mac_app?
       #  "the Fabric app. Launch the app and navigate to the fastlane tab to get the most recent version."
       else
         "sudo gem install #{gem_name.downcase}"
