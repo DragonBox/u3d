@@ -342,9 +342,8 @@ module U3d
           UI.verbose "Version #{version} of Unity is not installed yet"
         else
           UI.verbose "Unity #{version} is installed at #{unity.root_path}"
-          return unity
         end
-        nil
+        unity
       end
 
       # rubocop:disable Metrics/BlockNesting
