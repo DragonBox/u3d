@@ -24,6 +24,7 @@ require "bundler/gem_tasks"
 require "rspec/core/rake_task"
 require 'rubocop/rake_task'
 require 'u3d'
+
 UI = U3dCore::UI
 
 # doesn't yet support dot file
@@ -205,6 +206,46 @@ task :test_all do
     rspec_args = formatter
   end
   sh "rspec #{rspec_args}"
+end
+
+def parse_changelog
+  releases = {}
+  buffer = nil
+  version = nil
+  File.readlines("CHANGELOG.md").each do |line|
+    if (m = line.match(/^## \[(.*)\]/))
+      releases[version] = buffer if buffer
+      version = m[1]
+      buffer = version + "\n\n"
+    else
+      next unless version # skip first lines
+      buffer += line if line != "\n"
+    end
+  end
+  releases[version] = buffer
+  releases
+end
+
+desc 'Create missing Github releases from changelog'
+task :create_missing_github_releases do
+  releases = parse_changelog
+
+  known_releases = `hub release`.split("\n")
+
+  releases.keys.reverse.each do |version|
+    if known_releases.include? version
+      puts "Skipping existing version #{version}"
+      next
+    end
+    changelog = releases[version]
+    puts "Creating version #{version}"
+    require "tempfile"
+    Tempfile.create("githubchangelog") do |changelog_file|
+      File.write(changelog_file, changelog)
+      command = "hub release create #{version} -F #{changelog_file.path}"
+      `#{command}`
+    end
+  end
 end
 
 task default: %i[rubocop test_all]

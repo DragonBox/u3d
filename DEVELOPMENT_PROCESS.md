@@ -9,6 +9,7 @@
 * make a release
 
 `rake release`
+`rake create_missing_github_releases`
 
 = release of the fastlane plugin
 
