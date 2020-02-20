@@ -60,7 +60,13 @@ module U3dCore
       return (latest and Gem::Version.new(latest) > Gem::Version.new(current_version))
     end
 
+    # wait a abit for results when commands run real quick
+    def self.wait_for_results
+      sleep([0, 0.4 - (Time.now - @start_time)].max) if @start_time
+    end
+
     def self.show_update_status(gem_name, current_version)
+      wait_for_results unless update_available?(gem_name, current_version)
       if update_available?(gem_name, current_version)
         show_update_message(gem_name, current_version)
       end
