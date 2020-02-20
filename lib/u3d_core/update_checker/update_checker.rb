@@ -21,12 +21,9 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
-# require 'excon'
-# require 'digest'
+require 'excon'
 
 require_relative 'changelog'
-# require_relative '../analytics/app_identifier_guesser'
-# require_relative '../helper'
 require_relative '../ui/ui'
 
 module U3dCore
