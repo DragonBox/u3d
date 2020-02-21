@@ -26,7 +26,7 @@ require_relative '../ui/ui'
 require_relative '../../u3d/utils'
 
 module U3dCore
-  # Verifies, the user runs the latest version of this gem
+  # Verifies the user runs the latest version of this gem
   class UpdateChecker
     def self.start_looking_for_update(gem_name)
       return if Helper.test?
@@ -87,24 +87,20 @@ module U3dCore
       puts("# To see what's new, open https://github.com/DragonBox/#{gem_name}/releases.") if U3dCore::Env.truthy?("U3D_HIDE_CHANGELOG")
 
       if !Helper.bundler? && Random.rand(5) == 1
-        # We want to show this message from time to time, if the user doesn't use bundler, nor bundled fastlane
+        # We want to show this message from time to time, if the user doesn't use bundler
         puts('#######################################################################')
-        puts("# Run `sudo gem cleanup` from time to time to speed up fastlane")
+        puts("# Run `sudo gem cleanup` from time to time to speed up u3d")
       end
       puts('#######################################################################')
-      Changelog.show_changes(gem_name, current_version, update_gem_command: UpdateChecker.update_command(gem_name: gem_name)) unless U3dCore::Env.truthy?("U3D_HIDE_CHANGELOG")
+      Changelog.show_changes(gem_name, current_version, update_gem_command: UpdateChecker.update_command(gem_name)) unless U3dCore::Env.truthy?("U3D_HIDE_CHANGELOG")
 
       ensure_rubygems_source
     end
 
-    # The command that the user should use to update their mac
-    def self.update_command(gem_name: "u3d")
+    # The command that the user should use to update the gem
+    def self.update_command(gem_name)
       if Helper.bundler?
         "bundle update #{gem_name.downcase}"
-      # elsif Helper.homebrew?
-      #  "fastlane update_fastlane"
-      # elsif Helper.mac_app?
-      #  "the Fabric app. Launch the app and navigate to the fastlane tab to get the most recent version."
       else
         "sudo gem install #{gem_name.downcase}"
       end
