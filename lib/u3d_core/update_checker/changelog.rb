@@ -51,11 +51,12 @@ module U3dCore
 
       def to_version(tag_name)
         tag_name = tag_name[1..-1] if tag_name[0] == 'v'
+        tag_name
       end
 
       def releases(gem_name)
         url = "https://api.github.com/repos/DragonBox/#{gem_name}/releases"
-        JSON.parse(U3d::Utils::page_content(url))
+        JSON.parse(U3d::Utils.page_content(url))
       end
     end
   end

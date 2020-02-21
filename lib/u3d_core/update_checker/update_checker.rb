@@ -120,7 +120,7 @@ module U3dCore
     end
 
     def self.fetch_latest(gem_name)
-      JSON.parse(U3d::Utils::page_content(generate_fetch_url(gem_name)))["version"]
+      JSON.parse(U3d::Utils.page_content(generate_fetch_url(gem_name)))["version"]
     end
 
     def self.generate_fetch_url(gem_name)
