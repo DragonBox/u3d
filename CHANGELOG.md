@@ -1,5 +1,25 @@
 # Change Log
 
+## [v1.2.2](https://github.com/DragonBox/u3d/tree/v1.2.2) (2020-02-21)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.2.1...v1.2.2)
+
+**Fixed bugs:**
+
+- Error management in invalid modules at least on macOS [\#385](https://github.com/DragonBox/u3d/issues/385)
+- U3D\_EXTRA\_PATHS is improperly interpreted on Windows [\#383](https://github.com/DragonBox/u3d/issues/383)
+
+**Closed issues:**
+
+- github releases are not marked as latest nor contain changelogs [\#389](https://github.com/DragonBox/u3d/issues/389)
+
+**Merged pull requests:**
+
+- Bump Example1 dependencies that trigger security warning on github [\#396](https://github.com/DragonBox/u3d/pull/396) ([lacostej](https://github.com/lacostej))
+- Create Github releases. Required for \#390. \[Fixes \#389\] [\#395](https://github.com/DragonBox/u3d/pull/395) ([lacostej](https://github.com/lacostej))
+- Support displaying u3d updates [\#390](https://github.com/DragonBox/u3d/pull/390) ([lacostej](https://github.com/lacostej))
+- u3d/install: convert Windows paths to ruby paths when treating U3D\_EXTRA\_PATHS [\#388](https://github.com/DragonBox/u3d/pull/388) ([lacostej](https://github.com/lacostej))
+- u3d/install: verify package names before we ensure setup coherence \(fixes \#385\) \(regression from 1.2.0\) [\#387](https://github.com/DragonBox/u3d/pull/387) ([lacostej](https://github.com/lacostej))
+
 ## [v1.2.1](https://github.com/DragonBox/u3d/tree/v1.2.1) (2019-11-15)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.2.0...v1.2.1)
 
