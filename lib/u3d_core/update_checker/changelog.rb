@@ -20,7 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
-require 'excon'
+
+require_relative '../../u3d/utils'
 
 module U3dCore
   class Changelog
@@ -51,10 +52,7 @@ module U3dCore
 
       def releases(gem_name)
         url = "https://api.github.com/repos/DragonBox/#{gem_name}/releases"
-        # We have to follow redirects, since some repos were moved away into a separate org
-        server_response = Excon.get(url,
-                                    middlewares: Excon.defaults[:middlewares] + [Excon::Middleware::RedirectFollower])
-        JSON.parse(server_response.body)
+        JSON.parse(U3d::Utils::page_content(url))
       end
     end
   end

@@ -21,10 +21,9 @@
 # SOFTWARE.
 ## --- END LICENSE BLOCK ---
 
-require 'excon'
-
 require_relative 'changelog'
 require_relative '../ui/ui'
+require_relative '../../u3d/utils'
 
 module U3dCore
   # Verifies, the user runs the latest version of this gem
@@ -125,7 +124,7 @@ module U3dCore
     end
 
     def self.fetch_latest(gem_name)
-      JSON.parse(Excon.get(generate_fetch_url(gem_name)).body)["version"]
+      JSON.parse(U3d::Utils::page_content(generate_fetch_url(gem_name)))["version"]
     end
 
     def self.generate_fetch_url(gem_name)
