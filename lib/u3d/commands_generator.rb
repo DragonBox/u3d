@@ -36,8 +36,11 @@ module U3d
     UNICODE_FILE = File.expand_path('../../assets/utf8.txt', __FILE__)
 
     def self.start
+      U3dCore::UpdateChecker.start_looking_for_update('u3d')
       check_locale
       new.run
+    ensure
+      U3dCore::UpdateChecker.show_update_status('u3d', U3d::VERSION)
     end
 
     def self.check_locale

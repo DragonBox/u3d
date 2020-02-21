@@ -27,9 +27,17 @@ jobs:
           - v1-dependencies-
 
       - run:
+          name: Configure Bundler
+          command: |
+            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+            source $BASH_ENV
+            gem install bundler
+            bundle config set path '.bundle'
+
+      - run:
           name: install dependencies
           command: |
-            bundle install --jobs=4 --retry=3 --path .bundle
+            bundle install --jobs=4 --retry=3
 
       - save_cache:
           paths:
@@ -44,6 +52,8 @@ jobs:
       - run:
           name: run tests
           command: |
+            echo $BUNDLER_VERSION
+            bundle --version
             bundle exec rake
 
       # collect reports
