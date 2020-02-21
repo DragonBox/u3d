@@ -30,7 +30,7 @@ module U3dCore
         did_show_changelog = false
 
         releases(gem_name).each_with_index do |release, index|
-          next unless Gem::Version.new(release['tag_name']) > Gem::Version.new(current_version)
+          next unless Gem::Version.new(to_version(release['tag_name'])) > Gem::Version.new(current_version)
           puts("")
           puts(release['name'].green)
           puts(release['body'])
@@ -44,10 +44,13 @@ module U3dCore
 
         puts("")
         puts("Please update using `#{update_gem_command}`".green) if did_show_changelog
-        # rubocop:disable Lint/HandleExceptions
-      rescue StandardError
-        # rubocop:enable Lint/HandleExceptions
+      rescue StandardError => e
         # Something went wrong, we don't care so much about this
+        UI.error("Unable to show_changes: #{e}")
+      end
+
+      def to_version(tag_name)
+        tag_name = tag_name[1..-1] if tag_name[0] == 'v'
       end
 
       def releases(gem_name)
