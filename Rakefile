@@ -219,7 +219,7 @@ def parse_changelog
       buffer = version + "\n\n"
     else
       next unless version # skip first lines
-      buffer += line if line != "\n"
+      buffer += line
     end
   end
   releases[version] = buffer
@@ -227,22 +227,25 @@ def parse_changelog
 end
 
 desc 'Create missing Github releases from changelog'
-task :create_missing_github_releases do
+task :create_missing_github_releases, [:force] do |_t, args|
+  force = args[:force] || false
   releases = parse_changelog
 
   known_releases = `hub release`.split("\n")
 
   releases.keys.reverse.each do |version|
-    if known_releases.include? version
+    exist = known_releases.include? version
+    if exist && !force
       puts "Skipping existing version #{version}"
       next
     end
+    action = exist ? "edit" : "create"
     changelog = releases[version]
-    puts "Creating version #{version}"
+    puts "About to #{action} version #{version}"
     require "tempfile"
     Tempfile.create("githubchangelog") do |changelog_file|
       File.write(changelog_file, changelog)
-      command = "hub release create #{version} -F #{changelog_file.path}"
+      command = "hub release #{action} #{version} --file #{changelog_file.path}"
       `#{command}`
     end
   end
