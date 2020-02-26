@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    u3d (1.2.2)
+    u3d (1.2.3)
       colored (>= 1.2, < 2.0.0)
       commander (>= 4.4.0, < 5.0.0)
       file-tail (>= 1.2.0)
@@ -26,7 +26,7 @@ GEM
     byebug (10.0.2)
     coderay (1.1.2)
     colored (1.2)
-    commander (4.5.0)
+    commander (4.4.7)
       highline (~> 2.0.0)
     concurrent-ruby (1.0.5)
     coveralls (0.8.21)
@@ -100,7 +100,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.9.0)
-    rubyzip (2.2.0)
+    rubyzip (2.0.0)
     sawyer (0.8.1)
       addressable (>= 2.3.5, < 2.6)
       faraday (~> 0.8, < 1.0)
