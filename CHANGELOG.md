@@ -1,5 +1,13 @@
 # Change Log
 
+## [v1.2.3](https://github.com/DragonBox/u3d/tree/v1.2.3) (2020-02-26)
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.2.2...v1.2.3)
+
+**Merged pull requests:**
+
+- Allow to refresh the github changelog. Also fix them as we removed empty lines. [\#398](https://github.com/DragonBox/u3d/pull/398) ([lacostej](https://github.com/lacostej))
+- Detect 2019 modules and allow to install 2019, skipping dmg install for now [\#392](https://github.com/DragonBox/u3d/pull/392) ([lacostej](https://github.com/lacostej))
+
 ## [v1.2.2](https://github.com/DragonBox/u3d/tree/v1.2.2) (2020-02-21)
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.2.1...v1.2.2)
 
