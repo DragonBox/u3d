@@ -48,4 +48,15 @@ require 'u3d/unity_versions'
 module U3d
   Helper = U3dCore::Helper
   UI = U3dCore::UI
+
+  def self.const_missing(const_name)
+    deprecated = {
+      PlaybackEngineUtils: IvyPlaybackEngineUtils,
+      INIParser: INIModulesParser
+    }
+    super unless deprecated.keys.include? const_name
+    replacement = deprecated[const_name]
+    UI.deprecated "DEPRECATION WARNING: the class U3d::#{const_name} is deprecated. Use #{replacement} instead."
+    replacement
+  end
 end

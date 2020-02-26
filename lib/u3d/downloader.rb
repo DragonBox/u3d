@@ -33,7 +33,7 @@ module U3d
     # Regex to get the name of a localization asset
     UNITY_LANGUAGE_FILE_REGEX = %r{\/\d+/[0-9\.]+\/([\w-]+)$}
     # Regex to get the name of a package out of its file name
-    UNITY_MODULE_FILE_REGEX = %r{\/([\w\-_\.\+]+\.(?:pkg|exe|zip|sh|deb|msi|xz))[^\/]*$}
+    UNITY_MODULE_FILE_REGEX = %r{\/([\w\-_\.\+]+\.(?:pkg|dmg|exe|zip|sh|deb|msi|xz))[^\/]*$}
 
     class << self
       def download_directory

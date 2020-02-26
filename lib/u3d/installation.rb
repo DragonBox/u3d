@@ -105,7 +105,7 @@ module U3d
     end
   end
 
-  class PlaybackEngineUtils
+  class IvyPlaybackEngineUtils
     def self.list_module_configs(playbackengine_parent_path)
       Dir.glob("#{playbackengine_parent_path}/PlaybackEngines/*/ivy.xml")
     end
@@ -124,6 +124,32 @@ module U3d
 
     def self.unity_version(config_path)
       node_value(config_path, 'ivy-module/info/@e:unityVersion')
+    end
+  end
+
+  class ModulePlaybackEngineUtils
+    def self.list_module_configs(playbackengine_parent_path)
+      # this should work on all platforms, non existing paths being ignored...
+      Dir.glob("#{playbackengine_parent_path}/PlaybackEngines/*/modules.asset") |
+        Dir.glob("#{playbackengine_parent_path}/Unity.app/Contents/PlaybackEngines/*/modules.asset")
+    end
+
+    def self.module_name(config_path)
+      File.basename(File.dirname(config_path)).gsub("Support", "")
+    end
+  end
+
+  class InstallationUtils
+    def self.read_version_from_unity_builtin_extra(file)
+      File.open(file, "rb") do |f|
+        f.seek(20)
+        s = ""
+        while (c = f.read(1))
+          break if c == "\x00"
+          s += c
+        end
+        s
+      end
     end
   end
 
@@ -154,9 +180,13 @@ module U3d
 
     def packages
       pack = []
-      PlaybackEngineUtils.list_module_configs(root_path).each do |mpath|
-        pack << PlaybackEngineUtils.module_name(mpath)
+      IvyPlaybackEngineUtils.list_module_configs(root_path).each do |mpath|
+        pack << IvyPlaybackEngineUtils.module_name(mpath)
       end
+      ModulePlaybackEngineUtils.list_module_configs(root_path).each do |mpath|
+        pack << ModulePlaybackEngineUtils.module_name(mpath)
+      end
+
       NOT_PLAYBACKENGINE_PACKAGES.each do |module_name|
         pack << module_name unless Dir[module_name_pattern(module_name)].empty?
       end
@@ -236,15 +266,8 @@ module U3d
 
   class LinuxInstallation < Installation
     def version
-      # I don't find an easy way to extract the version on Linux
-      path = "#{root_path}/Editor/Data/"
-      package = PlaybackEngineUtils.list_module_configs(path).first
-      raise "Couldn't find a module under #{path}" unless package
-      version = PlaybackEngineUtils.unity_version(package)
-      if (m = version.match(/^(.*)x(.*)Linux$/))
-        version = "#{m[1]}#{m[2]}"
-      end
-      version
+      path = "#{root_path}/Editor/Data/Resources/unity_builtin_extra"
+      InstallationUtils.read_version_from_unity_builtin_extra(path)
     end
 
     def build_number
@@ -267,8 +290,11 @@ module U3d
     def packages
       path = "#{root_path}/Editor/Data/"
       pack = []
-      PlaybackEngineUtils.list_module_configs(path).each do |mpath|
-        pack << PlaybackEngineUtils.module_name(mpath)
+      IvyPlaybackEngineUtils.list_module_configs(path).each do |mpath|
+        pack << IvyPlaybackEngineUtils.module_name(mpath)
+      end
+      ModulePlaybackEngineUtils.list_module_configs(root_path).each do |mpath|
+        pack << ModulePlaybackEngineUtils.module_name(mpath)
       end
       NOT_PLAYBACKENGINE_PACKAGES.each do |module_name|
         pack << module_name unless Dir[module_name_pattern(module_name)].empty?
@@ -368,9 +394,9 @@ module U3d
       return version unless version.nil?
 
       path = "#{root_path}/Editor/Data/"
-      package = PlaybackEngineUtils.list_module_configs(path).first
+      package = IvyPlaybackEngineUtils.list_module_configs(path).first
       raise "Couldn't find a module under #{path}" unless package
-      PlaybackEngineUtils.unity_version(package)
+      IvyPlaybackEngineUtils.unity_version(package)
     end
 
     def build_number
@@ -403,8 +429,11 @@ module U3d
     def packages
       path = "#{root_path}/Editor/Data/"
       pack = []
-      PlaybackEngineUtils.list_module_configs(path).each do |mpath|
-        pack << PlaybackEngineUtils.module_name(mpath)
+      IvyPlaybackEngineUtils.list_module_configs(path).each do |mpath|
+        pack << IvyPlaybackEngineUtils.module_name(mpath)
+      end
+      ModulePlaybackEngineUtils.list_module_configs(root_path).each do |mpath|
+        pack << ModulePlaybackEngineUtils.module_name(mpath)
       end
       NOT_PLAYBACKENGINE_PACKAGES.each do |module_name|
         pack << module_name unless Dir[module_name_pattern(module_name)].empty?
