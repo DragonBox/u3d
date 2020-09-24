@@ -27,6 +27,7 @@ require 'fileutils'
 module U3d
   UNITY_DIR_CHECK = /Unity_\d+\.\d+\.\d+[a-z]\d+/
   UNITY_DIR_CHECK_LINUX = /unity-editor-\d+\.\d+\.\d+[a-z]\d+\z/
+  #Linux unity_builtin_extra seek position for version
   UNITY_VERSION_LINUX_POS_LE_2019 = 20
   UNITY_VERSION_LINUX_POS_GT_2019 = 48
   U3D_DO_NOT_MOVE = ".u3d_do_not_move".freeze
