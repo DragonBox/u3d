@@ -33,14 +33,14 @@ module U3d
       def load_modules(version, os: U3dCore::Helper.operating_system, offline: false)
         path = modules_path(version, os)
 
+        # force download if no hub file present
         unless File.file?(path) && File.size(path) > 0
-          return [] if offline # Should not raise, not all versions have hub modules
-          versions = download_modules(os: os)
+          download_modules(os: os) unless offline
+        end
 
-          unless versions.include? version
-            UI.verbose "No modules registered for UnityHub for version #{version}"
-            return []
-          end
+        unless File.file?(path) && File.size(path) > 0
+          UI.verbose "No modules registered for UnityHub for version #{version}"
+          return []
         end
 
         return JSON.parse(File.read(path))
