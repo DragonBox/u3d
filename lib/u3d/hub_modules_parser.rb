@@ -40,7 +40,24 @@ module U3d
 
         unless File.file?(path) && File.size(path) > 0
           UI.verbose "No modules registered for UnityHub for version #{version}"
-          return []
+          # cached_versions.keys.map{|s| UnityVersionNumber.new(s)}
+          # searching for closest version
+          files = Dir.glob("#{default_modules_path}/*-#{os}-modules.json")
+
+          vn = UnityVersionNumber.new(version)
+
+          versions_and_paths = files.map do |p|
+            v = File.basename(p).split('-')[0]
+            [UnityVersionNumber.new(v), p]
+          end
+          # filtered by version major.minor.patch (same major & minor and patch higher or equal)
+          versions_and_paths = versions_and_paths.select { |a| a[0].parts[0] == vn.parts[0] && a[0].parts[1] == vn.parts[1] && a[0].parts[2] >= vn.parts[2] }
+
+          if versions_and_paths.empty?
+            UI.info "No closest version from UnityHub found for version #{version}"
+            return []
+          end
+          path = versions_and_paths.first[1]
         end
 
         return JSON.parse(File.read(path))
