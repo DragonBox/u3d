@@ -4,3 +4,4 @@ gems/
 doc/
 LOCAL/
 .DS_Store
+.bundle/
