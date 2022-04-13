@@ -362,17 +362,20 @@ module U3d
     end
 
     def string_file_info(info, path)
-      require "Win32API"
-      get_file_version_info_size = Win32API.new('version.dll', 'GetFileVersionInfoSize', 'PP', 'L')
-      get_file_version_info = Win32API.new('version.dll', 'GetFileVersionInfo', 'PIIP', 'I')
-      ver_query_value = Win32API.new('version.dll', 'VerQueryValue', 'PPPP', 'I')
-      rtl_move_memory = Win32API.new('kernel32.dll', 'RtlMoveMemory', 'PLL', 'I')
+      require "fiddle"
+      version_dll = Fiddle.dlopen('version.dll')
+      kernel32 = Fiddle.dlopen('kernel32.dll')
+
+      get_file_version_info_size = Fiddle::Function.new(version_dll['GetFileVersionInfoSize'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP], Fiddle::TYPE_LONG)
+      get_file_version_info = Fiddle::Function.new(version_dll['GetFileVersionInfo'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_INT, Fiddle::TYPE_INT, Fiddle::TYPE_VOIDP], Fiddle::TYPE_INT) # FIXME TYPE_INT => TYPE_LONG??
+      ver_query_value = Fiddle::Function.new(version_dll['VerQueryValue'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP], Fiddle::TYPE_INT)
+      rtl_move_memory = Fiddle::Function.new(kernel32['RtlMoveMemory'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_LONG, Fiddle::TYPE_LONG], Fiddle::TYPE_INT)
 
       file = path.tr("/", "\\")
 
-      buf = [0].pack('L')
-      version_size = get_file_version_info_size.call(file + "\0", buf)
-      raise Exception if version_size.zero? # TODO: use GetLastError
+      s = ''
+      version_size = get_file_version_info_size.call(file, s)
+      raise Exception if version_size.zero?
 
       version_info = 0.chr * version_size
       version_ok = get_file_version_info.call(file, 0, version_size, version_info)
