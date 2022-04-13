@@ -27,6 +27,9 @@ require 'fileutils'
 module U3d
   UNITY_DIR_CHECK = /Unity_\d+\.\d+\.\d+[a-z]\d+/
   UNITY_DIR_CHECK_LINUX = /unity-editor-\d+\.\d+\.\d+[a-z]\d+\z/
+  # Linux unity_builtin_extra seek position for version
+  UNITY_VERSION_LINUX_POS_LE_2019 = 20
+  UNITY_VERSION_LINUX_POS_GT_2019 = 48
   U3D_DO_NOT_MOVE = ".u3d_do_not_move".freeze
 
   class Installation
@@ -142,7 +145,15 @@ module U3d
   class InstallationUtils
     def self.read_version_from_unity_builtin_extra(file)
       File.open(file, "rb") do |f|
-        f.seek(20)
+        # Check if it is version lower or equal to 2019
+        seek_pos = UNITY_VERSION_LINUX_POS_LE_2019
+        f.seek(seek_pos)
+        z = f.read(1)
+        if z == "\x00"
+          # Version is greater than 2019
+          seek_pos = UNITY_VERSION_LINUX_POS_GT_2019
+        end
+        f.seek(seek_pos)
         s = ""
         while (c = f.read(1))
           break if c == "\x00"
