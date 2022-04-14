@@ -367,7 +367,7 @@ module U3d
       kernel32 = Fiddle.dlopen('kernel32.dll')
 
       get_file_version_info_size = Fiddle::Function.new(version_dll['GetFileVersionInfoSize'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP], Fiddle::TYPE_LONG)
-      get_file_version_info = Fiddle::Function.new(version_dll['GetFileVersionInfo'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_INT, Fiddle::TYPE_INT, Fiddle::TYPE_VOIDP], Fiddle::TYPE_INT) # FIXME TYPE_INT => TYPE_LONG??
+      get_file_version_info = Fiddle::Function.new(version_dll['GetFileVersionInfo'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_INT, Fiddle::TYPE_INT, Fiddle::TYPE_VOIDP], Fiddle::TYPE_INT) # FIXME: TYPE_INT => TYPE_LONG??
       ver_query_value = Fiddle::Function.new(version_dll['VerQueryValue'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP], Fiddle::TYPE_INT)
       rtl_move_memory = Fiddle::Function.new(kernel32['RtlMoveMemory'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_LONG, Fiddle::TYPE_LONG], Fiddle::TYPE_INT)
 
