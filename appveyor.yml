@@ -5,10 +5,21 @@ version: "{build}"
 init:
   - git config --global core.autocrlf false
 
-# cloning the repository happens here
+cache:
+  - vendor/bundle
+
+environment:
+  matrix:
+    - RUBY_VERSION: 24
+    - RUBY_VERSION: 25
+    - RUBY_VERSION: 26
+    - RUBY_VERSION: 27
+    - RUBY_VERSION: 30
+    - RUBY_VERSION: 31
 
 install:
-  - set PATH=C:\Ruby24-x64\bin;%PATH%
+  - set PATH=C:\Ruby%RUBY_VERSION%-x64\bin;%PATH%
+  - bundle config --local path vendor/bundle
   - bundle install
 
 environment:
@@ -16,6 +27,11 @@ environment:
   LANG: en_US.UTF-8
 
 build: off
+
+before_test:
+  - ruby -v
+  - gem -v
+  - bundle -v
 
 test_script:
   - bundle exec rake
