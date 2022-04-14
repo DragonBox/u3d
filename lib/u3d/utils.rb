@@ -205,8 +205,15 @@ module U3d
       end
 
       def windows_local_appdata
-        require 'u3d/win_utils/win_utils'
-        windir = Win32FiddleDirectories.get_CSIDL_LOCAL_APPDATA
+        require "fiddle"
+
+        version_dll = Fiddle.dlopen('version.dll')
+        getdir = Fiddle::Function.new(version_dll['SHGetFolderPath'], [Fiddle::TYPE_LONG, Fiddle::TYPE_LONG, Fiddle::TYPE_LONG, Fiddle::TYPE_LONG, Fiddle::TYPE_VOIDP], Fiddle::TYPE_LONG)
+        windir = ' ' * 261
+        result = getdir.call(0, CSIDL_LOCAL_APPDATA, 0, 0, windir)
+
+        raise "Unable to get Local Appdata directory, returned with value #{result}" unless result.zero?
+        windir.rstrip!
         windir = windir.encode("UTF-8", Encoding.find('filesystem'))
         windir = File.expand_path(windir.rstrip)
 
