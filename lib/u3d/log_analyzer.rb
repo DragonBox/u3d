@@ -242,23 +242,23 @@ module U3d
       message
     end
 
-    def parse_rule(r)
-      return false unless r['active']
-      return false if r['start_pattern'].nil?
+    def parse_rule(rule)
+      return false unless rule['active']
+      return false if rule['start_pattern'].nil?
 
-      r['start_pattern'] = Regexp.new r['start_pattern']
-      r['end_pattern'] = Regexp.new r['end_pattern'] if r['end_pattern']
-      if r['fetch_line_at_index']
-        r.delete('fetch_line_at_index') if r['fetch_line_at_index'] >= MEMORY_SIZE
-        r.delete('fetch_line_at_index') if r['fetch_line_at_index'] <= 0
-      elsif r['fetch_first_line_not_matching']
-        r['fetch_first_line_not_matching'].map! { |pat| Regexp.new pat }
+      rule['start_pattern'] = Regexp.new rule['start_pattern']
+      rule['end_pattern'] = Regexp.new rule['end_pattern'] if rule['end_pattern']
+      if rule['fetch_line_at_index']
+        rule.delete('fetch_line_at_index') if rule['fetch_line_at_index'] >= MEMORY_SIZE
+        rule.delete('fetch_line_at_index') if rule['fetch_line_at_index'] <= 0
+      elsif rule['fetch_first_line_not_matching']
+        rule['fetch_first_line_not_matching'].map! { |pat| Regexp.new pat }
       end
-      r['fetched_line_pattern'] = Regexp.new r['fetched_line_pattern'] if (r['fetch_line_at_index'] || r['fetch_first_line_not_matching']) && (r['fetched_line_pattern'])
-      r['type'] = 'important' if r['type'] == 'warning'
-      r['type'] = 'message' if r['type'] && r['type'] != 'error' && r['type'] != 'important' && r['type'] != 'success'
-      r['type'] ||= 'message'
-      r['ignore_lines']&.map! { |pat| Regexp.new pat }
+      rule['fetched_line_pattern'] = Regexp.new rule['fetched_line_pattern'] if (rule['fetch_line_at_index'] || rule['fetch_first_line_not_matching']) && (rule['fetched_line_pattern'])
+      rule['type'] = 'important' if rule['type'] == 'warning'
+      rule['type'] = 'message' if rule['type'] && rule['type'] != 'error' && rule['type'] != 'important' && rule['type'] != 'success'
+      rule['type'] ||= 'message'
+      rule['ignore_lines']&.map! { |pat| Regexp.new pat }
       true
     end
   end

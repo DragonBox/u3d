@@ -32,8 +32,9 @@ module U3dCore
 
       attr_writer :current
     end
-
+    # rubocop:disable Style/MissingRespondToMissing
     def self.method_missing(method_sym, *args, &_block)
+      # rubocop:enable Style/MissingRespondToMissing
       # not using `responds` because we don't care about methods like .to_s and so on
       interface_methods = Interface.instance_methods - Object.instance_methods
       UI.user_error!("Unknown method '#{method_sym}', supported #{interface_methods}") unless interface_methods.include?(method_sym)

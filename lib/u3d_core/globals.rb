@@ -74,9 +74,7 @@ module U3dCore
 
       def respond_to_missing?(method_sym, include_private = false)
         case method_sym.to_s
-        when /^with_(.*)$/
-          return attributes.include? Regexp.last_match(1)
-        when /^(.*)\?$/
+        when /^with_(.*)$/ || /^(.*)\?$/
           return attributes.include? Regexp.last_match(1)
         else
           super

@@ -118,9 +118,9 @@ module U3dCore
         return output.join("\n")
       end
 
-      # rubocop:disable Naming/PredicateName,Metrics/PerceivedComplexity
+      # rubocop:disable Naming/PredicateName
       def has_admin_privileges?(retry_count: 2)
-        # rubocop:enable Naming/PredicateName,Metrics/PerceivedComplexity
+        # rubocop:enable Naming/PredicateName
         if Helper.windows?
           begin
             result = system_no_output('reg query HKU\\S-1-5-19')

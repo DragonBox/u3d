@@ -71,6 +71,7 @@ module U3dCore
         # The process might have exited.
         # This behavior is also ruby version dependent.
         rescue Errno::ECHILD, PTY::ChildExited
+          # do nothing
         end
       end
       $CHILD_STATUS.exitstatus

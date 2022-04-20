@@ -145,6 +145,7 @@ module U3dCore
       attr_reader :show_github_issues
 
       def initialize(show_github_issues: false)
+        super
         @show_github_issues = show_github_issues
       end
     end

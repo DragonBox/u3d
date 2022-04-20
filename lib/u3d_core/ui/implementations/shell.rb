@@ -29,6 +29,7 @@ module U3dCore
   class Shell < Interface
     # test_log_buffer: by default, don't show any logs when running tests
     def initialize(test_log_buffer: nil)
+      super()
       @test_log_buffer = test_log_buffer
     end
 
@@ -54,6 +55,7 @@ module U3dCore
 
     class EPipeIgnorerLogDevice < Logger::LogDevice
       def initialize(logdev)
+        super
         @logdev = logdev
       end
 

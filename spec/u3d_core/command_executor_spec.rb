@@ -166,14 +166,7 @@ describe U3dCore do
         end
 
         it "wraps a command when user is not root" do
-          allow(U3dCore::CommandExecutor).to receive(:has_admin_privileges?).with(retry_count: 2).and_return(true)
-          module U3dCore
-            class CommandExecutor
-              def self.has_admin_privileges?
-                true
-              end
-            end
-          end
+          allow(U3dCore::CommandExecutor).to receive(:has_admin_privileges?).and_return(true)
           credentials = double("Credentials")
           expect(U3dCore::Credentials).to receive(:new).once.ordered { credentials }
           expect(credentials).to receive(:password).once.ordered { 'abc' }

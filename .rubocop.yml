@@ -5,6 +5,10 @@
 #
 #   File.chmod(0o777, f)
 #
+require:
+  - rubocop-rake
+  #- rubocop-rspec
+
 AllCops:
   NewCops: enable
   #Include:
@@ -42,7 +46,7 @@ Metrics/MethodLength:
   Enabled: false
 
 # Configuration parameters: AllowURI, URISchemes.
-Metrics/LineLength:
+Layout/LineLength:
   Max: 370
 
 # We're not there yet
@@ -59,4 +63,7 @@ Layout/EndOfLine:
 
 # Some issues with rspec style
 Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
+Lint/EmptyBlock:
   Enabled: false

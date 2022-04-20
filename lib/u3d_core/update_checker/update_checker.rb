@@ -44,7 +44,7 @@ module U3dCore
     end
 
     def self.server_results
-      @results ||= {}
+      @server_results ||= {}
     end
 
     class << self

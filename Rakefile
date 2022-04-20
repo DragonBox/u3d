@@ -128,6 +128,7 @@ def github_reviewers
 end
 ###
 
+desc 'Ensure the git repository is clean. Fails otherwise'
 task :ensure_git_clean do
   branch = run_command('git rev-parse --abbrev-ref HEAD', "Couldn't get current git branch").strip
   UI.user_error!("You are not on 'master' but on '#{branch}'") unless branch == "master"
@@ -135,7 +136,7 @@ task :ensure_git_clean do
   UI.user_error!("git status not clean:\n#{output}") unless output == ""
 end
 
-# ensure ready to prepare a PR
+desc 'Ensure we are ready to prepare a PR'
 task :prepare_git_pr, [:pr_branch] do |_t, args|
   pr_branch = args['pr_branch']
   raise "Missing pr_branch argument" unless pr_branch
