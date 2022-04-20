@@ -4,16 +4,40 @@
 #
 version: 2.1
 
-
 orbs:
-  ruby: circleci/ruby@1.0
+  ruby: circleci/ruby@1.1
+
+#executors:
+#  linux:
+#    docker:
+#      - image: cimg/base:2020.01
+#  macos:
+#    macos:
+#      xcode: 11.4
+
+
+workflows:
+  all-tests:
+    jobs:
+      - build:
+          matrix:
+            parameters:
+              os: [linux]
+              ruby-version: ["2.5", "2.6", "2.7", "3.0", "3.1"]
 
 jobs:
   build:
+    parameters:
+      os:
+        type: executor
+      ruby-version:
+        type: string
+
     docker:
-      # specify the version you desire here
-       - image: cimg/ruby:2.5-node
-      
+       - image: cimg/ruby:<< parameters.ruby-version >>
+
+    executor: << parameters.os >>
+
     working_directory: ~/repo
 
     steps:
