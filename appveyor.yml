@@ -21,6 +21,8 @@ environment:
 
 install:
   - set PATH=C:\Ruby%RUBY_VERSION%-x64\bin;%PATH%
+  - set BUNDLER_VERSION=2.2.30
+  - gem install bundler -v %BUNDLER_VERSION%
   - bundle config --local path vendor/bundle
   - bundle install
 
