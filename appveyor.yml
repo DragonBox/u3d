@@ -9,6 +9,8 @@ cache:
   - vendor/bundle
 
 environment:
+  LC_ALL: en_US.UTF-8
+  LANG: en_US.UTF-8
   matrix:
     - RUBY_VERSION: 24
     - RUBY_VERSION: 25
@@ -21,10 +23,6 @@ install:
   - set PATH=C:\Ruby%RUBY_VERSION%-x64\bin;%PATH%
   - bundle config --local path vendor/bundle
   - bundle install
-
-environment:
-  LC_ALL: en_US.UTF-8
-  LANG: en_US.UTF-8
 
 build: off
 
