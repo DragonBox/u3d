@@ -67,5 +67,15 @@ describe U3d do
         expect(U3d::Utils.strings(path).to_a.include?('iTXtXML:com.adobe.xmp')).to be true
       end
     end
+
+    describe '.windows_local_appdata' do
+      it 'runs windows_local_appdata without failure on windows', if: WINDOWS do
+        puts U3d::Utils.windows_local_appdata
+      end
+      it 'runs windows_local_appdata fails on non windows', unless: WINDOWS do
+        require 'fiddle'
+        expect { U3d::Utils.windows_local_appdata }.to raise_error(Fiddle::DLError)
+      end
+    end
   end
 end
