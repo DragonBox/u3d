@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -28,12 +30,12 @@ HighLine.track_eof = false
 
 module U3d
   # CLI using commander gem for u3d
-  # rubocop:disable ClassLength
+  # rubocop:disable Metrics/ClassLength
   class CommandsGenerator
     include Commander::Methods
     UI = U3dCore::UI
 
-    UNICODE_FILE = File.expand_path('../../assets/utf8.txt', __FILE__)
+    UNICODE_FILE = File.expand_path('../assets/utf8.txt', __dir__)
 
     def self.start
       U3dCore::UpdateChecker.start_looking_for_update('u3d')
@@ -97,7 +99,7 @@ Fore more information about how the rules work, see https://github.com/DragonBox
         c.option '-u', '--unity_version STRING', String, 'Version of Unity to run with. If not specified, it runs with the version of the project (either specified as -projectPath or current)'
         c.option '-r', '--raw_logs', 'Raw Unity output, not filtered by u3d\'s log prettifier'
         c.action do |args, options|
-          UI.user_error! "Run doesn't take arguments. Did you forget '--' or did you mistake your command? (#{args})" if args.count > 0
+          UI.user_error! "Run doesn't take arguments. Did you forget '--' or did you mistake your command? (#{args})" if args.count.positive?
           U3dCore::Globals.log_timestamps = true
           Commands.run(options: convert_options(options), run_args: run_args)
         end
@@ -263,5 +265,5 @@ More on that: https://forum.unity3d.com/threads/unity-on-linux-release-notes-and
       run!
     end
   end
-  # rubocop:enable ClassLength
+  # rubocop:enable Metrics/ClassLength
 end

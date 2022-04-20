@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -434,7 +436,7 @@ describe U3d do
           expect(U3d::Utils).to receive(:final_url).with(@url).and_return(@url)
           mock_unity_modules(module_params: [{ id: 'unity', url: @url }])
 
-          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, '1.2.3f4' => @url)
+          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :linux, { '1.2.3f4' => @url })
           expect(
             @downloader.url_for(
               'unity',
@@ -460,7 +462,7 @@ describe U3d do
             expect(U3d::Utils).to receive(:ensure_dir) {}
             mock_unity_modules(module_params: [{ id: 'package', url: @path }])
 
-            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, '1.2.3f4' => @url)
+            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, { '1.2.3f4' => @url })
 
             expect(
               @downloader.destination_for(
@@ -476,7 +478,7 @@ describe U3d do
             expect(U3d::Utils).to receive(:ensure_dir) {}
             mock_unity_modules(module_params: [{ id: 'package', url: @path }])
 
-            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, '1.2.3f4' => @url)
+            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, { '1.2.3f4' => @url })
 
             expect(
               @downloader.destination_for(
@@ -492,7 +494,7 @@ describe U3d do
         it 'returns the correct url for the specified package' do
           mock_unity_modules(module_params: [{ id: 'package', url: @path }])
 
-          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, '1.2.3f4' => @url)
+          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :mac, { '1.2.3f4' => @url })
           expect(
             @downloader.url_for(
               'package',
@@ -517,7 +519,7 @@ describe U3d do
             expect(U3d::Utils).to receive(:ensure_dir) {}
             mock_unity_modules(module_params: [{ id: 'package', url: @path }])
 
-            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, '1.2.3f4' => @url)
+            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, { '1.2.3f4' => @url })
 
             expect(
               @downloader.destination_for(
@@ -533,7 +535,7 @@ describe U3d do
             expect(U3d::Utils).to receive(:ensure_dir) {}
             mock_unity_modules(module_params: [{ id: 'package', url: @path }])
 
-            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, '1.2.3f4' => @url)
+            definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, { '1.2.3f4' => @url })
 
             expect(
               @downloader.destination_for(
@@ -549,7 +551,7 @@ describe U3d do
         it 'returns the correct url for the specified package' do
           mock_unity_modules(module_params: [{ id: 'package', url: @path }])
 
-          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, '1.2.3f4' => @url)
+          definition = U3d::UnityVersionDefinition.new('1.2.3f4', :win, { '1.2.3f4' => @url })
           expect(
             @downloader.url_for(
               'package',

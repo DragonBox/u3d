@@ -13,7 +13,6 @@ environment:
   LC_ALL: en_US.UTF-8
   LANG: en_US.UTF-8
   matrix:
-    - RUBY_VERSION: 24
     - RUBY_VERSION: 25
     - RUBY_VERSION: 26
     - RUBY_VERSION: 27
@@ -22,7 +21,7 @@ environment:
 
 install:
   - set PATH=C:\Ruby%RUBY_VERSION%-x64\bin;%PATH%
-  - set BUNDLER_VERSION=2.2.30
+  - set BUNDLER_VERSION=2.3.11
   - ruby -v
   - gem -v
   - bundle -v

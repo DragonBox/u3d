@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Original work Copyright (c) 2015-present the fastlane authors
 # Modified work Copyright 2016-present WeWantToKnow AS
@@ -55,13 +57,11 @@ module U3dCore
         @logdev = logdev
       end
 
-      # rubocop:disable HandleExceptions
       def write(message)
         @logdev.write(message)
       rescue Errno::EPIPE
         # ignored
       end
-      # rubocop:enable HandleExceptions
     end
 
     def format_string(datetime = Time.now, severity = "")
@@ -79,7 +79,7 @@ module U3dCore
       s = []
       s << "#{severity} " if U3dCore::Globals.verbose? && severity && !severity.empty?
       s << "[#{datetime.strftime(timestamp)}] " if timestamp
-      s.join('')
+      s.join
     end
 
     #####################################################
@@ -114,7 +114,7 @@ module U3dCore
       actual = (message.split("\r").last || "") # as clearing the line will remove the `>` and the time stamp
       actual.split("\n").each do |msg|
         prefix = msg.include?("▸") ? "" : "▸ "
-        log.info(prefix + "" + msg.magenta)
+        log.info("#{prefix}#{msg.magenta}")
       end
     end
 
@@ -125,7 +125,7 @@ module U3dCore
     def header(message)
       i = message.length + 8
       success("-" * i)
-      success("--- " + message + " ---")
+      success("--- #{message} ---")
       success("-" * i)
     end
 
@@ -167,6 +167,7 @@ module U3dCore
 
     def verify_interactive!(message)
       return if interactive?
+
       important(message)
       crash!("Could not retrieve response as u3d runs in non-interactive mode")
     end

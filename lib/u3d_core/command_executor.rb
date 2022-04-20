@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Original work Copyright (c) 2015-present the fastlane authors
 # Modified work Copyright 2016-present WeWantToKnow AS
@@ -65,7 +67,7 @@ module U3dCore
           output_callback = proc do |line|
             # Prefix the current line with a string
             prefix.each do |element|
-              line = element[:prefix] + line if element[:block] && element[:block].call(line)
+              line = element[:prefix] + line if element[:block]&.call(line)
             end
             UI.command_output(line)
           end
@@ -97,27 +99,28 @@ module U3dCore
               line = l.strip # strip so that \n gets removed
               output << line
 
-              output_callback.call(l) if output_callback
+              output_callback&.call(l)
             end
           end
           raise "Exit status: #{status}".red if !status.nil? && status.nonzero?
-        rescue StandardError => ex
+        rescue StandardError => e
           # This could happen
           # * if the status is failed
           # * when the environment is wrong:
           # > invalid byte sequence in US-ASCII (ArgumentError)
-          output << ex.to_s
+          output << e.to_s
           o = output.join("\n")
           UI.verbose o
-          raise ex unless error_callback
+          raise e unless error_callback
+
           error_callback.call(o, nil)
         end
         return output.join("\n")
       end
 
-      # rubocop:disable PredicateName,PerceivedComplexity
+      # rubocop:disable Naming/PredicateName,Metrics/PerceivedComplexity
       def has_admin_privileges?(retry_count: 2)
-        # rubocop:enable PredicateName,PerceivedComplexity
+        # rubocop:enable Naming/PredicateName,Metrics/PerceivedComplexity
         if Helper.windows?
           begin
             result = system_no_output('reg query HKU\\S-1-5-19')
@@ -152,6 +155,7 @@ module U3dCore
           unless env_username == "root"
             cred = U3dCore::Credentials.new(user: env_username)
             raise CredentialsError, "The command \'#{command}\' must be run with admin privileges" unless has_admin_privileges?
+
             command = "sudo -k && echo #{cred.password.shellescape} | sudo -S bash -c \"#{command}\""
           end
         end

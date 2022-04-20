@@ -1,4 +1,6 @@
-lib = File.expand_path('../lib', __FILE__)
+# frozen_string_literal: true
+
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'u3d/version'
 
@@ -8,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.authors     = ["Jerome Lacoste", "Paul Niezborala"]
   spec.email       = 'jerome@wewanttoknow.com'
 
-  spec.required_ruby_version = '>= 2.1.0'
+  spec.required_ruby_version = '>= 2.5.0'
 
   spec.summary     = "U3d"
   spec.description = U3d::DESCRIPTION
@@ -25,8 +27,8 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'colored', '>= 1.2', '< 2.0.0' # terminal
   spec.add_dependency 'commander', '>= 4.4.0', '< 5.0.0' # CLI parser
-  spec.add_dependency 'file-tail', '>= 1.2.0'
   spec.add_dependency 'filesize', '>= 0.1.1' # File sizes prettifier
+  spec.add_dependency 'file-tail', '>= 1.2.0'
   spec.add_dependency 'inifile', '>= 3.0.0', '< 4.0.0' # Parses INI files
   spec.add_dependency 'plist', '>= 3.1.0', '< 4.0.0' # Generate the Xcode config plist file
   spec.add_dependency "rexml" # rexml was unbundled from the stdlib in ruby 3
@@ -38,7 +40,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "github_changelog_generator"
   spec.add_development_dependency "pry-byebug"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec", "~> 3.1.0"
-  spec.add_development_dependency 'rspec_junit_formatter', '~> 0.2.3'
-  spec.add_development_dependency 'rubocop', '~> 0.52.1'
+  spec.add_development_dependency "rspec", "~> 3.11.0"
+  spec.add_development_dependency 'rspec_junit_formatter', '~> 0.5.1'
+  spec.add_development_dependency 'rubocop', '~> 1.27'
+  spec.metadata['rubygems_mfa_required'] = 'true'
 end

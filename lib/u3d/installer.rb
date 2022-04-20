@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -30,13 +32,13 @@ require 'pathname'
 require 'zip'
 
 module U3d
-  DEFAULT_LINUX_INSTALL = '/opt/'.freeze
-  DEFAULT_MAC_INSTALL = '/'.freeze
-  DEFAULT_WINDOWS_INSTALL = 'C:/Program Files/'.freeze
-  UNITY_DIR = "Unity_%<version>s".freeze
-  UNITY_DIR_LONG = "Unity_%<version>s_%<build_number>s".freeze
-  UNITY_DIR_LINUX = "unity-editor-%<version>s".freeze
-  UNITY_DIR_LINUX_LONG = "unity-editor-%<version>s_%<build_number>s".freeze
+  DEFAULT_LINUX_INSTALL = '/opt/'
+  DEFAULT_MAC_INSTALL = '/'
+  DEFAULT_WINDOWS_INSTALL = 'C:/Program Files/'
+  UNITY_DIR = "Unity_%<version>s"
+  UNITY_DIR_LONG = "Unity_%<version>s_%<build_number>s"
+  UNITY_DIR_LINUX = "unity-editor-%<version>s"
+  UNITY_DIR_LINUX_LONG = "unity-editor-%<version>s_%<build_number>s"
 
   class Installer
     def self.create
@@ -57,7 +59,7 @@ module U3d
       installer = Installer.create
       files.each do |name, file, info|
         UI.header "Installing #{info.name} (#{name})"
-        UI.message 'Installing with ' + file
+        UI.message "Installing with #{file}"
         installer.install(file, version, installation_path: installation_path, info: info)
       end
     end
@@ -71,20 +73,24 @@ module U3d
   class BaseInstaller
     def sanitize_installs
       return unless UI.interactive? || Helper.test?
+
       unclean = []
       installed.each { |unity| unclean << unity unless unity.clean_install? }
       return if unclean.empty?
+
       UI.important("u3d can optionally standardize the existing Unity installation names and locations.")
       UI.important("Check the documentation for more information:")
       UI.important("** https://github.com/DragonBox/u3d/blob/master/README.md#default-installation-paths **")
       unclean.each { |unity| sanitize_install(unity, dry_run: true) }
       return unless UI.confirm("#{unclean.count} Unity installation(s) will be moved. Proceed??")
+
       unclean.each { |unity| sanitize_install(unity) }
     end
 
     def installed_sorted_by_versions
       list = installed
       return [] if list.empty?
+
       list.sort { |a, b| UnityVersionComparator.new(a.version) <=> UnityVersionComparator.new(b.version) }
     end
 
@@ -123,7 +129,7 @@ module U3d
         end
       end
 
-      if info && info.rename_from && info.rename_to
+      if info&.rename_from && info&.rename_to
         rename_from = info.rename_from.gsub(/{UNITY_PATH}/, unity.root_path)
         rename_to = info.rename_to.gsub(/{UNITY_PATH}/, unity.root_path)
         Utils.ensure_dir(rename_to)
@@ -131,7 +137,7 @@ module U3d
         if File.file? rename_from
           FileUtils.mv(rename_from, rename_to)
         else
-          Dir.glob(rename_from + '/*').each { |path| FileUtils.mv(path, rename_to) }
+          Dir.glob("#{rename_from}/*").each { |path| FileUtils.mv(path, rename_to) }
         end
       end
 
@@ -139,7 +145,7 @@ module U3d
     end
 
     def package_destination(info, unity_root_path)
-      if info && info.destination
+      if info&.destination
         info.destination.gsub(/{UNITY_PATH}/, unity_root_path)
       else
         unity_root_path
@@ -151,14 +157,15 @@ module U3d
     # Returns an array of ruby style paths
     def extra_installation_paths
       return [] if ENV['U3D_EXTRA_PATHS'].nil?
+
       ENV['U3D_EXTRA_PATHS'].strip.split(File::PATH_SEPARATOR).map { |p| File.expand_path p }
     end
 
-    def find_installations_with_path(default_root_path: '', postfix: [])
+    def find_installations_with_path(default_root_path: '', postfix: [], &block)
       ([default_root_path] | extra_installation_paths).map do |path|
         UI.verbose "Looking for installed Unity version under #{path}"
         pattern = File.join([path] + postfix)
-        Dir.glob(pattern).map { |found_path| yield found_path }
+        Dir.glob(pattern).map(&block)
       end.flatten
     end
   end
@@ -189,15 +196,16 @@ module U3d
     end
 
     def install(file_path, version, installation_path: nil, info: nil)
-      # rubocop:enable UnusedMethodArgument
       extension = File.extname(file_path)
       raise "Installation of #{extension} files is not supported on Mac" unless %w[.zip .po .pkg .dmg].include? extension
+
       path = installation_path || DEFAULT_MAC_INSTALL
-      if extension == '.po'
+      case extension
+      when '.po'
         install_po(file_path, version, info: info)
-      elsif extension == '.zip'
+      when '.zip'
         install_zip(file_path, version, info: info)
-      elsif extension == '.dmg'
+      when '.dmg'
         UI.important "Skipping installation of #{file_path} for now"
       else
         install_pkg(file_path, version: version, target_path: path)
@@ -278,7 +286,7 @@ module U3d
     end
   end
 
-  # rubocop:disable ClassLength
+  # rubocop:disable Metrics/ClassLength
   class LinuxInstaller < BaseInstaller
     def sanitize_install(unity, long: false, dry_run: false)
       source_path = File.expand_path(unity.root_path)
@@ -296,26 +304,26 @@ module U3d
       paths.map { |path| LinuxInstallation.new(root_path: path) }
     end
 
-    # rubocop:disable PerceivedComplexity
     def install(file_path, version, installation_path: nil, info: nil)
-      # rubocop:enable UnusedMethodArgument, PerceivedComplexity
       extension = File.extname(file_path)
 
       raise "Installation of #{extension} files is not supported on Linux" unless ['.zip', '.po', '.sh', '.xz', '.pkg'].include? extension
-      if extension == '.sh'
+
+      case extension
+      when '.sh'
         path = installation_path || DEFAULT_LINUX_INSTALL
         install_sh(file_path, installation_path: path)
-      elsif extension == '.xz'
+      when '.xz'
         new_path = File.join(DEFAULT_LINUX_INSTALL, format(UNITY_DIR_LINUX, version: version))
         path = installation_path || new_path
         install_xz(file_path, installation_path: path)
-      elsif extension == '.pkg'
+      when '.pkg'
         new_path = File.join(DEFAULT_LINUX_INSTALL, format(UNITY_DIR_LINUX, version: version))
         path = installation_path || new_path
         install_pkg(file_path, installation_path: path)
-      elsif extension == '.po'
+      when '.po'
         install_po(file_path, version, info: info)
-      elsif extension == '.zip'
+      when '.zip'
         install_zip(file_path, version, info: info)
       end
 
@@ -399,6 +407,7 @@ module U3d
 
     def pkg_install_path(unity_root_path, pinfo_path)
       raise "PackageInfo not found under #{pinfo_path}" unless File.exist? pinfo_path
+
       pinfo = File.read(pinfo_path)
       require 'rexml/document'
       d = REXML::Document.new(pinfo)
@@ -414,6 +423,7 @@ module U3d
       else
         install_location = d.root.attributes['install-location']
         raise "Not sure how to install this module with identifier #{identifier} install-location: #{install_location}" unless install_location.start_with? '/Applications/Unity/'
+
         install_location.gsub(%(\/Applications\/Unity), "#{unity_root_path}/Editor/Data")
       end
     end
@@ -442,7 +452,7 @@ module U3d
       paths
     end
   end
-  # rubocop:enable ClassLength
+  # rubocop:enable Metrics/ClassLength
 
   class WindowsInstaller < BaseInstaller
     def sanitize_install(unity, long: false, dry_run: false)
@@ -470,10 +480,12 @@ module U3d
     def install(file_path, version, installation_path: nil, info: nil)
       extension = File.extname(file_path)
       raise "Installation of #{extension} files is not supported on Windows" unless %w[.po .zip .exe .msi].include? extension
+
       path = installation_path || File.join(DEFAULT_WINDOWS_INSTALL, format(UNITY_DIR, version: version))
-      if extension == '.po'
+      case extension
+      when '.po'
         install_po(file_path, version, info: info)
-      elsif extension == '.zip'
+      when '.zip'
         install_zip(file_path, version, info: info)
       else
         install_exe(file_path, installation_path: path, info: info)
@@ -489,14 +501,14 @@ module U3d
         if info.command
           command = info.command
           if /msiexec/ =~ command
-            command.sub!(/{FILENAME}/, '"' + U3dCore::Helper.windows_path(file_path) + '"')
+            command.sub!(/{FILENAME}/, "\"#{U3dCore::Helper.windows_path(file_path)}\"")
           else
             command.sub!(/{FILENAME}/, file_path.argescape)
           end
           command.sub!(/{INSTDIR}/, final_path)
           command.sub!(/{DOCDIR}/, final_path)
           command.sub!(/{MODULEDIR}/, final_path)
-          command.sub!(%r{\/D=}, '/S /D=') unless %r{\/S} =~ command
+          command.sub!(%r{/D=}, '/S /D=') unless %r{/S} =~ command
         end
         command ||= file_path.argescape
         U3dCore::CommandExecutor.execute(command: command, admin: true)
@@ -572,9 +584,8 @@ module U3d
         raise 'Cannot install dependencies on your Linux distribution'
       end
 
-      if UI.interactive?
-        return unless UI.confirm "Install dependencies? (#{DEPENDENCIES.length} dependency(ies) to install)"
-      end
+      return if UI.interactive? && !(UI.confirm "Install dependencies? (#{DEPENDENCIES.length} dependency(ies) to install)")
+
       U3dCore::CommandExecutor.execute(command: "#{prefix} #{DEPENDENCIES.join(' ')}", admin: true)
     end
   end

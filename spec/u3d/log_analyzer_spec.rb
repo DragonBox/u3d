@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -47,9 +49,9 @@ class CustomExpectations
   end
 end
 
-rules_data_file = File.expand_path('../../data/rules_data.json', __FILE__)
+rules_data_file = File.expand_path('../data/rules_data.json', __dir__)
 
-log_analyzer_fixtures = Dir.glob(File.join(File.expand_path('../../fixtures/log_analyzer', __FILE__), "*.log"))
+log_analyzer_fixtures = Dir.glob(File.join(File.expand_path('../fixtures/log_analyzer', __dir__), "*.log"))
 
 describe U3d do
   describe U3d::LogAnalyzer do

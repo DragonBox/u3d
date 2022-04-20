@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -35,7 +37,7 @@ RSpec::Core::RakeTask.new(:spec)
 RuboCop::RakeTask.new
 
 class GithubChangelogGenerator
-  PATH = '.github_changelog_generator'.freeze
+  PATH = '.github_changelog_generator'
   class << self
     def future_release
       s = File.read(PATH)
@@ -56,13 +58,13 @@ class GithubChangelogGenerator
           line
         end
       end
-      File.write(PATH, lines.join("\n") + "\n")
+      File.write(PATH, "#{lines.join("\n")}\n")
     end
   end
 end
 
 class U3dCode
-  PATH = 'lib/u3d/version.rb'.freeze
+  PATH = 'lib/u3d/version.rb'
   class << self
     def version=(version)
       s = File.read(PATH)
@@ -74,7 +76,7 @@ class U3dCode
           line
         end
       end
-      File.write(PATH, lines.join("\n") + "\n")
+      File.write(PATH, "#{lines.join("\n")}\n")
     end
   end
 end
@@ -137,6 +139,7 @@ end
 task :prepare_git_pr, [:pr_branch] do |_t, args|
   pr_branch = args['pr_branch']
   raise "Missing pr_branch argument" unless pr_branch
+
   UI.user_error! "Prepare git PR stopped by user" unless UI.confirm("Creating PR branch #{pr_branch}")
   run_command("git checkout -b #{pr_branch}")
 end
@@ -216,9 +219,10 @@ def parse_changelog
     if (m = line.match(/^## \[(.*)\]/))
       releases[version] = buffer if buffer
       version = m[1]
-      buffer = version + "\n\n"
+      buffer = "#{version}\n\n"
     else
       next unless version # skip first lines
+
       buffer += line
     end
   end

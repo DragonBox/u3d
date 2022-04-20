@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -24,14 +26,14 @@ require 'u3d/utils'
 
 module U3d
   class UnityVersionNumber
-    attr_reader :unity_version
-    attr_reader :parts
+    attr_reader :unity_version, :parts
 
     def initialize(version)
       @unity_version = version
       parsed = Utils.parse_unity_version(@unity_version)
       parsed.each_with_index do |val, index|
         next if val.nil? || (index == 3)
+
         parsed[index] = val.to_i
       end
       @parts = parsed
@@ -52,12 +54,16 @@ module U3d
     def <=>(other)
       comp = @version.parts[0] <=> other.version.parts[0]
       return comp if comp.nonzero?
+
       comp = @version.parts[1] <=> other.version.parts[1]
       return comp if comp.nonzero?
+
       comp = @version.parts[2] <=> other.version.parts[2]
       return comp if comp.nonzero?
+
       comp = RELEASE_LETTER_STRENGTH[@version.parts[3].to_sym] <=> RELEASE_LETTER_STRENGTH[other.version.parts[3].to_sym]
       return comp if comp.nonzero?
+
       return @version.parts[4] <=> other.version.parts[4]
     end
 

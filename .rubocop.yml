@@ -6,6 +6,7 @@
 #   File.chmod(0o777, f)
 #
 AllCops:
+  NewCops: enable
   #Include:
   #  - '**/fastlane/Fastfile'
   Exclude:
@@ -35,7 +36,7 @@ Metrics/ParameterLists:
   Max: 8
 
 Metrics/PerceivedComplexity:
-  Max: 10
+  Max: 12
 
 Metrics/MethodLength:
   Enabled: false

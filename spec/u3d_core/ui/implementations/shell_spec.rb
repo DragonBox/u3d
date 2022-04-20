@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -95,7 +97,7 @@ describe U3dCore do
         stdout, stderr = capture_stds do
           shell.message("This is a log message")
         end
-        expect(stdout).to eq("This is a log message" + "\n")
+        expect(stdout).to eq("This is a log message\n")
         expect(stderr).to eq("")
       end
 
@@ -108,7 +110,7 @@ describe U3dCore do
           shell.message("This is a log message")
           shell.message("This is a second message")
         end
-        expect(stdout).to eq("This is a log message" + "\n")
+        expect(stdout).to eq("This is a log message\n")
         expect(stderr).to eq("")
       end
     end

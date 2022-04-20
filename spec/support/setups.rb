@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -105,7 +107,7 @@ def expected_definition(version, os, url, packages: [])
     packages
   end
   if url
-    definition = U3d::UnityVersionDefinition.new(version, os, version => url)
+    definition = U3d::UnityVersionDefinition.new(version, os, { version => url })
     expect(U3d::UnityVersionDefinition).to receive(:new).with(version, os, hash_including(version => url)) { definition }
   else
     definition = U3d::UnityVersionDefinition.new(version, os, nil)
@@ -122,6 +124,5 @@ end
 
 def mock_version_definition(version: '0.0.0x0', os: :fakeos, packages: [])
   allow(U3d::UnityModule).to receive(:load_modules).with(version, anything, anything) { packages }
-  definition = U3d::UnityVersionDefinition.new(version, os, nil)
-  definition
+  U3d::UnityVersionDefinition.new(version, os, nil)
 end

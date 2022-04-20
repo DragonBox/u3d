@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2017-present WeWantToKnow AS
 #
@@ -26,6 +28,7 @@ module CoreExtensions
         return 'Windows' if self == :win
         return 'Mac OSX' if self == :mac
         return 'Linux' if self == :linux
+
         raise "Not a known operating system symbol #{self}"
       end
     end

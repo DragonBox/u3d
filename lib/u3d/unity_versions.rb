@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -47,6 +49,7 @@ module U3d
     def fetch_cookie
       UI.verbose "FetchCookie? #{@cookie}"
       return @cookie if @cookie
+
       cookie_str = ''
       url = 'https://forum.unity.com/forums/linux-editor.93/' # a page that triggers cookies
       uri = URI(url)
@@ -56,15 +59,15 @@ module U3d
         response = http.request request
 
         case response
-        when Net::HTTPSuccess then
+        when Net::HTTPSuccess
           UI.verbose "unexpected result"
-        when Net::HTTPRedirection then
+        when Net::HTTPRedirection
           # A session must be opened with the server before accessing forum
           res = nil
           cookie_str = ''
           # Store the name and value of the cookies returned by the server
           response['set-cookie'].gsub(/\s+/, '').split(',').each do |c|
-            cookie_str << c.split(';', 2)[0] + '; '
+            cookie_str << ("#{c.split(';', 2)[0]}; ")
           end
           cookie_str.chomp!('; ')
 
@@ -78,6 +81,7 @@ module U3d
           end
 
           raise 'Unexpected result' unless res.is_a? Net::HTTPRedirection
+
           # It should be a redirection to the forum to perform authentication
           uri = URI(res['location'])
           UI.verbose "Redirecting to #{uri}"
@@ -90,50 +94,51 @@ module U3d
           raise 'Unable to establish a session with Unity forum' unless res.is_a? Net::HTTPRedirection
 
           UI.verbose "Found cookie_str #{cookie_str}"
-          cookie_str << '; ' + res['set-cookie'].gsub(/\s+/, '').split(';', 2)[0]
+          cookie_str << ("; #{res['set-cookie'].gsub(/\s+/, '').split(';', 2)[0]}")
         end
       end
       UI.verbose "Found @cookie #{cookie_str}"
       @cookie = cookie_str
     end
   end
+
   # Takes care of fectching versions and version list
   module UnityVersions
     #####################################################
     # @!group URLS: Locations to fetch information from
     #####################################################
     # URL for the forum thread listing all the Linux releases
-    UNITY_LINUX_DOWNLOADS = 'https://forum.unity.com/threads/unity-on-linux-release-notes-and-known-issues.350256/'.freeze
+    UNITY_LINUX_DOWNLOADS = 'https://forum.unity.com/threads/unity-on-linux-release-notes-and-known-issues.350256/'
     # URL for the main releases for Windows and Macintosh
-    UNITY_DOWNLOADS = 'https://unity3d.com/get-unity/download/archive'.freeze
+    UNITY_DOWNLOADS = 'https://unity3d.com/get-unity/download/archive'
     # URL for the LTS releases for Windows and Macintosh
-    UNITY_LTSES = 'https://unity3d.com/unity/qa/lts-releases'.freeze
+    UNITY_LTSES = 'https://unity3d.com/unity/qa/lts-releases'
     # URL for the patch releases for Windows and Macintosh
-    UNITY_PATCHES = 'https://unity3d.com/unity/qa/patch-releases'.freeze
+    UNITY_PATCHES = 'https://unity3d.com/unity/qa/patch-releases'
     # URL for the beta releases list, they need to be accessed after
-    UNITY_BETAS = 'https://unity3d.com/unity/beta/archive'.freeze
+    UNITY_BETAS = 'https://unity3d.com/unity/beta/archive'
     # URL for a specific beta, takes into parameter a version string (%s)
-    UNITY_BETA_URL = 'https://unity3d.com/unity/beta/unity%<version>s'.freeze
+    UNITY_BETA_URL = 'https://unity3d.com/unity/beta/unity%<version>s'
     # URL for latest releases listing (since Unity 2017.1.5f1), takes into parameter os (windows => win32, mac => darwin)
-    UNITY_LATEST_JSON_URL = 'https://public-cdn.cloud.unity3d.com/hub/prod/releases-%<os>s.json'.freeze
+    UNITY_LATEST_JSON_URL = 'https://public-cdn.cloud.unity3d.com/hub/prod/releases-%<os>s.json'
 
     #####################################################
     # @!group REGEX: expressions to interpret data
     #####################################################
     # Captures a version and its base url
-    LINUX_DOWNLOAD = %r{['"](https?:\/\/[\w/\.-]+/[0-9a-f\+]{12,13}\/)(.\/)?UnitySetup-(\d+\.\d+\.\d+\w\d+)['"]}
+    LINUX_DOWNLOAD = %r{['"](https?://[\w/.-]+/[0-9a-f+]{12,13}/)(./)?UnitySetup-(\d+\.\d+\.\d+\w\d+)['"]}.freeze
 
-    MAC_WIN_SHADERS = %r{"(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)builtin_shaders-(\d+\.\d+\.\d+\w\d+)\.?\w+"}
-    LINUX_INSTALLER = %r{(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)LinuxEditorInstaller/Unity.tar.xz}
+    MAC_WIN_SHADERS = %r{"(https?://[\w/.-]+/[0-9a-f+]{12,13}/)builtin_shaders-(\d+\.\d+\.\d+\w\d+)\.?\w+"}.freeze
+    LINUX_INSTALLER = %r{(https?://[\w/.-]+/[0-9a-f+]{12,13}/)LinuxEditorInstaller/Unity.tar.xz}.freeze
 
-    LINUX_DOWNLOAD_DATED = %r{"(https?://[\w/\._-]+/unity\-editor\-installer\-(\d+\.\d+\.\d+\w\d+).*\.sh)"}
-    LINUX_DOWNLOAD_RECENT_PAGE = %r{"(https?://beta\.unity3d\.com/download/[a-zA-Z0-9/\.\+]+/public_download\.html)"}
-    LINUX_DOWNLOAD_RECENT_FILE = %r{'(https?://beta\.unity3d\.com/download/[a-zA-Z0-9/\.\+]+/unity\-editor\-installer\-(\d+\.\d+\.\d+(?:x)?\w\d+).*\.sh)'}
+    LINUX_DOWNLOAD_DATED = %r{"(https?://[\w/._-]+/unity-editor-installer-(\d+\.\d+\.\d+\w\d+).*\.sh)"}.freeze
+    LINUX_DOWNLOAD_RECENT_PAGE = %r{"(https?://beta\.unity3d\.com/download/[a-zA-Z0-9/.+]+/public_download\.html)"}.freeze
+    LINUX_DOWNLOAD_RECENT_FILE = %r{'(https?://beta\.unity3d\.com/download/[a-zA-Z0-9/.+]+/unity-editor-installer-(\d+\.\d+\.\d+(?:x)?\w\d+).*\.sh)'}.freeze
     # Captures a beta version in html page
-    UNITY_BETAVERSION_REGEX = %r{\/unity\/beta\/unity(\d+\.\d+\.\d+\w\d+)"}
-    UNITY_EXTRA_DOWNLOAD_REGEX = %r{"(https?:\/\/[\w\/.-]+\.unity3d\.com\/(\w+))\/[a-zA-Z\/.-]+\/download.html"}
+    UNITY_BETAVERSION_REGEX = %r{/unity/beta/unity(\d+\.\d+\.\d+\w\d+)"}.freeze
+    UNITY_EXTRA_DOWNLOAD_REGEX = %r{"(https?://[\w/.-]+\.unity3d\.com/(\w+))/[a-zA-Z/.-]+/download.html"}.freeze
     # For the latest releases fetched from json
-    UNITY_LATEST_JSON = %r{(https?://[\w/\.-]+/[0-9a-f\+]{12,13}/)}
+    UNITY_LATEST_JSON = %r{(https?://[\w/.-]+/[0-9a-f+]{12,13}/)}.freeze
 
     class << self
       def list_available(os: nil)
@@ -191,7 +196,7 @@ module U3d
     end
 
     class LinuxVersions
-      JSON_OS = 'linux'.freeze
+      JSON_OS = 'linux'
 
       @unity_forums = U3d::UnityForums.new
       class << self
@@ -300,7 +305,7 @@ module U3d
     end
 
     class MacVersions
-      JSON_OS = 'darwin'.freeze
+      JSON_OS = 'darwin'
 
       class << self
         def list_available
@@ -312,7 +317,7 @@ module U3d
     end
 
     class WindowsVersions
-      JSON_OS = 'win32'.freeze
+      JSON_OS = 'win32'
 
       class << self
         def list_available

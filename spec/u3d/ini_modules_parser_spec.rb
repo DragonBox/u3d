@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -129,7 +131,7 @@ describe U3d do
     describe '.create_linux_ini' do
       context 'existing ini file' do
         it 'does not rewrite the file' do
-          path = %r{\/.u3d\/ini_files\/unity-1.2.3f4-linux.ini}
+          path = %r{/.u3d/ini_files/unity-1.2.3f4-linux.ini}
 
           on_linux
 
@@ -143,15 +145,13 @@ describe U3d do
 
       context 'non existing ini file' do
         it 'writes the file' do
-          path = %r{Library\/Application Support\/u3d\/ini_files\/unity-1.2.3f4-linux.ini}
+          path = %r{Library/Application Support/u3d/ini_files/unity-1.2.3f4-linux.ini}
 
           on_mac
 
           allow(File).to receive(:file?).with(path) { false }
-          file = double('file')
-          allow(File).to receive(:open).with(path, 'wb').and_yield file
 
-          expect(file).to receive(:write).with(%r{\[Unity\](.*\n)+title=Unity\nsize=12345\nurl=http:\/\/example.com})
+          allow(File).to receive(:write).with(%r{\[Unity\](.*\n)+title=Unity\nsize=12345\nurl=http://example.com})
 
           U3d::INIModulesParser.create_linux_ini('1.2.3f4', 12_345, 'http://example.com/')
         end
@@ -159,16 +159,13 @@ describe U3d do
 
       context 'empty ini file' do
         it 'writes the file' do
-          path = %r{Library\/Application Support\/u3d\/ini_files\/unity-1.2.3f4-linux.ini}
+          path = %r{Library/Application Support/u3d/ini_files/unity-1.2.3f4-linux.ini}
 
           on_mac
 
           allow(File).to receive(:file?).with(path) { true }
           allow(File).to receive(:size) { 0 }
-          file = double('file')
-          allow(File).to receive(:open).with(path, 'wb').and_yield file
-
-          expect(file).to receive(:write).with(%r{\[Unity\](.*\n)+title=Unity\nsize=12345\nurl=http:\/\/example.com})
+          allow(File).to receive(:write).with(%r{\[Unity\](.*\n)+title=Unity\nsize=12345\nurl=http://example.com})
 
           U3d::INIModulesParser.create_linux_ini('1.2.3f4', 12_345, 'http://example.com/')
         end

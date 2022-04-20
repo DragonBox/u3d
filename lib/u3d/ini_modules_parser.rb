@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -30,7 +32,7 @@ module U3d
     #####################################################
     # @!group INI parameters to load and save ini files
     #####################################################
-    INI_NAME = 'unity-%<version>s-%<os>s.ini'.freeze
+    INI_NAME = 'unity-%<version>s-%<os>s.ini'
 
     class << self
       def load_ini(version, cached_versions, os: U3dCore::Helper.operating_system, offline: false)
@@ -42,8 +44,9 @@ module U3d
         ini_name = format(INI_NAME, version: version, os: os)
         Utils.ensure_dir(default_ini_path)
         ini_path = File.expand_path(ini_name, default_ini_path)
-        unless File.file?(ini_path) && File.size(ini_path) > 0
+        unless File.file?(ini_path) && File.size(ini_path).positive?
           raise "INI file does not exist at #{ini_path}" if offline
+
           download_ini(version, cached_versions, os, ini_name, ini_path)
         end
         begin
@@ -58,7 +61,8 @@ module U3d
         ini_name = format(INI_NAME, version: version, os: 'linux')
         Utils.ensure_dir(default_ini_path)
         ini_path = File.expand_path(ini_name, default_ini_path)
-        return if File.file?(ini_path) && File.size(ini_path) > 0
+        return if File.file?(ini_path) && File.size(ini_path).positive?
+
         data = %([Unity]
 ; -- NOTE --
 ; This is not an official Unity file
@@ -90,16 +94,14 @@ url=#{url}
         UI.verbose("Searching for ini file at #{uri}")
 
         data = Net::HTTP.get(uri)
-        data.tr!("\"", '')
-        data.gsub!(/Note:.+\n/, '')
+        data = data.tr("\"", '')
+        data = data.gsub(/Note:.+\n/, '')
 
         write_ini_file(ini_path, data)
       end
 
       def write_ini_file(ini_path, data)
-        File.open(ini_path, 'wb') do |f|
-          f.write(data)
-        end
+        File.binwrite(ini_path, data)
       end
 
       def default_ini_path

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -48,17 +50,15 @@ describe U3d do
 
         it 'creates a cache file' do
           allow(U3d::UnityVersions).to receive(:list_available) { { 'test' => 'url' } }
-          expect(File).to receive(:open).with(anything, 'w')
+          expect(File).to receive(:write).with(anything, anything)
 
           U3d::Cache.new
         end
 
         it 'writes to the cache file' do
           allow(U3d::UnityVersions).to receive(:list_available)
-          file = double('file')
 
-          expect(File).to receive(:open).with(anything, 'w').and_yield(file)
-          expect(file).to receive(:write)
+          expect(File).to receive(:write).with(anything, anything)
 
           U3d::Cache.new
         end
@@ -69,10 +69,10 @@ describe U3d do
           allow(U3d::UnityVersions).to receive(:list_available) { { 'test' => 'url' } }
           file = double('file')
           cache = '{'\
-          '"win":{"lastupdate":0,"versions":{"version": "url"}},'\
-          '"mac":{"lastupdate":0,"versions":{"version": "url"}},'\
-          '"linux":{"lastupdate":0,"versions":{"version": "url"}}'\
-          '}'
+                  '"win":{"lastupdate":0,"versions":{"version": "url"}},'\
+                  '"mac":{"lastupdate":0,"versions":{"version": "url"}},'\
+                  '"linux":{"lastupdate":0,"versions":{"version": "url"}}'\
+                  '}'
           allow(File).to receive(:file?) { true }
           allow(File).to receive(:open).with(anything, 'r').and_yield(file)
           allow(file).to receive(:read) { cache }
@@ -86,10 +86,10 @@ describe U3d do
           before(:each) do
             file = double('file')
             cache = '{'\
-            '"win":{"lastupdate":0,"versions":{"version": "url"}},'\
-            '"mac":{"lastupdate":0,"versions":{"version": "url"}},'\
-            '"linux":{"lastupdate":0,"versions":{"version": "url"}}'\
-            '}'
+                    '"win":{"lastupdate":0,"versions":{"version": "url"}},'\
+                    '"mac":{"lastupdate":0,"versions":{"version": "url"}},'\
+                    '"linux":{"lastupdate":0,"versions":{"version": "url"}}'\
+                    '}'
             allow(File).to receive(:file?) { true }
             allow(File).to receive(:open).with(anything, 'r').and_yield(file)
             allow(file).to receive(:read) { cache }
@@ -105,10 +105,8 @@ describe U3d do
 
           it 'writes to the cache file' do
             allow(U3d::UnityVersions).to receive(:list_available)
-            write_file = double('file')
 
-            expect(File).to receive(:open).with(anything, 'w').and_yield(write_file)
-            expect(write_file).to receive(:write)
+            expect(File).to receive(:write).with(anything, anything)
 
             U3d::Cache.new
           end
@@ -118,10 +116,10 @@ describe U3d do
           before(:each) do
             file = double('file')
             cache = '{'\
-            '"win":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"version": "url"}},'\
-            '"mac":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"version": "url"}},'\
-            '"linux":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"version": "url"}}'\
-            '}'
+                    '"win":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"version": "url"}},'\
+                                                                  '"mac":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"version": "url"}},'\
+                                                                                                                '"linux":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"version": "url"}}'\
+                                                                                                                                                                '}'
             allow(File).to receive(:file?) { true }
             allow(File).to receive(:open).with(anything, 'r').and_yield(file)
             allow(file).to receive(:read) { cache }
@@ -154,10 +152,10 @@ describe U3d do
           allow(U3d::UnityVersions).to receive(:list_available)
           file = double('file')
           cache_data = '{'\
-          '"win":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}},'\
-          '"mac":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}},'\
-          '"linux":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}}'\
-          '}'
+                       '"win":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}},'\
+                                                                     '"mac":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}},'\
+                                                                                                                   '"linux":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}}'\
+                                                                                                                                                                   '}'
           allow(File).to receive(:file?) { true }
           allow(File).to receive(:open).with(anything, 'r').and_yield(file)
           allow(file).to receive(:read) { cache_data }

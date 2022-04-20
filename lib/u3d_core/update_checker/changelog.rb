@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Original work Copyright (c) 2015-present the fastlane authors
 # Modified work Copyright 2019-present WeWantToKnow AS
@@ -31,12 +33,14 @@ module U3dCore
 
         releases(gem_name).each_with_index do |release, index|
           next unless Gem::Version.new(to_version(release['tag_name'])) > Gem::Version.new(current_version)
+
           puts("")
           puts(release['name'].green)
           puts(release['body'])
           did_show_changelog = true
 
           next unless index == 2
+
           puts("")
           puts("To see all new releases, open https://github.com/DragonBox/#{gem_name}/releases".green)
           break

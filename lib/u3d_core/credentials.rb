@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Original work Copyright (c) 2015-present the fastlane authors
 # Modified work Copyright 2016-present WeWantToKnow AS
@@ -26,7 +28,7 @@ require 'security'
 
 module U3dCore
   class Credentials
-    MAC_U3D_SERVER = 'u3d'.freeze
+    MAC_U3D_SERVER = 'u3d'
     def initialize(user: nil, password: nil)
       @user = user
       @password = password
@@ -39,6 +41,7 @@ module U3dCore
       while @user.to_s.empty?
         UI.verbose 'Username does not exist or is empty'
         raise CredentialsError, 'Username missing and context is not interactive. Please check that the environment variable is correct' unless UI.interactive?
+
         @user = UI.input 'Username for u3d:'
       end
 
@@ -48,12 +51,10 @@ module U3dCore
     def password
       @password ||= ENV['U3D_PASSWORD']
 
-      if Helper.mac? && @use_keychain
-        unless @password
-          UI.message 'Fetching password from keychain'
-          password_holder = Security::InternetPassword.find(server: server_name)
-          @password = password_holder.password unless password_holder.nil?
-        end
+      if Helper.mac? && @use_keychain && !@password
+        UI.message 'Fetching password from keychain'
+        password_holder = Security::InternetPassword.find(server: server_name)
+        @password = password_holder.password unless password_holder.nil?
       end
 
       if @password.nil?
@@ -76,6 +77,7 @@ module U3dCore
       while @password.nil?
         UI.verbose 'Password does not exist'
         raise CredentialsError, 'Password missing and context is not interactive. Please make sure it is correct' unless UI.interactive?
+
         @password = UI.password "Password for #{user}:"
       end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Original work Copyright (c) 2015-present the fastlane authors
 # Modified work Copyright 2016-present WeWantToKnow AS
@@ -42,7 +44,7 @@ module U3dCore
     end
 
     def self.windows_path(path)
-      path.gsub(%r{\/(\d)}, '/\\\\\1').tr('/', '\\')
+      path.gsub(%r{/(\d)}, '/\\\\\1').tr('/', '\\')
     end
 
     # Runs a given command using backticks (`)
@@ -95,6 +97,7 @@ module U3dCore
       # taken from: https://github.com/Microsoft/BashOnWindows/issues/423#issuecomment-221627364
       proc_version = '/proc/version'
       return false unless File.exist? proc_version
+
       File.open(proc_version, 'r') do |f|
         return !(/Microsof|WSL/ =~ f.read).nil?
       end
@@ -112,7 +115,7 @@ module U3dCore
 
     # the current operating system
     def self.operating_system
-      # rubocop:disable GuardClause
+      # rubocop:disable Style/GuardClause
       if linux?
         return :linux
       elsif mac?
@@ -122,7 +125,7 @@ module U3dCore
       else
         raise 'Could not assume what OS you\'re running, please specify it as much as possible'
       end
-      # rubocop:enable GuardClause
+      # rubocop:enable Style/GuardClause
     end
 
     def self.win_64?
@@ -153,5 +156,4 @@ module U3dCore
     #  return ENV["FL_BUILDLOG_PATH"] || "~/Library/Logs"
     # end
   end
-  # rubocop:enable Metrics/ModuleLength
 end
