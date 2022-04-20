@@ -368,7 +368,7 @@ module U3d
       @unity_version_info ||= string_file_info('Unity Version', @exe_path)
     end
 
-    def string_file_info(info, path)
+    def string_file_info(info_key, path)
       require "fiddle"
       version_dll = Fiddle.dlopen('version.dll')
       kernel32 = Fiddle.dlopen('kernel32.dll')
@@ -389,7 +389,7 @@ module U3d
       raise StandardError if version_ok.zero? # TODO: use GetLastError
 
       # hardcoding lang codepage
-      struct_path = "\\StringFileInfo\\040904b0\\#{info}"
+      struct_path = "\\StringFileInfo\\040904b0\\#{info_key}"
 
       addr = [0].pack('L')
       size = [0].pack('L')
@@ -403,7 +403,7 @@ module U3d
       rtl_move_memory.call(info, raddr, info.length)
       info.strip
     rescue StandardError => e
-      UI.verbose("Failure to find '#{info}' under '#{path}': #{e}")
+      UI.verbose("Failure to find '#{info_key}' under '#{path}': #{e}")
       UI.verbose(e.backtrace)
       nil
     end
