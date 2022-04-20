@@ -215,8 +215,8 @@ module U3d
       def windows_local_appdata
         require "fiddle"
 
-        version_dll = Fiddle.dlopen('version.dll')
-        getdir = Fiddle::Function.new(version_dll['SHGetFolderPath'], [Fiddle::TYPE_LONG, Fiddle::TYPE_LONG, Fiddle::TYPE_LONG, Fiddle::TYPE_LONG, Fiddle::TYPE_VOIDP], Fiddle::TYPE_LONG)
+        shell32 = Fiddle.dlopen('shell32')
+        getdir = Fiddle::Function.new(shell32['SHGetFolderPath'], [Fiddle::TYPE_LONG, Fiddle::TYPE_LONG, Fiddle::TYPE_LONG, Fiddle::TYPE_LONG, Fiddle::TYPE_VOIDP], Fiddle::TYPE_LONG)
         windir = ' ' * 261
         result = getdir.call(0, CSIDL_LOCAL_APPDATA, 0, 0, windir)
 
