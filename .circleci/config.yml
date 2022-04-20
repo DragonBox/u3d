@@ -15,28 +15,27 @@ orbs:
 #    macos:
 #      xcode: 11.4
 
-
 workflows:
   all-tests:
     jobs:
       - build:
           matrix:
             parameters:
-              os: [linux]
+              # os: [linux]
               ruby-version: ["2.5", "2.6", "2.7", "3.0", "3.1"]
 
 jobs:
   build:
     parameters:
-      os:
-        type: executor
+      # os:
+      #  type: executor
       ruby-version:
         type: string
 
     docker:
        - image: cimg/ruby:<< parameters.ruby-version >>
 
-    executor: << parameters.os >>
+    # executor: << parameters.os >>
 
     working_directory: ~/repo
 
