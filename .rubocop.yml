@@ -9,6 +9,7 @@ AllCops:
   #Include:
   #  - '**/fastlane/Fastfile'
   Exclude:
+    - 'vendor/**/*'
     - './fastlane-plugin-u3d/**/*'
 
 # broken in 0.52.1
