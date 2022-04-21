@@ -83,8 +83,10 @@ describe U3d do
         exe1 = 'spec/assets/exe/Uninstall.exe'
         exe2 = 'spec/assets/exe/UnityBugReporter.exe'
         [exe1, exe2].each do |exe|
-          puts U3d::Utils.windows_fileversion("FileVersion", exe)
-          puts U3d::Utils.windows_fileversion("Unity Version", exe)
+          ["FileVersion", "Unity Version"].each do |key|
+            value = U3d::Utils.windows_fileversion(key, exe)
+            puts "#{File.basename(exe)}: #{key}: #{value}"
+          end
         end
       end
     end
