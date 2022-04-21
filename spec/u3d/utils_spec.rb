@@ -77,5 +77,16 @@ describe U3d do
         expect { U3d::Utils.windows_local_appdata }.to raise_error(Fiddle::DLError)
       end
     end
+
+    describe '.windows_fileversion' do
+      it 'runs windows_fileversion without failure on widnows', if: WINDOWS do
+        exe1 = 'spec/assets/exe/Uninstall.exe'
+        exe2 = 'spec/assets/exe/UnityBugReporter.exe'
+        [exe1, exe2].each do |exe|
+          puts U3d::Utils.windows_fileversion("FileVersion", exe)
+          puts U3d::Utils.windows_fileversion("Unity Version", exe)
+        end
+      end
+    end
   end
 end

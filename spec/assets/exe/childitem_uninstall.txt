@@ -1,0 +1,31 @@
+
+
+FileVersionRaw     : 2020.3.1.0
+ProductVersionRaw  : 2020.3.1.0
+Comments           :
+CompanyName        : Unity Technologies ApS
+FileBuildPart      : 1
+FileDescription    : Unity 2020.3.1f1 Installer
+FileMajorPart      : 2020
+FileMinorPart      : 3
+FileName           : C:\Program Files\Unity\Hub\Editor\2020.3.1f1\Editor\Uninstall.exe
+FilePrivatePart    : 0
+FileVersion        : 2020.3.1.0
+InternalName       :
+IsDebug            : False
+IsPatched          : False
+IsPrivateBuild     : False
+IsPreRelease       : False
+IsSpecialBuild     : False
+Language           : Anglais (États-Unis)
+LegalCopyright     : (c) 2021 Unity Technologies ApS. All rights reserved.
+LegalTrademarks    :
+OriginalFilename   :
+PrivateBuild       :
+ProductBuildPart   : 1
+ProductMajorPart   : 2020
+ProductMinorPart   : 3
+ProductName        : Unity 2020.3.1f1 (64-bit)
+ProductPrivatePart : 0
+ProductVersion     :
+SpecialBuild       :

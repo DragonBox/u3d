@@ -231,6 +231,46 @@ module U3d
         raise "Local Appdata retrieved (#{windir}) is not correct"
       end
 
+      def windows_fileversion(info_key, path)
+        require "fiddle"
+        version_dll = Fiddle.dlopen('version.dll')
+        kernel32 = Fiddle.dlopen('kernel32.dll')
+
+        get_file_version_info_size = Fiddle::Function.new(version_dll['GetFileVersionInfoSize'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP], Fiddle::TYPE_LONG)
+        get_file_version_info = Fiddle::Function.new(version_dll['GetFileVersionInfo'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_INT, Fiddle::TYPE_INT, Fiddle::TYPE_VOIDP], Fiddle::TYPE_INT) # FIXME: TYPE_INT => TYPE_LONG??
+        ver_query_value = Fiddle::Function.new(version_dll['VerQueryValue'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP], Fiddle::TYPE_INT)
+        rtl_move_memory = Fiddle::Function.new(kernel32['RtlMoveMemory'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_LONG, Fiddle::TYPE_LONG], Fiddle::TYPE_INT)
+
+        file = path.tr("/", "\\")
+
+        s = ''
+        version_size = get_file_version_info_size.call(file, s)
+        raise StandardError if version_size.zero?
+
+        version_info = 0.chr * version_size
+        version_ok = get_file_version_info.call(file, 0, version_size, version_info)
+        raise StandardError if version_ok.zero? # TODO: use GetLastError
+
+        # hardcoding lang codepage
+        struct_path = "\\StringFileInfo\\040904b0\\#{info_key}"
+
+        addr = [0].pack('L')
+        size = [0].pack('L')
+        query_ok = ver_query_value.call(version_info, "#{struct_path}\u0000", addr, size)
+        raise StandardError if query_ok.zero?
+
+        raddr = addr.unpack1('L')
+        rsize = size.unpack1('L')
+
+        info = Array.new(rsize, 0).pack('L*')
+        rtl_move_memory.call(info, raddr, info.length)
+        info.strip
+      rescue StandardError => e
+        UI.verbose("Failure to find '#{info_key}' under '#{path}': #{e}")
+        UI.verbose(e.backtrace)
+        nil
+      end
+
       def pretty_filesize(filesize)
         Filesize.from("#{filesize.round} B").pretty
       end
