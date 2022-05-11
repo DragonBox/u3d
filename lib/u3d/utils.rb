@@ -272,9 +272,9 @@ module U3d
         raise StandardError if query_ok.zero?
 
         info = fixed_info.unpack('LSSSSSSSSSSLLLLLLL')
-        file_version = [ info[4], info[3], info[6], info[5] ]
-        product_version = [ info[8], info[7], info[10], info[9] ]
-
+        file_version = [info[4], info[3], info[6], info[5]]
+        product_version = [info[8], info[7], info[10], info[9]]
+        [file_version, product_version]
       rescue StandardError => e
         UI.verbose("Failure to find '#{info_key}' under '#{path}': #{e}")
         UI.verbose(e.backtrace)
