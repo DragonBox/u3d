@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -51,6 +53,7 @@ module U3d
 
     def [](package)
       return nil unless available_package? package
+
       @packages.find { |pack| pack.id == package.downcase }
     end
 

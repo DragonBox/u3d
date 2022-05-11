@@ -5,10 +5,16 @@
 #
 #   File.chmod(0o777, f)
 #
+require:
+  - rubocop-rake
+  #- rubocop-rspec
+
 AllCops:
+  NewCops: enable
   #Include:
   #  - '**/fastlane/Fastfile'
   Exclude:
+    - 'vendor/**/*'
     - './fastlane-plugin-u3d/**/*'
 
 # broken in 0.52.1
@@ -34,13 +40,13 @@ Metrics/ParameterLists:
   Max: 8
 
 Metrics/PerceivedComplexity:
-  Max: 10
+  Max: 12
 
 Metrics/MethodLength:
   Enabled: false
 
 # Configuration parameters: AllowURI, URISchemes.
-Metrics/LineLength:
+Layout/LineLength:
   Max: 370
 
 # We're not there yet
@@ -57,4 +63,7 @@ Layout/EndOfLine:
 
 # Some issues with rspec style
 Lint/AmbiguousBlockAssociation:
+  Enabled: false
+
+Lint/EmptyBlock:
   Enabled: false

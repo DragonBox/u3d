@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -45,6 +47,7 @@ module U3d
       if log_file
         tail_thread = start_tail_thread(log_file, output_callback)
         return unless tail_thread.status
+
         tail_thread.run
       end
 
@@ -78,9 +81,9 @@ module U3d
     end
 
     class << self
-      # rubocop:disable MethodName
+      # rubocop:disable Naming/MethodName
       def find_logFile_in_args(args)
-        # rubocop:enable MethodName
+        # rubocop:enable Naming/MethodName
         find_arg_in_args('-logFile', args)
       end
 
@@ -90,6 +93,7 @@ module U3d
 
       def find_arg_in_args(arg_to_find, args)
         raise 'Only arguments of type array supported right now' unless args.is_a?(Array)
+
         args.each_with_index do |arg, index|
           return args[index + 1] if arg == arg_to_find && index < args.count - 1
         end
@@ -101,12 +105,10 @@ module U3d
 
     def start_tail_thread(log_file, output_callback)
       tail_thread = Thread.new do
-        begin
-          pipe(log_file) { |line| output_callback.call(line) }
-        rescue StandardError => e
-          UI.error "Failure while trying to pipe #{log_file}: #{e.message}"
-          e.backtrace.each { |l| UI.error "  #{l}" }
-        end
+        pipe(log_file) { |line| output_callback.call(line) }
+      rescue StandardError => e
+        UI.error "Failure while trying to pipe #{log_file}: #{e.message}"
+        e.backtrace.each { |l| UI.error "  #{l}" }
       end
 
       # Wait for tail_thread setup to be complete
@@ -114,14 +116,14 @@ module U3d
       tail_thread
     end
 
-    def pipe(file)
+    def pipe(file, &block)
       File.open(file, 'r') do |f|
         f.extend File::Tail
         f.interval = 0.1
         f.max_interval = 0.4
         f.backward 0
         Thread.stop
-        f.tail { |l| yield l }
+        f.tail(&block)
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -27,13 +29,13 @@ module U3d
   # Take care of downloading files and packages
   module Downloader
     # Name of the directory for the package downloading
-    DOWNLOAD_DIRECTORY = 'Unity_Packages'.freeze
+    DOWNLOAD_DIRECTORY = 'Unity_Packages'
     # Path to the directory for the package downloading
-    DOWNLOAD_PATH = "#{ENV['HOME']}/Downloads".freeze
+    DOWNLOAD_PATH = "#{ENV['HOME']}/Downloads"
     # Regex to get the name of a localization asset
-    UNITY_LANGUAGE_FILE_REGEX = %r{\/\d+/[0-9\.]+\/([\w-]+)$}
+    UNITY_LANGUAGE_FILE_REGEX = %r{/\d+/[0-9.]+/([\w-]+)$}.freeze
     # Regex to get the name of a package out of its file name
-    UNITY_MODULE_FILE_REGEX = %r{\/([\w\-_\.\+]+\.(?:pkg|dmg|exe|zip|sh|deb|msi|xz))[^\/]*$}
+    UNITY_MODULE_FILE_REGEX = %r{/([\w\-_.+]+\.(?:pkg|dmg|exe|zip|sh|deb|msi|xz))[^/]*$}.freeze
 
     class << self
       def download_directory
@@ -112,15 +114,15 @@ module U3d
             return
           else
             extension = File.extname(path)
-            new_path = File.join(File.dirname(path), File.basename(path, extension) + '_CORRUPTED' + extension)
+            new_path = File.join(File.dirname(path), "#{File.basename(path, extension)}_CORRUPTED#{extension}")
             UI.important "File present at #{path} is not correct, it has been renamed to #{new_path}"
             File.rename(path, new_path)
           end
         end
 
         UI.header "Downloading #{package_info.name} version #{definition.version}"
-        UI.message 'Downloading from ' + url.to_s.cyan.underline
-        UI.message 'Download will be found at ' + path
+        UI.message "Downloading from #{url.to_s.cyan.underline}"
+        UI.message "Download will be found at #{path}"
         download_package(path, url, size: package_info.download_size)
 
         if validator.validate(package, path, definition)
@@ -153,7 +155,7 @@ module U3d
         Utils.ensure_dir(dir)
 
         file_name = if (language_match = UNITY_LANGUAGE_FILE_REGEX.match(final_url))
-                      language_match[1] + '.po' # Unity uses PO (Portable object files) for localization
+                      "#{language_match[1]}.po" # Unity uses PO (Portable object files) for localization
                     elsif (module_match = UNITY_MODULE_FILE_REGEX.match(final_url))
                       module_match[1]
                     else
@@ -182,8 +184,10 @@ module U3d
     # for backward compatibility
     class MacDownloader < StandardPackageDownloader
     end
+
     class LinuxDownloader < StandardPackageDownloader
     end
+
     class WindowsDownloader < StandardPackageDownloader
     end
   end

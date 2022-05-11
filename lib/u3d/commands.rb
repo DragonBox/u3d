@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -37,7 +39,7 @@ require 'fileutils'
 
 module U3d
   # API for U3d, redirecting calls to class they concern
-  # rubocop:disable ClassLength
+  # rubocop:disable Metrics/ClassLength
   class Commands
     using ::CoreExtensions::Extractable
 
@@ -51,18 +53,18 @@ module U3d
           return
         end
         list.each do |u|
-          version_format = "Version %-15{version} [%<build_number>s] %<do_not_move>s(%<root_path>s)"
+          version_format = "Version %-15<version>s [%<build_number>s] %<do_not_move>s(%<root_path>s)"
           do_not_move = u.do_not_move? ? '!'.red.bold : ' '
           h = { version: u.version, build_number: u.build_number, root_path: u.root_path, do_not_move: do_not_move }
           UI.message version_format % h
           packages = u.packages
           next unless options[:packages] && packages && !packages.empty?
+
           UI.message 'Packages:'
           packages.each { |pack| UI.message " - #{pack}" }
         end
       end
 
-      # rubocop:disable Style/FormatStringToken
       def console
         require 'irb'
         ARGV.clear
@@ -81,7 +83,6 @@ module U3d
 
         catch(:IRB_EXIT) { @irb.eval_input }
       end
-      # rubocop:enable Style/FormatStringToken
 
       def move(args: {}, options: {})
         long_name = options[:long]
@@ -131,6 +132,7 @@ module U3d
           v = cache_versions[k]
           UI.message "Version #{k}: " + v.to_s.cyan.underline
           next unless show_packages
+
           version_packages = packages[k]
           UI.message 'Packages:'
           version_packages.each { |package| UI.message " - #{package.id.capitalize}" }
@@ -166,6 +168,7 @@ module U3d
         files = Downloader.fetch_modules(definition, packages: packages, download: options[:download])
 
         return unless options[:install]
+
         Installer.install_modules(files, definition.version, installation_path: options[:installation_path])
       end
 
@@ -222,12 +225,14 @@ module U3d
         action = args[0]
         raise "Please specify an action to perform, one of #{credentials_actions.join(',')}" unless action
         raise "Unknown action '#{action}'. Use one of #{credentials_actions.join(',')}" unless credentials_actions.include? action
-        if action == 'add'
+
+        case action
+        when 'add'
           U3dCore::Globals.use_keychain = true
           # credentials = U3dCore::Credentials.new(user: ENV['USER'])
           # credentials.login # ask password
           UI.error 'Invalid credentials' unless U3dCore::CommandExecutor.has_admin_privileges?
-        elsif action == 'remove'
+        when 'remove'
           U3dCore::Globals.use_keychain = true
           U3dCore::Credentials.new(user: ENV['USER']).forget_credentials(force: true)
         else
@@ -269,8 +274,7 @@ module U3d
       def cache_versions(os, offline: false, force_refresh: false, central_cache: true)
         cache = Cache.new(force_os: os, offline: offline, force_refresh: force_refresh, central_cache: central_cache)
         cache_os = cache[os.id2name] || {}
-        cache_versions = cache_os['versions'] || {}
-        cache_versions
+        cache_os['versions'] || {}
       end
 
       def verify_package_names(packages, definition)
@@ -418,6 +422,7 @@ module U3d
         package = definition[package_name]
         return true unless package.depends_on
         return true if unity.package_installed?(package.depends_on)
+
         installing.map { |other| definition[other] }.any? do |other|
           other.id == package.depends_on || other.name == package.depends_on
         end
@@ -430,7 +435,7 @@ module U3d
       end
     end
   end
-  # rubocop:enable ClassLength
+  # rubocop:enable Metrics/ClassLength
 end
 
 class InstallationSetupError < StandardError

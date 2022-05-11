@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Original work Copyright (c) 2015-present the fastlane authors
 # Modified work Copyright 2019-present WeWantToKnow AS
@@ -35,18 +37,14 @@ module U3dCore
       @start_time = Time.now
 
       Thread.new do
-        begin
-          server_results[gem_name] = fetch_latest(gem_name)
-          # rubocop:disable Lint/HandleExceptions
-        rescue StandardError
-          # rubocop:enable Lint/HandleExceptions
-          # we don't want to show a stack trace if something goes wrong
-        end
+        server_results[gem_name] = fetch_latest(gem_name)
+      rescue StandardError
+        # we don't want to show a stack trace if something goes wrong
       end
     end
 
     def self.server_results
-      @results ||= {}
+      @server_results ||= {}
     end
 
     class << self
@@ -112,6 +110,7 @@ module U3dCore
     # running the specified command
     def self.ensure_rubygems_source
       return if `gem sources`.include?("https://rubygems.org")
+
       puts("")
       UI.error("RubyGems is not listed as your Gem source")
       UI.error("You can run `gem sources` to see all your sources")

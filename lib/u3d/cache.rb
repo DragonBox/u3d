@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -32,12 +34,12 @@ module U3d
     using ::CoreExtensions::OperatingSystem
 
     # Name of the cache file
-    DEFAULT_NAME = 'cache.json'.freeze
+    DEFAULT_NAME = 'cache.json'
     # Maximum duration after which the cache is considered outdated
     # Currently set to 24h
     CACHE_LIFE = 60 * 60 * 24
 
-    GLOBAL_CACHE_URL = 'https://dragonbox.github.io/unities/v1/versions.json'.freeze
+    GLOBAL_CACHE_URL = 'https://dragonbox.github.io/unities/v1/versions.json'
 
     private
 
@@ -49,11 +51,13 @@ module U3d
 
     def [](key)
       return nil if @cache[key].nil?
+
       @cache[key]
     end
 
     def initialize(path: nil, force_os: nil, force_refresh: false, offline: false, central_cache: false)
       raise "Cache: cannot specify both offline and force_refresh" if offline && force_refresh
+
       @path = path || Cache.default_os_path
       @cache = {}
       os = force_os || U3dCore::Helper.operating_system
@@ -78,23 +82,23 @@ module U3d
     def check_for_update(file_path, os)
       need_update = false
       data = {}
-      if !File.file?(file_path)
-        need_update = true
-      else
+      if File.file?(file_path)
         begin
           File.open(file_path, 'r') do |f|
             data = JSON.parse(f.read)
           end
-        rescue JSON::ParserError => json_error
-          UI.error 'Failed to parse cache.json: ' + json_error.to_s
+        rescue JSON::ParserError => e
+          UI.error "Failed to parse cache.json: #{e}"
           need_update = true
-        rescue SystemCallError => file_error
-          UI.error 'Failed to open cache.json: ' + file_error.to_s
+        rescue SystemCallError => e
+          UI.error "Failed to open cache.json: #{e}"
           need_update = true
         else
           need_update = os_data_need_update?(data, os)
           data[os.id2name] = nil if need_update
         end
+      else
+        need_update = true
       end
       return need_update, data
     end
@@ -111,7 +115,7 @@ module U3d
       update_cache(os) unless central_cache && fetch_central_cache(os)
 
       File.delete(file_path) if File.file?(file_path)
-      File.open(file_path, 'w') { |f| f.write(@cache.to_json) }
+      File.write(file_path, @cache.to_json)
     end
 
     # Fetches central versions.json. Ignore it if it is too old

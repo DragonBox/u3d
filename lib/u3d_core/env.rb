@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Original work Copyright (c) 2015-present the fastlane authors
 # Modified work Copyright 2019-present WeWantToKnow AS
@@ -26,6 +28,7 @@ module U3dCore
     def self.truthy?(env)
       return false unless ENV[env]
       return false if %w[no false off 0].include?(ENV[env].to_s)
+
       return true
     end
   end

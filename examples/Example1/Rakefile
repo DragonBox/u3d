@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Example integration of u3d
 
 task :u3d_load_save_scenes do

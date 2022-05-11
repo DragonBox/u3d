@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -23,11 +25,13 @@
 require 'u3d/installer'
 require 'support/installations'
 
+module U3d
+  class DummyInstaller < U3d::BaseInstaller
+  end
+end
 describe U3d do
   describe U3d::Installer do
     describe U3d::BaseInstaller do
-      class DummyInstaller < U3d::BaseInstaller
-      end
       describe ".sanitize_installs" do
         context "Clean installs" do
           it "allows to list the installed versions and doesn't ask for sanitization" do
@@ -37,7 +41,7 @@ describe U3d do
 
             installed = [linux_5_6_standard]
 
-            installer = DummyInstaller.new
+            installer = U3d::DummyInstaller.new
             allow(installer).to receive(:new) { installer }
             allow(installer).to receive(:installed) { installed }
 
@@ -54,7 +58,7 @@ describe U3d do
             allow(U3dCore::UI).to receive(:confirm).with(/2 Unity .* will be moved/) { 'y' }
             installed = [macinstall_5_6_custom_with_space, macinstall_5_6_default]
 
-            installer = DummyInstaller.new
+            installer = U3d::DummyInstaller.new
             allow(installer).to receive(:installed) { installed }
 
             expect(U3d::UI).to receive(:important).with(/u3d can optionally standardize/)
@@ -82,7 +86,7 @@ describe U3d do
           installed = [i1, i2, i3, i4]
           sorted_installed = [i2, i3, i4, i1]
 
-          installer = DummyInstaller.new
+          installer = U3d::DummyInstaller.new
           allow(installer).to receive(:installed) { installed }
 
           expect(installer.installed_sorted_by_versions).to eq(sorted_installed)
@@ -92,7 +96,7 @@ describe U3d do
       describe ".extra_installation_paths" do
         describe "converts paths to ruby paths" do
           def expect_extra_installation_paths(env_var, expected_paths)
-            installer = DummyInstaller.new
+            installer = U3d::DummyInstaller.new
             with_env_values('U3D_EXTRA_PATHS' => env_var) do
               expect(installer.send(:extra_installation_paths)).to eql(expected_paths)
             end

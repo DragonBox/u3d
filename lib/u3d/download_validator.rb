@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -51,7 +53,8 @@ module U3d
 
   class LinuxValidator < DownloadValidator
     def validate(package, file, definition)
-      return size_validation(expected: definition[package].download_size, actual: File.size(file)) if definition[package] && definition[package].download_size
+      return size_validation(expected: definition[package].download_size, actual: File.size(file)) if definition[package]&.download_size
+
       UI.important "No file validation available, #{file} is assumed to be correct"
       true
     end
@@ -59,7 +62,7 @@ module U3d
 
   class MacValidator < DownloadValidator
     def validate(package, file, definition)
-      if definition[package].download_size % 1000 && definition[package].checksum.nil?
+      if (definition[package].download_size % 1000) && definition[package].checksum.nil?
         UI.verbose "File '#{definition[package].name}' seems external. Validation skipped"
         return true
       end
@@ -71,7 +74,7 @@ module U3d
   class WindowsValidator < DownloadValidator
     def validate(package, file, definition)
       # External packages have no md5 and a false size value
-      if definition[package].download_size % 1000 && definition[package].checksum.nil?
+      if (definition[package].download_size % 1000) && definition[package].checksum.nil?
         UI.verbose "File '#{definition[package].name}' seems external. Validation skipped"
         return true
       end

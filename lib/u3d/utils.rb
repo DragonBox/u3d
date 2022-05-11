@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -27,11 +29,11 @@ require 'u3d_core/helper'
 
 module U3d
   # Several different utility methods
-  # rubocop:disable ModuleLength
+  # rubocop:disable Metrics/ModuleLength
   module Utils
     # Regex to capture each part of a version string (0.0.0x0)
     CSIDL_LOCAL_APPDATA = 0x001c
-    UNITY_VERSION_REGEX = /(\d+)(?:\.(\d+)(?:\.(\d+))?)?(?:(\w)(?:(\d+))?)?/
+    UNITY_VERSION_REGEX = /(\d+)(?:\.(\d+)(?:\.(\d+))?)?(?:(\w)(?:(\d+))?)?/.freeze
 
     class << self
       def final_url(url, redirect_limit: 10)
@@ -53,6 +55,7 @@ module U3d
 
       def follow_redirects(url, redirect_limit: 10, http_method: :get, request_headers: {}, &block)
         raise 'Too many redirections' if redirect_limit.zero?
+
         response = nil
         request = nil
         uri = URI(url)
@@ -65,15 +68,15 @@ module U3d
             end
             response = http.request request
           end
-        rescue OpenSSL::OpenSSLError => ssl_error
+        rescue OpenSSL::OpenSSLError => e
           UI.error 'SSL has faced an error, you may want to check our README to fix it'
-          raise ssl_error
+          raise e
         end
 
         case response
-        when Net::HTTPSuccess then
+        when Net::HTTPSuccess
           yield(request, response)
-        when Net::HTTPRedirection then
+        when Net::HTTPRedirection
           UI.verbose "Redirected to #{response['location']}"
           follow_redirects(response['location'], redirect_limit: redirect_limit - 1, http_method: http_method, request_headers: request_headers, &block)
         else raise "Request failed with status #{response.code}"
@@ -83,6 +86,7 @@ module U3d
       def http_request_class(method, uri)
         return Net::HTTP::Get.new uri if method == :get
         return Net::HTTP::Head.new uri if method == :head
+
         raise "Unknown method #{method}"
       end
 
@@ -111,10 +115,12 @@ module U3d
                 # FIXME revisits, this slows down download on fast network
                 # sleep 0.08 # adjust to reduce CPU
                 next unless print_progress
+
                 print_progress_now = Time.now.to_f - last_print_update > 0.5
                 # force printing when done downloading
                 print_progress_now = true if !print_progress_now && size && current >= size
                 next unless print_progress_now
+
                 last_print_update = Time.now.to_f
                 Utils.print_progress(current, size, started_at)
                 print "\n" unless UI.interactive?
@@ -140,6 +146,7 @@ module U3d
       def hashfile(file_path, blocksize: 65_536)
         require 'digest'
         raise ArgumentError, 'Not a file' unless File.file?(file_path)
+
         md5 = Digest::MD5.new
         File.open(file_path, 'r') do |f|
           md5 << f.read(blocksize) until f.eof?
@@ -155,9 +162,10 @@ module U3d
         if U3dCore::Helper.operating_system == :win
           yield
         else
-          stat_command = if U3dCore::Helper.operating_system == :linux
+          stat_command = case U3dCore::Helper.operating_system
+                         when :linux
                            "stat -c \"%U,%a\" #{dir}"
-                         elsif U3dCore::Helper.operating_system == :mac
+                         when :mac
                            "stat -f \"%Su,%A\" #{dir}"
                          end
           owner, access = U3dCore::CommandExecutor.execute(command: stat_command, admin: false).strip.split(',')
@@ -199,29 +207,87 @@ module U3d
         ver = UNITY_VERSION_REGEX.match(version)
         if ver.nil?
           raise ArgumentError, "Version (#{version}) does not match the Unity "\
-          'version format 0.0.0x0'
+                               'version format 0.0.0x0'
         end
         [ver[1], ver[2], ver[3], ver[4], ver[5]]
       end
 
       def windows_local_appdata
-        require 'win32api'
+        require "fiddle"
 
+        shell32 = Fiddle.dlopen('shell32')
+        getdir = Fiddle::Function.new(shell32['SHGetFolderPath'], [Fiddle::TYPE_LONG, Fiddle::TYPE_LONG, Fiddle::TYPE_LONG, Fiddle::TYPE_LONG, Fiddle::TYPE_VOIDP], Fiddle::TYPE_LONG)
         windir = ' ' * 261
-
-        getdir = Win32API.new('shell32', 'SHGetFolderPath', 'LLLLP', 'L')
         result = getdir.call(0, CSIDL_LOCAL_APPDATA, 0, 0, windir)
+
         raise "Unable to get Local Appdata directory, returned with value #{result}" unless result.zero?
+
         windir.rstrip!
         windir = windir.encode("UTF-8", Encoding.find('filesystem'))
         windir = File.expand_path(windir.rstrip)
 
         return windir if Dir.exist? windir
+
         raise "Local Appdata retrieved (#{windir}) is not correct"
       end
 
+      def windows_fileversion(info_key, path)
+        require "fiddle"
+        version_dll = Fiddle.dlopen('version.dll')
+        kernel32 = Fiddle.dlopen('kernel32.dll')
+
+        get_file_version_info_size = Fiddle::Function.new(version_dll['GetFileVersionInfoSize'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP], Fiddle::TYPE_LONG)
+        get_file_version_info = Fiddle::Function.new(version_dll['GetFileVersionInfo'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_INT, Fiddle::TYPE_INT, Fiddle::TYPE_VOIDP], Fiddle::TYPE_INT) # FIXME: TYPE_INT => TYPE_LONG??
+        ver_query_value = Fiddle::Function.new(version_dll['VerQueryValue'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP], Fiddle::TYPE_INT)
+        rtl_move_memory = Fiddle::Function.new(kernel32['RtlMoveMemory'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_LONG, Fiddle::TYPE_LONG], Fiddle::TYPE_INT)
+
+        file = "#{path.tr('/', '\\')}\u0000"
+
+        s = [0].pack('L')
+        version_size = get_file_version_info_size.call(file, s)
+        raise StandardError if version_size.zero?
+
+        version_info = ' ' * version_size
+        version_ok = get_file_version_info.call(file, 0, version_size, version_info)
+        raise StandardError if version_ok.zero? # TODO: use GetLastError
+
+        # hack, giving up using VerQueryValue for now.
+        rstring = version_info.unpack('v*').map { |c| c.chr if c < 256 } * ''
+        r = /#{info_key}..(.*?)\000/.match(rstring)
+        # puts "#{info_key} = #{r ? r[1] : '??'}"
+        return r ? r[1] : nil
+
+        # rubocop:disable Lint/UnreachableCode
+        # hardcoding lang codepage
+        struct_path = "\\StringFileInfo\\040904b0\\#{info_key}"
+
+        addr = [0].pack('L')
+        size = [0].pack('L')
+        query_ok = ver_query_value.call(version_info, "#{struct_path}\u0000", addr, size)
+        raise StandardError if query_ok.zero?
+
+        raddr = addr.unpack1('L')
+        rsize = size.unpack1('L')
+
+        # this is not working right now, getting seg faults and other low level issues
+        puts "Size: #{raddr} #{rsize}"
+        fixed_info = Array.new(rsize, 0).pack('L*')
+        query_ok = rtl_move_memory.call(fixed_info, raddr, fixed_info.length)
+        raise StandardError if query_ok.zero?
+
+        info = fixed_info.unpack('L*')
+        file_version = [info[4], info[3], info[6], info[5]]
+        product_version = [info[8], info[7], info[10], info[9]]
+        [file_version, product_version]
+        # rubocop:enable Lint/UnreachableCode
+      rescue StandardError => e
+        UI.error("Failure to find '#{info_key}' under '#{path}': #{e}")
+        UI.error(e.backtrace)
+        nil
+      end
+
       def pretty_filesize(filesize)
-        Filesize.from(filesize.round.to_s + ' B').pretty
+        Filesize.from("#{filesize.round} B").pretty
       end
 
       def windows_path(path)
@@ -252,11 +318,12 @@ module U3d
       private
 
       def http_max_retries
-        ENV['U3D_HTTP_MAX_RETRIES'].to_i if ENV['U3D_HTTP_MAX_RETRIES']
+        ENV.fetch('U3D_HTTP_MAX_RETRIES', nil)&.to_i
       end
 
       def http_read_timeout
         return ENV['U3D_HTTP_READ_TIMEOUT'].to_i if ENV['U3D_HTTP_READ_TIMEOUT']
+
         300
       end
 
@@ -270,5 +337,5 @@ module U3d
       end
     end
   end
-  # rubocop:enable ModuleLength
+  # rubocop:enable Metrics/ModuleLength
 end

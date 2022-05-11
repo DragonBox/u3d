@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Original work Copyright (c) 2015-present the fastlane authors
 # Modified work Copyright 2016-present WeWantToKnow AS
@@ -30,7 +32,6 @@ describe String do
         allow(U3d::Helper).to receive(:windows?) { true }
       end
       it "doesn't quote arguments without spaces" do
-        puts "apath".argescape
         expect("apath".argescape).to eq("apath")
       end
       it "quotes arguments with spaces" do

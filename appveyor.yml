@@ -1,21 +1,40 @@
 # https://www.appveyor.com/docs/appveyor-yml/
-
+image: Visual Studio 2022
+      
 version: "{build}"
 
 init:
   - git config --global core.autocrlf false
 
-# cloning the repository happens here
-
-install:
-  - set PATH=C:\Ruby24-x64\bin;%PATH%
-  - bundle install
+cache:
+  - vendor/bundle
 
 environment:
   LC_ALL: en_US.UTF-8
   LANG: en_US.UTF-8
+  matrix:
+    - RUBY_VERSION: 25
+    - RUBY_VERSION: 26
+    - RUBY_VERSION: 27
+    - RUBY_VERSION: 30
+    - RUBY_VERSION: 31
+
+install:
+  - set PATH=C:\Ruby%RUBY_VERSION%-x64\bin;%PATH%
+  - set BUNDLER_VERSION=2.3.11
+  - ruby -v
+  - gem -v
+  - bundle -v
+  - gem install bundler -v %BUNDLER_VERSION%
+  - bundle config --local path vendor/bundle
+  - bundle install
 
 build: off
+
+before_test:
+  - ruby -v
+  - gem -v
+  - bundle -v
 
 test_script:
   - bundle exec rake

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -25,12 +27,12 @@ require 'u3d_core/admin_tools'
 require 'fileutils'
 
 module U3d
-  UNITY_DIR_CHECK = /Unity_\d+\.\d+\.\d+[a-z]\d+/
-  UNITY_DIR_CHECK_LINUX = /unity-editor-\d+\.\d+\.\d+[a-z]\d+\z/
+  UNITY_DIR_CHECK = /Unity_\d+\.\d+\.\d+[a-z]\d+/.freeze
+  UNITY_DIR_CHECK_LINUX = /unity-editor-\d+\.\d+\.\d+[a-z]\d+\z/.freeze
   # Linux unity_builtin_extra seek position for version
   UNITY_VERSION_LINUX_POS_LE_2019 = 20
   UNITY_VERSION_LINUX_POS_GT_2019 = 48
-  U3D_DO_NOT_MOVE = ".u3d_do_not_move".freeze
+  U3D_DO_NOT_MOVE = ".u3d_do_not_move"
 
   class Installation
     attr_accessor :root_path
@@ -117,6 +119,7 @@ module U3d
       require 'rexml/document'
       UI.verbose("reading #{config_path}")
       raise "File not found at #{config_path}" unless File.exist? config_path
+
       doc = REXML::Document.new(File.read(config_path))
       REXML::XPath.first(doc, node_name).value
     end
@@ -157,6 +160,7 @@ module U3d
         s = ""
         while (c = f.read(1))
           break if c == "\x00"
+
           s += c
         end
         s
@@ -186,6 +190,7 @@ module U3d
     def path
       UI.deprecated("path is deprecated. Use root_path instead")
       return @path if @path
+
       "#{@root_path}/Unity.app"
     end
 
@@ -228,13 +233,14 @@ module U3d
         begin
           fpath = "#{root_path}/Unity.app/Contents/Info.plist"
           raise "#{fpath} doesn't exist" unless File.exist? fpath
+
           Plist.parse_xml(fpath)
         end
     end
   end
 
   class LinuxInstallationHelper
-    STRINGS_FULL_VERSION_MATCHER = /^[0-9\.abfp]+_[0-9a-f]{12}/
+    STRINGS_FULL_VERSION_MATCHER = /^[0-9.abfp]+_[0-9a-f]{12}/.freeze
 
     def find_build_number(root)
       known_rev_locations.each do |p|
@@ -247,10 +253,10 @@ module U3d
     private
 
     def strings(path)
-      if `which strings` != ''
-        binutils_strings(path)
-      else
+      if `which strings` == ''
         Utils.strings(path).to_a
+      else
+        binutils_strings(path)
       end
     end
 
@@ -269,8 +275,9 @@ module U3d
 
     def find_build_number_in(path = nil)
       return nil unless File.exist? path
+
       str = strings(path)
-      lines = str.select { |l| l =~ STRINGS_FULL_VERSION_MATCHER }
+      lines = str.grep(STRINGS_FULL_VERSION_MATCHER)
       lines.empty? ? nil : lines[0].split('_')[1]
     end
   end
@@ -358,44 +365,7 @@ module U3d
     private
 
     def unity_version_info
-      @uvf ||= string_file_info('Unity Version', @exe_path)
-    end
-
-    def string_file_info(info, path)
-      require "Win32API"
-      get_file_version_info_size = Win32API.new('version.dll', 'GetFileVersionInfoSize', 'PP', 'L')
-      get_file_version_info = Win32API.new('version.dll', 'GetFileVersionInfo', 'PIIP', 'I')
-      ver_query_value = Win32API.new('version.dll', 'VerQueryValue', 'PPPP', 'I')
-      rtl_move_memory = Win32API.new('kernel32.dll', 'RtlMoveMemory', 'PLL', 'I')
-
-      file = path.tr("/", "\\")
-
-      buf = [0].pack('L')
-      version_size = get_file_version_info_size.call(file + "\0", buf)
-      raise Exception if version_size.zero? # TODO: use GetLastError
-
-      version_info = 0.chr * version_size
-      version_ok = get_file_version_info.call(file, 0, version_size, version_info)
-      raise Exception if version_ok.zero? # TODO: use GetLastError
-
-      # hardcoding lang codepage
-      struct_path = "\\StringFileInfo\\040904b0\\#{info}"
-
-      addr = [0].pack('L')
-      size = [0].pack('L')
-      query_ok = ver_query_value.call(version_info, struct_path + "\0", addr, size)
-      raise Exception if query_ok.zero?
-
-      raddr = addr.unpack('L')[0]
-      rsize = size.unpack('L')[0]
-
-      info = Array.new(rsize, 0).pack('L*')
-      rtl_move_memory.call(info, raddr, info.length)
-      info.strip
-    rescue StandardError => e
-      UI.verbose("Failure to find '#{info}' under '#{path}': #{e}")
-      UI.verbose(e.backtrace)
-      nil
+      @unity_version_info ||= U3d::Utils.windows_fileversion('Unity Version', @exe_path)
     end
   end
 
@@ -407,6 +377,7 @@ module U3d
       path = "#{root_path}/Editor/Data/"
       package = IvyPlaybackEngineUtils.list_module_configs(path).first
       raise "Couldn't find a module under #{path}" unless package
+
       IvyPlaybackEngineUtils.unity_version(package)
     end
 
@@ -421,8 +392,8 @@ module U3d
           log_dir = File.expand_path('Unity/Editor/', loc_appdata)
           UI.important "Log directory (#{log_dir}) does not exist" unless Dir.exist? log_dir
           @logfile = File.expand_path('Editor.log', log_dir)
-        rescue RuntimeError => ex
-          UI.error "Unable to retrieve the editor logfile: #{ex}"
+        rescue RuntimeError => e
+          UI.error "Unable to retrieve the editor logfile: #{e}"
         end
       end
       @logfile

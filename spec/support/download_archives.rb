@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -163,7 +165,7 @@ def linux_public_archive_standalone_plus
   )
 end
 
-def linux_public_archive_standalone_plus_2
+def linux_public_archive_standalone_plus_other
   %(
     <html><head><meta http-equiv='content-type' content='text/html; charset=UTF-8'></head><body><h2>Unity 2017.3.0p2 Linux Editor downloads</h2>
     <p>Welcome to the Linux Editor download repository.  Here, you will find the download links to experimental releases of the Linux Editor.</p>

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 desc "Run the EditorRun.Build task"
 lane :u3d_build do |options|
   u3d(raw_logs: options[:raw_logs], run_args: "-logFile './editor.log' -executeMethod U3d.EditorRun.Build -quit -batchmode")

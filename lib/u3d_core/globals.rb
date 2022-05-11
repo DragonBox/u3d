@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Original work Copyright (c) 2015-present the fastlane authors
 # Modified work Copyright 2016-present WeWantToKnow AS
@@ -52,13 +54,14 @@ module U3dCore
       end
 
       def method_missing(method_sym, *arguments, &block)
-        if method_sym.to_s =~ /^with_(.*)$/
+        case method_sym.to_s
+        when /^with_(.*)$/
           if attributes.include? Regexp.last_match(1)
             with(Regexp.last_match(1).to_sym, arguments.first, &block)
           else
             super
           end
-        elsif method_sym.to_s =~ /^(.*)\?$/
+        when /^(.*)\?$/
           if attributes.include? Regexp.last_match(1)
             is?(Regexp.last_match(1).to_sym)
           else
@@ -70,15 +73,12 @@ module U3dCore
       end
 
       def respond_to_missing?(method_sym, include_private = false)
-        # rubocop:disable GuardClause
-        if method_sym.to_s =~ /^with_(.*)$/
-          return attributes.include? Regexp.last_match(1)
-        elsif method_sym.to_s =~ /^(.*)\?$/
+        case method_sym.to_s
+        when /^with_(.*)$/ || /^(.*)\?$/
           return attributes.include? Regexp.last_match(1)
         else
           super
         end
-        # rubocop:enable GuardClause
       end
     end
     private_class_method :is?, :with, :attributes

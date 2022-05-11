@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -63,6 +65,44 @@ describe U3d do
       it 'finds printable characters in strings' do
         path = 'spec/data/u3d_console.png'
         expect(U3d::Utils.strings(path).to_a.include?('iTXtXML:com.adobe.xmp')).to be true
+      end
+    end
+
+    describe '.windows_local_appdata' do
+      it 'runs windows_local_appdata without failure on windows', if: WINDOWS do
+        if ENV['GITHUB_ACTION']
+          expected = "#{ENV['HOME'].tr('\\', '/')}/AppData/Local"
+          expect(U3d::Utils.windows_local_appdata).to eql(expected)
+        else
+          puts U3d::Utils.windows_local_appdata
+        end
+      end
+
+      it 'runs windows_local_appdata fails on non windows', unless: WINDOWS do
+        require 'fiddle'
+        expect { U3d::Utils.windows_local_appdata }.to raise_error(Fiddle::DLError)
+      end
+    end
+
+    describe '.windows_fileversion' do
+      it 'runs windows_fileversion without failure on widnows', if: WINDOWS do
+        data = {
+          'spec/assets/exe/Uninstall.exe' => {
+            "FileVersion" => "2020.3.1.0",
+            "Unity Version" => "2020.3.1f1"
+          },
+          'spec/assets/exe/UnityBugReporter.exe' => {
+            "FileVersion" => "2020.3.1.7841951",
+            "Unity Version" => "2020.3.1f1_77a89f25062f"
+          }
+        }
+        data.each do |exe, exe_data|
+          path = File.expand_path exe
+          exe_data.each do |key, expected_value|
+            value = U3d::Utils.windows_fileversion(key, path)
+            expect(value).to eql(expected_value)
+          end
+        end
       end
     end
   end

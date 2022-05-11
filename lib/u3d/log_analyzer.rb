@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -25,9 +27,9 @@ require 'u3d/failure_reporter'
 
 module U3d
   # Analyzes log by filtering output along a set of rules
-  # rubocop:disable ClassLength, PerceivedComplexity, BlockNesting
+  # rubocop:disable Metrics/ClassLength, Metrics/PerceivedComplexity, Metrics/BlockNesting
   class LogAnalyzer
-    RULES_PATH = File.expand_path('../../../config/log_rules.json', __FILE__)
+    RULES_PATH = File.expand_path('../../config/log_rules.json', __dir__)
     MEMORY_SIZE = 10
 
     def initialize
@@ -55,6 +57,7 @@ module U3d
         # Phase parsing
         next unless phase['active']
         next if phase['phase_start_pattern'].nil?
+
         phase['phase_start_pattern'] = Regexp.new phase['phase_start_pattern']
         phase['phase_end_pattern'] = Regexp.new phase['phase_end_pattern'] if phase['phase_end_pattern']
         phase.delete('comment')
@@ -79,6 +82,7 @@ module U3d
       @phases.each do |name, phase|
         next if name == @active_phase
         next unless line =~ phase['phase_start_pattern']
+
         finish_phase if @active_phase
         @active_phase = name
         UI.verbose("--- Beginning #{name} phase ---")
@@ -116,12 +120,10 @@ module U3d
           # It's not the end of the rules, should the line be stored?
           elsif rule['store_lines']
             match = false
-            if rule['ignore_lines']
-              rule['ignore_lines'].each do |pat|
-                if line =~ pat
-                  match = true
-                  break
-                end
+            rule['ignore_lines']&.each do |pat|
+              if line =~ pat
+                match = true
+                break
               end
             end
             @rule_lines_buffer << line.chomp unless match
@@ -133,6 +135,7 @@ module U3d
           ruleset.each do |rn, r|
             pattern = r['start_pattern']
             next unless line =~ pattern
+
             @active_rule = rn if r['end_pattern']
             match = line.match(pattern)
             @context = match.names.map(&:to_sym).zip(match.captures).to_h
@@ -145,10 +148,12 @@ module U3d
                   match = false
                   r['fetch_first_line_not_matching'].each do |pat|
                     next unless l =~ pat
+
                     match = true
                     break
                   end
                   next if match
+
                   fetched_line = l
                   break
                 end
@@ -196,7 +201,7 @@ module U3d
       if @active_rule
         # Active rule should be finished
         # If it is still active during phase change, it means that something went wrong
-        context = @lines_memory.map { |l| "> #{l}" }.join('')
+        context = @lines_memory.map { |l| "> #{l}" }.join
         UI.error("[#{@active_phase}] Could not finish active rule '#{@active_rule}'. Aborting it. Context:\n#{context}")
 
         U3d::FailureReporter.report(
@@ -237,26 +242,25 @@ module U3d
       message
     end
 
-    def parse_rule(r)
-      return false unless r['active']
-      return false if r['start_pattern'].nil?
-      r['start_pattern'] = Regexp.new r['start_pattern']
-      r['end_pattern'] = Regexp.new r['end_pattern'] if r['end_pattern']
-      if r['fetch_line_at_index']
-        r.delete('fetch_line_at_index') if r['fetch_line_at_index'] >= MEMORY_SIZE
-        r.delete('fetch_line_at_index') if r['fetch_line_at_index'] <= 0
-      elsif r['fetch_first_line_not_matching']
-        r['fetch_first_line_not_matching'].map! { |pat| Regexp.new pat }
+    def parse_rule(rule)
+      return false unless rule['active']
+      return false if rule['start_pattern'].nil?
+
+      rule['start_pattern'] = Regexp.new rule['start_pattern']
+      rule['end_pattern'] = Regexp.new rule['end_pattern'] if rule['end_pattern']
+      if rule['fetch_line_at_index']
+        rule.delete('fetch_line_at_index') if rule['fetch_line_at_index'] >= MEMORY_SIZE
+        rule.delete('fetch_line_at_index') if rule['fetch_line_at_index'] <= 0
+      elsif rule['fetch_first_line_not_matching']
+        rule['fetch_first_line_not_matching'].map! { |pat| Regexp.new pat }
       end
-      if r['fetch_line_at_index'] || r['fetch_first_line_not_matching']
-        r['fetched_line_pattern'] = Regexp.new r['fetched_line_pattern'] if r['fetched_line_pattern']
-      end
-      r['type'] = 'important' if r['type'] == 'warning'
-      r['type'] = 'message' if r['type'] && r['type'] != 'error' && r['type'] != 'important' && r['type'] != 'success'
-      r['type'] ||= 'message'
-      r['ignore_lines'].map! { |pat| Regexp.new pat } if r['ignore_lines']
+      rule['fetched_line_pattern'] = Regexp.new rule['fetched_line_pattern'] if (rule['fetch_line_at_index'] || rule['fetch_first_line_not_matching']) && (rule['fetched_line_pattern'])
+      rule['type'] = 'important' if rule['type'] == 'warning'
+      rule['type'] = 'message' if rule['type'] && rule['type'] != 'error' && rule['type'] != 'important' && rule['type'] != 'success'
+      rule['type'] ||= 'message'
+      rule['ignore_lines']&.map! { |pat| Regexp.new pat }
       true
     end
   end
-  # rubocop:enable ClassLength, PerceivedComplexity, BlockNesting
+  # rubocop:enable Metrics/ClassLength, Metrics/PerceivedComplexity, Metrics/BlockNesting
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Original work Copyright (c) 2015-present the fastlane authors
 # Modified work Copyright 2016-present WeWantToKnow AS
@@ -36,6 +38,7 @@ module U3dCore
       def select_runner_impl
         # disable PTY by setting env variable
         return U3dCore::SafePopen.method(:spawn) unless ENV['U3D_NO_TTY'].nil?
+
         begin
           require 'pty'
           return U3dCore::SafePty.method(:spawn)
@@ -55,25 +58,20 @@ module U3dCore
     def self.spawn(command, &_block)
       require 'pty'
       PTY.spawn(command) do |r, w, p|
+        trap('INT') do
+          Process.kill("INT", p)
+        end
+        yield r, w, p
+      # if the process has closed, ruby might raise an exception if we try
+      # to do I/O on a closed stream. This behavior is platform specific
+      rescue Errno::EIO
+      ensure
         begin
-          trap('INT') do
-            Process.kill("INT", p)
-          end
-          yield r, w, p
-        # if the process has closed, ruby might raise an exception if we try
-        # to do I/O on a closed stream. This behavior is platform specific
-        # rubocop:disable HandleExceptions
-        rescue Errno::EIO
-        # rubocop:enable HandleExceptions
-        ensure
-          begin
-            Process.wait p
-          # The process might have exited.
-          # This behavior is also ruby version dependent.
-          # rubocop:disable HandleExceptions
-          rescue Errno::ECHILD, PTY::ChildExited
-          end
-          # rubocop:enable HandleExceptions
+          Process.wait p
+        # The process might have exited.
+        # This behavior is also ruby version dependent.
+        rescue Errno::ECHILD, PTY::ChildExited
+          # do nothing
         end
       end
       $CHILD_STATUS.exitstatus
@@ -88,7 +86,7 @@ module U3dCore
     def self.spawn(command, &_block)
       require 'open3'
       Open3.popen2e(command) do |r, w, p|
-        yield w, r, p.value.pid # note the inversion
+        yield w, r, p.value.pid # NOTE: the inversion
 
         r.close
         w.close

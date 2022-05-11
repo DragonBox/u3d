@@ -1,0 +1,29 @@
+FileVersionRaw     : 2020.3.1.43167
+ProductVersionRaw  : 2020.3.1.43167
+Comments           :
+CompanyName        : Unity Technologies ApS
+FileBuildPart      : 1
+FileDescription    : Unity bug reporting tool
+FileMajorPart      : 2020
+FileMinorPart      : 3
+FileName           : C:\Program Files\Unity\Hub\Editor\2020.3.1f1\Editor\BugReporter\UnityBugReporter.exe
+FilePrivatePart    : 43167
+FileVersion        : 2020.3.1.7841951
+InternalName       :
+IsDebug            : False
+IsPatched          : False
+IsPrivateBuild     : False
+IsPreRelease       : False
+IsSpecialBuild     : False
+Language           : Anglais (États-Unis)
+LegalCopyright     : (c) 2021 Unity Technologies ApS. All rights reserved.
+LegalTrademarks    :
+OriginalFilename   :
+PrivateBuild       :
+ProductBuildPart   : 1
+ProductMajorPart   : 2020
+ProductMinorPart   : 3
+ProductName        : Unity Bug Reporter
+ProductPrivatePart : 43167
+ProductVersion     : 2020.3.1.7841951
+SpecialBuild       :

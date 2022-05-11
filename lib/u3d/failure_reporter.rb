@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'date'
 require 'fileutils'
 require 'json'
@@ -9,6 +11,7 @@ module U3d
     class << self
       def report(failure_type: "DEFAULT", failure_message: "", data: {})
         return unless ENV['U3D_REPORT_FAILURES']
+
         report = {
           type: failure_type,
           message: failure_message,
@@ -21,9 +24,7 @@ module U3d
           "#{failure_type}.#{Date.now.strftime('%Y%m%dT%H%M')}.failure.json"
         )
 
-        File.open(report_file, 'w') do |file|
-          file.write JSON.pretty_generate(report)
-        end
+        File.write(report_file, JSON.pretty_generate(report))
       rescue StandardError => e
         UI.important "Unable to report a #{failure_type} failure. Please use --verbose to get more information about the failure"
         UI.verbose "Unable to report failure: #{e}"

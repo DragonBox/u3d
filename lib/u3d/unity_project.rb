@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -46,9 +48,10 @@ module U3d
       require 'yaml'
       project_version = File.join(project_settings_path, 'ProjectVersion.txt')
       return nil unless File.exist? project_version
+
       yaml = YAML.safe_load(File.read(project_version))
       version = yaml['m_EditorVersion']
-      version.gsub!(/(\d+\.\d+\.\d+)(?:x)?(\w\d+)(?:Linux)?/, '\1\2') if Helper.linux?
+      version = version.gsub(/(\d+\.\d+\.\d+)(?:x)?(\w\d+)(?:Linux)?/, '\1\2') if Helper.linux?
       version
     end
   end

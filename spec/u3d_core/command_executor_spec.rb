@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Original work Copyright (c) 2015-present the fastlane authors
 # Modified work Copyright 2016-present WeWantToKnow AS
@@ -164,13 +166,7 @@ describe U3dCore do
         end
 
         it "wraps a command when user is not root" do
-          module U3dCore
-            class CommandExecutor
-              def self.has_admin_privileges?
-                true
-              end
-            end
-          end
+          allow(U3dCore::CommandExecutor).to receive(:has_admin_privileges?).and_return(true)
           credentials = double("Credentials")
           expect(U3dCore::Credentials).to receive(:new).once.ordered { credentials }
           expect(credentials).to receive(:password).once.ordered { 'abc' }

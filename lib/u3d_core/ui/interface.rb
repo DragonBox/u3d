@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Original work Copyright (c) 2015-present the fastlane authors
 # Modified work Copyright 2016-present WeWantToKnow AS
@@ -143,6 +145,7 @@ module U3dCore
       attr_reader :show_github_issues
 
       def initialize(show_github_issues: false)
+        super
         @show_github_issues = show_github_issues
       end
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -28,17 +30,15 @@ require 'u3d_core/helper'
 module U3d
   module HubModulesParser
     class << self
-      HUB_MODULES_NAME = '%<version>s-%<os>s-modules.json'.freeze
+      HUB_MODULES_NAME = '%<version>s-%<os>s-modules.json'
 
       def load_modules(version, os: U3dCore::Helper.operating_system, offline: false)
         path = modules_path(version, os)
 
         # force download if no hub file present
-        unless File.file?(path) && File.size(path) > 0
-          download_modules(os: os) unless offline
-        end
+        download_modules(os: os) if !File.file?(path) && File.size(path).positive? && !offline
 
-        unless File.file?(path) && File.size(path) > 0
+        unless File.file?(path) && File.size(path).positive?
           UI.verbose "No modules registered for UnityHub for version #{version}"
           # cached_versions.keys.map{|s| UnityVersionNumber.new(s)}
           # searching for closest version
@@ -98,7 +98,7 @@ module U3d
         path = modules_path(build['version'], os)
         Utils.ensure_dir(File.dirname(path))
 
-        File.open(path, 'w') { |file| file.write build['modules'].to_json }
+        File.write(path, build['modules'].to_json)
       end
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -36,8 +38,9 @@ module U3d
 
     def initialize(path, unity_project = nil)
       raise ArgumentError, "No file at #{path}" unless File.exist?(path)
+
       @path = path
-      @meta_path = path + ".meta"
+      @meta_path = "#{path}.meta"
       @meta = YAML.safe_load(File.read(@meta_path))
       @guid = @meta['guid']
       @unity_project = unity_project
@@ -63,6 +66,7 @@ module U3d
 
     def eql?(other)
       return false unless other.is_a? Asset
+
       other.guid == @guid
     end
 
@@ -81,7 +85,7 @@ module U3d
     private
 
     def grep_reference_root
-      @unity_project && @unity_project.exist? ? 'Assets/' : '.'
+      @unity_project&.exist? ? 'Assets/' : '.'
     end
   end
 end

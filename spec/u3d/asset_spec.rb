@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ## --- BEGIN LICENSE BLOCK ---
 # Copyright (c) 2016-present WeWantToKnow AS
 #
@@ -26,7 +28,7 @@ require 'yaml'
 def mock_file(path, guid, extra_lines = [])
   allow(File).to receive(:exist?).with(path) { true }
   allow(File).to receive(:file?).with(path) { true }
-  allow(File).to receive(:read).with(path + '.meta') { (["guid: #{guid}"] | extra_lines).join("\n") }
+  allow(File).to receive(:read).with("#{path}.meta") { (["guid: #{guid}"] | extra_lines).join("\n") }
 end
 
 describe U3d do
@@ -63,7 +65,7 @@ describe U3d do
         end
 
         it 'has the correct path to the .meta' do
-          expect(@asset.meta_path).to eql(@file + '.meta')
+          expect(@asset.meta_path).to eql("#{@file}.meta")
         end
 
         it 'successfully retrieves the guid' do
