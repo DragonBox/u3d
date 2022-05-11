@@ -90,7 +90,8 @@ describe U3d do
         exe2 = 'spec/assets/exe/UnityBugReporter.exe'
         [exe1, exe2].each do |exe|
           ["FileVersion", "Unity Version"].each do |key|
-            value = U3d::Utils.windows_fileversion(key, exe)
+            path = File.expand_path exe
+            value = U3d::Utils.windows_fileversion(key, path)
             puts value.class
             puts "#{File.basename(exe)}: #{key}: #{value}"
           end
