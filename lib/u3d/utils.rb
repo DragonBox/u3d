@@ -276,8 +276,8 @@ module U3d
         product_version = [info[8], info[7], info[10], info[9]]
         [file_version, product_version]
       rescue StandardError => e
-        UI.verbose("Failure to find '#{info_key}' under '#{path}': #{e}")
-        UI.verbose(e.backtrace)
+        puts ("Failure to find '#{info_key}' under '#{path}': #{e}")
+        puts (e.backtrace)
         nil
       end
 
