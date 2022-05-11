@@ -241,9 +241,9 @@ module U3d
         ver_query_value = Fiddle::Function.new(version_dll['VerQueryValue'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP, Fiddle::TYPE_VOIDP], Fiddle::TYPE_INT)
         rtl_move_memory = Fiddle::Function.new(kernel32['RtlMoveMemory'], [Fiddle::TYPE_VOIDP, Fiddle::TYPE_LONG, Fiddle::TYPE_LONG], Fiddle::TYPE_INT)
 
-        file = path.tr("/", "\\")
+        file = path.tr("/", "\\") + "\0"
 
-        s = ''
+        s = [0].pack('L')
         version_size = get_file_version_info_size.call(file, s)
         raise StandardError if version_size.zero?
 
