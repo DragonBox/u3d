@@ -247,9 +247,13 @@ module U3d
         version_size = get_file_version_info_size.call(file, s)
         raise StandardError if version_size.zero?
 
-        version_info = 0.chr * version_size
+        version_info = ' ' * version_size
         version_ok = get_file_version_info.call(file, 0, version_size, version_info)
         raise StandardError if version_ok.zero? # TODO: use GetLastError
+
+        rstring = version_ok.unpack('v*').map { |c| c.chr if s < 256 } * ''
+        r = /FileVersion..(.*?)\000/.match(rstring)
+        puts "FileVersion = #{r ? r[1] : '??'}"
 
         # hardcoding lang codepage
         struct_path = "\\StringFileInfo\\040904b0\\#{info_key}"
@@ -262,6 +266,7 @@ module U3d
         raddr = addr.unpack1('L')
         rsize = size.unpack1('L')
 
+        puts "Size: #{raddr} #{rsize}"
         info = Array.new(rsize, 0).pack('L*')
         rtl_move_memory.call(info, raddr, info.length)
         info.strip
@@ -303,7 +308,7 @@ module U3d
       private
 
       def http_max_retries
-        ENV['U3D_HTTP_MAX_RETRIES']&.to_i
+        ENV.fetch('U3D_HTTP_MAX_RETRIES', nil)&.to_i
       end
 
       def http_read_timeout

@@ -70,7 +70,13 @@ describe U3d do
 
     describe '.windows_local_appdata' do
       it 'runs windows_local_appdata without failure on windows', if: WINDOWS do
-        puts U3d::Utils.windows_local_appdata
+        if ENV['CIRCLECI']
+          puts `env`
+          expected = 'C:/Users/runneradmin/AppData/Local'
+          expect(U3d::Utils.windows_local_appdata).to eql(expected)
+        else
+          puts U3d::Utils.windows_local_appdata
+        end
       end
       it 'runs windows_local_appdata fails on non windows', unless: WINDOWS do
         require 'fiddle'
