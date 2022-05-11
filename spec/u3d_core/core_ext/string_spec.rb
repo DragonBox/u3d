@@ -32,7 +32,6 @@ describe String do
         allow(U3d::Helper).to receive(:windows?) { true }
       end
       it "doesn't quote arguments without spaces" do
-        puts "apath".argescape
         expect("apath".argescape).to eq("apath")
       end
       it "quotes arguments with spaces" do

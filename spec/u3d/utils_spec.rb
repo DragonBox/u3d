@@ -91,6 +91,7 @@ describe U3d do
         [exe1, exe2].each do |exe|
           ["FileVersion", "Unity Version"].each do |key|
             value = U3d::Utils.windows_fileversion(key, exe)
+            puts value.class
             puts "#{File.basename(exe)}: #{key}: #{value}"
           end
         end
