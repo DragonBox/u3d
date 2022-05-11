@@ -92,12 +92,12 @@ describe U3d do
             "FileVersion" => "2020.3.1.0",
             "Unity Version" => "2020.3.1f1"
           },
-          'spec/assets/exe/UnityBugReporter.exe' =>  => {
+          'spec/assets/exe/UnityBugReporter.exe' => {
             "FileVersion" => "2020.3.1.7841951",
             "Unity Version" => "2020.3.1f1_77a89f25062f"
           }
         }
-        data.keys.each do |exe, exe_data|
+        data.each do |exe, exe_data|
           path = File.expand_path exe
           exe_data.each do |key, expected_value|
             value = U3d::Utils.windows_fileversion(key, path)
