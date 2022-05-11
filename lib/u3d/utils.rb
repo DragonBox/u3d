@@ -251,10 +251,13 @@ module U3d
         version_ok = get_file_version_info.call(file, 0, version_size, version_info)
         raise StandardError if version_ok.zero? # TODO: use GetLastError
 
+        # hack, giving up using VerQueryValue for now.
         rstring = version_info.unpack('v*').map { |c| c.chr if c < 256 } * ''
         r = /#{info_key}..(.*?)\000/.match(rstring)
-        puts "#{info_key} = #{r ? r[1] : '??'}"
+        # puts "#{info_key} = #{r ? r[1] : '??'}"
+        return r ? r[1] : nil
 
+        # rubocop:disable Lint/UnreachableCode
         # hardcoding lang codepage
         struct_path = "\\StringFileInfo\\040904b0\\#{info_key}"
 
@@ -266,6 +269,7 @@ module U3d
         raddr = addr.unpack1('L')
         rsize = size.unpack1('L')
 
+        # this is not working right now, getting seg faults and other low level issues
         puts "Size: #{raddr} #{rsize}"
         fixed_info = Array.new(rsize, 0).pack('L*')
         query_ok = rtl_move_memory.call(fixed_info, raddr, fixed_info.length)
@@ -275,9 +279,10 @@ module U3d
         file_version = [info[4], info[3], info[6], info[5]]
         product_version = [info[8], info[7], info[10], info[9]]
         [file_version, product_version]
+        # rubocop:enable Lint/UnreachableCode
       rescue StandardError => e
-        puts "Failure to find '#{info_key}' under '#{path}': #{e}"
-        puts e.backtrace
+        UI.error("Failure to find '#{info_key}' under '#{path}': #{e}")
+        UI.error(e.backtrace)
         nil
       end
 
