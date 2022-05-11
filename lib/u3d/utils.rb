@@ -252,8 +252,8 @@ module U3d
         raise StandardError if version_ok.zero? # TODO: use GetLastError
 
         rstring = version_info.unpack('v*').map { |c| c.chr if c < 256 } * ''
-        r = /FileVersion..(.*?)\000/.match(rstring)
-        puts "FileVersion = #{r ? r[1] : '??'}"
+        r = /#{info_key}..(.*?)\000/.match(rstring)
+        puts "#{info_key} = #{r ? r[1] : '??'}"
 
         # hardcoding lang codepage
         struct_path = "\\StringFileInfo\\040904b0\\#{info_key}"
