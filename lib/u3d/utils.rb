@@ -251,7 +251,7 @@ module U3d
         version_ok = get_file_version_info.call(file, 0, version_size, version_info)
         raise StandardError if version_ok.zero? # TODO: use GetLastError
 
-        rstring = version_ok.unpack('v*').map { |c| c.chr if s < 256 } * ''
+        rstring = version_info.unpack('v*').map { |c| c.chr if s < 256 } * ''
         r = /FileVersion..(.*?)\000/.match(rstring)
         puts "FileVersion = #{r ? r[1] : '??'}"
 
@@ -267,9 +267,14 @@ module U3d
         rsize = size.unpack1('L')
 
         puts "Size: #{raddr} #{rsize}"
-        info = Array.new(rsize, 0).pack('L*')
-        rtl_move_memory.call(info, raddr, info.length)
-        info.strip
+        fixed_info = Array.new(rsize, 0).pack('LSSSSSSSSSSLLLLLLL')
+        query_ok = rtl_move_memory.call(fixed_info, raddr, info.length)
+        raise StandardError if query_ok.zero?
+
+        info = fixed_info.unpack('LSSSSSSSSSSLLLLLLL')
+        file_version = [ info[4], info[3], info[6], info[5] ]
+        product_version = [ info[8], info[7], info[10], info[9] ]
+
       rescue StandardError => e
         UI.verbose("Failure to find '#{info_key}' under '#{path}': #{e}")
         UI.verbose(e.backtrace)

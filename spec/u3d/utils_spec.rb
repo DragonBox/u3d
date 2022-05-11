@@ -70,7 +70,7 @@ describe U3d do
 
     describe '.windows_local_appdata' do
       it 'runs windows_local_appdata without failure on windows', if: WINDOWS do
-        if ENV['CIRCLECI']
+        if ENV['GITHUB']
           puts `env`
           expected = 'C:/Users/runneradmin/AppData/Local'
           expect(U3d::Utils.windows_local_appdata).to eql(expected)
