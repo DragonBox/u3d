@@ -267,11 +267,11 @@ module U3d
         rsize = size.unpack1('L')
 
         puts "Size: #{raddr} #{rsize}"
-        fixed_info = Array.new(rsize, 0).pack('LSSSSSSSSSSLLLLLLL')
+        fixed_info = Array.new(rsize, 0).pack('LSSSSSSSSSS')
         query_ok = rtl_move_memory.call(fixed_info, raddr, info.length)
         raise StandardError if query_ok.zero?
 
-        info = fixed_info.unpack('LSSSSSSSSSSLLLLLLL')
+        info = fixed_info.unpack('LSSSSSSSSSS')
         file_version = [info[4], info[3], info[6], info[5]]
         product_version = [info[8], info[7], info[10], info[9]]
         [file_version, product_version]
