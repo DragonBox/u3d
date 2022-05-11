@@ -251,7 +251,7 @@ module U3d
         version_ok = get_file_version_info.call(file, 0, version_size, version_info)
         raise StandardError if version_ok.zero? # TODO: use GetLastError
 
-        rstring = version_info.unpack('v*').map { |c| c.chr if s < 256 } * ''
+        rstring = version_info.unpack('v*').map { |c| c.chr if c < 256 } * ''
         r = /FileVersion..(.*?)\000/.match(rstring)
         puts "FileVersion = #{r ? r[1] : '??'}"
 
