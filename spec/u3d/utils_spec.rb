@@ -70,9 +70,8 @@ describe U3d do
 
     describe '.windows_local_appdata' do
       it 'runs windows_local_appdata without failure on windows', if: WINDOWS do
-        if ENV['GITHUB']
-          puts `env`
-          expected = 'C:/Users/runneradmin/AppData/Local'
+        if ENV['GITHUB_ACTION']
+          expected = "#{ENV['HOME'].tr('\\', '/')}/AppData/Local"
           expect(U3d::Utils.windows_local_appdata).to eql(expected)
         else
           puts U3d::Utils.windows_local_appdata
