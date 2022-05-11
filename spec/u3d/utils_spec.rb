@@ -78,6 +78,7 @@ describe U3d do
           puts U3d::Utils.windows_local_appdata
         end
       end
+
       it 'runs windows_local_appdata fails on non windows', unless: WINDOWS do
         require 'fiddle'
         expect { U3d::Utils.windows_local_appdata }.to raise_error(Fiddle::DLError)
@@ -86,14 +87,21 @@ describe U3d do
 
     describe '.windows_fileversion' do
       it 'runs windows_fileversion without failure on widnows', if: WINDOWS do
-        exe1 = 'spec/assets/exe/Uninstall.exe'
-        exe2 = 'spec/assets/exe/UnityBugReporter.exe'
-        [exe1, exe2].each do |exe|
-          ["FileVersion", "Unity Version"].each do |key|
-            path = File.expand_path exe
+        data = {
+          'spec/assets/exe/Uninstall.exe' => {
+            "FileVersion" => "2020.3.1.0",
+            "Unity Version" => "2020.3.1f1"
+          },
+          'spec/assets/exe/UnityBugReporter.exe' =>  => {
+            "FileVersion" => "2020.3.1.7841951",
+            "Unity Version" => "2020.3.1f1_77a89f25062f"
+          }
+        }
+        data.keys.each do |exe, exe_data|
+          path = File.expand_path exe
+          exe_data.each do |key, expected_value|
             value = U3d::Utils.windows_fileversion(key, path)
-            puts value.class
-            puts "#{File.basename(exe)}: #{key}: #{value}"
+            expect(value).to eql(expected_value)
           end
         end
       end
