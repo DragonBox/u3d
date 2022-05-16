@@ -40,8 +40,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "coveralls"
   spec.add_development_dependency "excon", ">= 0.71.0" # force secure transitive dep
-  spec.add_development_dependency "json", ">= 2.3.0" # force secure transitive dep
   spec.add_development_dependency "github_changelog_generator", ">= 1.16.4"
+  spec.add_development_dependency "json", ">= 2.3.0" # force secure transitive dep
   # spec.add_development_dependency "pry-byebug"
   spec.add_development_dependency "rake", ">= 12.3.3"
   spec.add_development_dependency "rspec", "~> 3.11.0"
