@@ -35,11 +35,15 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rubyzip', '>= 1.0.0' # Installation of .zip files
   spec.add_dependency 'security', '= 0.1.3' # macOS Keychain manager, a dead project, no updates expected
   # Development only
+  spec.add_development_dependency "activesupport", ">= 5.2.4.3" # force secure transitive dep
+  spec.add_development_dependency "addressable", ">= 2.8.0" # force secure transitive dep
   spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "coveralls"
-  spec.add_development_dependency "github_changelog_generator"
+  spec.add_development_dependency "excon", ">= 0.71.0" # force secure transitive dep
+  spec.add_development_dependency "json", ">= 2.3.0" # force secure transitive dep
+  spec.add_development_dependency "github_changelog_generator", ">= 1.16.4"
   # spec.add_development_dependency "pry-byebug"
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rake", ">= 12.3.3"
   spec.add_development_dependency "rspec", "~> 3.11.0"
   spec.add_development_dependency 'rspec_junit_formatter', '~> 0.5.1'
   spec.add_development_dependency 'rubocop', '~> 1.27'
