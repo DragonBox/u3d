@@ -1,6 +1,27 @@
-# Change Log
+# Changelog
+
+## [v1.3.0](https://github.com/DragonBox/u3d/tree/v1.3.0) (2022-05-16)
+
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.2.3...v1.3.0)
+
+**Closed issues:**
+
+- Install without password/sudo [\#418](https://github.com/DragonBox/u3d/issues/418)
+- u3d install gives error about missing Win32 dependency.  [\#415](https://github.com/DragonBox/u3d/issues/415)
+- Segmentation Fault with Win32API [\#414](https://github.com/DragonBox/u3d/issues/414)
+- Can't find 2019.4.14f LTS in u3d available. [\#412](https://github.com/DragonBox/u3d/issues/412)
+- Missing Linux versions in central cache [\#408](https://github.com/DragonBox/u3d/issues/408)
+- Cannot install 2019.4.4f1 [\#401](https://github.com/DragonBox/u3d/issues/401)
+
+**Merged pull requests:**
+
+- Various gem updates to solve security vulnerabilities in development tools [\#419](https://github.com/DragonBox/u3d/pull/419) ([lacostej](https://github.com/lacostej))
+- Support ruby3 and later on Windows \(fixes \#414\) [\#417](https://github.com/DragonBox/u3d/pull/417) ([lacostej](https://github.com/lacostej))
+- Fix installation of modules for non latest releases [\#416](https://github.com/DragonBox/u3d/pull/416) ([lacostej](https://github.com/lacostej))
+- Fixing error when installing Unity 2020 version in Linux [\#410](https://github.com/DragonBox/u3d/pull/410) ([DiegoTorresSED](https://github.com/DiegoTorresSED))
 
 ## [v1.2.3](https://github.com/DragonBox/u3d/tree/v1.2.3) (2020-02-26)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.2.2...v1.2.3)
 
 **Merged pull requests:**
@@ -9,6 +30,7 @@
 - Detect 2019 modules and allow to install 2019, skipping dmg install for now [\#392](https://github.com/DragonBox/u3d/pull/392) ([lacostej](https://github.com/lacostej))
 
 ## [v1.2.2](https://github.com/DragonBox/u3d/tree/v1.2.2) (2020-02-21)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.2.1...v1.2.2)
 
 **Fixed bugs:**
@@ -29,6 +51,7 @@
 - u3d/install: verify package names before we ensure setup coherence \(fixes \#385\) \(regression from 1.2.0\) [\#387](https://github.com/DragonBox/u3d/pull/387) ([lacostej](https://github.com/lacostej))
 
 ## [v1.2.1](https://github.com/DragonBox/u3d/tree/v1.2.1) (2019-11-15)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.2.0...v1.2.1)
 
 **Implemented enhancements:**
@@ -37,6 +60,7 @@
 - Lower dependency on rubyzip to 1.3.0 for fastlane compatibility [\#380](https://github.com/DragonBox/u3d/pull/380) ([niezbop](https://github.com/niezbop))
 
 ## [v1.2.0](https://github.com/DragonBox/u3d/tree/v1.2.0) (2019-11-15)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.5...v1.2.0)
 
 **Implemented enhancements:**
@@ -71,6 +95,7 @@
 - u3d/internals: support accentuated characters in Windows Local App Data path. Fixes \#352 [\#353](https://github.com/DragonBox/u3d/pull/353) ([lacostej](https://github.com/lacostej))
 
 ## [v1.1.5](https://github.com/DragonBox/u3d/tree/v1.1.5) (2019-03-06)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.4...v1.1.5)
 
 **Fixed bugs:**
@@ -83,6 +108,7 @@
 - build: automatically set reviewer on pre\_release PR [\#348](https://github.com/DragonBox/u3d/pull/348) ([lacostej](https://github.com/lacostej))
 
 ## [v1.1.4](https://github.com/DragonBox/u3d/tree/v1.1.4) (2019-02-28)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.3...v1.1.4)
 
 **Implemented enhancements:**
@@ -101,9 +127,10 @@
 - u3d/list: support Magic Leap Versions parsing and sorting \(fixes \#331\) [\#346](https://github.com/DragonBox/u3d/pull/346) ([lacostej](https://github.com/lacostej))
 - Update to latest hub to label PRs and remove the hardcoding of the user's repo [\#345](https://github.com/DragonBox/u3d/pull/345) ([lacostej](https://github.com/lacostej))
 - u3d/install exit 1 when version not found. Fixes \#343 [\#344](https://github.com/DragonBox/u3d/pull/344) ([lacostej](https://github.com/lacostej))
-- Add `-t\*` flag for 7z when unpacking packages [\#342](https://github.com/DragonBox/u3d/pull/342) ([rawstacktech](https://github.com/rawstacktech))
+- Add `-t*` flag for 7z when unpacking packages [\#342](https://github.com/DragonBox/u3d/pull/342) ([tony-rowan](https://github.com/tony-rowan))
 
 ## [v1.1.3](https://github.com/DragonBox/u3d/tree/v1.1.3) (2019-01-08)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.2...v1.1.3)
 
 **Implemented enhancements:**
@@ -122,10 +149,11 @@
 
 **Merged pull requests:**
 
-- u3d/available: Make Linux 2018.3.0f2 available on linux \#337 [\#338](https://github.com/DragonBox/u3d/pull/338) ([rawstacktech](https://github.com/rawstacktech))
+- u3d/available: Make Linux 2018.3.0f2 available on linux \#337 [\#338](https://github.com/DragonBox/u3d/pull/338) ([tony-rowan](https://github.com/tony-rowan))
 - Bump dependencies to remove dependency on rubyzip 1.2.1 [\#328](https://github.com/DragonBox/u3d/pull/328) ([lacostej](https://github.com/lacostej))
 
 ## [v1.1.2](https://github.com/DragonBox/u3d/tree/v1.1.2) (2018-07-12)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.1...v1.1.2)
 
 **Implemented enhancements:**
@@ -133,6 +161,7 @@
 - u3d/available: Add option to not use the central cache [\#324](https://github.com/DragonBox/u3d/pull/324) ([niezbop](https://github.com/niezbop))
 
 ## [v1.1.1](https://github.com/DragonBox/u3d/tree/v1.1.1) (2018-07-12)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.1.0...v1.1.1)
 
 **Fixed bugs:**
@@ -147,6 +176,7 @@
 - Betas not fetched anymore [\#314](https://github.com/DragonBox/u3d/issues/314)
 
 ## [v1.1.0](https://github.com/DragonBox/u3d/tree/v1.1.0) (2018-06-27)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.21...v1.1.0)
 
 **Implemented enhancements:**
@@ -163,6 +193,7 @@
 - u3d/available: proper fetching of paginated archives \(fixes \#312\) [\#313](https://github.com/DragonBox/u3d/pull/313) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.21](https://github.com/DragonBox/u3d/tree/v1.0.21) (2018-04-27)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.20...v1.0.21)
 
 **Implemented enhancements:**
@@ -204,6 +235,7 @@
 - u3d/list: introduce format and make sure the list\_installed return an array of versions [\#284](https://github.com/DragonBox/u3d/pull/284) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.20](https://github.com/DragonBox/u3d/tree/v1.0.20) (2018-04-19)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.19...v1.0.20)
 
 **Implemented enhancements:**
@@ -233,6 +265,7 @@
 - u3d/prettify: Fix UnityEngine.Debug.LogXXXFormat not being caught [\#270](https://github.com/DragonBox/u3d/pull/270) ([niezbop](https://github.com/niezbop))
 
 ## [v1.0.19](https://github.com/DragonBox/u3d/tree/v1.0.19) (2018-03-09)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.18...v1.0.19)
 
 **Implemented enhancements:**
@@ -244,6 +277,7 @@
 - u3d/licenses: add feature to display licenses [\#262](https://github.com/DragonBox/u3d/pull/262) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.18](https://github.com/DragonBox/u3d/tree/v1.0.18) (2018-03-08)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.17...v1.0.18)
 
 **Closed issues:**
@@ -255,6 +289,7 @@
 - u3d/\* allow to modify Net::HTTP read timeout \(all rubies\) and max retries \(ruby 2.5+\) default values. Change read time out to 300 sec \(fixes \#258\) [\#260](https://github.com/DragonBox/u3d/pull/260) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.17](https://github.com/DragonBox/u3d/tree/v1.0.17) (2018-03-05)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.16...v1.0.17)
 
 **Closed issues:**
@@ -267,6 +302,7 @@
 - Detect missing 3 Linux versions \(fixes \#255 and \#256\) [\#257](https://github.com/DragonBox/u3d/pull/257) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.16](https://github.com/DragonBox/u3d/tree/v1.0.16) (2018-02-04)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.15...v1.0.16)
 
 **Implemented enhancements:**
@@ -293,6 +329,7 @@
 - Support linux forums pagination [\#243](https://github.com/DragonBox/u3d/pull/243) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.15](https://github.com/DragonBox/u3d/tree/v1.0.15) (2018-01-16)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.14...v1.0.15)
 
 **Fixed bugs:**
@@ -300,6 +337,7 @@
 - u3d/install: download beta for mac also needs to discard checking md5s on Windows packages [\#234](https://github.com/DragonBox/u3d/pull/234) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.14](https://github.com/DragonBox/u3d/tree/v1.0.14) (2018-01-15)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.13...v1.0.14)
 
 **Implemented enhancements:**
@@ -315,6 +353,7 @@
 - u3d/install: allow to download from one platform while on another one [\#226](https://github.com/DragonBox/u3d/pull/226) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.13](https://github.com/DragonBox/u3d/tree/v1.0.13) (2018-01-09)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.12...v1.0.13)
 
 **Implemented enhancements:**
@@ -334,6 +373,7 @@
 - Update to latest rubocop [\#212](https://github.com/DragonBox/u3d/pull/212) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.12](https://github.com/DragonBox/u3d/tree/v1.0.12) (2018-01-03)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.11...v1.0.12)
 
 **Implemented enhancements:**
@@ -353,6 +393,7 @@
 - u3d/install: describe how password can be passed to u3d \(fixes \#200\) [\#201](https://github.com/DragonBox/u3d/pull/201) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.11](https://github.com/DragonBox/u3d/tree/v1.0.11) (2017-12-07)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.10...v1.0.11)
 
 **Implemented enhancements:**
@@ -365,6 +406,7 @@
 - u3d/run: fail with a proper message when opening a Unity4 project [\#187](https://github.com/DragonBox/u3d/pull/187) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.10](https://github.com/DragonBox/u3d/tree/v1.0.10) (2017-11-03)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.9...v1.0.10)
 
 **Fixed bugs:**
@@ -385,6 +427,7 @@
 - u3d/downloader: print progress improvements \(fix \#164\) [\#177](https://github.com/DragonBox/u3d/pull/177) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.9](https://github.com/DragonBox/u3d/tree/v1.0.9) (2017-10-31)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.8...v1.0.9)
 
 **Implemented enhancements:**
@@ -399,6 +442,7 @@
 - u3d/cleanups small refactorings and cleanups [\#170](https://github.com/DragonBox/u3d/pull/170) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.8](https://github.com/DragonBox/u3d/tree/v1.0.8) (2017-10-18)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.7...v1.0.8)
 
 **Fixed bugs:**
@@ -412,6 +456,7 @@
 - Fix module name issue for Globals call [\#167](https://github.com/DragonBox/u3d/pull/167) ([niezbop](https://github.com/niezbop))
 
 ## [v1.0.7](https://github.com/DragonBox/u3d/tree/v1.0.7) (2017-10-03)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.6...v1.0.7)
 
 **Closed issues:**
@@ -423,6 +468,7 @@
 - u3d/install: properly search for freshly installed versions on Mac \(fixes \#160\) [\#162](https://github.com/DragonBox/u3d/pull/162) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.6](https://github.com/DragonBox/u3d/tree/v1.0.6) (2017-10-02)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.5...v1.0.6)
 
 **Implemented enhancements:**
@@ -439,6 +485,7 @@
 - u3d/all feature/detect bash on ubuntu on windows \(fixed \#150\) [\#155](https://github.com/DragonBox/u3d/pull/155) ([niezbop](https://github.com/niezbop))
 
 ## [v1.0.5](https://github.com/DragonBox/u3d/tree/v1.0.5) (2017-09-28)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.4...v1.0.5)
 
 **Merged pull requests:**
@@ -448,12 +495,13 @@
 - u3d/credentials fix ArgumentError in commands \(fixes \#148\) [\#149](https://github.com/DragonBox/u3d/pull/149) ([niezbop](https://github.com/niezbop))
 
 ## [v1.0.4](https://github.com/DragonBox/u3d/tree/v1.0.4) (2017-09-16)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.3...v1.0.4)
 
 **Fixed bugs:**
 
 - u3d/installer might not see a newly installed version on Mac [\#139](https://github.com/DragonBox/u3d/issues/139)
-- Issue with using installer \(error: undefined method `\[\]' for nil:NilClass.\) [\#138](https://github.com/DragonBox/u3d/issues/138)
+- Issue with using installer (error: undefined method `\[\]' for nil:NilClass.\) [\#138](https://github.com/DragonBox/u3d/issues/138)
 
 **Merged pull requests:**
 
@@ -464,6 +512,7 @@
 - u3d/internal: load all internal modules in top 'u3d' file [\#137](https://github.com/DragonBox/u3d/pull/137) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.3](https://github.com/DragonBox/u3d/tree/v1.0.3) (2017-09-11)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.2...v1.0.3)
 
 **Implemented enhancements:**
@@ -489,6 +538,7 @@
 - Download file now prints progress also in non interactive mode \(only in verbose\) [\#129](https://github.com/DragonBox/u3d/pull/129) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.2](https://github.com/DragonBox/u3d/tree/v1.0.2) (2017-09-05)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.1...v1.0.2)
 
 **Implemented enhancements:**
@@ -511,6 +561,7 @@
 - u3d/install: do not refresh cache when download disabled \(Fixes \#104\) [\#120](https://github.com/DragonBox/u3d/pull/120) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.1](https://github.com/DragonBox/u3d/tree/v1.0.1) (2017-08-31)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.0...v1.0.1)
 
 **Merged pull requests:**
@@ -518,9 +569,11 @@
 - u3d/downloader: use\_ssl should be set dynamically to download from https [\#113](https://github.com/DragonBox/u3d/pull/113) ([lacostej](https://github.com/lacostej))
 
 ## [v1.0.0](https://github.com/DragonBox/u3d/tree/v1.0.0) (2017-08-31)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.0.0.rc1...v1.0.0)
 
 ## [v1.0.0.rc1](https://github.com/DragonBox/u3d/tree/v1.0.0.rc1) (2017-08-30)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v0.9.4...v1.0.0.rc1)
 
 **Implemented enhancements:**
@@ -550,6 +603,7 @@
 - logger: Hide EPIPE errors when stdout already closed [\#97](https://github.com/DragonBox/u3d/pull/97) ([lacostej](https://github.com/lacostej))
 
 ## [v0.9.4](https://github.com/DragonBox/u3d/tree/v0.9.4) (2017-08-28)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v0.9.3...v0.9.4)
 
 **Implemented enhancements:**
@@ -586,14 +640,10 @@
 - Make sure tests pass in full offline mode \(no network at all\) [\#87](https://github.com/DragonBox/u3d/pull/87) ([lacostej](https://github.com/lacostej))
 - Mac Installer fix [\#85](https://github.com/DragonBox/u3d/pull/85) ([niezbop](https://github.com/niezbop))
 - u3d/run: add -projectpath also when passing arguments \(fixes \#73\) [\#80](https://github.com/DragonBox/u3d/pull/80) ([lacostej](https://github.com/lacostej))
-- Refactor/downloader and ini [\#79](https://github.com/DragonBox/u3d/pull/79) ([lacostej](https://github.com/lacostej))
 - Improve the docs, in particular with run and auto-detection of the current project [\#78](https://github.com/DragonBox/u3d/pull/78) ([lacostej](https://github.com/lacostej))
-- Improve the docs, in particular with run and auto-detection of the current project \(\#75\) [\#77](https://github.com/DragonBox/u3d/pull/77) ([lacostej](https://github.com/lacostej))
-- u3d/commands: add unit tests and fix 2 small install command issues [\#76](https://github.com/DragonBox/u3d/pull/76) ([lacostej](https://github.com/lacostej))
 - Do not crash when no PlaybackEngines are found [\#74](https://github.com/DragonBox/u3d/pull/74) ([lacostej](https://github.com/lacostej))
 - A missing license header [\#67](https://github.com/DragonBox/u3d/pull/67) ([lacostej](https://github.com/lacostej))
 - \[tech\] Installer unit tests. Initial commit [\#60](https://github.com/DragonBox/u3d/pull/60) ([lacostej](https://github.com/lacostej))
-- \[tech\] automate changelog generation through rake [\#59](https://github.com/DragonBox/u3d/pull/59) ([lacostej](https://github.com/lacostej))
 - u3d/install: do not try to download unknown versions \(i.e. not in cache\) [\#57](https://github.com/DragonBox/u3d/pull/57) ([niezbop](https://github.com/niezbop))
 - u3d/run: improve run inline help [\#54](https://github.com/DragonBox/u3d/pull/54) ([lacostej](https://github.com/lacostej))
 - \[tech\] migrate to circle ci 2.0, using Rakefile as basis for complex operations [\#49](https://github.com/DragonBox/u3d/pull/49) ([lacostej](https://github.com/lacostej))
@@ -601,6 +651,7 @@
 - u3d/install: allow to recover from incomplete downloads on linux by autodetecting size  [\#23](https://github.com/DragonBox/u3d/pull/23) ([niezbop](https://github.com/niezbop))
 
 ## [v0.9.3](https://github.com/DragonBox/u3d/tree/v0.9.3) (2017-08-07)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v0.9.2...v0.9.3)
 
 **Implemented enhancements:**
@@ -623,12 +674,11 @@
 - \[linux\] Adjust to weird editor versions stored under ProjectSettings/ProjectVersion.txt [\#33](https://github.com/DragonBox/u3d/pull/33) ([niezbop](https://github.com/niezbop))
 - Make Linux runner functional again [\#29](https://github.com/DragonBox/u3d/pull/29) ([lacostej](https://github.com/lacostej))
 - u3d/run: ensure parent dir to logfile exists before creating the file [\#28](https://github.com/DragonBox/u3d/pull/28) ([lacostej](https://github.com/lacostej))
-- Rubocop / Improve code style [\#27](https://github.com/DragonBox/u3d/pull/27) ([lacostej](https://github.com/lacostej))
-- Fix Linux runner and installation [\#26](https://github.com/DragonBox/u3d/pull/26) ([niezbop](https://github.com/niezbop))
 - Change sanitizer to be platform specific [\#24](https://github.com/DragonBox/u3d/pull/24) ([niezbop](https://github.com/niezbop))
 - Make Linux installer functional again [\#20](https://github.com/DragonBox/u3d/pull/20) ([lacostej](https://github.com/lacostej))
 
 ## [v0.9.2](https://github.com/DragonBox/u3d/tree/v0.9.2) (2017-08-04)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v0.9.1...v0.9.2)
 
 **Fixed bugs:**
@@ -652,8 +702,9 @@
 - Document further the prettifier [\#1](https://github.com/DragonBox/u3d/pull/1) ([lacostej](https://github.com/lacostej))
 
 ## [v0.9.1](https://github.com/DragonBox/u3d/tree/v0.9.1) (2017-07-24)
+
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v0.9...v0.9.1)
 
 
 
-\* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
+\* *This Changelog was automatically generated       by [github_changelog_generator]      (https://github.com/github-changelog-generator/github-changelog-generator)*
