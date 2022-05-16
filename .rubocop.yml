@@ -21,6 +21,9 @@ AllCops:
 Layout/EmptyLinesAroundArguments:
   Enabled: false
 
+Style/FetchEnvVar:
+  Enabled: false
+
 Style/NumericLiteralPrefix:
   Enabled: false
 
