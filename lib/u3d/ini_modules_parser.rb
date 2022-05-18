@@ -44,7 +44,7 @@ module U3d
         ini_name = format(INI_NAME, version: version, os: os)
         Utils.ensure_dir(default_ini_path)
         ini_path = File.expand_path(ini_name, default_ini_path)
-        unless File.file?(ini_path) && File.size(ini_path).positive?
+        unless Utils.file_exists_not_empty?(ini_path)
           raise "INI file does not exist at #{ini_path}" if offline
 
           download_ini(version, cached_versions, os, ini_name, ini_path)
