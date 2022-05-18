@@ -1,5 +1,18 @@
 # Changelog
 
+## [v1.3.1](https://github.com/DragonBox/u3d/tree/v1.3.1) (2022-05-18)
+
+[Full Changelog](https://github.com/DragonBox/u3d/compare/v1.3.0...v1.3.1)
+
+**Closed issues:**
+
+- `u3d install 2019.4.35f1` fails at 1.3.0 [\#421](https://github.com/DragonBox/u3d/issues/421)
+
+**Merged pull requests:**
+
+- \[Fix\] Broken install command, fixes \#421 [\#422](https://github.com/DragonBox/u3d/pull/422) ([lacostej](https://github.com/lacostej))
+- Release 1.3.0 [\#420](https://github.com/DragonBox/u3d/pull/420) ([lacostej](https://github.com/lacostej))
+
 ## [v1.3.0](https://github.com/DragonBox/u3d/tree/v1.3.0) (2022-05-16)
 
 [Full Changelog](https://github.com/DragonBox/u3d/compare/v1.2.3...v1.3.0)
