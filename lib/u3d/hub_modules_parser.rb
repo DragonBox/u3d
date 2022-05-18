@@ -36,11 +36,11 @@ module U3d
         path = modules_path(version, os)
 
         # force download if no hub file present
-        unless File.file?(path) && File.size(path).positive?
+        unless Utils.file_exists_not_empty?(path)
           download_modules(os: os) unless offline
         end
 
-        unless File.file?(path) && File.size(path).positive?
+        unless Utils.file_exists_not_empty?(path)
           UI.verbose "No modules registered for UnityHub for version #{version}"
           # cached_versions.keys.map{|s| UnityVersionNumber.new(s)}
           # searching for closest version

@@ -315,6 +315,10 @@ module U3d
         end
       end
 
+      def file_exists_not_empty?(path)
+        File.file?(path) && File.size(path).positive?
+      end
+
       private
 
       def http_max_retries
