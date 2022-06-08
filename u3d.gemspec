@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'colored', '>= 1.2', '< 2.0.0' # terminal
   spec.add_dependency 'commander', '>= 4.4.0', '< 5.0.0' # CLI parser
+  spec.add_dependency 'fiddle'
   spec.add_dependency 'filesize', '>= 0.1.1' # File sizes prettifier
   spec.add_dependency 'file-tail', '>= 1.2.0'
   spec.add_dependency 'inifile', '>= 3.0.0', '< 4.0.0' # Parses INI files
