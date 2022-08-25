@@ -54,7 +54,7 @@ module U3d
           versions_and_paths = versions_and_paths.select { |a| a[0].parts[0] == vn.parts[0] && a[0].parts[1] == vn.parts[1] && a[0].parts[2] >= vn.parts[2] }
 
           if versions_and_paths.empty?
-            UI.info "No closest version from UnityHub found for version #{version}"
+            UI.message "No closest version from UnityHub found for version #{version}"
             return []
           end
           path = versions_and_paths.first[1]
