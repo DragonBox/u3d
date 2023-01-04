@@ -64,7 +64,7 @@ module U3d
         when Net::HTTPRedirection
           # A session must be opened with the server before accessing forum
           res = nil
-          cookie_str = ''
+          cookie_str = +''
           # Store the name and value of the cookies returned by the server
           response['set-cookie'].gsub(/\s+/, '').split(',').each do |c|
             cookie_str << ("#{c.split(';', 2)[0]}; ")
