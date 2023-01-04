@@ -23,7 +23,7 @@
 ## --- END LICENSE BLOCK ---
 
 module U3d
-  VERSION = '1.3.2'
+  VERSION = '1.3.3'
   DESCRIPTION = 'Provides numerous tools for installing, managing and running the Unity game engine from command line.'
   UNITY_VERSIONS_NOTE = "Unity uses the following version formatting: 0.0.0x0. The \'x\' can takes different values:\n"\
                         "\t. 'f' are the main release candidates for Unity\n"\
