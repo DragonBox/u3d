@@ -200,15 +200,8 @@ end
 desc 'Run all rspec tests'
 task :test_all do
   formatter = "--format progress"
-  if ENV["CIRCLECI"]
-    Dir.mkdir("/tmp/rspec/")
-    formatter += " -r rspec_junit_formatter --format RspecJunitFormatter -o /tmp/rspec/rspec.xml"
-    TEST_FILES = `(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)`.tr!("\n", ' ')
-    rspec_args = "#{formatter} #{TEST_FILES}"
-  else
-    formatter += ' --pattern "./spec/**/*_spec.rb"'
-    rspec_args = formatter
-  end
+  formatter += ' --pattern "./spec/**/*_spec.rb"'
+  rspec_args = formatter
   sh "rspec #{rspec_args}"
 end
 
