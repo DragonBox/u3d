@@ -38,6 +38,7 @@ module U3d
       'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:106.0) Gecko/20100101 Firefox/106.0'
     }.freeze
 
+    # rubocop:disable Metrics/ClassLength
     class << self
       def final_url(url, redirect_limit: 10)
         follow_redirects(url, redirect_limit: redirect_limit, http_method: :head) do |request, _response|
@@ -346,6 +347,7 @@ module U3d
         opt
       end
     end
+    # rubocop:enable Metrics/ClassLength
   end
   # rubocop:enable Metrics/ModuleLength
 end
