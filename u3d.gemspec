@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.authors     = ["Jerome Lacoste", "Paul Niezborala"]
   spec.email       = 'jerome@wewanttoknow.com'
 
-  spec.required_ruby_version = '>= 2.5.0'
+  spec.required_ruby_version = '>= 2.6.0'
 
   spec.summary     = "U3d"
   spec.description = U3d::DESCRIPTION
