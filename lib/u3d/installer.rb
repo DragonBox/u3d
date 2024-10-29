@@ -424,7 +424,7 @@ module U3d
         install_location = d.root.attributes['install-location']
         raise "Not sure how to install this module with identifier #{identifier} install-location: #{install_location}" unless install_location.start_with? '/Applications/Unity/'
 
-        install_location.gsub(%(\/Applications\/Unity), "#{unity_root_path}/Editor/Data")
+        install_location.gsub(%(/Applications/Unity), "#{unity_root_path}/Editor/Data")
       end
     end
 

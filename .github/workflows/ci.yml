@@ -6,14 +6,14 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu, macos, windows ]
-        ruby: [ 2.5.9, 2.6.10, 2.7.6, 3.0.4, 3.1.2 ]
+        ruby: [ 2.6, 2.7, 3.0.7, 3.1, 3.2, 3.3 ] # somehow github uses ruby 3.3 when specifying 3.0
     runs-on: ${{ matrix.os }}-latest
     steps:
     - name: git config autocrlf
       run: git config --global core.autocrlf false
       if: matrix.os == 'windows'
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}

@@ -104,9 +104,9 @@ module U3d
     end
 
     def os_data_need_update?(data, os)
-      data[os.id2name].nil?\
-      || data[os.id2name]['lastupdate'].nil?\
-      || (Time.now.to_i - data[os.id2name]['lastupdate'] > CACHE_LIFE)\
+      data[os.id2name].nil? \
+      || data[os.id2name]['lastupdate'].nil? \
+      || (Time.now.to_i - data[os.id2name]['lastupdate'] > CACHE_LIFE) \
       || (data[os.id2name]['versions'] || []).empty?
     end
 

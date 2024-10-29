@@ -54,7 +54,7 @@ module U3dCore
       end
 
       def to_version(tag_name)
-        tag_name = tag_name[1..-1] if tag_name[0] == 'v'
+        tag_name = tag_name[1..] if tag_name[0] == 'v'
         tag_name
       end
 
