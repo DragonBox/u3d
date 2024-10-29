@@ -106,7 +106,7 @@ GEM
     minitest (5.15.0)
     multi_json (1.15.0)
     multipart-post (2.1.1)
-    nio4r (2.5.8)
+    nio4r (2.7.4)
     octokit (4.22.0)
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
@@ -198,4 +198,4 @@ DEPENDENCIES
   u3d!
 
 BUNDLED WITH
-   2.3.9
+   2.3.25
