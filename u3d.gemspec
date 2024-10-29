@@ -47,7 +47,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", ">= 12.3.3"
   spec.add_development_dependency "rspec", "~> 3.11.0"
   spec.add_development_dependency 'rspec_junit_formatter', '~> 0.5.1'
-  spec.add_development_dependency 'rubocop', '~> 1.27'
+  spec.add_development_dependency 'rubocop', '~> 1.50' # for ruby 2.6 compatibility
   spec.add_development_dependency 'rubocop-rake', '~> 0.6.0'
   # spec.add_development_dependency 'rubocop-rspec', '~> 2.10.0'
   spec.metadata['rubygems_mfa_required'] = 'true'
