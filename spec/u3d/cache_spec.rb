@@ -68,10 +68,10 @@ describe U3d do
         it 'checks if the file is up-to-date' do
           allow(U3d::UnityVersions).to receive(:list_available) { { 'test' => 'url' } }
           file = double('file')
-          cache = '{'\
-                  '"win":{"lastupdate":0,"versions":{"version": "url"}},'\
-                  '"mac":{"lastupdate":0,"versions":{"version": "url"}},'\
-                  '"linux":{"lastupdate":0,"versions":{"version": "url"}}'\
+          cache = '{' \
+                  '"win":{"lastupdate":0,"versions":{"version": "url"}},' \
+                  '"mac":{"lastupdate":0,"versions":{"version": "url"}},' \
+                  '"linux":{"lastupdate":0,"versions":{"version": "url"}}' \
                   '}'
           allow(File).to receive(:file?) { true }
           allow(File).to receive(:open).with(anything, 'r').and_yield(file)
@@ -85,10 +85,10 @@ describe U3d do
         context 'when cache file is outdated' do
           before(:each) do
             file = double('file')
-            cache = '{'\
-                    '"win":{"lastupdate":0,"versions":{"version": "url"}},'\
-                    '"mac":{"lastupdate":0,"versions":{"version": "url"}},'\
-                    '"linux":{"lastupdate":0,"versions":{"version": "url"}}'\
+            cache = '{' \
+                    '"win":{"lastupdate":0,"versions":{"version": "url"}},' \
+                    '"mac":{"lastupdate":0,"versions":{"version": "url"}},' \
+                    '"linux":{"lastupdate":0,"versions":{"version": "url"}}' \
                     '}'
             allow(File).to receive(:file?) { true }
             allow(File).to receive(:open).with(anything, 'r').and_yield(file)
@@ -115,10 +115,10 @@ describe U3d do
         context 'when cache file is fresh' do
           before(:each) do
             file = double('file')
-            cache = '{'\
-                    '"win":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"version": "url"}},'\
-                                                                  '"mac":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"version": "url"}},'\
-                                                                                                                '"linux":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"version": "url"}}'\
+            cache = '{' \
+                    '"win":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"version": "url"}},' \
+                                                                  '"mac":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"version": "url"}},' \
+                                                                                                                '"linux":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"version": "url"}}' \
                                                                                                                                                                 '}'
             allow(File).to receive(:file?) { true }
             allow(File).to receive(:open).with(anything, 'r').and_yield(file)
@@ -151,10 +151,10 @@ describe U3d do
         before(:each) do
           allow(U3d::UnityVersions).to receive(:list_available)
           file = double('file')
-          cache_data = '{'\
-                       '"win":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}},'\
-                                                                     '"mac":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}},'\
-                                                                                                                   '"linux":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}}'\
+          cache_data = '{' \
+                       '"win":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}},' \
+                                                                     '"mac":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}},' \
+                                                                                                                   '"linux":{"lastupdate":' + Time.now.to_i.to_s + ',"versions":{"key": "url"}}' \
                                                                                                                                                                    '}'
           allow(File).to receive(:file?) { true }
           allow(File).to receive(:open).with(anything, 'r').and_yield(file)

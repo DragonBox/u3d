@@ -212,7 +212,7 @@ module U3d
       def parse_unity_version(version)
         ver = UNITY_VERSION_REGEX.match(version)
         if ver.nil?
-          raise ArgumentError, "Version (#{version}) does not match the Unity "\
+          raise ArgumentError, "Version (#{version}) does not match the Unity " \
                                'version format 0.0.0x0'
         end
         [ver[1], ver[2], ver[3], ver[4], ver[5]]

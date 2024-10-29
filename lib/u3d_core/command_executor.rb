@@ -149,12 +149,12 @@ module U3dCore
 
       def grant_admin_privileges(command)
         if Helper.windows?
-          raise CredentialsError, "The command \'#{command}\' must be run in administrative shell" unless has_admin_privileges?
+          raise CredentialsError, "The command '#{command}' must be run in administrative shell" unless has_admin_privileges?
         else
           env_username = ENV['USER']
           unless env_username == "root"
             cred = U3dCore::Credentials.new(user: env_username)
-            raise CredentialsError, "The command \'#{command}\' must be run with admin privileges" unless has_admin_privileges?
+            raise CredentialsError, "The command '#{command}' must be run with admin privileges" unless has_admin_privileges?
 
             command = "sudo -k && echo #{cred.password.shellescape} | sudo -S bash -c \"#{command}\""
           end
