@@ -31,7 +31,7 @@ module U3d
     # Name of the directory for the package downloading
     DOWNLOAD_DIRECTORY = 'Unity_Packages'
     # Path to the directory for the package downloading
-    DOWNLOAD_PATH = "#{ENV['HOME']}/Downloads"
+    DOWNLOAD_PATH = "#{Dir.home}/Downloads"
     # Regex to get the name of a localization asset
     UNITY_LANGUAGE_FILE_REGEX = %r{/\d+/[0-9.]+/([\w-]+)$}.freeze
     # Regex to get the name of a package out of its file name

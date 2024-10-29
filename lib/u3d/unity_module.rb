@@ -77,19 +77,19 @@ module U3d
       def load_versions_modules(versions, cached_versions, os, offline)
         ini_modules = versions
                       .map { |version| [version, INIModulesParser.load_ini(version, cached_versions, os: os, offline: offline)] }
-                      .map do |version, ini_data|
+                      .to_h do |version, ini_data|
           url_root = cached_versions[version]
           modules = ini_data.map { |k, v| module_from_ini_data(k, v, url_root, os) }
           [version, modules]
-        end.to_h
+        end
 
         HubModulesParser.download_modules(os: os) unless offline
         hub_modules = versions
                       .map { |version| [version, HubModulesParser.load_modules(version, os: os, offline: true)] }
-                      .map do |version, json_data|
+                      .to_h do |version, json_data|
           modules = json_data.map { |data| module_from_json_data(data, os) }
           [version, modules]
-        end.to_h
+        end
 
         return ini_modules.merge(hub_modules) do |_version, ini_version_modules, json_version_modules|
           (ini_version_modules + json_version_modules).uniq(&:id)

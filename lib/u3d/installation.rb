@@ -180,7 +180,7 @@ module U3d
     end
 
     def default_log_file
-      "#{ENV['HOME']}/Library/Logs/Unity/Editor.log"
+      "#{Dir.home}/Library/Logs/Unity/Editor.log"
     end
 
     def exe_path
@@ -293,7 +293,7 @@ module U3d
     end
 
     def default_log_file
-      "#{ENV['HOME']}/.config/unity3d/Editor.log"
+      "#{Dir.home}/.config/unity3d/Editor.log"
     end
 
     def exe_path

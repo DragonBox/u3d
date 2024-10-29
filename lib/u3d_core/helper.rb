@@ -28,9 +28,9 @@ require 'colored'
 
 module U3dCore
   module Helper
-    DEFAULT_LINUX_PATH = File.join(ENV['HOME'], '.u3d').freeze
-    DEFAULT_MAC_PATH = File.join(ENV['HOME'], 'Library', 'Application Support', 'u3d').freeze
-    DEFAULT_WINDOWS_PATH = File.join(ENV['HOME'], 'AppData', 'Local', 'u3d').freeze
+    DEFAULT_LINUX_PATH = File.join(Dir.home, '.u3d').freeze
+    DEFAULT_MAC_PATH = File.join(Dir.home, 'Library', 'Application Support', 'u3d').freeze
+    DEFAULT_WINDOWS_PATH = File.join(Dir.home, 'AppData', 'Local', 'u3d').freeze
 
     def self.data_path
       case operating_system

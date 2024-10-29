@@ -409,7 +409,7 @@ describe U3d do
                 'unity',
                 definition
               )
-            ).to eql File.expand_path(File.join(ENV['HOME'], 'Downloads', 'Unity_Packages', '1.2.3f4', 'unity-editor-installer-1.2.3f4+20160628.sh'))
+            ).to eql File.expand_path(File.join(Dir.home, 'Downloads', 'Unity_Packages', '1.2.3f4', 'unity-editor-installer-1.2.3f4+20160628.sh'))
           end
         end
 
@@ -469,7 +469,7 @@ describe U3d do
                 'package',
                 definition
               )
-            ).to eql File.expand_path(File.join(ENV['HOME'], 'Downloads', 'Unity_Packages', '1.2.3f4', 'Unity.pkg'))
+            ).to eql File.expand_path(File.join(Dir.home, 'Downloads', 'Unity_Packages', '1.2.3f4', 'Unity.pkg'))
           end
         end
 
@@ -526,7 +526,7 @@ describe U3d do
                 'package',
                 definition
               )
-            ).to eql File.expand_path(File.join(ENV['HOME'], 'Downloads', 'Unity_Packages', '1.2.3f4', 'UnitySetup64.exe'))
+            ).to eql File.expand_path(File.join(Dir.home, 'Downloads', 'Unity_Packages', '1.2.3f4', 'UnitySetup64.exe'))
           end
         end
 

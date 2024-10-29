@@ -181,9 +181,9 @@ module U3d
       end
 
       def fetch_from_json(url, pattern)
-        fetch_json(url, pattern).map do |build|
+        fetch_json(url, pattern).to_h do |build|
           [build['version'], pattern.match(build['downloadUrl'])[1]]
-        end.to_h
+        end
       end
 
       def fetch_betas(url, pattern)

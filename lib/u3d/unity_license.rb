@@ -40,13 +40,13 @@ module U3d
     # petit cachotier va!
     def number
       require 'base64'
-      Base64.decode64(self['DeveloperData'])[4..-1]
+      Base64.decode64(self['DeveloperData'])[4..]
     end
 
     class << self
       LICENSES_DIR_MAC = File.join("/", "Library", "Application Support", "Unity").freeze
       LICENSES_DIR_WINDOWS = File.join("C:/ProgramData", "Unity").freeze
-      LICENSES_DIR_LINUX = File.join(ENV['HOME'], ".local", "share", "unity3d", "Unity").freeze
+      LICENSES_DIR_LINUX = File.join(Dir.home, ".local", "share", "unity3d", "Unity").freeze
 
       def from_path(path)
         doc = REXML::Document.new(File.read(path))
