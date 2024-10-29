@@ -70,3 +70,7 @@ Lint/AmbiguousBlockAssociation:
 
 Lint/EmptyBlock:
   Enabled: false
+
+Gemspec/DevelopmentDependencies:
+  EnforcedStyle: gemspec
+  Include: [ "Gemfile", "u3d.gemspec" ]
