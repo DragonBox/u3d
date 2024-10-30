@@ -4,3 +4,4 @@ exclude_tags_regex=v0\.[0-8]\..*
 exclude-labels=nochangelog,question
 user=DragonBox
 project=u3d
+http_cache=false
