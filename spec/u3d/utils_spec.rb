@@ -105,5 +105,47 @@ describe U3d do
         end
       end
     end
+
+    describe '.follow_redirects' do
+      it 'handles relative URLs in redirects' do
+        http_mock = double('http')
+        redirect_response = double('redirect_response')
+        success_response = double('success_response')
+
+        # First request returns redirect with relative URL
+        allow(redirect_response).to receive(:kind_of?).with(Net::HTTPSuccess).and_return(false)
+        allow(redirect_response).to receive(:kind_of?).with(Net::HTTPRedirection).and_return(true)
+        allow(Net::HTTPSuccess).to receive(:===).with(redirect_response).and_return(false)
+        allow(Net::HTTPRedirection).to receive(:===).with(redirect_response).and_return(true)
+        allow(redirect_response).to receive(:[]).with('location').and_return('/new-path')
+        allow(redirect_response).to receive(:code).and_return('302')
+
+        # Second request succeeds
+        allow(success_response).to receive(:kind_of?).with(Net::HTTPSuccess).and_return(true)
+        allow(success_response).to receive(:kind_of?).with(Net::HTTPRedirection).and_return(false)
+        allow(Net::HTTPSuccess).to receive(:===).with(success_response).and_return(true)
+        allow(Net::HTTPRedirection).to receive(:===).with(success_response).and_return(false)
+        allow(success_response).to receive(:body).and_return('success')
+        allow(success_response).to receive(:code).and_return('200')
+
+        call_count = 0
+        allow(Net::HTTP).to receive(:start) do |host, port, _opts, &block|
+          call_count += 1
+          expect(host).to eq('example.com')
+          expect(port).to eq(443)
+          allow(http_mock).to receive(:request) do
+            call_count == 1 ? redirect_response : success_response
+          end
+          block.call(http_mock)
+        end
+
+        result = U3d::Utils.follow_redirects('https://example.com/original') do |_request, response|
+          response.body
+        end
+
+        expect(result).to eql('success')
+        expect(call_count).to eq(2)
+      end
+    end
   end
 end
