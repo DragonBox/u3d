@@ -69,12 +69,12 @@ module U3d
         require 'irb'
         ARGV.clear
         IRB.setup(nil)
-        @irb = IRB::Irb.new(nil)
+        workspace = IRB::WorkSpace.new(binding)
+        @irb = IRB::Irb.new(workspace)
         IRB.conf[:MAIN_CONTEXT] = @irb.context
         IRB.conf[:PROMPT][:U3D] = IRB.conf[:PROMPT][:SIMPLE].dup
         IRB.conf[:PROMPT][:U3D][:RETURN] = "%s\n"
         @irb.context.prompt_mode = :U3D
-        @irb.context.workspace = IRB::WorkSpace.new(binding)
         trap 'INT' do
           @irb.signal_handle
         end
