@@ -84,8 +84,11 @@ module U3d
         when Net::HTTPSuccess
           yield(request, response)
         when Net::HTTPRedirection
-          UI.verbose "Redirected to #{response['location']}"
-          follow_redirects(response['location'], redirect_limit: redirect_limit - 1, http_method: http_method, request_headers: request_headers, &block)
+          location = response['location']
+          # Handle relative URLs in redirects
+          location = (uri + location).to_s if location && !location.start_with?('http://', 'https://')
+          UI.verbose "Redirected to #{location}"
+          follow_redirects(location, redirect_limit: redirect_limit - 1, http_method: http_method, request_headers: request_headers, &block)
         else raise "Request failed with status #{response.code}"
         end
       end
